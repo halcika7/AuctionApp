@@ -1,0 +1,111 @@
+<app-breadcrumb [title]="title === 'Login' ? 'Login' : 'Register'"></app-breadcrumb>
+<section class="container">
+  <div class="form">
+    <h1>Login</h1>
+    <div class="wrapper pb-51">
+      <div class="form-group mt-43">
+        <label for="email">Email</label>
+        <div class="input">
+          <input type="text" id="email" placeholder="Enter Email" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input">
+          <input type="password" id="password" placeholder="Enter Password" />
+        </div>
+      </div>
+      <div class="form-group flex">
+        <input type="checkbox" id="remeber" />
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        <label for="remeber">Remember me</label>
+      </div>
+      <button type="button" class="login-button">Login</button>
+      <div class="social-login">
+        <a href="" class="facebook-link"
+          ><fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>login with facebook</a
+        >
+        <a href="" class="gmail-link"
+          ><fa-icon [icon]="['fab', 'google-plus-square']"></fa-icon>login with gmail</a
+        >
+      </div>
+      <a href="" class="forgot-password">Forgot Password?</a>
+    </div>
+  </div>
+</section>
+<section class="container">
+  <div class="form">
+    <h1>Register</h1>
+    <div class="wrapper pb-76">
+      <div class="form-group mt-43">
+        <label for="fName">First Name</label>
+        <div class="input">
+          <input type="text" id="fName" placeholder="Enter First Name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lName">Last Name</label>
+        <div class="input">
+          <input type="text" id="lName" placeholder="Enter Last Name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input">
+          <input type="text" id="email" placeholder="Enter Email" />
+        </div>
+      </div>
+      <div class="form-group mb-60">
+        <label for="password">Password</label>
+        <div class="input">
+          <input type="password" id="password" placeholder="Enter Password" />
+        </div>
+      </div>
+      <button type="button">Submit</button>
+      <span>Already have an account? <a href="">Login</a></span>
+    </div>
+  </div>
+</section>
+<section class="container">
+  <div class="form">
+    <h1>Forgot Password</h1>
+    <div class="wrapper">
+      <p>
+        Lost your password? Please enter your username or email address. You will receive a link to
+        create a new password via email.
+      </p>
+      <div class="form-group">
+        <label for="email-username">Enter Email or Username</label>
+        <div class="input">
+          <input type="text" id="email-username" placeholder="Email or Username" />
+        </div>
+      </div>
+      <button type="button">Submit</button>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="form">
+    <h1>Reset Password</h1>
+    <div class="wrapper">
+      <p>
+        Lost your password? Please enter your username or email address. You will receive a link to
+        create a new password via email.
+      </p>
+      <div class="form-group">
+        <label for="password">Enter Password</label>
+        <div class="input">
+          <input type="password" id="password" placeholder="" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password2">Repeat Password</label>
+        <div class="input">
+          <input type="password" id="password2" placeholder="" />
+        </div>
+      </div>
+      <button type="button">Reset Password</button>
+    </div>
+  </div>
+</section>

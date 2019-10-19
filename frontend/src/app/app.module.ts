@@ -18,9 +18,14 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { AboutComponent } from './about/about.component';
+import { ConditionsComponent } from './conditions/conditions.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, BreadcrumbComponent],
+  declarations: [AppComponent, HeaderComponent, FooterComponent, BreadcrumbComponent, PrivacyComponent, AboutComponent, ConditionsComponent, NotFoundComponent, AuthComponent],
   imports: [BrowserModule, HttpClientModule, FontAwesomeModule],
   providers: [],
   bootstrap: [AppComponent]
