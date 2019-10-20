@@ -1,0 +1,44 @@
+<app-breadcrumb [title]="'login'"></app-breadcrumb>
+<section class="container">
+  <form class="form" #f="ngForm">
+    <h1>Login</h1>
+    <div class="wrapper pb-51">
+      <div class="form-group mt-43">
+        <label for="email">Email</label>
+        <div class="input">
+          <input type="email" id="email" placeholder="Enter Email" ngModel name="email" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            ngModel
+            name="password"
+          />
+        </div>
+      </div>
+      <div class="form-group flex">
+        <input type="checkbox" id="remeber" />
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        <label for="remeber">Remember me</label>
+      </div>
+      <button type="submit" class="login-button" (click)="onSubmit(f)">
+        Login
+      </button>
+      <div class="social-login">
+        <a href="" class="facebook-link"
+          ><fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>login with facebook</a
+        >
+        <a href="" class="gmail-link"
+          ><fa-icon [icon]="['fab', 'google-plus-square']"></fa-icon>login with gmail</a
+        >
+      </div>
+      <a href="" class="forgot-password">Forgot Password?</a>
+      <span>Don't have an account? <a [routerLink]="['/home/auth/register']">Register</a></span>
+    </div>
+  </form>
+</section>

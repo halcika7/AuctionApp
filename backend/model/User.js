@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
 
-const User = db.define('user', {
+const User = db.define('users', {
     id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -41,6 +41,9 @@ const User = db.define('user', {
         allowNull: false,
         defaultValue: false
     }
+}, {
+    sequelize: Sequelize,
+    modelName: 'User'
 });
 
 module.exports = User;

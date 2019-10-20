@@ -1,24 +1,24 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const compression = require('compression');
 const path = require('path');
 const app = express();
-const db = require('./config/database');
-const User = require('./model/User');
 
-db.authenticate()
-    .then(() => console.log('DB connected'))
-    .catch(err => console.log(err));
-
-app.use(cors());
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    })
+);
+app.use(cookieParser());
+app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-app.get('/api', async (req, res) => {
-    const users = await User.findAll();
-    return res.status(201).json({ users, message: 'successfull' });
-});
+app.use('/api/auth', require('./routes/authentication/authRoutes'));
 
 const port = process.env.PORT || 5000;
 

@@ -1,9 +1,11 @@
 const Sequelize = require('sequelize');
+const { DB_USERNAME, DB_PASSWORD } = require('./configs');
 
-module.exports = new Sequelize('auctionapp', 'postgres', 'volimtejaa7', {
+const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {
     host: 'localhost',
     port: 5433,
     dialect: 'postgres',
+    logging: false,
     pool: {
         max: 5,
         min: 0,
@@ -15,8 +17,8 @@ module.exports = new Sequelize('auctionapp', 'postgres', 'volimtejaa7', {
     }
 });
 
-// sequelize.sync({ force: true }).then(() => {
-//     console.log(`Database & tables created!`);
-// });
+db.authenticate()
+    .then(() => console.log('DB connected'))
+    .catch(err => console.log(err));
 
-// module.exports = sequelize;
+module.exports = db;

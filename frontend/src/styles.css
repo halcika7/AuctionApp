@@ -6,6 +6,7 @@ html {
 html, body, app-root {
   height:100%;
   margin: 0;
+  scroll-behavior: smooth;
 }
 
 app-root {
@@ -375,6 +376,26 @@ template {
   font-weight: 700;
   width: 280px;
   height: 54px;
+  box-shadow: 3px 3px 0 0 rgba(131,103,216,0.31);
+}
+
+@media (max-width: 730px) {
+  .wrapper .social-login {
+    flex-direction: column;
+  }
+
+  .wrapper .social-login a {
+    width: 100%;
+  }
+
+  .wrapper .social-login a:nth-child(2) {
+    margin-top: 33px;
+  }
+}
+
+.wrapper .social-login a:hover,
+.wrapper .social-login a:active {
+  box-shadow: none;
 }
 
 .wrapper .social-login a.facebook-link {
@@ -392,7 +413,6 @@ template {
 .wrapper .social-login a.gmail-link {
   background: #CD5542;
   border: 3px solid #CD5542;
-
 }
 
 .wrapper .social-login a.gmail-link fa-icon,
