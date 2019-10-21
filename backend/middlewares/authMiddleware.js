@@ -12,10 +12,10 @@ module.exports = (req, res, next) => {
         const decodedAccessToken = decodeToken(token),
             { err } = verifyAccessToken(token),
             verifiedRefreshToken = verifyRefreshToken(req.cookies.jid);
-        if (verifiedRefreshToken.err) {
+        if (verifiedRefreshToken.err || !token) {
             setRefreshTokenCookie(res, '');
             return res
-                .status(401)
+                .status(200)
                 .json({ authorizationError: 'Unauthorized request', accessToken: '' });
         }
         if (err && !verifiedRefreshToken.err) {
@@ -26,6 +26,7 @@ module.exports = (req, res, next) => {
 
         next();
     } catch (error) {
+        console.log('TCL: error', error);
         return res.status().json({ authorizationError: 'Unauthorized request', accessToken: '' });
     }
 };

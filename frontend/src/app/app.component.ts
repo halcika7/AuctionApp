@@ -1,7 +1,7 @@
+import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Location } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +9,19 @@ import { throwError } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
+  notFound = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private location: Location, private router: Router) {}
 
   ngOnInit() {
-    this.http
-      .post('http://localhost:5000/api/auth/register', {
-        email: 'halcikiooohja_7@hotmail.com',
-        firstName: 'dsfijds',
-        lastName: 'asdsad',
-        password: '@Volimtejaa7'
-      })
-      .subscribe(users => {
-        console.log(users);
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (this.location.path() === '/404') {
+          this.notFound = true;
+        } else {
+          this.notFound = false;
+        }
       });
   }
 }

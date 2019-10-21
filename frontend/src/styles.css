@@ -237,10 +237,13 @@ template {
   font-size: 24px;
   color: #252525;
   letter-spacing: 0.84px;
-  text-align: center;
   background: #FAFAFA;
-  padding: 15px 225px 16px 226px;
+  height: 58px;
+  width: 100%;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form .wrapper {
@@ -313,20 +316,33 @@ template {
 
 .form-group .input {
   background: #FCFCFC;
-  border: 1px solid #D8D8D8;
-  height: 54px;
-  padding: 0 30px;
 }
 
 .form-group .input input {
+  box-sizing: border-box;
+  padding: 0 30px;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
   font-size: 18px;
   outline: none;
+  border: 1px solid #D8D8D8;
   background: transparent;
-  border: none;
   height: 54px;
   width: 100%;
+}
+
+@media (max-width: 400px) {
+  .form .wrapper {
+    padding: 0 30px 122px 30px;
+  }
+
+  .form-group .input input {
+    padding: 0 15px;
+  }
+}
+
+.wrapper {
+  height: auto;
 }
 
 .wrapper button {
@@ -469,4 +485,23 @@ template {
 
 .mt-43 {
   margin-top: 43px !important;
+}
+
+.form-group .input input.ng-invalid.ng-touched {
+  border: 1px solid #CC0000;
+}
+
+.form-group .input input.ng-invalid.ng-touched ~ span,
+.form-group .input input.ng-invalid ~ span.async {
+  display: block;
+  color: #CC0000;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.form-group .input input.ng-invalid.ng-touched ~ span > span,
+.form-group .input input.ng-invalid ~ span.async > span {
+  display: block;
+  margin-top: 5px;
 }

@@ -1,8 +1,10 @@
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 // Font Awesome Icons
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -25,10 +27,15 @@ import { AboutComponent } from './containers/about/about.component';
 import { ConditionsComponent } from './containers/conditions/conditions.component';
 import { NotFoundComponent } from './containers/not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
-import { HomeComponent } from './containers/home/home.component';
+import { HomeComponent } from './home/home.component';
 import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { LandingPageComponent } from './home/landing-page/landing-page.component';
+
+import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
+import { AlertComponent } from './components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +51,20 @@ import { RegisterComponent } from './auth/register/register.component';
     HomeComponent,
     DropdownDirective,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LandingPageComponent,
+    AlertComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, FontAwesomeModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
+    FontAwesomeModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

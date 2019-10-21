@@ -1,6 +1,6 @@
 const { register, login, setRefreshTokenCookie } = require('../services/authServices');
 
-module.exports = class AuthController {
+class AuthController {
     constructor() {
         if (!!AuthController.instance) return AuthController.instance;
         AuthController.instance = this;
@@ -14,7 +14,9 @@ module.exports = class AuthController {
 
     async loginUser(req, res) {
         const { status, response, refreshToken } = await login(req.body);
-        setRefreshTokenCookie(res, refreshToken);
+        if (!response.errors && !response.err) {
+            setRefreshTokenCookie(res, refreshToken);
+        }
         return res.status(status).json(response);
     }
 
@@ -23,3 +25,7 @@ module.exports = class AuthController {
         return res.status(200).json({ message: 'logout', accessToken: '' });
     }
 };
+
+const AuthControllerInstance = new AuthController();
+
+module.exports = AuthControllerInstance;

@@ -1,0 +1,39 @@
+.alert {
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 100;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  margin-top: 15px;
+  color: #252525;
+  border-radius: 5px;
+  background: rgba(204, 0, 0, 0.516);
+}
+
+.alert-wrapper {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 45px;
+}
+
+.alert.success {
+  background: rgba(107, 192, 71, 0.516);
+}
+
+.alert button {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  color: rgb(135, 3, 3);
+}
+
+.alert.success button {
+  color: #417505;
+}

@@ -1,3 +1,5 @@
-<app-header></app-header>
+<ng-template [ngIf]="!notFound">
+  <app-header></app-header>
+</ng-template>
 <router-outlet></router-outlet>
 <app-footer></app-footer>

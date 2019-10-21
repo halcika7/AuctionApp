@@ -6,13 +6,16 @@ import { AboutComponent } from './containers/about/about.component';
 import { NotFoundComponent } from './containers/not-found/not-found.component';
 import { PrivacyComponent } from './containers/privacy/privacy.component';
 import { ConditionsComponent } from './containers/conditions/conditions.component';
-import { HomeComponent } from './containers/home/home.component';
+import { HomeComponent } from './home/home.component';
+import { LandingPageComponent } from './home/landing-page/landing-page.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: 'home',
+    component: HomeComponent,
     children: [
+      { path: 'landing', component: LandingPageComponent },
       {
         path: 'auth/:type',
         component: AuthComponent

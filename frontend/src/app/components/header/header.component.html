@@ -37,8 +37,8 @@
   <div class="nav-links">
     <a [routerLink]="['/home']" routerLinkActive="active">home</a>
     <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
-    <a href="#" appDropdown>
-      <a [routerLink]="['/account']" routerLinkActive="active" >my account</a>
+    <a href="#" appDropdown (click)="clicked($event)">
+      <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
       <ul class="dropdown">
         <li>
           <a href=""><span>Profile</span></a>

@@ -10,4 +10,8 @@ export class HeaderComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  clicked(e: Event) {
+    e.preventDefault();
+  }
 }

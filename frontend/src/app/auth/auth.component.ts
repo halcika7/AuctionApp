@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -10,10 +9,13 @@ import { NgForm } from '@angular/forms';
 export class AuthComponent implements OnInit {
   type: string;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
+      if (params.type !== 'login' && params.type !== 'register') {
+        this.router.navigate(['/404']);
+      }
       this.type = params.type;
     });
   }

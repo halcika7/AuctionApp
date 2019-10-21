@@ -25,8 +25,8 @@ exports.registerValidation = async data => {
 
     if (Validator.isEmpty(data.password)) {
         errors.password = 'Password field is required';
-    } else if (!Validator.isLength(data.password, { min: 8, max: 30 })) {
-        errors.password = 'Password must be at least 8 characters';
+    } else if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
+        errors.password = 'Password must be at least 6 characters';
     } else if (!strongRegex.test(data.password)) {
         errors.password =
             'Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character($#%) and length must be between 6 and 30 characters';
@@ -46,6 +46,7 @@ exports.registerValidation = async data => {
 exports.loginValidation = async data => {
     let errors = {};
     const user = await findUserByEmail(data.email);
+    console.log('TCL: user', user)
 
     if (Validator.isEmpty(data.email)) errors.email = 'Please provide email';
 
