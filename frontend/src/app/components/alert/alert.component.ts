@@ -10,6 +10,7 @@ export class AlertComponent implements OnInit {
   @Output() closeAlert = new EventEmitter<any>();
   @Input() type: boolean;
   @Input() message: string;
+  @Input() closable = true;
 
   constructor() {}
 

@@ -1,0 +1,26 @@
+<div class="form-group mt-43" [formGroup]="parentForm">
+  <label for="{{ id }}">{{ title }}</label>
+  <div class="input">
+    <input
+      type="{{ type }}"
+      id="{{ id }}"
+      placeholder="{{ placeholder }}"
+      formControlName="{{ controlName }}"
+    />
+    <span *ngIf="input.invalid && input.touched">
+      <span *ngIf="input.errors['required']">{{ title }} is required !!</span>
+      <span *ngIf="input.errors['minlength']"
+        >{{ title }} must contain at least {{ input.errors['minlength'].requiredLength }} characters
+        !!</span
+      >
+      <span *ngIf="input.errors['maxlength']"
+        >{{ title }} cannot exceed {{ input.errors['maxlength'].requiredLength }} characters
+        !!</span
+      >
+      <span *ngIf="input.errors['email'] || input.errors['pattern']">{{ pattern }}</span>
+    </span>
+    <span *ngIf="input.invalid" class="async">
+      <span *ngIf="input.errors['async']">{{ input.errors['async'] }}</span>
+    </span>
+  </div>
+</div>

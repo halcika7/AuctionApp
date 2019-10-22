@@ -46,7 +46,6 @@ exports.registerValidation = async data => {
 exports.loginValidation = async data => {
     let errors = {};
     const user = await findUserByEmail(data.email);
-    console.log('TCL: user', user)
 
     if (Validator.isEmpty(data.email)) errors.email = 'Please provide email';
 

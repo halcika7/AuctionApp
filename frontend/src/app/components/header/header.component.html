@@ -14,10 +14,13 @@
         <fa-icon [icon]="['fab', 'google-plus-g']"></fa-icon>
       </a>
     </div>
-    <div class="login">
+    <div class="login" *ngIf="!isAuthenticated">
       <a [routerLink]="['/home/auth/login']">Login</a>
       <span>or</span>
       <a [routerLink]="['/home/auth/register']">Create an Account</a>
+    </div>
+    <div class="login" *ngIf="isAuthenticated">
+      <button (click)="logout()">Logout</button>
     </div>
   </div>
 </header>
@@ -35,9 +38,9 @@
     <fa-icon [icon]="['fas', 'search']"></fa-icon>
   </div>
   <div class="nav-links">
-    <a [routerLink]="['/home']" routerLinkActive="active">home</a>
+    <a [routerLink]="['/home']" routerLinkActive="active" routeli>home</a>
     <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
-    <a href="#" appDropdown (click)="clicked($event)">
+    <a href="#" appDropdown (click)="clicked($event)" *ngIf="isAuthenticated">
       <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
       <ul class="dropdown">
         <li>

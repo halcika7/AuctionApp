@@ -504,4 +504,5 @@ template {
 .form-group .input input.ng-invalid ~ span.async > span {
   display: block;
   margin-top: 5px;
+  text-transform: capitalize;
 }

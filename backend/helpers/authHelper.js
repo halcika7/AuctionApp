@@ -3,14 +3,15 @@ const bcrypt = require('bcryptjs');
 const User = require('../model/User');
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require('../config/configs');
 
-exports.createAccessToken = data => jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+exports.createAccessToken = ({ id, email }) =>
+    jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
 
 exports.createRefreshToken = ({ id, email }) =>
     jwt.sign({ id, email }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
 exports.verifyRefreshToken = token => {
     try {
-        return { payload: jwt.verify(token, REFRESH_TOKEN_SECRET) };
+        return jwt.verify(token, REFRESH_TOKEN_SECRET);
     } catch {
         return { err: 'Token expired' };
     }
@@ -18,7 +19,7 @@ exports.verifyRefreshToken = token => {
 
 exports.verifyAccessToken = token => {
     try {
-        return { payload: jwt.verify(token, ACCESS_TOKEN_SECRET) };
+        return jwt.verify(token, ACCESS_TOKEN_SECRET);
     } catch {
         return { err: 'Token expired' };
     }

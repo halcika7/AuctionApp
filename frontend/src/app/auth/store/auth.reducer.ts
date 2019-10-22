@@ -1,7 +1,6 @@
 import * as AuthActions from './auth.actions';
 
 export interface State {
-  isAuthenticated: boolean;
   errors: {
     firstName: string;
     lastName: string;
@@ -10,10 +9,10 @@ export interface State {
   };
   errorMessage: string;
   successMessage: string;
+  accessToken: string;
 }
 
 const initialState: State = {
-  isAuthenticated: false,
   errors: {
     email: '',
     password: '',
@@ -21,12 +20,15 @@ const initialState: State = {
     lastName: ''
   },
   errorMessage: '',
-  successMessage: ''
+  successMessage: '',
+  accessToken: ''
 };
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
     case AuthActions.REGISTER_START:
+    case AuthActions.LOGIN_START:
+    case AuthActions.LOGOUT_START:
       return { ...initialState };
     case AuthActions.REGISTER_SUCCESS:
       return {
@@ -38,6 +40,28 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,
         errorMessage: action.payload.err ? action.payload.err : state.errorMessage
+      };
+    case AuthActions.LOGIN_SUCCESS:
+      return {
+        ...initialState,
+        accessToken: action.payload.accessToken,
+        successMessage: action.payload.successMessage
+      };
+    case AuthActions.LOGIN_FAILED:
+      return {
+        ...initialState,
+        errors: action.payload.errors ? action.payload.errors : state.errors,
+        errorMessage: action.payload.err ? action.payload.err : state.errorMessage
+      };
+    case AuthActions.REFRESH_ACCESS_TOKEN:
+      return {
+        ...initialState,
+        accessToken: action.payload.accessToken
+      };
+    case AuthActions.LOGIN_SUCCESS:
+      return {
+        ...initialState,
+        accessToken: action.payload.accessToken
       };
     case AuthActions.AUTH_CLEAR_MESSAGESS:
       return {

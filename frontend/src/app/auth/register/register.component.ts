@@ -53,8 +53,7 @@ export class RegisterComponent implements OnInit {
       .select('auth')
       .pipe(
         map(storeData => {
-          console.log('TCL: RegisterComponent -> ngOnInit -> storeData', storeData);
-          delete storeData.isAuthenticated;
+          delete storeData.accessToken;
           return { ...storeData };
         })
       )
@@ -72,10 +71,16 @@ export class RegisterComponent implements OnInit {
           this.message = '';
           this.success = null;
         }
+
+        if (successMessage) {
+          this.signupForm.reset();
+        }
       });
   }
 
   onSubmit() {
+    this.signupForm.clearValidators();
+    this.signupForm.markAsUntouched();
     this.store.dispatch(new AuthActions.RegisterStart({ ...this.signupForm.value }));
   }
 

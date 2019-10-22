@@ -2,7 +2,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -36,6 +36,8 @@ import { LandingPageComponent } from './home/landing-page/landing-page.component
 import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { AlertComponent } from './components/alert/alert.component';
+import { InputComponent } from './components/input/input.component';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { AlertComponent } from './components/alert/alert.component';
     LoginComponent,
     RegisterComponent,
     LandingPageComponent,
-    AlertComponent
+    AlertComponent,
+    InputComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,7 @@ import { AlertComponent } from './components/alert/alert.component';
     EffectsModule.forRoot([AuthEffects]),
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

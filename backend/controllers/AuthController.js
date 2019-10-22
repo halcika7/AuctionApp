@@ -1,4 +1,4 @@
-const { register, login, setRefreshTokenCookie } = require('../services/authServices');
+const AuthServcieInstance = require('../services/authServices');
 
 class AuthController {
     constructor() {
@@ -8,23 +8,37 @@ class AuthController {
     }
 
     async registerUser(req, res) {
-        const { status, response } = await register(req.body);
+        const { status, response } = await AuthServcieInstance.register(req.body);
         return res.status(status).json(response);
     }
 
     async loginUser(req, res) {
-        const { status, response, refreshToken } = await login(req.body);
+        const { status, response, refreshToken } = await AuthServcieInstance.login(req.body);
         if (!response.errors && !response.err) {
-            setRefreshTokenCookie(res, refreshToken);
+            AuthServcieInstance.setRefreshTokenCookie(res, refreshToken);
         }
         return res.status(status).json(response);
     }
 
     async logout(req, res) {
-        setRefreshTokenCookie(res, '');
-        return res.status(200).json({ message: 'logout', accessToken: '' });
+        console.log('logout fireeddsfkjidjdsif');
+        AuthServcieInstance.setRefreshTokenCookie(res, '');
+        return res.status(200).json({ accessToken: '' });
     }
-};
+
+    async refreshToken(req, res) {
+        const token = req.cookies.jid;
+        console.log('TCL: AuthController -> refreshToken -> token', token);
+        if (!token) {
+            return res.status(400).json({ accessToken: '' });
+        }
+        const { status, response, refreshToken } = await AuthServcieInstance.refreshToken(token);
+        if (!response.authorizationError) {
+            AuthServcieInstance.setRefreshTokenCookie(res, refreshToken);
+        }
+        return res.status(status).json(response);
+    }
+}
 
 const AuthControllerInstance = new AuthController();
 

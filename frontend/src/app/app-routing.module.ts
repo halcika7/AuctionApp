@@ -1,5 +1,6 @@
+import { AuthGuard } from './auth/auth.guard';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 
 import { AuthComponent } from './auth/auth.component';
 import { AboutComponent } from './containers/about/about.component';
@@ -13,19 +14,19 @@ const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: 'home',
-    component: HomeComponent,
     children: [
-      { path: 'landing', component: LandingPageComponent },
+      { path: '', component: LandingPageComponent },
       {
         path: 'auth/:type',
         component: AuthComponent
+        // canActivate: [AuthGuard]
       }
     ]
   },
   {
     path: 'shop',
     children: [
-      { path: 'about', component: AboutComponent },
+      { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
       { path: 'privacy', component: PrivacyComponent },
       { path: 'terms', component: ConditionsComponent }
     ]

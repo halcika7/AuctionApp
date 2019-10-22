@@ -33,7 +33,14 @@ header {
   align-items: center;
 }
 
-.links a {
+.login > button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.links a{
   height: 25px;
   width: 25px;
   margin-right: 10px;
@@ -60,7 +67,8 @@ header {
   margin: 0 19px;
 }
 
-.login a {
+.login a,
+.login button {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   font-size: 14px;
@@ -300,6 +308,10 @@ header {
   .navigation > .nav-links > a:first-child:nth-last-child(2) {
     margin-left: 0px;
     margin-right: 0px;
+  }
+
+  .navigation > .brand > .brand-icon span:nth-child(1) {
+    margin-top: -3px;
   }
 }
 

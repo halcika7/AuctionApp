@@ -2,6 +2,9 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import * as fromApp from './store/app.reducer';
+import * as AuthActions from './auth/store/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,11 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   notFound = false;
 
-  constructor(private location: Location, private router: Router) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+    private store: Store<fromApp.AppState>
+  ) {}
 
   ngOnInit() {
     this.router.events
@@ -23,5 +30,8 @@ export class AppComponent implements OnInit {
           this.notFound = false;
         }
       });
+    if (localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')) {
+      this.store.dispatch(new AuthActions.RefreshTokenStart());
+    }
   }
 }
