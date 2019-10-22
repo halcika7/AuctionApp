@@ -7,6 +7,9 @@
     "start": "node index.js",
     "server": "nodemon index.js",
     "frontend": "npm start --prefix ../frontend",
+    "frontend-install": "npm install --prefix ../frontend",
+    "backend": "npm install",
+    "install-packages": "npm run frontend-install & npm run backend",
     "dev": "concurrently \"npm run server\" \"npm run frontend\""
   },
   "keywords": [],
