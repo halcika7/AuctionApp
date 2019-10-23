@@ -21,14 +21,18 @@ class AuthService {
             await createUser(data);
             return { status: 200, response: { successMessage: 'Account successfully created !' } };
         } catch (error) {
-            return { status: 403, response: { err: error.message } };
+            return {
+                status: 403,
+                response: { err: 'Something happened. We were unable to create an account.' }
+            };
         }
     }
 
     async login(data) {
         try {
-            const { errors, isValid, user } = await loginValidation(data);
-            if (!isValid) return { status: 403, response: { ...errors } };
+            const { errors, errorMessage, isValid, user } = await loginValidation(data);
+            if (!isValid && errors) return { status: 403, response: { ...errors } };
+            if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
             const accessToken = createAccessToken(user),
                 refreshToken = createRefreshToken(user);
             return {
@@ -37,7 +41,10 @@ class AuthService {
                 refreshToken
             };
         } catch (error) {
-            return { status: 403, response: { err: error.message } };
+            return {
+                status: 403,
+                response: { err: 'Something happened. We were unable to perform login.' }
+            };
         }
     }
 
@@ -59,7 +66,7 @@ class AuthService {
     }
 
     setRefreshTokenCookie(res, token) {
-        return res.cookie('jid', token, { httpOnly: true });
+        return res.cookie('jid', token, { httpOnly: true, path: '/api/auth/refresh_token' });
     }
 }
 

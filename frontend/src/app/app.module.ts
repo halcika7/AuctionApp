@@ -26,8 +26,6 @@ import { PrivacyComponent } from './containers/privacy/privacy.component';
 import { AboutComponent } from './containers/about/about.component';
 import { ConditionsComponent } from './containers/conditions/conditions.component';
 import { NotFoundComponent } from './containers/not-found/not-found.component';
-import { AuthComponent } from './auth/auth.component';
-import { HomeComponent } from './home/home.component';
 import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -49,14 +47,12 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     AboutComponent,
     ConditionsComponent,
     NotFoundComponent,
-    AuthComponent,
-    HomeComponent,
-    DropdownDirective,
     LoginComponent,
     RegisterComponent,
     LandingPageComponent,
     AlertComponent,
-    InputComponent
+    InputComponent,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,

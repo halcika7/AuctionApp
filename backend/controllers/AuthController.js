@@ -27,7 +27,6 @@ class AuthController {
 
     async refreshToken(req, res) {
         const token = req.cookies.jid;
-        console.log('TCL: AuthController -> refreshToken -> token', token);
         if (!token) {
             return res.status(400).json({ accessToken: '' });
         }

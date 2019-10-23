@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
@@ -10,13 +11,13 @@ import { map } from 'rxjs/operators';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   signupForm: FormGroup;
   message: string;
   success: boolean;
   showErrors = true;
 
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -50,8 +51,6 @@ export class RegisterComponent implements OnInit {
       ])
     });
 
-    this.store.dispatch(new AuthActions.AuthClearMessagess());
-
     this.store
       .select('auth')
       .pipe(
@@ -62,14 +61,21 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe(({ errors, successMessage, errorMessage }) => {
         // tslint:disable-next-line: no-unused-expression
-        errors.email && this.signupForm.controls.email.setErrors({ async: errors.email });
+        errors.email && !errorMessage
+          ? this.signupForm.controls.email.setErrors({ async: errors.email })
+          : this.signupForm.controls.email.setErrors({});
         // tslint:disable-next-line: no-unused-expression
-        errors.password && this.signupForm.controls.password.setErrors({ async: errors.password });
+        errors.password && !errorMessage
+          ? this.signupForm.controls.password.setErrors({ async: errors.password })
+          : this.signupForm.controls.password.setErrors({});
         // tslint:disable-next-line: no-unused-expression
-        errors.firstName &&
-          this.signupForm.controls.firstName.setErrors({ async: errors.firstName });
+        errors.firstName && !errorMessage
+          ? this.signupForm.controls.firstName.setErrors({ async: errors.firstName })
+          : this.signupForm.controls.firstName.setErrors({});
         // tslint:disable-next-line: no-unused-expression
-        errors.lastName && this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
+        errors.lastName && !errorMessage
+          ? this.signupForm.controls.lastName.setErrors({ async: errors.lastName })
+          : this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
         if (successMessage || errorMessage) {
           this.message = successMessage ? successMessage : errorMessage;
           this.success = successMessage ? true : false;
@@ -81,13 +87,19 @@ export class RegisterComponent implements OnInit {
         if (successMessage) {
           this.showErrors = false;
           this.signupForm.reset();
+
+          setTimeout(() => {
+            this.router.navigate(['/home/auth/login']);
+          }, 2000);
         }
       });
   }
 
+  ngOnDestroy() {
+    this.store.dispatch(new AuthActions.AuthClearMessagess());
+  }
+
   onSubmit() {
-    this.signupForm.clearValidators();
-    this.signupForm.markAsUntouched();
     this.store.dispatch(new AuthActions.RegisterStart({ ...this.signupForm.value }));
   }
 

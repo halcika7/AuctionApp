@@ -44,25 +44,33 @@ exports.registerValidation = async data => {
 };
 
 exports.loginValidation = async data => {
-    console.log('TCL: data', data);
     let errors = {};
+    let errorMessage = '';
     const user = await findUserByEmail(data.email);
 
-    if (isEmpty(data.email)) errors.email = 'Please provide email';
-
-    if (!user) errors.email = 'User not found with provided email';
+    if (isEmpty(data.email)) {
+        errors.email = 'Please provide email';
+    }
 
     if (isEmpty(data.password)) errors.password = 'Please provide password';
 
-    if (isEmpty(data.password) && user) {
+    if (!user && !isEmpty(data.password) && !isEmpty(data.email)) {
+        errorMessage = 'Incorrect email or password';
+    }
+
+    if (!isEmpty(data.password) && user) {
         const byCrypt = await comparePassword(data.password, user.password);
-        if (!byCrypt) errors.password = 'Password is incorrect';
+        if (!byCrypt) {
+            errorMessage = 'Incorrect email or password';
+        }
     }
 
     if (!isEmpty(errors)) {
-        return { errors: { errors }, isValid: isEmpty(errors) };
+        return { errors: { errors }, isValid: false };
+    } else if(!isEmpty(errorMessage)) {
+        return { errorMessage, isValid: false };
     } else {
         delete user.password;
-        return { user, isValid: isEmpty(errors) };
+        return { user, isValid: true };
     }
 };

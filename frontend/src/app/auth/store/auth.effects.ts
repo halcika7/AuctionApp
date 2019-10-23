@@ -45,9 +45,9 @@ export class AuthEffects {
   logout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT_START),
     switchMap(() => {
-      return this.http.post<any>('http://localhost:5000/api/auth/logout', {}).pipe(
-        map(data => new AuthActions.LogoutSuccess(data))
-      );
+      return this.http
+        .post<any>('http://localhost:5000/api/auth/logout', {})
+        .pipe(map(data => new AuthActions.LogoutSuccess(data)));
     })
   );
 
@@ -59,7 +59,11 @@ export class AuthEffects {
         .post<{ accessToken: string }>('http://localhost:5000/api/auth/refresh_token', {})
         .pipe(
           map(data => new AuthActions.RefreshToken(data)),
-          catchError(data => of(new AuthActions.RefreshToken(data)))
+          catchError(data => {
+            localStorage.removeItem('accessToken');
+            sessionStorage.removeItem('accessToken');
+            return of(new AuthActions.RefreshToken(data));
+          })
         );
     })
   );

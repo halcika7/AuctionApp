@@ -20,6 +20,10 @@ export class HeaderComponent implements OnInit {
       .pipe(map(storeData => (storeData.accessToken ? true : false)))
       .subscribe(isAuthenticated => {
         this.isAuthenticated = isAuthenticated;
+        console.log(
+          'TCL: HeaderComponent -> ngOnInit -> this.isAuthenticated ',
+          this.isAuthenticated
+        );
       });
   }
 

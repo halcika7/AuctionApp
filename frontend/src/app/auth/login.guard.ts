@@ -15,19 +15,22 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
-
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.store.select('auth').pipe(
       map(auth => {
-        if (!!auth.accessToken) {
-          return true;
+        if (
+          auth.accessToken ||
+          localStorage.getItem('accessToken') ||
+          sessionStorage.getItem('accessToken')
+        ) {
+          this.router.navigate(['/']);
         }
-        this.router.navigate(['/home/auth/login']);
+        return true;
       })
     );
   }

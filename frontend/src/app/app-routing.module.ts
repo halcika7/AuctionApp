@@ -1,14 +1,16 @@
-import { AuthGuard } from './auth/auth.guard';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from './auth/auth.component';
 import { AboutComponent } from './containers/about/about.component';
 import { NotFoundComponent } from './containers/not-found/not-found.component';
 import { PrivacyComponent } from './containers/privacy/privacy.component';
 import { ConditionsComponent } from './containers/conditions/conditions.component';
-import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { LoginComponent } from './auth/login/login.component';
 import { LandingPageComponent } from './home/landing-page/landing-page.component';
+
+import { AuthGuard } from './auth/auth.guard';
+import { LoginGuard } from './auth/login.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -17,9 +19,14 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: LandingPageComponent },
       {
-        path: 'auth/:type',
-        component: AuthComponent,
-        // canActivate: [AuthGuard]
+        path: 'auth/login',
+        component: LoginComponent,
+        canActivate: [LoginGuard]
+      },
+      {
+        path: 'auth/register',
+        component: RegisterComponent,
+        canActivate: [LoginGuard]
       }
     ]
   },
@@ -31,7 +38,6 @@ const appRoutes: Routes = [
       { path: 'terms', component: ConditionsComponent }
     ]
   },
-  { path: 'account', component: HomeComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

@@ -1,19 +1,9 @@
-import { AuthActions } from './store/auth.actions';
 import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-  HttpHandler,
-  HttpEvent,
-  HttpParams,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { take, exhaustMap, map, catchError } from 'rxjs/operators';
+import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import { take, exhaustMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
@@ -34,5 +24,4 @@ export class AuthInterceptorService implements HttpInterceptor {
       })
     );
   }
-
 }
