@@ -60,7 +60,7 @@ class AuthService {
                 response: { accessToken: createAccessToken(user) },
                 refreshToken: createRefreshToken(user)
             };
-        } catch {
+        } catch(error) {
             return { status: 400, response: { accessToken: '' } };
         }
     }
