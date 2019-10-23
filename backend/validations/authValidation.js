@@ -50,11 +50,18 @@ exports.loginValidation = async data => {
 
     if (isEmpty(data.email)) {
         errors.email = 'Please provide email';
+    }else if (!Validator.isEmail(data.email)) {
+        errors.email = 'Please provide valid email';
     }
 
     if (isEmpty(data.password)) errors.password = 'Please provide password';
 
-    if (!user && !isEmpty(data.password) && !isEmpty(data.email)) {
+    if (
+        !user &&
+        !isEmpty(data.password) &&
+        !isEmpty(data.email) &&
+        Validator.isEmail(data.email)
+    ) {
         errorMessage = 'Incorrect email or password';
     }
 
@@ -67,7 +74,7 @@ exports.loginValidation = async data => {
 
     if (!isEmpty(errors)) {
         return { errors: { errors }, isValid: false };
-    } else if(!isEmpty(errorMessage)) {
+    } else if (!isEmpty(errorMessage)) {
         return { errorMessage, isValid: false };
     } else {
         delete user.password;

@@ -41,6 +41,7 @@ class AuthService {
                 refreshToken
             };
         } catch (error) {
+            console.log('TCL: AuthService -> login -> error', error)
             return {
                 status: 403,
                 response: { err: 'Something happened. We were unable to perform login.' }
