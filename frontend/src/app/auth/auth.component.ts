@@ -33,7 +33,7 @@ export class AuthComponent implements OnInit {
       .pipe(map(state => state.accessToken))
       .subscribe(token => {
         if (token) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/404']);
         }
       });
   }
