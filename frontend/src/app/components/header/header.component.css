@@ -83,7 +83,7 @@ header {
   grid-template-columns: repeat(7, 1fr);
   grid-column: 3;
   grid-template-areas:
-    "a b b b b c c";
+    "a a b b b c c";
 }
 
 .navigation div:nth-child(1) {
@@ -173,7 +173,6 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
 }
 
 .navigation > .nav-links > a:first-child:nth-last-child(2) {
@@ -263,12 +262,7 @@ header {
   .navigation {
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas:
-      "b b b b c c";
-    padding: 0;
-  }
-
-  .navigation div:nth-child(1) {
-    display: none;
+      "a b b b c c";
   }
 }
 
@@ -280,7 +274,6 @@ header {
       "b b b"
       "c c c"
       ;
-    padding: 0;
     height: auto;
   }
 
@@ -315,7 +308,11 @@ header {
   }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 350px) {
+  .navigation {
+    padding: 0;
+  }
+
   .navigation > .nav-links > a {
     margin: 0 7px;
   }
