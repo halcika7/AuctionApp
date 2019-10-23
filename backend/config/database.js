@@ -12,9 +12,14 @@ const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {
         acquire: 30000,
         idel: 10000
     },
+    dialectOptions: {
+        dateStrings: true,
+        typeCast: true,
+        timezone: '+05:30'
+    },
+    timezone: '+05:30',
     define: {
-        operatorsAliases: false,
-        timestamps: false
+        timestamps: true
     }
 });
 
