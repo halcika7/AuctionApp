@@ -37,7 +37,7 @@ exports.registerValidation = async data => {
     } else if (!Validator.isEmail(data.email)) {
         errors.email = 'Email is invalid';
     } else if (user) {
-        errors.email = 'User already exists with entered email!';
+        errors.email = 'Invalid email!';
     }
 
     return { errors: { errors }, isValid: isEmpty(errors) };
@@ -49,12 +49,12 @@ exports.loginValidation = async data => {
     const user = await findUserByEmail(data.email);
 
     if (isEmpty(data.email)) {
-        errors.email = 'Please provide email';
+        errors.email = 'Email is required';
     }else if (!Validator.isEmail(data.email)) {
-        errors.email = 'Please provide valid email';
+        errors.email = 'Please enter valid email';
     }
 
-    if (isEmpty(data.password)) errors.password = 'Please provide password';
+    if (isEmpty(data.password)) errors.password = 'Password is required';
 
     if (
         !user &&
