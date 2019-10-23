@@ -47,7 +47,7 @@ export class AuthEffects {
     switchMap(() => {
       return this.http
         .post<any>('http://localhost:5000/api/auth/logout', {})
-        .pipe(map(data => new AuthActions.LogoutSuccess(data)));
+        .pipe(map(() => new AuthActions.LogoutSuccess()));
     })
   );
 

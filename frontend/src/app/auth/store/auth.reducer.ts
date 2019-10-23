@@ -36,6 +36,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         successMessage: action.payload.successMessage
       };
     case AuthActions.REGISTER_FAILED:
+    case AuthActions.LOGIN_FAILED:
       return {
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,
@@ -47,18 +48,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         accessToken: action.payload.accessToken,
         successMessage: action.payload.successMessage
       };
-    case AuthActions.LOGIN_FAILED:
-      return {
-        ...initialState,
-        errors: action.payload.errors ? action.payload.errors : state.errors,
-        errorMessage: action.payload.err ? action.payload.err : state.errorMessage
-      };
     case AuthActions.REFRESH_ACCESS_TOKEN:
-      return {
-        ...initialState,
-        accessToken: action.payload.accessToken
-      };
-    case AuthActions.LOGIN_SUCCESS:
       return {
         ...initialState,
         accessToken: action.payload.accessToken

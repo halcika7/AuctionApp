@@ -3,11 +3,14 @@ import { Action } from '@ngrx/store';
 export const REGISTER_START = 'REGISTER_START';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILED = 'REGISTER_FAILED';
+
 export const LOGIN_START = 'LOGIN_START';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
+
 export const LOGOUT_START = 'LOGOUT_START';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
 export const REFRESH_ACCESS_TOKEN = 'REFRESH_ACCESS_TOKEN';
 export const REFRESH_ACCESS_TOKEN_START = 'REFRESH_ACCESS_TOKEN_START';
 export const AUTH_CLEAR_MESSAGESS = 'AUTH_CLEAR_MESSAGESS';
@@ -50,8 +53,6 @@ export class LogoutStart implements Action {
 
 export class LogoutSuccess implements Action {
   readonly type = LOGOUT_SUCCESS;
-
-  constructor(public payload: { accessToken: string }) {}
 }
 
 export class RefreshTokenStart implements Action {
