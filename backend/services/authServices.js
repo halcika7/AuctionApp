@@ -7,10 +7,10 @@ const {
     verifyRefreshToken
 } = require('../helpers/authHelper');
 
-class AuthServcie {
+class AuthService {
     constructor() {
-        if (!!AuthServcie.instance) return AuthServcie.instance;
-        AuthServcie.instance = this;
+        if (!!AuthService.instance) return AuthService.instance;
+        AuthService.instance = this;
         return this;
     }
 
@@ -63,6 +63,6 @@ class AuthServcie {
     }
 }
 
-const AuthServcieInstance = new AuthServcie();
+const AuthServcieInstance = new AuthService();
 
 module.exports = AuthServcieInstance;

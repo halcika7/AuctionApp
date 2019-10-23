@@ -13,9 +13,12 @@ const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {
         idel: 10000
     },
     define: {
+        operatorsAliases: false,
         timestamps: false
     }
 });
+
+db.sync();
 
 db.authenticate()
     .then(() => console.log('DB connected'))

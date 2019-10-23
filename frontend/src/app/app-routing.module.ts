@@ -18,7 +18,7 @@ const appRoutes: Routes = [
       { path: '', component: LandingPageComponent },
       {
         path: 'auth/:type',
-        component: AuthComponent
+        component: AuthComponent,
         // canActivate: [AuthGuard]
       }
     ]
@@ -26,7 +26,7 @@ const appRoutes: Routes = [
   {
     path: 'shop',
     children: [
-      { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
+      { path: 'about', component: AboutComponent },
       { path: 'privacy', component: PrivacyComponent },
       { path: 'terms', component: ConditionsComponent }
     ]

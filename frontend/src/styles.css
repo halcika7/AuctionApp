@@ -491,7 +491,7 @@ template {
   border: 1px solid #CC0000;
 }
 
-.form-group .input input.ng-invalid.ng-touched ~ span,
+.form-group .input input.ng-invalid ~ span,
 .form-group .input input.ng-invalid ~ span.async {
   display: block;
   color: #CC0000;
@@ -500,7 +500,7 @@ template {
   font-size: 14px;
 }
 
-.form-group .input input.ng-invalid.ng-touched ~ span > span,
+.form-group .input input.ng-invalid ~ span > span,
 .form-group .input input.ng-invalid ~ span.async > span {
   display: block;
   margin-top: 5px;

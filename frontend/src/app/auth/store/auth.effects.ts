@@ -54,7 +54,7 @@ export class AuthEffects {
   @Effect()
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
-    switchMap((loginData: AuthActions.RefreshToken) => {
+    switchMap(() => {
       return this.http
         .post<{ accessToken: string }>('http://localhost:5000/api/auth/refresh_token', {})
         .pipe(

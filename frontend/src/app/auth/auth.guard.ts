@@ -24,8 +24,7 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.store.select('auth').pipe(
       map(auth => {
-        const accessToken = !!auth.accessToken;
-        if (accessToken) {
+        if (!!auth.accessToken) {
           return true;
         }
         this.router.navigate(['/home/auth/login']);

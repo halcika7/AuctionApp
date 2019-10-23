@@ -44,16 +44,17 @@ exports.registerValidation = async data => {
 };
 
 exports.loginValidation = async data => {
+    console.log('TCL: data', data);
     let errors = {};
     const user = await findUserByEmail(data.email);
 
-    if (Validator.isEmpty(data.email)) errors.email = 'Please provide email';
+    if (isEmpty(data.email)) errors.email = 'Please provide email';
 
     if (!user) errors.email = 'User not found with provided email';
 
-    if (Validator.isEmpty(data.password)) errors.password = 'Please provide password';
+    if (isEmpty(data.password)) errors.password = 'Please provide password';
 
-    if (!Validator.isEmpty(data.password) && user) {
+    if (isEmpty(data.password) && user) {
         const byCrypt = await comparePassword(data.password, user.password);
         if (!byCrypt) errors.password = 'Password is incorrect';
     }

@@ -17,6 +17,7 @@
         controlName="firstName"
         [parentForm]="signupForm"
         [input]="signupForm.get('firstName')"
+        [showErrors]="showErrors"
       ></app-input>
       <app-input
         id="LName"
@@ -26,6 +27,7 @@
         controlName="lastName"
         [parentForm]="signupForm"
         [input]="signupForm.get('lastName')"
+        [showErrors]="showErrors"
       ></app-input>
       <app-input
         id="email"
@@ -36,6 +38,7 @@
         [parentForm]="signupForm"
         [input]="signupForm.get('email')"
         pattern="Please enter valid email address !!"
+        [showErrors]="showErrors"
       ></app-input>
       <app-input
         id="password"
@@ -47,6 +50,7 @@
         [input]="signupForm.get('password')"
         pattern="Possword must include at least one of each type: lowercase, uppercase, number and
         special symbol such as (!@#$%)!!"
+        [showErrors]="showErrors"
       ></app-input>
       <button type="submit">
         Register

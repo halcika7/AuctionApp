@@ -14,22 +14,23 @@ export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
   message: string;
   success: boolean;
+  showErrors = true;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.signupForm = new FormGroup({
-      firstName: new FormControl(null, [
+      firstName: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(100)
       ]),
-      lastName: new FormControl(null, [
+      lastName: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(100)
       ]),
-      email: new FormControl(null, [
+      email: new FormControl('', [
         Validators.required,
         Validators.email,
         Validators.pattern(
@@ -39,7 +40,7 @@ export class RegisterComponent implements OnInit {
           )
         )
       ]),
-      password: new FormControl(null, [
+      password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30),
@@ -48,6 +49,8 @@ export class RegisterComponent implements OnInit {
         )
       ])
     });
+
+    this.store.dispatch(new AuthActions.AuthClearMessagess());
 
     this.store
       .select('auth')
@@ -58,12 +61,15 @@ export class RegisterComponent implements OnInit {
         })
       )
       .subscribe(({ errors, successMessage, errorMessage }) => {
-        if (errors.email || errors.password || errors.firstName || errors.lastName) {
-          this.signupForm.controls.email.setErrors({ async: errors.email });
-          this.signupForm.controls.password.setErrors({ async: errors.password });
+        // tslint:disable-next-line: no-unused-expression
+        errors.email && this.signupForm.controls.email.setErrors({ async: errors.email });
+        // tslint:disable-next-line: no-unused-expression
+        errors.password && this.signupForm.controls.password.setErrors({ async: errors.password });
+        // tslint:disable-next-line: no-unused-expression
+        errors.firstName &&
           this.signupForm.controls.firstName.setErrors({ async: errors.firstName });
-          this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
-        }
+        // tslint:disable-next-line: no-unused-expression
+        errors.lastName && this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
         if (successMessage || errorMessage) {
           this.message = successMessage ? successMessage : errorMessage;
           this.success = successMessage ? true : false;
@@ -73,6 +79,7 @@ export class RegisterComponent implements OnInit {
         }
 
         if (successMessage) {
+          this.showErrors = false;
           this.signupForm.reset();
         }
       });

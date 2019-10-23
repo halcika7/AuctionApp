@@ -21,7 +21,6 @@ class AuthController {
     }
 
     async logout(req, res) {
-        console.log('logout fireeddsfkjidjdsif');
         AuthServcieInstance.setRefreshTokenCookie(res, '');
         return res.status(200).json({ accessToken: '' });
     }

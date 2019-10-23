@@ -1,10 +1,12 @@
 <app-breadcrumb [title]="'login'"></app-breadcrumb>
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  (closeAlert)="removeMessages()"
+  [type]="success"
+></app-alert>
 <section class="container">
-  <form
-    class="form"
-    [formGroup]="loginForm"
-    (ngSubmit)="onSubmit()"
-  >
+  <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h1>Login</h1>
     <div class="wrapper pb-51">
       <app-input
@@ -15,6 +17,7 @@
         controlName="email"
         [parentForm]="loginForm"
         [input]="loginForm.get('email')"
+        [showErrors]="showErrors"
       ></app-input>
       <app-input
         id="password"
@@ -24,6 +27,7 @@
         controlName="password"
         [parentForm]="loginForm"
         [input]="loginForm.get('password')"
+        [showErrors]="showErrors"
       ></app-input>
       <div class="form-group flex">
         <input type="checkbox" id="remember" formControlName="remember" />
