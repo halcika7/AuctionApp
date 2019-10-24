@@ -40,13 +40,19 @@ const User = db.define(
             }
         },
         photo: {
-            type: Sequelize.STRING(255)
+            type: Sequelize.STRING(255),
+            allowNull: true,
+            defaultValue: null
         },
         gender: {
-            type: Sequelize.CHAR(6)
+            type: Sequelize.CHAR(6),
+            allowNull: true,
+            defaultValue: null
         },
         phoneNumber: {
-            type: Sequelize.STRING(20)
+            type: Sequelize.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         seller: {
             type: Sequelize.BOOLEAN,
@@ -57,6 +63,24 @@ const User = db.define(
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false
+        },
+        roleId: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: {
+                    tableName: 'Roles'
+                },
+                key: 'id'
+            }
+        },
+        optionalInfoId: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: {
+                    tableName: 'OptionalInfos'
+                },
+                key: 'id'
+            }
         }
     },
     {

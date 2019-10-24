@@ -27,34 +27,31 @@ export class LoginComponent implements OnInit, OnDestroy {
       remember: new FormControl(false)
     });
 
-    this.store.select('auth').subscribe(({ errors, errorMessage, accessToken }) => {
-      if (
-        accessToken ||
-        localStorage.getItem('accessToken') ||
-        sessionStorage.getItem('accessToken')
-      ) {
+    this.store.select('auth').subscribe((data) => {
+      if (data.accessToken) {
         this.remember
-          ? localStorage.setItem('accessToken', accessToken)
-          : sessionStorage.setItem('accessToken', accessToken);
+          ? localStorage.setItem('accessToken', data.accessToken)
+          : sessionStorage.setItem('accessToken', data.accessToken);
         this.router.navigate(['/']);
+      } else {
+        if (data.errors.email && !data.errorMessage) {
+          this.loginForm.controls.email.setErrors({ async: data.errors.email });
+          this.loginForm.controls.email.markAsTouched();
+        } else {
+          this.loginForm.controls.email.setErrors({});
+          this.loginForm.controls.email.setValue(this.loginForm.controls.email.value);
+        }
+
+        if (data.errors.password && !data.errorMessage) {
+          this.loginForm.controls.password.setErrors({ async: data.errors.password });
+          this.loginForm.controls.password.markAsTouched();
+        } else {
+          this.loginForm.controls.password.setErrors({});
+          this.loginForm.controls.password.setValue(this.loginForm.controls.password.value);
+        }
       }
 
-      if (errors.email && !errorMessage) {
-        this.loginForm.controls.email.setErrors({ async: errors.email });
-        this.loginForm.controls.email.markAsTouched();
-      } else {
-        this.loginForm.controls.email.setErrors({});
-        this.loginForm.controls.email.setValue(this.loginForm.controls.email.value);
-      }
-
-      if (errors.password && !errorMessage) {
-        this.loginForm.controls.password.setErrors({ async: errors.password });
-        this.loginForm.controls.password.markAsTouched();
-      } else {
-        this.loginForm.controls.password.setErrors({});
-        this.loginForm.controls.password.setValue(this.loginForm.controls.password.value);
-      }
-      this.message = errorMessage ? errorMessage : '';
+      this.message = data.errorMessage ? data.errorMessage : '';
     });
   }
 

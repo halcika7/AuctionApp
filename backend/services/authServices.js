@@ -21,7 +21,7 @@ class AuthService {
             await createUser(data);
             return { status: 200, response: { successMessage: 'Account successfully created !' } };
         } catch (error) {
-            console.log('TCL: AuthService -> register -> error', error)
+            console.log('TCL: AuthService -> register -> error', error);
             return {
                 status: 403,
                 response: { err: 'Something happened. We were unable to create an account.' }
@@ -35,7 +35,7 @@ class AuthService {
             if (!isValid && errors) return { status: 403, response: { ...errors } };
             if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
             const accessToken = createAccessToken(user),
-                refreshToken = createRefreshToken(user);
+            refreshToken = createRefreshToken(user);
             return {
                 status: 200,
                 response: { successMessage: 'success', accessToken },
@@ -61,7 +61,7 @@ class AuthService {
                 response: { accessToken: createAccessToken(user) },
                 refreshToken: createRefreshToken(user)
             };
-        } catch(error) {
+        } catch (error) {
             return { status: 400, response: { accessToken: '' } };
         }
     }

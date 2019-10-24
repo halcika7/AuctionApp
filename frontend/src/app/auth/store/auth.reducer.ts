@@ -27,7 +27,6 @@ const initialState: State = {
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
     case AuthActions.REGISTER_START:
-    case AuthActions.LOGIN_START:
     case AuthActions.LOGOUT_START:
       return { ...initialState };
     case AuthActions.REGISTER_SUCCESS:

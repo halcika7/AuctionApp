@@ -105,7 +105,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.signupForm.reset();
 
           setTimeout(() => {
-            this.router.navigate(['/home/auth/login']);
+            this.router.navigate(['/home/auth/login']).then(() => window.location.reload());
           }, 2000);
         }
       });
