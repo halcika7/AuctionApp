@@ -28,6 +28,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
   switch (action.type) {
     case AuthActions.REGISTER_START:
     case AuthActions.LOGOUT_START:
+    case AuthActions.AUTH_CLEAR_MESSAGESS:
       return { ...initialState };
     case AuthActions.REGISTER_SUCCESS:
       return {
@@ -51,12 +52,6 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...initialState,
         accessToken: action.payload.accessToken
-      };
-    case AuthActions.AUTH_CLEAR_MESSAGESS:
-      return {
-        ...state,
-        errorMessage: '',
-        successMessage: ''
       };
     default:
       return state;

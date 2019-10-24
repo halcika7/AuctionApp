@@ -11,7 +11,7 @@ import * as AuthActions from '../store/auth.actions';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   message: string;
   showErrors = true;
@@ -53,10 +53,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.message = data.errorMessage ? data.errorMessage : '';
     });
-  }
-
-  ngOnDestroy() {
-    this.store.dispatch(new AuthActions.AuthClearMessagess());
   }
 
   onSubmit() {

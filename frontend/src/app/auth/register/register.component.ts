@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   signupForm: FormGroup;
   message: string;
   success: boolean;
@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   ngOnInit() {
+    this.store.dispatch(new AuthActions.AuthClearMessagess());
     this.signupForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
@@ -109,6 +110,10 @@ export class RegisterComponent implements OnInit {
           }, 2000);
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new AuthActions.AuthClearMessagess());
   }
 
   onSubmit() {
