@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -27,32 +27,36 @@ export class LoginComponent implements OnInit {
       remember: new FormControl(false)
     });
 
-    this.store.select('auth').subscribe((data) => {
-      if (data.accessToken) {
-        this.remember
-          ? localStorage.setItem('accessToken', data.accessToken)
-          : sessionStorage.setItem('accessToken', data.accessToken);
-        this.router.navigate(['/']);
-      } else {
-        if (data.errors.email && !data.errorMessage) {
-          this.loginForm.controls.email.setErrors({ async: data.errors.email });
+    this.store
+      .select('auth')
+      .pipe(map(storeData => storeData))
+      .subscribe(({ errorMessage, errors, accessToken, remember }) => {
+        if (
+          accessToken ||
+          localStorage.getItem('accessToken') ||
+          sessionStorage.getItem('accessToken')
+        ) {
+          this.router.navigate(['/']);
+        }
+
+        if (errors.email && !errorMessage) {
+          this.loginForm.controls.email.setErrors({ async: errors.email });
           this.loginForm.controls.email.markAsTouched();
         } else {
           this.loginForm.controls.email.setErrors({});
           this.loginForm.controls.email.setValue(this.loginForm.controls.email.value);
         }
 
-        if (data.errors.password && !data.errorMessage) {
-          this.loginForm.controls.password.setErrors({ async: data.errors.password });
+        if (errors.password && !errorMessage) {
+          this.loginForm.controls.password.setErrors({ async: errors.password });
           this.loginForm.controls.password.markAsTouched();
         } else {
           this.loginForm.controls.password.setErrors({});
           this.loginForm.controls.password.setValue(this.loginForm.controls.password.value);
         }
-      }
 
-      this.message = data.errorMessage ? data.errorMessage : '';
-    });
+        this.message = errorMessage ? errorMessage : '';
+      });
   }
 
   onSubmit() {

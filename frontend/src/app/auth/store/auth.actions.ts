@@ -34,12 +34,12 @@ export class RegisterFailed implements Action {
 
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
-  constructor(public payload: { email: string; password: string }) {}
+  constructor(public payload: { email: string; password: string; remember: boolean }) {}
 }
 
 export class LoginSuccess implements Action {
   readonly type = LOGIN_SUCCESS;
-  constructor(public payload: { successMessage: string; accessToken: string }) {}
+  constructor(public payload: { successMessage: string; accessToken: string, remember: boolean }) {}
 }
 
 export class LoginFailed implements Action {

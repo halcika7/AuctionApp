@@ -32,7 +32,8 @@ export class AuthEffects {
       return this.http
         .post<any>('http://localhost:5000/api/auth/login', {
           email: loginData.payload.email,
-          password: loginData.payload.password
+          password: loginData.payload.password,
+          remember: loginData.payload.remember
         })
         .pipe(
           map(resData => new AuthActions.LoginSuccess(resData)),

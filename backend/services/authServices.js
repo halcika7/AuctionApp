@@ -37,7 +37,7 @@ class AuthService {
             refreshToken = createRefreshToken(user);
             return {
                 status: 200,
-                response: { successMessage: 'success', accessToken },
+                response: { successMessage: 'success', accessToken, remember: data.remember },
                 refreshToken
             };
         } catch (error) {

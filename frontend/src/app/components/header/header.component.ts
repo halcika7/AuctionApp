@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from '../../auth/store/auth.actions';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -15,20 +14,16 @@ export class HeaderComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store
-      .select('auth')
-      .pipe(map(storeData => (storeData.accessToken ? true : false)))
-      .subscribe(isAuthenticated => {
-        if (
-          isAuthenticated ||
-          localStorage.getItem('accessToken') ||
-          sessionStorage.getItem('accessToken')
-        ) {
-          this.isAuthenticated = true;
-        } else {
-          this.isAuthenticated = false;
-        }
-      });
+    this.store.select('auth').subscribe(data => {
+      if (data.accessToken) {
+        this.isAuthenticated = true;
+        data.remember
+          ? localStorage.setItem('accessToken', data.accessToken)
+          : sessionStorage.setItem('accessToken', data.accessToken);
+      } else {
+        this.isAuthenticated = false;
+      }
+    });
   }
 
   clicked(e: Event) {
