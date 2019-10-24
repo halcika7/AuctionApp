@@ -1,26 +1,18 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
+    up: (queryInterface, Sequelize) => {
+        let psub = [];
+        for (let i = 0; i < 100; i++) {
+            psub.push({
+                productId: Math.floor(Math.random() * 200 + 1),
+                subcategoryId: Math.floor(Math.random() * 100 + 1)
+            });
+        }
+        return queryInterface.bulkInsert('Product_Subcategories', psub, {});
+    },
 
-      Example:
-      return queryInterface.bulkInsert('People', [{
-        name: 'John Doe',
-        isBetaMember: false
-      }], {});
-    */
-  },
-
-  down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('People', null, {});
-    */
-  }
+    down: (queryInterface, Sequelize) => {
+        return queryInterface.bulkDelete('Product_Subcategories', null, {});
+    }
 };

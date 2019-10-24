@@ -17,7 +17,6 @@ class AuthController {
         if (!response.errors && !response.err) {
             AuthServcieInstance.setRefreshTokenCookie(res, refreshToken);
         }
-        console.log('TCL: AuthController -> loginUser -> response', response);
         return res.status(status).json(response);
     }
 
