@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
   message: string;
   success: boolean;
@@ -105,14 +105,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.signupForm.reset();
 
           setTimeout(() => {
-            this.router.navigate(['/home/auth/login']).then(() => window.location.reload());
+            this.router.navigate(['/home/auth/login']);
           }, 2000);
         }
       });
-  }
-
-  ngOnDestroy() {
-    this.store.dispatch(new AuthActions.AuthClearMessagess());
   }
 
   onSubmit() {
