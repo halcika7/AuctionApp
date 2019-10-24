@@ -19,7 +19,15 @@ export class HeaderComponent implements OnInit {
       .select('auth')
       .pipe(map(storeData => (storeData.accessToken ? true : false)))
       .subscribe(isAuthenticated => {
-        this.isAuthenticated = isAuthenticated;
+        if (
+          isAuthenticated ||
+          localStorage.getItem('accessToken') ||
+          sessionStorage.getItem('accessToken')
+        ) {
+          this.isAuthenticated = true;
+        } else {
+          this.isAuthenticated = false;
+        }
       });
   }
 

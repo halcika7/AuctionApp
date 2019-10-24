@@ -21,6 +21,7 @@ class AuthService {
             await createUser(data);
             return { status: 200, response: { successMessage: 'Account successfully created !' } };
         } catch (error) {
+            console.log('TCL: AuthService -> register -> error', error)
             return {
                 status: 403,
                 response: { err: 'Something happened. We were unable to create an account.' }

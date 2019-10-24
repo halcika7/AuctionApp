@@ -81,20 +81,19 @@ header {
   height: 80px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-column: 3;
   grid-template-areas:
     "a a b b b c c";
 }
 
-.navigation div:nth-child(1) {
+.navigation > div:nth-child(1) {
   grid-area: a;
 }
 
-.navigation div:nth-child(2) {
+.navigation > div:nth-child(2) {
   grid-area: b;
 }
 
-.navigation div:nth-child(3) {
+.navigation > div:nth-child(3) {
   grid-area: c;
 }
 

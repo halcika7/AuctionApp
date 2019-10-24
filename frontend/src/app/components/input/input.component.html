@@ -8,7 +8,7 @@
       formControlName="{{ controlName }}"
     />
     <span *ngIf="input.invalid && input.touched && showErrors">
-      <span *ngIf="input.errors['required']">{{ title }} is required !!</span>
+      <span *ngIf="input.errors['required']">{{ title }} is required</span>
       <span *ngIf="input.errors['minlength']"
         >{{ title }} must contain at least {{ input.errors['minlength'].requiredLength }} characters
         !!</span

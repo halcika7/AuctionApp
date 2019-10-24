@@ -61,7 +61,7 @@ const User = db.define(
     },
     {
         sequelize: Sequelize,
-        modelName: 'users'
+        modelName: 'Users'
     }
 );
 
