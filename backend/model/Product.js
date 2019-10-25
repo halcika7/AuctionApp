@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
+console.log('TCL: db', db)
 
 const Product = db.define(
     'Product',
@@ -59,12 +60,13 @@ const Product = db.define(
 );
 
 Product.associate = function(models) {
+    Product.hasMany(models.ProductImages, { as: 'images' });
     Product.belongsToMany(models.Order, {
-      through: 'Product_Subcategorys',
-      as: 'product_subcategories',
-      foreignKey: 'productId',
-      otherKey: 'subcategoryId'
+        through: 'Product_Subcategories',
+        as: 'product_subcategories',
+        foreignKey: 'productId',
+        otherKey: 'subcategoryId'
     });
-  };
+};
 
 module.exports = Product;

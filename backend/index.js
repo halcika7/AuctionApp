@@ -19,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+require('./config/database')
+
 app.use('/api/auth', require('./routes/authentication/authRoutes'));
 
 const port = process.env.PORT || 5000;

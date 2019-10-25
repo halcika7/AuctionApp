@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+Sequelize.cre;
 const { DB_USERNAME, DB_PASSWORD } = require('./configs');
 
 const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {

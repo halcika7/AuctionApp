@@ -56,7 +56,10 @@
 
     cd backend/
     
-    npm run install-packages
+    npm run backend-install
+    npm run frontend-install
+    npm run create-db
+    npm run migrate
 
     npm run dev
 ```

@@ -8,8 +8,9 @@
     "server": "nodemon index.js",
     "frontend": "npm start --prefix ../frontend",
     "frontend-install": "npm install --prefix ../frontend",
-    "backend": "npm install",
-    "install-packages": "npm run frontend-install & npm run backend",
+    "backend-install": "npm install",
+    "create-db": "node ./config/createDb.js",
+    "migrate": "npx sequelize-cli db:migrate",
     "dev": "concurrently \"npm run server\" \"npm run frontend\""
   },
   "keywords": [],

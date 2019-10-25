@@ -30,4 +30,9 @@ const ProductImage = db.define(
     }
 );
 
+ProductImage.associate = function(models) {
+    // ProductImage.hasMany(db.ProductImages, { foreignKey: 'productId' });
+    ProductImage.hasOne(models.Product);
+};
+
 module.exports = ProductImage;
