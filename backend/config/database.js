@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 Sequelize.cre;
-const { DB_USERNAME, DB_PASSWORD, DB_PORT } = require('./configs');
+const { DB_USERNAME, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME } = require('./configs');
 
-const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {
-    host: 'localhost',
+const db = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
+    host: DB_HOST,
     port: DB_PORT,
     dialect: 'postgres',
     logging: false,
