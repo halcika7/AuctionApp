@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 Sequelize.cre;
-const { DB_USERNAME, DB_PASSWORD } = require('./configs');
+const { DB_USERNAME, DB_PASSWORD, DB_PORT } = require('./configs');
 
 const db = new Sequelize('auctionapp', DB_USERNAME, DB_PASSWORD, {
     host: 'localhost',
-    port: 5433,
+    port: DB_PORT,
     dialect: 'postgres',
     logging: false,
     pool: {

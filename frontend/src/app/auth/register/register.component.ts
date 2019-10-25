@@ -15,6 +15,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   signupForm: FormGroup;
   message: string;
   success: boolean;
+  isValidForm = false;
+  isClicked = false;
   showErrors = true;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
@@ -50,6 +52,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
           new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})')
         )
       ])
+    });
+
+    this.signupForm.statusChanges.subscribe(validity => {
+      if (validity === 'VALID') {
+        this.isValidForm = true;
+      } else {
+        this.isValidForm = false;
+      }
     });
 
     this.store
@@ -108,6 +118,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.router.navigate(['/home/auth/login']);
           }, 2000);
+        } else {
+          this.isClicked = false;
         }
       });
   }
@@ -117,6 +129,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.isClicked = true;
     this.store.dispatch(new AuthActions.RegisterStart({ ...this.signupForm.value }));
   }
 

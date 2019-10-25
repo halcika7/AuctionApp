@@ -52,7 +52,7 @@
         special symbol such as (!@#$%)!!"
         [showErrors]="showErrors"
       ></app-input>
-      <button type="submit">
+      <button type="submit" [disabled]="!isValidForm || isClicked">
         Register
       </button>
       <span>Already have an account? <a [routerLink]="['/home/auth/login']">Login</a></span>
