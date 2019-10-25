@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.store
       .select('auth')
       .pipe(map(storeData => storeData))
-      .subscribe(({ errorMessage, errors, accessToken, remember }) => {
+      .subscribe(({ errorMessage, errors, accessToken }) => {
         if (
           accessToken ||
           localStorage.getItem('accessToken') ||
