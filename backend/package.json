@@ -11,6 +11,7 @@
     "backend-install": "npm install",
     "create-db": "node ./config/createDb.js",
     "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all",
     "dev": "concurrently \"npm run server\" \"npm run frontend\""
   },
   "keywords": [],

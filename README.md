@@ -47,6 +47,9 @@
     REFRESH_TOKEN_SECRET=
     DB_USER=
     DB_PASSWORD=
+    DB_PORT=
+    DB_HOST=
+    DB_NAME=
     NODE_ENV=
 ```
 ** Run the following commands **

@@ -16,6 +16,5 @@ pg.connect()
             });
     })
     .catch(err => {
-        console.log('TCL: err', err);
-        console.log('error');
+        console.log('unable to connect to postgres db');
     });
