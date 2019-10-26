@@ -10,11 +10,14 @@ pg.connect()
             .query(`CREATE DATABASE ${DB_NAME}`)
             .then(() => {
                 console.log('db created');
+                process.kill(process.pid);
             })
             .catch(err => {
                 console.log('db exists');
+                process.kill(process.pid);
             });
     })
     .catch(err => {
         console.log('unable to connect to postgres db');
+        process.kill(process.pid);
     });
