@@ -2,45 +2,8 @@
 
 > This project was made using Angular, Node.js, Express(Node.js web application framework), PostgreSQL 
 
-** After downloading or cloning add the following files **
+** After downloading or cloning add the following file **
 
----> Add config.json in backend/config folder something like:
-```
-    {
-        "local": {
-            "username": "dbusername",
-            "password": "dbpassword",
-            "database": "databasename",
-            "host": "localhost",
-            "port": 5433,
-            "dialect": "postgres"
-        },
-        "development": {
-            "username": "dbusername",
-            "password": "dbpassword",
-            "database": "databasename",
-            "host": "localhost",
-            "port": 5433,
-            "dialect": "postgres"
-        },
-        "test": {
-            "username": "dbusername",
-            "password": "dbpassword",
-            "database": "databasename",
-            "host": "localhost",
-            "port": 5433,
-            "dialect": "postgres"
-        },
-        "production": {
-            "username": "dbusername",
-            "password": "dbpassword",
-            "database": "databasename",
-            "host": "localhost",
-            "port": 5433,
-            "dialect": "postgres"
-        }
-    }
-```
 ---> Add .env in backend/ root folder :
 ```
     ACCESS_TOKEN_SECRET=
