@@ -70,6 +70,6 @@ class AuthService {
     }
 }
 
-const AuthServcieInstance = new AuthService();
+const AuthServiceInstance = new AuthService();
 
-module.exports = AuthServcieInstance;
+module.exports = AuthServiceInstance;
