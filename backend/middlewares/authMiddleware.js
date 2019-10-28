@@ -1,5 +1,5 @@
 const { verifyAccessToken } = require('../helpers/authHelper');
-const { setRefreshTokenCookie } = require('../services/authServices');
+const { setRefreshTokenCookie } = require('../services/AuthService');
 
 module.exports = (req, res, next) => {
     const authorization = req.headers['authorization'];
