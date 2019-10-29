@@ -1,1 +1,5 @@
-<h1>Angular and Node connected</h1>
+<ng-template [ngIf]="!notFound">
+  <app-header></app-header>
+</ng-template>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

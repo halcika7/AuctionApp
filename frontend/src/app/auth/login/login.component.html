@@ -1,0 +1,53 @@
+<app-breadcrumb [title]="'login'"></app-breadcrumb>
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  (closeAlert)="removeMessages()"
+  [type]="success"
+></app-alert>
+<section class="container">
+  <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h1>Login</h1>
+    <div class="wrapper pb-51">
+      <app-input
+        id="email"
+        title="Email"
+        placeholder="Enter Email"
+        type="email"
+        controlName="email"
+        [parentForm]="loginForm"
+        [input]="loginForm.get('email')"
+        [showErrors]="showErrors"
+        pattern="Please enter valid email address !!"
+      ></app-input>
+      <app-input
+        id="password"
+        title="Password"
+        placeholder="Enter Password"
+        type="password"
+        controlName="password"
+        [parentForm]="loginForm"
+        [input]="loginForm.get('password')"
+        [showErrors]="showErrors"
+      ></app-input>
+      <div class="form-group flex">
+        <input type="checkbox" id="remember" formControlName="remember" />
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        <label for="remember">Remember me</label>
+      </div>
+      <button type="submit" class="login-button">
+        Login
+      </button>
+      <div class="social-login">
+        <a href="" class="facebook-link"
+          ><fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>login with facebook</a
+        >
+        <a href="" class="gmail-link"
+          ><fa-icon [icon]="['fab', 'google-plus-square']"></fa-icon>login with gmail</a
+        >
+      </div>
+      <a href="" class="forgot-password">Forgot Password?</a>
+      <span>Don't have an account? <a [routerLink]="['/home/auth/register']">Register</a></span>
+    </div>
+  </form>
+</section>

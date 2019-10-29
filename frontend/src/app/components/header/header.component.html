@@ -1,0 +1,64 @@
+<header class="container-fluid">
+  <div class="top container">
+    <div class="links">
+      <a href="">
+        <fa-icon [icon]="['fab', 'facebook-f']"></fa-icon>
+      </a>
+      <a href="">
+        <fa-icon [icon]="['fab', 'instagram']"></fa-icon>
+      </a>
+      <a href="">
+        <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
+      </a>
+      <a href="">
+        <fa-icon [icon]="['fab', 'google-plus-g']"></fa-icon>
+      </a>
+    </div>
+    <div class="login" *ngIf="!isAuthenticated">
+      <a [routerLink]="['/home/auth/login']">Login</a>
+      <span>or</span>
+      <a [routerLink]="['/home/auth/register']">Create an Account</a>
+    </div>
+    <div class="login" *ngIf="isAuthenticated">
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
+</header>
+<nav class="navigation container">
+  <div class="brand">
+    <div class="brand-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    Auction
+  </div>
+  <div class="search">
+    <input type="search" placeholder="Search" />
+    <fa-icon [icon]="['fas', 'search']"></fa-icon>
+  </div>
+  <div class="nav-links">
+    <a [routerLink]="['/home']" routerLinkActive="active" >home</a>
+    <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
+    <a href="#" appDropdown (click)="clicked($event)" *ngIf="isAuthenticated">
+      <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
+      <ul class="dropdown">
+        <li>
+          <a href=""><span>Profile</span></a>
+        </li>
+        <li>
+          <a href="" class="active"><span>Become Seller</span></a>
+        </li>
+        <li>
+          <a href=""><span>Your Bids</span></a>
+        </li>
+        <li>
+          <a href=""><span>Wishlist</span></a>
+        </li>
+        <li>
+          <a href=""><span>Settings</span></a>
+        </li>
+      </ul>
+    </a>
+  </div>
+</nav>

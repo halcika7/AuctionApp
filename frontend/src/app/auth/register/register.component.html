@@ -1,0 +1,61 @@
+<app-breadcrumb [title]="'register'"></app-breadcrumb>
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  (closeAlert)="removeMessages()"
+  [type]="success"
+></app-alert>
+<section class="container">
+  <form class="form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <h1>Register</h1>
+    <div class="wrapper pb-51">
+      <app-input
+        id="fName"
+        title="First Name"
+        placeholder="Enter First Name"
+        type="text"
+        controlName="firstName"
+        [parentForm]="signupForm"
+        [input]="signupForm.get('firstName')"
+        [showErrors]="showErrors"
+      ></app-input>
+      <app-input
+        id="LName"
+        title="Last Name"
+        placeholder="Enter Last Name"
+        type="text"
+        controlName="lastName"
+        [parentForm]="signupForm"
+        [input]="signupForm.get('lastName')"
+        [showErrors]="showErrors"
+      ></app-input>
+      <app-input
+        id="email"
+        title="Email"
+        placeholder="Enter Email"
+        type="email"
+        controlName="email"
+        [parentForm]="signupForm"
+        [input]="signupForm.get('email')"
+        pattern="Please enter valid email address !!"
+        [showErrors]="showErrors"
+      ></app-input>
+      <app-input
+        id="password"
+        title="Password"
+        placeholder="Enter Password"
+        type="password"
+        controlName="password"
+        [parentForm]="signupForm"
+        [input]="signupForm.get('password')"
+        pattern="Possword must include at least one of each type: lowercase, uppercase, number and
+        special symbol such as (!@#$%)!!"
+        [showErrors]="showErrors"
+      ></app-input>
+      <button type="submit" [disabled]="!isValidForm || isClicked">
+        Register
+      </button>
+      <span>Already have an account? <a [routerLink]="['/home/auth/login']">Login</a></span>
+    </div>
+  </form>
+</section>
