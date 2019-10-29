@@ -6,7 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
+  isOpen = false;
+
   constructor() {}
 
   ngOnInit() {}
+
+  toggle() {
+    this.isOpen = !this.isOpen;
+  }
 }

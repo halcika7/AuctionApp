@@ -1,0 +1,172 @@
+<section class="container-fluid">
+  <div class="hero-content">
+    <div class="container">
+      <div class="wrapper">
+        <button [ngClass]="{ show: isOpen }" (click)="toggle()">Categories</button>
+        <ul class="categories">
+          <h3>Categories</h3>
+          <li><a href="">Fashion</a></li>
+          <li><a href="">Accesories</a></li>
+          <li><a href="">Jewlery</a></li>
+          <li><a href="">Shoes</a></li>
+          <li><a href="">Sportware</a></li>
+          <li><a href="">Home</a></li>
+          <li><a href="">Electronics</a></li>
+          <li><a href="">Mobile</a></li>
+          <li><a href="">Computer</a></li>
+          <li><a href="">All Categories</a></li>
+        </ul>
+      </div>
+      <div class="carousel">
+        <div class="item">
+          <div class="about">
+            <h2>Runing Shoes</h2>
+            <p class="price">Start from - $240.00</p>
+            <p class="description">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fusce ut consequant nulla.
+              Duis nec fermentum erat, et varius augue. Vivamus sed tempor libero.
+            </p>
+            <a href="">bid now <span></span><span></span></a>
+          </div>
+          <img src="assets/shoes.png" alt="shoes" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="feature-collection">
+    <div class="container">
+      <h3>Feature Collection</h3>
+      <div class="collections">
+        <div class="collection">
+          <a href="">
+            <div class="img">
+              <img [src]="item.picture" alt="item.name" />
+            </div>
+            <h5>{{ item.name }}</h5>
+            <p>Start From {{ item.price | currency }}</p>
+          </a>
+        </div>
+        <div class="collection">
+          <a href="">
+            <div class="img">
+              <img [src]="item.picture" alt="item.name" />
+            </div>
+            <h5>{{ item.name }}</h5>
+            <p>Start From {{ item.price | currency }}</p>
+          </a>
+        </div>
+        <div class="collection">
+          <a href="">
+            <div class="img">
+              <img [src]="item.picture" alt="item.name" />
+            </div>
+            <h5>{{ item.name }}</h5>
+            <p>Start From {{ item.price | currency }}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="feature-products">
+    <div class="container">
+      <h3>Feature Products</h3>
+      <div class="collections">
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="feature-products mb-168">
+    <div class="container">
+      <ul class="nav-tabs">
+        <li><a href="" class="active">New Arrivals</a></li>
+        <li><a href="">Top Rated</a></li>
+        <li><a href="">Last Chance</a></li>
+      </ul>
+      <div class="collections">
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+        <div class="collection">
+          <div class="img">
+            <img [src]="item.picture" alt="item.name" />
+          </div>
+          <h5>{{ item.name }}</h5>
+          <p>Start From {{ item.price | currency }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

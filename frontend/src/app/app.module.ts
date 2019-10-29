@@ -29,7 +29,7 @@ import { NotFoundComponent } from './containers/not-found/not-found.component';
 import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { LandingPageComponent } from './home/landing-page/landing-page.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
