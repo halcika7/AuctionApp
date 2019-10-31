@@ -43,7 +43,7 @@ class AuthService {
         } catch (error) {
             return {
                 status: 403,
-                response: { err: 'Something happened. We were unable to perform login.' }
+                response: {  err: 'Something happened. We were unable to perform login.' }
             };
         }
     }

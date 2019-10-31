@@ -16,7 +16,9 @@ export class AuthInterceptorService implements HttpInterceptor {
         return authState.accessToken;
       }),
       exhaustMap(token => {
+        const url = 'http://localhost:5000/api';
         const modifiedReq = req.clone({
+          url: url + req.url,
           headers: req.headers.set('Authorization', 'Bearer ' + token),
           withCredentials: true
         });

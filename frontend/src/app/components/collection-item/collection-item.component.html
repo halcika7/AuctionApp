@@ -1,0 +1,9 @@
+<div class="collection">
+  <a href="">
+    <div class="img">
+      <img [src]="item.picture" [alt]="item.name" />
+    </div>
+    <h5>{{ item.name }}</h5>
+    <p>Start From {{ item.price | currency }}</p>
+  </a>
+</div>

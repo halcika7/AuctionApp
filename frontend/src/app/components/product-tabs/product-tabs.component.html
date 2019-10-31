@@ -1,0 +1,52 @@
+<div class="feature-products mb-168">
+  <div class="container">
+    <ul class="nav-tabs">
+      <li>
+        <a
+          href=""
+          [ngClass]="{ active: active === 'newArrivals' }"
+          (click)="tabsChange($event, 'newArrivals')"
+          >New Arrivals</a
+        >
+      </li>
+      <li>
+        <a
+          href=""
+          [ngClass]="{ active: active === 'topRated' }"
+          (click)="tabsChange($event, 'topRated')"
+          >Top Rated</a
+        >
+      </li>
+      <li>
+        <a
+          href=""
+          [ngClass]="{ active: active === 'lastChance' }"
+          (click)="tabsChange($event, 'lastChance')"
+          >Last Chance</a
+        >
+      </li>
+    </ul>
+    <div class="collections">
+      <ng-template [ngIf]="active === 'newArrivals'">
+        <p *ngIf="newArrivals.length === 0; else newA">No products</p>
+        <app-collection-item
+          #newA
+          *ngFor="let item of newArrivals"
+          [item]="item"
+        ></app-collection-item>
+      </ng-template>
+      <ng-template [ngIf]="active === 'topRated'">
+        <p *ngIf="topRated.length === 0; else top">No products</p>
+        <app-collection-item #top *ngFor="let item of topRated" [item]="item"></app-collection-item>
+      </ng-template>
+      <ng-template [ngIf]="active === 'lastChance'">
+        <p *ngIf="lastChance.length === 0; else lastC">No products</p>
+        <app-collection-item
+          #lastC
+          *ngFor="let item of lastChance"
+          [item]="item"
+        ></app-collection-item>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="{{ className }}">
+  <div class="container">
+    <h3>{{ title }}</h3>
+    <div class="collections">
+      <app-collection-item *ngFor="let item of items" [item]="item"></app-collection-item>
+    </div>
+  </div>
+</div>

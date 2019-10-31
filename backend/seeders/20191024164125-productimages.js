@@ -8,7 +8,7 @@ module.exports = {
     for(let i = 0; i < 1000; i++) {
       images.push({
         image: faker.image.imageUrl(),
-        productId: Math.floor(Math.random() * 100 + 1)
+        productId: Math.floor(Math.random() * 280 + 1)
       })
     }
 

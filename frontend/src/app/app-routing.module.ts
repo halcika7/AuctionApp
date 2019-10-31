@@ -8,6 +8,7 @@ import { ConditionsComponent } from './containers/conditions/conditions.componen
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
 
 import { AuthGuard } from './auth/auth.guard';
 import { LoginGuard } from './auth/login.guard';
@@ -27,6 +28,10 @@ const appRoutes: Routes = [
         path: 'auth/register',
         component: RegisterComponent,
         canActivate: [LoginGuard]
+      },
+      {
+        path: 'categories',
+        component: AllCategoriesComponent
       }
     ]
   },

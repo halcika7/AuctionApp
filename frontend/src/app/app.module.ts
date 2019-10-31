@@ -31,11 +31,20 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
-import * as fromApp from './store/app.reducer';
-import { AuthEffects } from './auth/store/auth.effects';
 import { AlertComponent } from './components/alert/alert.component';
 import { InputComponent } from './components/input/input.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { CategoriesListComponent } from './components/categories-list/categories-list.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { LandingPageProductsComponent } from './components/landing-page-products/landing-page-products.component';
+import { ProductTabsComponent } from './components/product-tabs/product-tabs.component';
+import { CollectionItemComponent } from './components/collection-item/collection-item.component';
+import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
+
+import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
+import { LandingPageEffects } from './landing-page/store/landing-page.effects';
+import { CategoriesPageEffects } from './containers/all-categories/store/all-categories.effects';
 
 @NgModule({
   declarations: [
@@ -52,7 +61,13 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     LandingPageComponent,
     AlertComponent,
     InputComponent,
-    DropdownDirective
+    DropdownDirective,
+    CategoriesListComponent,
+    CarouselComponent,
+    LandingPageProductsComponent,
+    ProductTabsComponent,
+    CollectionItemComponent,
+    AllCategoriesComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +76,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, LandingPageEffects, CategoriesPageEffects]),
     FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],
