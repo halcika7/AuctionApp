@@ -49,6 +49,15 @@ module.exports = {
                     },
                     key: 'id'
                 }
+            },
+            subcategoryId: {
+                type: Sequelize.BIGINT,
+                references: {
+                    model: {
+                        tableName: 'Subcategories'
+                    },
+                    key: 'id'
+                }
             }
         });
     },

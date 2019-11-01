@@ -85,6 +85,18 @@ class ProductService {
             };
         }
     }
+
+    async withSub() {
+        try {
+            const prod = await findProducts({ limit: 1, sub: true });
+            return { status: 200, prod };
+        } catch (error) {
+            return {
+                status: 403,
+                failedMessage: 'Something happened. We were unable to perform request.'
+            };
+        }
+    }
 }
 
 const ProductServiceInstance = new ProductService();

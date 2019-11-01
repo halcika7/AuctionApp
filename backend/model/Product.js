@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const { db } = require('../config/database');
 const ProductImage = require('./ProductImage');
 const ProductReview = require('./ProductReview');
+const Subcategory = require('./Subcategory');
 
 const Product = db.define(
     'Product',
@@ -52,6 +53,15 @@ const Product = db.define(
                 },
                 key: 'id'
             }
+        },
+        subcategoryId: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: {
+                    tableName: 'Subcategories'
+                },
+                key: 'id'
+            }
         }
     },
     {
@@ -62,6 +72,7 @@ const Product = db.define(
 
 Product.hasMany(ProductImage, { foreignKey: 'productId', sourceKey: 'id' });
 Product.hasMany(ProductReview, { foreignKey: 'productId', sourceKey: 'id' });
+Product.belongsTo(Subcategory, { foreignKey: 'subcategoryId', sourceKey: 'id' });
 ProductReview.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
 
 module.exports = Product;

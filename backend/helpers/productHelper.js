@@ -1,8 +1,9 @@
 const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
+const Subcategory = require('../model/Subcategory');
 const { db, Op } = require('../config/database');
 
-exports.findProducts = async ({ where, order, limit, auctionStart, rated, hero }) => {
+exports.findProducts = async ({ where, order, limit, auctionStart, rated, hero, sub }) => {
     const findObj = {
         where: {
             auctionEnd: {
@@ -42,6 +43,15 @@ exports.findProducts = async ({ where, order, limit, auctionStart, rated, hero }
 
     if (hero) {
         findObj.attributes = [...findObj.attributes, 'details'];
+    }
+
+    if (sub) {
+        findObj.include = [
+            {
+                model: Subcategory,
+                attributes: ['id', 'name']
+            }
+        ];
     }
     return await Product.findAll(findObj);
 };

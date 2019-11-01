@@ -54,6 +54,14 @@ class ProductController {
         }
         return res.status(200).json({ heroProduct });
     }
+
+    async productWithSub(req, res) {
+        const { prod, failedMessage, status } = await ProductServiceInstance.withSub();
+        if (failedMessage) {
+            return res.status(status).json({ failedMessage });
+        }
+        return res.status(200).json({ prod });
+    }
 }
 
 const ProductControllerInstance = new ProductController();
