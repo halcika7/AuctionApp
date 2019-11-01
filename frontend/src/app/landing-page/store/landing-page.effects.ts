@@ -11,7 +11,7 @@ export class LandingPageEffects {
   featuredProductStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_PRODUCTS_START),
     switchMap(() => {
-      return this.http.get<{ featured?; failedMessage? }>('/landing/featuredP').pipe(
+      return this.http.get<{ featured?; failedMessage? }>('/landing/featured').pipe(
         map(data => new LandingPageActions.LandingPageSuccess(data)),
         catchError(({ failedMessage }) =>
           of(new LandingPageActions.LandingPageFailed(failedMessage))
@@ -24,7 +24,7 @@ export class LandingPageEffects {
   featuredCollectionStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_COLLECTIONS_START),
     switchMap(() => {
-      return this.http.get<{ featuredCollections?; failedMessage? }>('/landing/featuredC').pipe(
+      return this.http.get<{ featuredCollections?; failedMessage? }>('/landing/featured/3').pipe(
         map(data => new LandingPageActions.LandingPageSuccess(data)),
         catchError(({ failedMessage }) =>
           of(new LandingPageActions.LandingPageFailed(failedMessage))

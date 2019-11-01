@@ -7,10 +7,10 @@ class ProductService {
         return this;
     }
 
-    async featured() {
+    async helperfunction(obj, callBack) {
         try {
-            const featured = await findProducts({ where: { featured: true }, limit: 4 });
-            return { status: 200, featured };
+            const products = await callBack(obj);
+            return { status: 200, products };
         } catch (error) {
             return {
                 status: 403,
@@ -19,83 +19,54 @@ class ProductService {
         }
     }
 
-    async featuredCollections() {
-        try {
-            const featuredCollections = await findProducts({ where: { featured: true }, limit: 3 });
-            return { status: 200, featuredCollections };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
+    async featured(limit = null) {
+        const { products, failedMessage, status } = await this.helperfunction(
+            {
+                where: { featured: true },
+                limit: limit ? limit : 4
+            },
+            findProducts
+        );
+        return { featured: products, failedMessage, status };
     }
 
     async newArrivals() {
-        try {
-            const newArrivals = await findProducts({
+        const { products, failedMessage, status } = await this.helperfunction(
+            {
                 order: [['auctionStart', 'DESC']],
                 limit: 8,
                 auctionStart: true
-            });
-            return { status: 200, newArrivals };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
+            },
+            findProducts
+        );
+        return { newArrivals: products, failedMessage, status };
     }
 
     async lastChance() {
-        try {
-            const lastChance = await findProducts({
+        const { products, failedMessage, status } = await this.helperfunction(
+            {
                 order: [['auctionEnd', 'ASC']],
                 limit: 8
-            });
-            return { status: 200, lastChance };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
+            },
+            findProducts
+        );
+        return { lastChance: products, failedMessage, status };
     }
 
     async topRated() {
-        try {
-            const topRated = await findProducts({ rated: true, limit: 8 });
-            return { status: 200, topRated };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
+        const { products, failedMessage, status } = await this.helperfunction(
+            { rated: true, limit: 8 },
+            findProducts
+        );
+        return { topRated: products, failedMessage, status };
     }
 
     async heroProduct() {
-        try {
-            const heroProduct = await findProducts({ limit: 1, hero: true });
-            return { status: 200, heroProduct };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
-    }
-
-    async withSub() {
-        try {
-            const prod = await findProducts({ limit: 1, sub: true });
-            return { status: 200, prod };
-        } catch (error) {
-            return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
-            };
-        }
+        const { products, failedMessage, status } = await this.helperfunction(
+            { limit: 1, hero: true },
+            findProducts
+        );
+        return { heroProduct: products, failedMessage, status };
     }
 }
 

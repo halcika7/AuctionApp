@@ -8,19 +8,14 @@ class ProductController {
     }
 
     async featuredProducts(req, res) {
-        const { featured, failedMessage, status } = await ProductServiceInstance.featured();
+        const { featured, failedMessage, status } = await ProductServiceInstance.featured(
+            req.params.limit
+        );
+        const products = req.params.limit ? { featuredCollections: featured } : { featured };
         if (failedMessage) {
             return res.status(status).json({ failedMessage });
         }
-        return res.status(200).json({ featured });
-    }
-
-    async featuredCollections(req, res) {
-        const { featuredCollections, failedMessage, status } = await ProductServiceInstance.featuredCollections();
-        if (failedMessage) {
-            return res.status(status).json({ failedMessage });
-        }
-        return res.status(200).json({ featuredCollections });
+        return res.status(200).json(products);
     }
 
     async newArrivalProducts(req, res) {
@@ -53,14 +48,6 @@ class ProductController {
             return res.status(status).json({ failedMessage });
         }
         return res.status(200).json({ heroProduct });
-    }
-
-    async productWithSub(req, res) {
-        const { prod, failedMessage, status } = await ProductServiceInstance.withSub();
-        if (failedMessage) {
-            return res.status(status).json({ failedMessage });
-        }
-        return res.status(200).json({ prod });
     }
 }
 

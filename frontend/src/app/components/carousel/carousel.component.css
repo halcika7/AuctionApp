@@ -84,7 +84,10 @@
 }
 
 .carousel .item img {
-  width: 484px;
+  max-width: 484px;
+  max-height: 429px;
+  object-fit: scale-down;
+  margin-left: 20px;
 }
 
 
