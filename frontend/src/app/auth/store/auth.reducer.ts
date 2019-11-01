@@ -37,8 +37,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         ...initialState,
         successMessage: action.payload.successMessage
       };
-    case AuthActions.REGISTER_FAILED:
-    case AuthActions.LOGIN_FAILED:
+    case AuthActions.AUTH_FAILED:
       return {
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,

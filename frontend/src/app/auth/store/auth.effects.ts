@@ -12,7 +12,7 @@ export class AuthEffects {
     ofType(AuthActions.REGISTER_START),
     switchMap((registerData: AuthActions.RegisterStart) => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/register', {
+        .post<any>('/auth/register', {
           email: registerData.payload.email,
           password: registerData.payload.password,
           firstName: registerData.payload.firstName,
@@ -20,7 +20,7 @@ export class AuthEffects {
         })
         .pipe(
           map(resData => new AuthActions.RegisterSuccess(resData)),
-          catchError(({ error }) => of(new AuthActions.RegisterFailed(error)))
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
     })
   );
@@ -30,14 +30,14 @@ export class AuthEffects {
     ofType(AuthActions.LOGIN_START),
     switchMap((loginData: AuthActions.LoginStart) => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/login', {
+        .post<any>('/auth/login', {
           email: loginData.payload.email,
           password: loginData.payload.password,
           remember: loginData.payload.remember
         })
         .pipe(
           map(resData => new AuthActions.LoginSuccess(resData)),
-          catchError(({ error }) => of(new AuthActions.LoginFailed(error)))
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
     })
   );
@@ -47,7 +47,7 @@ export class AuthEffects {
     ofType(AuthActions.LOGOUT_START),
     switchMap(() => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/logout', {})
+        .post<any>('/auth/logout', {})
         .pipe(map(() => new AuthActions.LogoutSuccess()));
     })
   );
@@ -56,16 +56,14 @@ export class AuthEffects {
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
     switchMap(() => {
-      return this.http
-        .post<{ accessToken: string }>('http://localhost:5000/api/auth/refresh_token', {})
-        .pipe(
-          map(data => new AuthActions.RefreshToken(data)),
-          catchError(data => {
-            localStorage.removeItem('accessToken');
-            sessionStorage.removeItem('accessToken');
-            return of(new AuthActions.RefreshToken(data));
-          })
-        );
+      return this.http.post<{ accessToken: string }>('/auth/refresh_token', {}).pipe(
+        map(data => new AuthActions.RefreshToken(data)),
+        catchError(data => {
+          localStorage.removeItem('accessToken');
+          sessionStorage.removeItem('accessToken');
+          return of(new AuthActions.RefreshToken(data));
+        })
+      );
     })
   );
 
