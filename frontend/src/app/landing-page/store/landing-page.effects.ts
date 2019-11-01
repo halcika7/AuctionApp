@@ -10,93 +10,51 @@ export class LandingPageEffects {
   @Effect()
   featuredProductStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_PRODUCTS_START),
-    switchMap(() => {
-      return this.http.get<{ featured?; failedMessage? }>('/landing/featured').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('featured'))
   );
 
   @Effect()
   featuredCollectionStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_COLLECTIONS_START),
-    switchMap(() => {
-      return this.http.get<{ featuredCollections?; failedMessage? }>('/landing/featured/3').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('featured/3'))
   );
 
   @Effect()
   newArrivalsProductStart = this.actions$.pipe(
     ofType(LandingPageActions.NEW_ARRIVALS_START),
-    switchMap(() => {
-      return this.http.get<{ newArrivals?; failedMessage? }>('/landing/newarrivals').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('newarrivals'))
   );
 
   @Effect()
   topRatedProductStart = this.actions$.pipe(
     ofType(LandingPageActions.TOP_RATED_START),
-    switchMap(() => {
-      return this.http.get<{ topRated?; failedMessage? }>('/landing/toprated').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('toprated'))
   );
 
   @Effect()
   lastChanceProductStart = this.actions$.pipe(
     ofType(LandingPageActions.LAST_CHANCE_START),
-    switchMap(() => {
-      return this.http.get<{ lastChance?; failedMessage? }>('/landing/lastchance').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('lastchance'))
   );
 
   @Effect()
   heroProduct = this.actions$.pipe(
     ofType(LandingPageActions.HERO_PRODUCT_START),
-    switchMap(() => {
-      return this.http.get<{ heroProduct?; failedMessage? }>('/landing/hero').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('hero'))
   );
 
   @Effect()
   categories = this.actions$.pipe(
     ofType(LandingPageActions.CATEGORIES_START),
-    switchMap(() => {
-      return this.http.get<{ categories?; failedMessage? }>('/landing/categories').pipe(
-        map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ failedMessage }) =>
-          of(new LandingPageActions.LandingPageFailed(failedMessage))
-        )
-      );
-    })
+    switchMap(() => this.helperFunction('categories'))
   );
+
+  helperFunction(path) {
+    return this.http.get<any>('/landing/' + path).pipe(
+      map(data => new LandingPageActions.LandingPageSuccess(data)),
+      catchError(({ failedMessage }) => of(new LandingPageActions.LandingPageFailed(failedMessage)))
+    );
+  }
 
   constructor(private actions$: Actions, private http: HttpClient) {}
 }
