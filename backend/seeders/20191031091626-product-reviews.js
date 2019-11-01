@@ -7,7 +7,7 @@ module.exports = {
         for (let i = 0; i < 5000; i++) {
             reviews.push({
                 rating: Math.floor(Math.random() * 5 + 1),
-                productId: Math.floor(Math.random() * 280 + 1),
+                productId: Math.floor(Math.random() * 100 + 1),
                 userId: Math.floor(Math.random() * 100 + 1)
             });
         }

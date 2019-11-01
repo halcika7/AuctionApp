@@ -4,12 +4,12 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     const gg = [
       'Fashion',
-      'Video Games',
+      'Accessories',
       'Jewlery',
       'Shoes',
       'Sportware',
-      'Electronics',
       'Home',
+      'Electronics',
       'Mobile',
       'Computer'
   ];

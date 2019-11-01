@@ -22,7 +22,6 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('landingPage').subscribe(state => {
-      console.log('TCL: LandingPageComponent -> ngOnInit -> state', state);
       this.featured = state.featured;
       this.featuredCollections = state.featuredCollections;
       this.lastChance = state.lastChance;

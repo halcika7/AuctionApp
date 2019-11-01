@@ -3,15 +3,15 @@ const faker = require('faker');
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        const fasionSUbcategories = ['Clearance', 'Vintage', 'Costumes'];
-        const gamesSub = ['Games', 'Parts and Accessories'];
-        const jewlerySub = ['Bracelets', 'Rings', 'Wristwatches'];
-        const shoesSubcategories = ['Boots', 'Shoes', 'Slippers', 'Sneakers'];
-        const sportwareSubcategories = ['Track suit', 'Sweatshirts'];
-        const electronicsSubcategories = ['Audio', 'Video', 'Camera', 'Wireles'];
-        const homeSubcategories = ['Furniture', 'Lamps', 'Security Devices'];
-        const mobileSUbcategories = ['Parts', 'Phones', 'Tablets', 'Smartwatch'];
-        const computerSubcategories = ['Hardware', 'Software', 'Instruction'];
+        const fasionSUbcategories = ['Jeans', 'Vintage'];
+        const accessoriesSub = ["Women's Accessories"]; 
+        const jewlerySub = ['Wristwatches'];
+        const shoesSubcategories = ['Sneakers'];
+        const sportwareSubcategories = ['Sweatshirts'];
+        const homeSubcategories = ['Lamps'];
+        const electronicsSubcategories = ['Camera'];
+        const mobileSUbcategories = ['Phones'];
+        const computerSubcategories = ['Laptops'];
         let subcategories = [];
 
         const helperFunction = (arr, CategoriesId) => {
@@ -23,12 +23,12 @@ module.exports = {
             }
         }
         helperFunction(fasionSUbcategories, 1)
-        helperFunction(gamesSub, 2)
+        helperFunction(accessoriesSub, 2)
         helperFunction(jewlerySub, 3)
         helperFunction(shoesSubcategories, 4)
         helperFunction(sportwareSubcategories, 5)
-        helperFunction(electronicsSubcategories, 6)
-        helperFunction(homeSubcategories, 7)
+        helperFunction(homeSubcategories, 6)
+        helperFunction(electronicsSubcategories, 7)
         helperFunction(mobileSUbcategories, 8)
         helperFunction(computerSubcategories, 9)
 
