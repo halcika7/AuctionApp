@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
   message: string;
   showErrors = true;
   success = false;
-  private remember: boolean;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
@@ -60,7 +59,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.remember = this.loginForm.value.remember;
     this.store.dispatch(new AuthActions.LoginStart({ ...this.loginForm.value }));
   }
 

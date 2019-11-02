@@ -95,6 +95,8 @@
   .carousel .item {
     flex-wrap: wrap-reverse;
     justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 
   .carousel .item img {
