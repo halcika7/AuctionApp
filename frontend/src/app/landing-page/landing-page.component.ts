@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as LandingPageActions from './store/landing-page.actions';
-import { Product, Category } from './store/landing-page.reducers';
+import { Product } from './store/landing-page.reducers';
+import { Categories } from './../containers/all-categories/store/all-categories.reducer';
 
 @Component({
   selector: 'app-landing-page',
@@ -15,7 +16,7 @@ export class LandingPageComponent implements OnInit {
   lastChance: Product[] = [];
   newArrivals: Product[] = [];
   topRated: Product[] = [];
-  categories: Category[] = [];
+  categories: Categories[] = [];
   heroProduct: Product;
 
   constructor(private store: Store<fromApp.AppState>) {}

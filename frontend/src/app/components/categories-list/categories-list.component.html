@@ -3,7 +3,12 @@
   <ul class="categories">
     <h3>Categories</h3>
     <li *ngFor="let category of categories">
-      <a href="">{{ category.name }}</a>
+      <p appDropdownNoautoclose>{{ category.name }}</p>
+      <ul class="subcategories">
+        <li *ngFor="let subCat of category.Subcategories">
+          <a href="">{{ subCat.name }}</a>
+        </li>
+      </ul>
     </li>
     <li><a [routerLink]="['/home/categories']">All Categories</a></li>
   </ul>

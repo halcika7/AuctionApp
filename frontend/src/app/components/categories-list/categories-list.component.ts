@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Category } from './../../landing-page/store/landing-page.reducers';
+import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
 
 @Component({
   selector: 'app-categories-list',
@@ -7,7 +7,7 @@ import { Category } from './../../landing-page/store/landing-page.reducers';
   styleUrls: ['./categories-list.component.css']
 })
 export class CategoriesListComponent implements OnInit {
-  @Input() categories: Category[];
+  @Input() categories: Categories[];
   isOpen = false;
 
   constructor() {}

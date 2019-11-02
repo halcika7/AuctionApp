@@ -11,17 +11,14 @@ class CategoryService {
     async categories(include = false) {
         try {
             const findObj = {
-                attributes: ['id', 'name']
-            };
-
-            if (include) {
-                findObj.include = [
+                attributes: ['id', 'name'],
+                include: [
                     {
                         model: Subcategory,
                         attributes: ['id', 'name']
                     }
-                ];
-            }
+                ]
+            };
             const categories = await Category.findAll(findObj);
             return { status: 200, categories };
         } catch (error) {

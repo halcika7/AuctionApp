@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { Product, Category } from './landing-page.reducers';
+import { Product } from './landing-page.reducers';
+import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
 
 export const FEATURED_PRODUCTS_START = 'FEATURED_PRODUCTS_START';
 export const FEATURED_COLLECTIONS_START = 'FEATURED_COLLECTIONS_START';
@@ -44,7 +45,7 @@ export class LandingPageSuccess implements Action {
   readonly type = LANDING_PAGE_SUCCESS;
   constructor(
     public payload: {
-      categories?: Category[];
+      categories?: Categories[];
       heroProduct?: Product;
       lastChance?: Product[];
       topRated?: Product[];

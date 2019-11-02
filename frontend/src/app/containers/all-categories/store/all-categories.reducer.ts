@@ -1,5 +1,9 @@
 import * as CategoriesPageActions from './all-categories.actions';
-import { Category } from './../../../landing-page/store/landing-page.reducers';
+
+export interface Category {
+  id: string;
+  name: string;
+}
 
 export interface Categories extends Category {
   Subcategories: Category[];

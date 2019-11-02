@@ -1,4 +1,5 @@
 import * as LandingPageActions from './landing-page.actions';
+import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
 
 export interface Product {
   name: string;
@@ -8,11 +9,6 @@ export interface Product {
   details?: string;
 }
 
-export interface Category {
-  id: string;
-  name: string;
-}
-
 export interface State {
   featured: Product[];
   featuredCollections: Product[];
@@ -20,7 +16,7 @@ export interface State {
   topRated: Product[];
   lastChance: Product[];
   heroProduct: Product;
-  categories: Category[];
+  categories: Categories[];
   failedMessage: string;
 }
 

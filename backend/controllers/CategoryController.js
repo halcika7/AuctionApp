@@ -14,14 +14,6 @@ class CategoryController {
         }
         return res.status(200).json({ categories });
     }
-
-    async categoriesSub(req, res) {
-        const { categories, failedMessage, status } = await CategoryServiceInstance.categories(true);
-        if (failedMessage) {
-            return res.status(status).json({ failedMessage });
-        }
-        return res.status(200).json({ categories });
-    }
 }
 
 const CategoryControllerInstance = new CategoryController();

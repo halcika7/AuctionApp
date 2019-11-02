@@ -45,6 +45,7 @@ import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { LandingPageEffects } from './landing-page/store/landing-page.effects';
 import { CategoriesPageEffects } from './containers/all-categories/store/all-categories.effects';
+import { DropdownNoautocloseDirective } from './shared/directives/dropdown-noautoclose.directive';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { CategoriesPageEffects } from './containers/all-categories/store/all-cat
     LandingPageProductsComponent,
     ProductTabsComponent,
     CollectionItemComponent,
-    AllCategoriesComponent
+    AllCategoriesComponent,
+    DropdownNoautocloseDirective
   ],
   imports: [
     BrowserModule,

@@ -17,7 +17,6 @@ export class AllCategoriesComponent implements OnInit {
   ngOnInit() {
     this.store.select('categoriesPage').subscribe(({ categories }) => {
       this.categories = categories;
-      console.log('TCL: AllCategoriesComponent -> ngOnInit -> this.categories', this.categories);
     });
 
     this.store.dispatch(new CategoriesPageActions.CategoriesStart());
