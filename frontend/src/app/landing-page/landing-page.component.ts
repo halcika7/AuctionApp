@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as LandingPageActions from './store/landing-page.actions';
+import { CategoriesStart } from '../containers/all-categories/store/all-categories.actions';
 import { Product } from './store/landing-page.reducers';
 import { Categories } from './../containers/all-categories/store/all-categories.reducer';
 
@@ -29,7 +30,9 @@ export class LandingPageComponent implements OnInit {
       this.newArrivals = state.newArrivals;
       this.topRated = state.topRated;
       this.heroProduct = state.heroProduct;
-      this.categories = state.categories;
+    });
+    this.store.select('categoriesPage').subscribe(({ categories }) => {
+      this.categories = categories;
     });
     this.store.dispatch(new LandingPageActions.FeaturedProductStart());
     this.store.dispatch(new LandingPageActions.FeaturedCollectionStart());
@@ -37,6 +40,6 @@ export class LandingPageComponent implements OnInit {
     this.store.dispatch(new LandingPageActions.TopRatedProductStart());
     this.store.dispatch(new LandingPageActions.LastChanceProductStart());
     this.store.dispatch(new LandingPageActions.HeroProductStart());
-    this.store.dispatch(new LandingPageActions.CategoriesStart());
+    this.store.dispatch(new CategoriesStart());
   }
 }

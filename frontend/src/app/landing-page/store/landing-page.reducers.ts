@@ -16,7 +16,6 @@ export interface State {
   topRated: Product[];
   lastChance: Product[];
   heroProduct: Product;
-  categories: Categories[];
   failedMessage: string;
 }
 
@@ -27,7 +26,6 @@ const initialState: State = {
   topRated: [],
   lastChance: [],
   heroProduct: null,
-  categories: [],
   failedMessage: ''
 };
 
@@ -39,7 +37,6 @@ export function landingPageReducer(
     case LandingPageActions.LANDING_PAGE_SUCCESS:
       return {
         ...state,
-        categories: action.payload.categories ? action.payload.categories : state.categories,
         featured: action.payload.featured ? action.payload.featured : state.featured,
         featuredCollections: action.payload.featuredCollections ? action.payload.featuredCollections : state.featuredCollections,
         newArrivals: action.payload.newArrivals ? action.payload.newArrivals : state.newArrivals,

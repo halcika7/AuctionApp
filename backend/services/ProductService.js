@@ -19,54 +19,39 @@ class ProductService {
         }
     }
 
-    async featured(limit = null) {
-        const { products, failedMessage, status } = await this.helperfunction(
-            {
-                where: { featured: true },
-                limit: limit ? limit : 4
-            },
-            findProducts
-        );
-        return { featured: products, failedMessage, status };
-    }
+    async products(type) {
+        let objFind = {
+            where:
+                type === 'featured' || type === 'featuredCollections' ? { featured: true } : null,
+            limit:
+                type === 'featuredCollections'
+                    ? 3
+                    : type === 'featured'
+                    ? 4
+                    : type === 'heroProduct'
+                    ? 1
+                    : 8,
+            order:
+                type === 'newArrivals'
+                    ? [['auctionStart', 'DESC']]
+                    : type === 'lastChance'
+                    ? [['auctionEnd', 'ASC']]
+                    : null,
+            auctionStart: type === 'newArrivals' ? true : null,
+            rated: type === 'topRated' ? true : null,
+            hero: type === 'heroProduct' ? true : null
+        };
+        !objFind.where && delete objFind.where;
+        !objFind.order && delete objFind.order;
+        !objFind.auctionStart && delete objFind.auctionStart;
+        !objFind.rated && delete objFind.rated;
+        !objFind.hero && delete objFind.hero;
 
-    async newArrivals() {
         const { products, failedMessage, status } = await this.helperfunction(
-            {
-                order: [['auctionStart', 'DESC']],
-                limit: 8,
-                auctionStart: true
-            },
+            objFind,
             findProducts
         );
-        return { newArrivals: products, failedMessage, status };
-    }
-
-    async lastChance() {
-        const { products, failedMessage, status } = await this.helperfunction(
-            {
-                order: [['auctionEnd', 'ASC']],
-                limit: 8
-            },
-            findProducts
-        );
-        return { lastChance: products, failedMessage, status };
-    }
-
-    async topRated() {
-        const { products, failedMessage, status } = await this.helperfunction(
-            { rated: true, limit: 8 },
-            findProducts
-        );
-        return { topRated: products, failedMessage, status };
-    }
-
-    async heroProduct() {
-        const { products, failedMessage, status } = await this.helperfunction(
-            { limit: 1, hero: true },
-            findProducts
-        );
-        return { heroProduct: products, failedMessage, status };
+        return { [type]: products, failedMessage, status };
     }
 }
 
