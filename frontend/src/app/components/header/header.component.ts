@@ -15,13 +15,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('auth').subscribe(data => {
-      if (
-        data.accessToken ||
-        localStorage.getItem('accessToken') ||
-        sessionStorage.getItem('accessToken')
-      ) {
+      if (data.accessToken) {
         this.isAuthenticated = true;
-        data.remember
+        data.remember || localStorage.getItem('accessToken')
           ? localStorage.setItem('accessToken', data.accessToken)
           : sessionStorage.setItem('accessToken', data.accessToken);
       } else {
