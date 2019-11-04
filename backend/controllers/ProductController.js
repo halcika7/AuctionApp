@@ -9,7 +9,8 @@ class ProductController {
 
     async products(req, res) {
         const { failedMessage, status, ...products } = await ProductServiceInstance.products(
-            req.params.type
+            req.params.type,
+            req.params.limit
         );
         if (failedMessage) {
             return res.status(status).json({ failedMessage });

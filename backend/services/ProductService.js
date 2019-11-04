@@ -19,18 +19,11 @@ class ProductService {
         }
     }
 
-    async products(type) {
+    async products(type, limit) {
         let objFind = {
             where:
                 type === 'featured' || type === 'featuredCollections' ? { featured: true } : null,
-            limit:
-                type === 'featuredCollections'
-                    ? 3
-                    : type === 'featured'
-                    ? 4
-                    : type === 'heroProduct'
-                    ? 1
-                    : 8,
+            limit: limit,
             order:
                 type === 'newArrivals'
                     ? [['auctionStart', 'DESC']]

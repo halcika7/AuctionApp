@@ -10,37 +10,37 @@ export class LandingPageEffects {
   @Effect()
   featuredProductStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_PRODUCTS_START),
-    switchMap(() => this.helperFunction('featured'))
+    switchMap(() => this.helperFunction('featured/4'))
   );
 
   @Effect()
   featuredCollectionStart = this.actions$.pipe(
     ofType(LandingPageActions.FEATURED_COLLECTIONS_START),
-    switchMap(() => this.helperFunction('featuredCollections'))
+    switchMap(() => this.helperFunction('featuredCollections/3'))
   );
 
   @Effect()
   newArrivalsProductStart = this.actions$.pipe(
     ofType(LandingPageActions.NEW_ARRIVALS_START),
-    switchMap(() => this.helperFunction('newArrivals'))
+    switchMap(() => this.helperFunction('newArrivals/8'))
   );
 
   @Effect()
   topRatedProductStart = this.actions$.pipe(
     ofType(LandingPageActions.TOP_RATED_START),
-    switchMap(() => this.helperFunction('topRated'))
+    switchMap(() => this.helperFunction('topRated/8'))
   );
 
   @Effect()
   lastChanceProductStart = this.actions$.pipe(
     ofType(LandingPageActions.LAST_CHANCE_START),
-    switchMap(() => this.helperFunction('lastChance'))
+    switchMap(() => this.helperFunction('lastChance/8'))
   );
 
   @Effect()
   heroProduct = this.actions$.pipe(
     ofType(LandingPageActions.HERO_PRODUCT_START),
-    switchMap(() => this.helperFunction('heroProduct'))
+    switchMap(() => this.helperFunction('heroProduct/1'))
   );
 
   helperFunction(path) {
