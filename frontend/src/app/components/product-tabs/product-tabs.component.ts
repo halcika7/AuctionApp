@@ -19,7 +19,7 @@ export class ProductTabsComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new LandingPageActions.NewArrivalsProductStart());
+    this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
     this.store.select('landingPage').subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
       if (this.active === 'newArrivals') {
         this.products = newArrivals;
@@ -42,11 +42,11 @@ export class ProductTabsComponent implements OnInit {
       this.offset = 0;
       this.active = tab;
       if (this.active === 'newArrivals') {
-        this.store.dispatch(new LandingPageActions.NewArrivalsProductStart());
+        this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
       } else if (this.active === 'topRated') {
-        this.store.dispatch(new LandingPageActions.TopRatedProductStart());
+        this.store.dispatch(new LandingPageActions.LandingPageStart('topRated/8'));
       } else {
-        this.store.dispatch(new LandingPageActions.LastChanceProductStart());
+        this.store.dispatch(new LandingPageActions.LandingPageStart('lastChance/8'));
       }
     }
   }

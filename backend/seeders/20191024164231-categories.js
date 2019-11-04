@@ -5,7 +5,7 @@ module.exports = {
     const gg = [
       'Fashion',
       'Accessories',
-      'Jewlery',
+      'Jewelry',
       'Shoes',
       'Sportware',
       'Home',

@@ -3,9 +3,9 @@ const faker = require('faker');
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        const fasionSUbcategories = ['Jeans', 'Vintage'];
+        const fasionSubcategories = ['Jeans', 'Vintage'];
         const accessoriesSub = ["Women's Accessories"]; 
-        const jewlerySub = ['Wristwatches'];
+        const jewelrySub = ['Wristwatches'];
         const shoesSubcategories = ['Sneakers'];
         const sportwareSubcategories = ['Sweatshirts'];
         const homeSubcategories = ['Lamps'];
@@ -22,9 +22,9 @@ module.exports = {
                 });
             }
         }
-        helperFunction(fasionSUbcategories, 1)
+        helperFunction(fasionSubcategories, 1)
         helperFunction(accessoriesSub, 2)
-        helperFunction(jewlerySub, 3)
+        helperFunction(jewelrySub, 3)
         helperFunction(shoesSubcategories, 4)
         helperFunction(sportwareSubcategories, 5)
         helperFunction(homeSubcategories, 6)

@@ -28,9 +28,9 @@ export class LandingPageComponent implements OnInit {
     this.store.select('categoriesPage').subscribe(({ categories }) => {
       this.categories = categories;
     });
-    this.store.dispatch(new LandingPageActions.FeaturedProductStart());
-    this.store.dispatch(new LandingPageActions.FeaturedCollectionStart());
-    this.store.dispatch(new LandingPageActions.HeroProductStart());
+    this.store.dispatch(new LandingPageActions.LandingPageStart('featured/4'));
+    this.store.dispatch(new LandingPageActions.LandingPageStart('featuredCollections/3'));
+    this.store.dispatch(new LandingPageActions.LandingPageStart('heroProduct/1'));
     this.store.dispatch(new CategoriesStart());
   }
 }
