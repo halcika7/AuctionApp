@@ -27,26 +27,11 @@
       </li>
     </ul>
     <div class="collections">
-      <ng-template [ngIf]="active === 'newArrivals'">
-        <p *ngIf="newArrivals.length === 0; else newA">No products</p>
-        <app-collection-item
-          #newA
-          *ngFor="let item of newArrivals"
-          [item]="item"
-        ></app-collection-item>
-      </ng-template>
-      <ng-template [ngIf]="active === 'topRated'">
-        <p *ngIf="topRated.length === 0; else top">No products</p>
-        <app-collection-item #top *ngFor="let item of topRated" [item]="item"></app-collection-item>
-      </ng-template>
-      <ng-template [ngIf]="active === 'lastChance'">
-        <p *ngIf="lastChance.length === 0; else lastC">No products</p>
-        <app-collection-item
-          #lastC
-          *ngFor="let item of lastChance"
-          [item]="item"
-        ></app-collection-item>
-      </ng-template>
+      <p *ngIf="products.length === 0; else newA">No products</p>
+      <app-collection-item #newA *ngFor="let item of products" [item]="item"></app-collection-item>
+    </div>
+    <div class="button-wrapper" *ngIf="showButton">
+      <button class="load-more-button" type="button" (click)="loadMore($event)">Load More</button>
     </div>
   </div>
 </div>

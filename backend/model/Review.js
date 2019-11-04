@@ -10,7 +10,7 @@ const Review = db.define(
             autoIncrement: true
         },
         rating: {
-            type: Sequelize.INTEGER(1),
+            type: Sequelize.SMALLINT,
             allowNull: false
         },
         userId: {

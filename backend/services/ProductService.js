@@ -12,7 +12,6 @@ class ProductService {
             const products = await callBack(obj);
             return { status: 200, products };
         } catch (error) {
-            console.log('TCL: ProductService -> error', error)
             return {
                 status: 403,
                 failedMessage: 'Something happened. We were unable to perform request.'
@@ -20,7 +19,7 @@ class ProductService {
         }
     }
 
-    async products(type, limit) {
+    async products(type, limit, offset) {
         let objFind = {
             where:
                 type === 'featured' || type === 'featuredCollections' ? { featured: true } : null,
@@ -34,7 +33,8 @@ class ProductService {
             auctionStart: type === 'newArrivals' ? true : null,
             auctionEnd: type === 'lastChance' ? true : null,
             rated: type === 'topRated' ? true : null,
-            hero: type === 'heroProduct' ? true : null
+            hero: type === 'heroProduct' ? true : null,
+            offset: offset ? offset : 0
         };
         !objFind.where && delete objFind.where;
         !objFind.order && delete objFind.order;

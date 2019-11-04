@@ -17,6 +17,7 @@ export interface State {
   lastChance: Product[];
   heroProduct: Product;
   failedMessage: string;
+  noMore: boolean;
 }
 
 const initialState: State = {
@@ -26,7 +27,8 @@ const initialState: State = {
   topRated: [],
   lastChance: [],
   heroProduct: null,
-  failedMessage: ''
+  failedMessage: '',
+  noMore: false
 };
 
 export function landingPageReducer(
@@ -38,16 +40,33 @@ export function landingPageReducer(
       return {
         ...state,
         featured: action.payload.featured ? action.payload.featured : state.featured,
-        featuredCollections: action.payload.featuredCollections ? action.payload.featuredCollections : state.featuredCollections,
+        featuredCollections: action.payload.featuredCollections
+          ? action.payload.featuredCollections
+          : state.featuredCollections,
         newArrivals: action.payload.newArrivals ? action.payload.newArrivals : state.newArrivals,
         topRated: action.payload.topRated ? action.payload.topRated : state.topRated,
         lastChance: action.payload.lastChance ? action.payload.lastChance : state.lastChance,
-        heroProduct: action.payload.heroProduct ? action.payload.heroProduct : state.heroProduct
+        heroProduct: action.payload.heroProduct ? action.payload.heroProduct : state.heroProduct,
+        noMore: false
       };
     case LandingPageActions.LANDING_PAGE_FAILED:
       return {
         ...state,
         failedMessage: action.payload.failedMessage
+      };
+    case LandingPageActions.LOAD_MORE_SUCCESS:
+      return {
+        ...state,
+        newArrivals: action.payload.newArrivals
+          ? [...state.newArrivals, ...action.payload.newArrivals]
+          : state.newArrivals,
+        topRated: action.payload.topRated
+          ? [...state.topRated, ...action.payload.topRated]
+          : state.topRated,
+        lastChance: action.payload.lastChance
+          ? [...state.lastChance, ...action.payload.lastChance]
+          : state.lastChance,
+        noMore: action.payload.noMore
       };
     default:
       return state;

@@ -43,6 +43,19 @@ export class LandingPageEffects {
     switchMap(() => this.helperFunction('heroProduct/1'))
   );
 
+  @Effect()
+  loadMore = this.actions$.pipe(
+    ofType(LandingPageActions.LOAD_MORE_START),
+    switchMap(({ productType, offset }) => {
+      return this.http.get<any>(`/landing/${productType}/8/${offset}`).pipe(
+        map(data => new LandingPageActions.LoadMoreProductsSuccess(data)),
+        catchError(({ failedMessage }) =>
+          of(new LandingPageActions.LandingPageFailed(failedMessage))
+        )
+      );
+    })
+  );
+
   helperFunction(path) {
     return this.http.get<any>('/landing/' + path).pipe(
       map(data => new LandingPageActions.LandingPageSuccess(data)),

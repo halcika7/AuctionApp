@@ -2,7 +2,7 @@ const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
 const { db, Op } = require('../config/database');
 
-exports.findProducts = async ({ where, order, limit, auctionStart, auctionEnd, rated, hero }) => {
+exports.findProducts = async ({ where, order, limit, auctionStart, auctionEnd, rated, hero, offset }) => {
     const findObj = {
         where: {
             auctionEnd: {
@@ -12,7 +12,8 @@ exports.findProducts = async ({ where, order, limit, auctionStart, auctionEnd, r
         },
         attributes: ['id', 'name', 'price', 'picture', 'auctionStart', 'auctionEnd'],
         order: order ? order : db.random(),
-        limit
+        limit,
+        offset
     };
 
     if (auctionStart) {

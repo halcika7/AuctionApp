@@ -14,9 +14,6 @@ import { Categories } from './../containers/all-categories/store/all-categories.
 export class LandingPageComponent implements OnInit {
   featured: Product[] = [];
   featuredCollections: Product[] = [];
-  lastChance: Product[] = [];
-  newArrivals: Product[] = [];
-  topRated: Product[] = [];
   categories: Categories[] = [];
   heroProduct: Product;
 
@@ -26,9 +23,6 @@ export class LandingPageComponent implements OnInit {
     this.store.select('landingPage').subscribe(state => {
       this.featured = state.featured;
       this.featuredCollections = state.featuredCollections;
-      this.lastChance = state.lastChance;
-      this.newArrivals = state.newArrivals;
-      this.topRated = state.topRated;
       this.heroProduct = state.heroProduct;
     });
     this.store.select('categoriesPage').subscribe(({ categories }) => {
@@ -36,9 +30,6 @@ export class LandingPageComponent implements OnInit {
     });
     this.store.dispatch(new LandingPageActions.FeaturedProductStart());
     this.store.dispatch(new LandingPageActions.FeaturedCollectionStart());
-    this.store.dispatch(new LandingPageActions.NewArrivalsProductStart());
-    this.store.dispatch(new LandingPageActions.TopRatedProductStart());
-    this.store.dispatch(new LandingPageActions.LastChanceProductStart());
     this.store.dispatch(new LandingPageActions.HeroProductStart());
     this.store.dispatch(new CategoriesStart());
   }
