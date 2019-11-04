@@ -2,7 +2,7 @@ const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
 const { db, Op } = require('../config/database');
 
-exports.findProducts = async ({ where, order, limit, auctionStart, rated, hero }) => {
+exports.findProducts = async ({ where, order, limit, auctionStart, auctionEnd, rated, hero }) => {
     const findObj = {
         where: {
             auctionEnd: {
@@ -16,10 +16,25 @@ exports.findProducts = async ({ where, order, limit, auctionStart, rated, hero }
     };
 
     if (auctionStart) {
+        let date = new Date();
+        date.setDate(date.getDate() + 7);
         findObj.where = {
             ...findObj.where,
             auctionStart: {
-                [Op.gt]: new Date()
+                [Op.gt]: new Date(),
+                [Op.lte]: date
+            }
+        };
+    }
+
+    if (auctionEnd) {
+        let date = new Date();
+        date.setDate(date.getDate() + 3);
+        findObj.where = {
+            ...findObj.where,
+            auctionEnd: {
+                [Op.gt]: new Date(),
+                [Op.lte]: date
             }
         };
     }

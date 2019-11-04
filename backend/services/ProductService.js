@@ -12,6 +12,7 @@ class ProductService {
             const products = await callBack(obj);
             return { status: 200, products };
         } catch (error) {
+            console.log('TCL: ProductService -> error', error)
             return {
                 status: 403,
                 failedMessage: 'Something happened. We were unable to perform request.'
@@ -31,12 +32,14 @@ class ProductService {
                     ? [['auctionEnd', 'ASC']]
                     : null,
             auctionStart: type === 'newArrivals' ? true : null,
+            auctionEnd: type === 'lastChance' ? true : null,
             rated: type === 'topRated' ? true : null,
             hero: type === 'heroProduct' ? true : null
         };
         !objFind.where && delete objFind.where;
         !objFind.order && delete objFind.order;
         !objFind.auctionStart && delete objFind.auctionStart;
+        !objFind.auctionEnd && delete objFind.auctionEnd;
         !objFind.rated && delete objFind.rated;
         !objFind.hero && delete objFind.hero;
 
