@@ -46,7 +46,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { LandingPageEffects } from './landing-page/store/landing-page.effects';
 import { CategoriesPageEffects } from './containers/all-categories/store/all-categories.effects';
 import { DropdownNoautocloseDirective } from './shared/directives/dropdown-noautoclose.directive';
-import { TruncuateTextPipe } from './shared/pipes/truncuate-text.pipe';
+import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
 
 @NgModule({
   declarations: [
@@ -71,7 +71,7 @@ import { TruncuateTextPipe } from './shared/pipes/truncuate-text.pipe';
     CollectionItemComponent,
     AllCategoriesComponent,
     DropdownNoautocloseDirective,
-    TruncuateTextPipe
+    TruncateTextPipe
   ],
   imports: [
     BrowserModule,
