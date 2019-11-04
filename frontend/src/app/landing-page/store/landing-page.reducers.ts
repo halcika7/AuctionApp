@@ -1,5 +1,4 @@
 import * as LandingPageActions from './landing-page.actions';
-import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
 
 export interface Product {
   name: string;
