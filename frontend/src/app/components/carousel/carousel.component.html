@@ -3,7 +3,7 @@
     <div class="about">
       <h2>{{ item.name }}</h2>
       <p class="price">Start from - {{ item.price | currency }}</p>
-      <p class="description">{{ item.details | truncuateText }}</p>
+      <p class="description">{{ item.details | truncateText }}</p>
       <a href="">bid now <span></span><span></span></a>
     </div>
     <img [src]="item.picture" [alt]="item.name" />
