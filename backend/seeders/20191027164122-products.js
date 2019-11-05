@@ -110,10 +110,10 @@ module.exports = {
         const helperFunction = (index, j, subcategoryId) => {
             for (let i = index; i < j; i++) {
                 let date = new Date();
-                let newDate = new Date(date);
-                newDate.setDate(newDate.getDate() + faker.random.number(30));
                 let startDate = new Date(date);
-                startDate.setDate(newDate.getDate() + faker.random.number(4));
+                let newDate = new Date(startDate);
+                startDate.setDate(startDate.getDate() + faker.random.number(4));
+                newDate.setDate(startDate.getDate() + faker.random.number(30));
 
                 products.push({
                     name: faker.commerce.productName(),
