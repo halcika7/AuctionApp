@@ -64,6 +64,7 @@ export type AuthActions =
   | LoginSuccess
   | LogoutStart
   | LogoutSuccess
+  | RefreshTokenStart
   | RefreshToken
   | AuthClearMessagess
   | AuthFailed;

@@ -1,8 +1,8 @@
 module.exports = class BaseService {
-    constructor(ExtendedClass) {
-        if (!ExtendedClass.instance) {
-            ExtendedClass.instance = this;
+    constructor(ChildClass) {
+        if (!ChildClass.instance) {
+            ChildClass.instance = this;
         }
-        return ExtendedClass.instance;
+        return ChildClass.instance;
     }
 };

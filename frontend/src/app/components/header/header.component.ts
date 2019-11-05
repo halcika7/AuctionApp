@@ -9,19 +9,22 @@ import * as AuthActions from '@app/auth/store/auth.actions';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  isAuthenticated = false;
+  isAuthenticated = null;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.select('auth').subscribe(data => {
-      if (data.accessToken) {
-        this.isAuthenticated = true;
-        data.remember || localStorage.getItem('accessToken')
-          ? localStorage.setItem('accessToken', data.accessToken)
-          : sessionStorage.setItem('accessToken', data.accessToken);
-      } else {
-        this.isAuthenticated = false;
+    this.store.select('auth').subscribe(({ accessToken, remember, loading }) => {
+      if (!loading) {
+        if (accessToken && (localStorage.getItem('accessToken') || remember)) {
+          this.isAuthenticated = true;
+          localStorage.setItem('accessToken', accessToken);
+        } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
+          this.isAuthenticated = true;
+          sessionStorage.setItem('accessToken', accessToken);
+        } else {
+          this.isAuthenticated = false;
+        }
       }
     });
   }

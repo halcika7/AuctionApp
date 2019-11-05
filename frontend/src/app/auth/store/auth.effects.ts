@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, ofType, Effect } from '@ngrx/effects';
 import * as AuthActions from '@app/auth/store/auth.actions';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { concatMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class AuthEffects {
   @Effect()
   authRegister = this.actions$.pipe(
     ofType(AuthActions.REGISTER_START),
-    switchMap((registerData: AuthActions.RegisterStart) => {
+    concatMap((registerData: AuthActions.RegisterStart) => {
       return this.http
         .post<any>('/auth/register', {
           email: registerData.payload.email,
@@ -28,7 +28,7 @@ export class AuthEffects {
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
-    switchMap((loginData: AuthActions.LoginStart) => {
+    concatMap((loginData: AuthActions.LoginStart) => {
       return this.http
         .post<any>('/auth/login', {
           email: loginData.payload.email,
@@ -45,7 +45,7 @@ export class AuthEffects {
   @Effect()
   logout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT_START),
-    switchMap(() => {
+    concatMap(() => {
       return this.http
         .post<any>('/auth/logout', {})
         .pipe(map(() => new AuthActions.LogoutSuccess()));
@@ -55,7 +55,7 @@ export class AuthEffects {
   @Effect()
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
-    switchMap(() => {
+    concatMap(() => {
       return this.http.post<{ accessToken: string }>('/auth/refresh_token', {}).pipe(
         map(data => new AuthActions.RefreshToken(data)),
         catchError(data => {

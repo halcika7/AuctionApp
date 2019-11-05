@@ -11,6 +11,7 @@ export interface State {
   successMessage: string;
   accessToken: string;
   remember: boolean;
+  loading: boolean;
 }
 
 const initialState: State = {
@@ -23,7 +24,8 @@ const initialState: State = {
   errorMessage: '',
   successMessage: '',
   accessToken: '',
-  remember: false
+  remember: false,
+  loading: false
 };
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
@@ -48,12 +50,20 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         ...initialState,
         accessToken: action.payload.accessToken ? action.payload.accessToken : '',
         successMessage: action.payload.successMessage,
-        remember: action.payload.remember
+        remember: action.payload.remember,
+        loading: false
+      };
+    case AuthActions.REFRESH_ACCESS_TOKEN_START:
+    case AuthActions.LOGIN_START:
+      return {
+        ...initialState,
+        loading: true
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
       return {
         ...initialState,
-        accessToken: action.payload.accessToken
+        accessToken: action.payload.accessToken,
+        loading: false
       };
     default:
       return state;

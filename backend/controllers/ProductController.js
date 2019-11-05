@@ -10,11 +10,9 @@ class ProductController extends BaseController {
         const { failedMessage, status, ...products } = await ProductServiceInstance.filterProducts(
             req.params
         );
-        if (failedMessage) {
-            return res.status(status).json({ failedMessage });
-        }
-        if (req.params.offset) {
-            return res.status(200).json({
+
+        if (req.params.offset && !failedMessage) {
+            return super.sendResponse(res, status, {
                 ...products,
                 noMore:
                     products[req.params.type].length === 0 ||
@@ -23,7 +21,7 @@ class ProductController extends BaseController {
                         : false
             });
         }
-        return res.status(200).json(products);
+        return super.sendResponseWithMessage(res, status, products, failedMessage);
     }
 }
 

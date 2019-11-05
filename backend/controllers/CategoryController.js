@@ -12,10 +12,7 @@ class CategoryController extends BaseController {
             failedMessage,
             status
         } = await CategoryServiceInstance.getCategoriesWithSubcategories();
-        if (failedMessage) {
-            return res.status(status).json({ failedMessage });
-        }
-        return res.status(200).json({ categories });
+        return super.sendResponseWithMessage(res, status, { categories }, failedMessage);
     }
 }
 
