@@ -7,7 +7,7 @@ class CategoryService extends BaseService {
         super(CategoryService);
     }
 
-    async categories() {
+    async getCategoriesWithSubcategories() {
         try {
             const findObj = {
                 attributes: ['id', 'name'],

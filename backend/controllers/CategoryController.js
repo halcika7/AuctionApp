@@ -7,7 +7,11 @@ class CategoryController extends BaseController {
     }
 
     async getCategories(req, res) {
-        const { categories, failedMessage, status } = await CategoryServiceInstance.categories();
+        const {
+            categories,
+            failedMessage,
+            status
+        } = await CategoryServiceInstance.getCategoriesWithSubcategories();
         if (failedMessage) {
             return res.status(status).json({ failedMessage });
         }
