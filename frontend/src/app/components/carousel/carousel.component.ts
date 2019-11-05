@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Product } from './../../landing-page/store/landing-page.reducers';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 @Component({
   selector: 'app-carousel',

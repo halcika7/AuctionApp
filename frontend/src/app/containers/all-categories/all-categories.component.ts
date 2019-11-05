@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as CategoriesPageActions from './store/all-categories.actions';
-import { Categories } from './store/all-categories.reducer';
+import * as fromApp from '@app/store/app.reducer';
+import * as CategoriesPageActions from '@app/containers/all-categories/store/all-categories.actions';
+import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
 
 @Component({
   selector: 'app-all-categories',

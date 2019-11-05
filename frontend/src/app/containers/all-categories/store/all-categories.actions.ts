@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Categories } from './all-categories.reducer';
+import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
 
 export const ALL_CATEGORIES_START = 'ALL_CATEGORIES_START';
 export const ALL_CATEGORIES_SUCCESS = 'ALL_CATEGORIES_SUCCESS';

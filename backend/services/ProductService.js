@@ -1,53 +1,21 @@
-const { findProducts } = require('../helpers/productHelper');
+const { getFilteredProducts } = require('../helpers/productFilter');
+const BaseService = require('./BaseService');
 
-class ProductService {
+class ProductService extends BaseService {
     constructor() {
-        if (!!ProductService.instance) return ProductService.instance;
-        ProductService.instance = this;
-        return this;
+        super(ProductService);
     }
 
-    async helperfunction(obj, callBack) {
+    async filterProducts(reqParams) {
         try {
-            const products = await callBack(obj);
-            return { status: 200, products };
+            const products = await getFilteredProducts(reqParams);
+            return { status: 200, [reqParams.type]: products };
         } catch (error) {
             return {
                 status: 403,
                 failedMessage: 'Something happened. We were unable to perform request.'
             };
         }
-    }
-
-    async products(type, limit, offset) {
-        let objFind = {
-            where:
-                type === 'featured' || type === 'featuredCollections' ? { featured: true } : null,
-            limit: limit,
-            order:
-                type === 'newArrivals'
-                    ? [['auctionStart', 'DESC']]
-                    : type === 'lastChance'
-                    ? [['auctionEnd', 'ASC']]
-                    : null,
-            auctionStart: type === 'newArrivals' ? true : null,
-            auctionEnd: type === 'lastChance' ? true : null,
-            rated: type === 'topRated' ? true : null,
-            hero: type === 'heroProduct' ? true : null,
-            offset: offset ? offset : 0
-        };
-        !objFind.where && delete objFind.where;
-        !objFind.order && delete objFind.order;
-        !objFind.auctionStart && delete objFind.auctionStart;
-        !objFind.auctionEnd && delete objFind.auctionEnd;
-        !objFind.rated && delete objFind.rated;
-        !objFind.hero && delete objFind.hero;
-
-        const { products, failedMessage, status } = await this.helperfunction(
-            objFind,
-            findProducts
-        );
-        return { [type]: products, failedMessage, status };
     }
 }
 

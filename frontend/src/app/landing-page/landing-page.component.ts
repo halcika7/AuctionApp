@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as LandingPageActions from './store/landing-page.actions';
-import { CategoriesStart } from '../containers/all-categories/store/all-categories.actions';
-import { Product } from './store/landing-page.reducers';
-import { Categories } from './../containers/all-categories/store/all-categories.reducer';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
+import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
+import { CategoriesStart } from '@app/containers/all-categories/store/all-categories.actions';
 
 @Component({
   selector: 'app-landing-page',

@@ -1,4 +1,4 @@
-import * as AuthActions from './auth.actions';
+import * as AuthActions from '@app/auth/store/auth.actions';
 
 export interface State {
   errors: {

@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as AuthActions from '../store/auth.actions';
+import * as fromApp from '@app/store/app.reducer';
+import * as AuthActions from '@app/auth/store/auth.actions';
 
 @Component({
   selector: 'app-login',

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, ofType, Effect } from '@ngrx/effects';
-import * as LandingPageActions from './landing-page.actions';
 import { switchMap, map, catchError, concatMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import * as LandingPageActions from '@app/landing-page/store/landing-page.actions';
 
 @Injectable()
 export class LandingPageEffects {

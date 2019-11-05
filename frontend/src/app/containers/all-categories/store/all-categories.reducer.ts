@@ -1,4 +1,4 @@
-import * as CategoriesPageActions from './all-categories.actions';
+import * as CategoriesPageActions from '@app/containers/all-categories/store/all-categories.actions';
 
 export interface Category {
   id: string;

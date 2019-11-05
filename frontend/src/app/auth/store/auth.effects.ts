@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, ofType, Effect } from '@ngrx/effects';
-import * as AuthActions from './auth.actions';
+import * as AuthActions from '@app/auth/store/auth.actions';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 

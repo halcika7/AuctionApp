@@ -1,9 +1,8 @@
-import { LoadMoreProductsStart } from './../../landing-page/store/landing-page.actions';
-import { Component, OnInit, Input } from '@angular/core';
-import { Product } from './../../landing-page/store/landing-page.reducers';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as LandingPageActions from '../../landing-page/store/landing-page.actions';
+import * as fromApp from '@app/store/app.reducer';
+import * as LandingPageActions from '@app/landing-page/store/landing-page.actions';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 @Component({
   selector: 'app-product-tabs',

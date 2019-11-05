@@ -1,19 +1,15 @@
+const BaseController = require('./BaseController');
 const ProductServiceInstance = require('../services/ProductService');
 
-class ProductController {
+class ProductController extends BaseController {
     constructor() {
-        if (!!ProductController.instance) return ProductController.instance;
-        ProductController.instance = this;
-        return this;
+        super(ProductController);
     }
 
-    async products(req, res) {
-        const { failedMessage, status, ...products } = await ProductServiceInstance.products(
-            req.params.type,
-            req.params.limit,
-            req.params.offset
+    async getProducts(req, res) {
+        const { failedMessage, status, ...products } = await ProductServiceInstance.filterProducts(
+            req.params
         );
-        const prod = { ...products };
         if (failedMessage) {
             return res.status(status).json({ failedMessage });
         }
@@ -21,7 +17,8 @@ class ProductController {
             return res.status(200).json({
                 ...products,
                 noMore:
-                    products[req.params.type].length === 0 || products[req.params.type].length < 8
+                    products[req.params.type].length === 0 ||
+                    products[req.params.type].length < req.params.limit
                         ? true
                         : false
             });

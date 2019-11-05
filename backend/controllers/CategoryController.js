@@ -1,13 +1,12 @@
 const CategoryServiceInstance = require('../services/CategoryService');
+const BaseController = require('./BaseController');
 
-class CategoryController {
+class CategoryController extends BaseController {
     constructor() {
-        if (!!CategoryController.instance) return CategoryController.instance;
-        CategoryController.instance = this;
-        return this;
+        super(CategoryController);
     }
 
-    async categories(req, res) {
+    async getCategories(req, res) {
         const { categories, failedMessage, status } = await CategoryServiceInstance.categories();
         if (failedMessage) {
             return res.status(status).json({ failedMessage });

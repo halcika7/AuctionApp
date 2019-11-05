@@ -1,10 +1,9 @@
 const AuthServiceInstance = require('../services/AuthService');
+const BaseController = require('./BaseController');
 
-class AuthController {
+class AuthController extends BaseController {
     constructor() {
-        if (!!AuthController.instance) return AuthController.instance;
-        AuthController.instance = this;
-        return this;
+        super(AuthController);
     }
 
     async registerUser(req, res) {

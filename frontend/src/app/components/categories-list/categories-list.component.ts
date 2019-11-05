@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
+import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
 
 @Component({
   selector: 'app-categories-list',

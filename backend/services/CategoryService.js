@@ -1,14 +1,13 @@
 const Category = require('../model/Category');
 const Subcategory = require('../model/Subcategory');
+const BaseService = require('./BaseService');
 
-class CategoryService {
+class CategoryService extends BaseService {
     constructor() {
-        if (!!CategoryService.instance) return CategoryService.instance;
-        CategoryService.instance = this;
-        return this;
+        super(CategoryService);
     }
 
-    async categories(include = false) {
+    async categories() {
         try {
             const findObj = {
                 attributes: ['id', 'name'],

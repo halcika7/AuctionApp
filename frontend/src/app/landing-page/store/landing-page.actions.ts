@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { Product } from './landing-page.reducers';
-import { Categories } from './../../containers/all-categories/store/all-categories.reducer';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
+import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
 
 export const LOAD_MORE_START = 'LOAD_MORE_START';
 export const LOAD_MORE_SUCCESS = 'LOAD_MORE_SUCCESS';
@@ -18,7 +18,12 @@ export class LoadMoreProductsStart implements Action {
 export class LoadMoreProductsSuccess implements Action {
   readonly type = LOAD_MORE_SUCCESS;
   constructor(
-    public payload: { lastChance?: Product[]; topRated?: Product[]; newArrivals?: Product[], noMore: boolean }
+    public payload: {
+      lastChance?: Product[];
+      topRated?: Product[];
+      newArrivals?: Product[];
+      noMore: boolean;
+    }
   ) {}
 }
 

@@ -1,4 +1,4 @@
-import * as LandingPageActions from './landing-page.actions';
+import * as LandingPageActions from '@app/landing-page/store/landing-page.actions';
 
 export interface Product {
   name: string;

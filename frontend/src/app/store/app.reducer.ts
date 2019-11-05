@@ -1,8 +1,8 @@
 import { ActionReducerMap } from '@ngrx/store';
 
-import * as fromAuth from '../auth/store/auth.reducer';
-import * as fromLandingPage from '../landing-page/store/landing-page.reducers';
-import * as fromCategoriesPage from '../containers/all-categories/store/all-categories.reducer';
+import * as fromAuth from '@app/auth/store/auth.reducer';
+import * as fromLandingPage from '@app/landing-page/store/landing-page.reducers';
+import * as fromCategoriesPage from '@app/containers/all-categories/store/all-categories.reducer';
 
 export interface AppState {
   auth: fromAuth.State;

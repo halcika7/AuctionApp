@@ -1,5 +1,5 @@
-import { Product } from './../../landing-page/store/landing-page.reducers';
 import { Component, OnInit, Input } from '@angular/core';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 @Component({
   selector: 'app-collection-item',
