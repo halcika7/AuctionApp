@@ -1,25 +1,16 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 .button-wrapper {
+  @include flex(center, center);
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-content: center;
 }
 
 .load-more-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 51px;
-  width: 192px;
-  background: #FFFFFF;
-  border: 3px solid #8367D8;
-  box-shadow: 3px 3px 0 0 rgba(131,103,216,0.31);
-  text-transform: uppercase;
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: #252525;
-  letter-spacing: 0.63px;
+  @include flex(center, center);
+  @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
+  @include heightWidth(51px, 192px);
+  @include boxShadowBackground(true, white, 3px, purple);
   outline: none;
   cursor: pointer;
 }

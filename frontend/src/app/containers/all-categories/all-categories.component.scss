@@ -1,8 +1,8 @@
+@import '../../../scss/mixins';
+
 .all-categories {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 25px;
-  margin: 50px 0 400px 0;
+  @include margin($all: 50px 0 400px 0);
+  @include grid(4, 25px);
   width: 100%;
 }
 
@@ -11,22 +11,14 @@
 
   li {
     &.heading {
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      color: #252525;
-      letter-spacing: 0.84px;
-      margin: 20px 0;
+      @include margin($all: 20px 0);
+      @include fontMixin(24px, regular, 0.84px, light_black);
     }
-
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    letter-spacing: 0.56px;
-    margin: 13px 0;
+    @include margin($all: 13px 0);
+    @include fontMixin(16px, light, 0.56px);
 
     a {
-      color: #252525;
+      color: getColor(light_black);
       text-decoration: none;
     }
   }
@@ -34,18 +26,18 @@
 
 @media (max-width: 750px) {
   .all-categories {
-    grid-template-columns: repeat(3, 1fr);
+    @include grid(3);
   }
 }
 
 @media (max-width: 575px) {
   .all-categories {
-    grid-template-columns: repeat(2, 1fr);
+    @include grid(2);
   }
 }
 
 @media (max-width: 400px) {
   .all-categories {
-    grid-template-columns: repeat(1, 1fr);
+    @include grid(1);
   }
 }

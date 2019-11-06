@@ -1,17 +1,15 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 footer {
+  @include flex(center, center);
   height: 365px;
-  background: #252525;
-  border: 1px solid #979797;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: getColor(light_black);
+  border: 1px solid getColor(gray2);
 }
 
 .content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 25px;
-  grid-template-areas: "a b c";
+  @include grid(3, 25px, "a b c");
 
   > div {
     &:first-child {
@@ -29,106 +27,72 @@ footer {
   }
 
   h4 {
-    text-transform: uppercase;
+    @include margin(0);
+    @include fontMixin(16px, regular, 0.56px, white, uppercase);
     opacity: 0.5;
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: #FFFFFF;
-    letter-spacing: 0.56px;
-    margin-top: 0;
   }
 }
 
 .links a {
+  @include margin($bottom: 15px);
+  @include fontMixin(16px, regular, 0.56px, light_gray, $decoration: none);
   display: block;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  color: #D8D8D8;
-  letter-spacing: 0.56px;
-  text-decoration: none;
-  margin-bottom: 15px;
 }
 
 .contact p {
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  color: #D8D8D8;
-  letter-spacing: 0.56px;
-  margin-bottom: 15px;
-  margin-top: 0;
+  @include margin(0, 15px);
+  @include fontMixin(16px, regular, 0.56px, light_gray);
 }
 
 .icons {
-  display: flex;
-  align-items: center;
+  @include flex(center);
 
   a {
-    height: 25px;
-    width: 25px;
-    margin-right: 10px;
-    background: #9B9B9B;
+    @include flex(center, center);
+    @include margin($right: 10px);
+    @include heightWidth(25px, 25px);
+    background: getColor(gray);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     fa-icon {
-      color: #252525;
-      font-size: 12px;
-      font-weight: bold;
+      @include fontMixin(12px, bold, $color: light_black);
     }
   }
 }
 
 .newsletter {
   .input {
-    display: flex;
-    align-items: center;
+    @include flex(center);
   }
 
   p {
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: #D8D8D8;
-    letter-spacing: 0.56px;
+    @include margin($bottom: 30px);
+    @include fontMixin(16px, regular, 0.56px, light_gray);
     max-width: 334px;
     width: 100%;
-    margin-bottom: 30px;
   }
 
   input {
+    @include padding($all: 17.5px);
+    @include fontMixin(16px, regular, 0.56px, dark_gray);
     outline: none;
-    background: #3B3B3B;
-    font-size: 16px;
-    color: #ffffff;
-    letter-spacing: 0.56px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
+    background: getColor(dark_gray);
     width: 275px;
-    padding: 17.5px;
     border: none;
   }
 
   button {
-    border: 3px solid #8367D8;
+    @include margin($left: 5px);
+    @include padding($all: 0 23.36px);
+    @include fontMixin(18px, bold, 0.63px, light_gray);
+    border: 3px solid getColor(purple);
     height: 54px;
-    font-size: 18px;
-    color: #D8D8D8;
-    letter-spacing: 0.63px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
     background: transparent;
     outline: none;
-    padding: 0 23.36px;
-    margin-left: 5px;
     cursor: pointer;
 
     fa-icon {
-      margin-left: 10px;
+      @include margin($left: 10px);
     }
   }
 }
@@ -139,36 +103,33 @@ footer {
   }
 
   .content {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-areas: "a b" "c c";
+    @include grid(2, $areas: "a b" "c c");
     height: auto;
 
     > div {
-      padding: 20px;
+      @include padding($all: 20px);
     }
   }
 }
 
 @media (max-width: 490px) {
   footer {
+    @include padding($all: 60px 0);
     height: auto;
-    padding: 60px 0;
     display: block;
   }
 
   .content {
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-areas: "a" "b" "c";
-    grid-gap: 50px;
+    @include grid(1, 50px, "a" "b" "c");
 
     > div {
+      @include padding($all: 0);
       width: 100%;
       max-width: 100%;
-      padding: 0;
 
       &:last-child {
+        @include margin($all: 0);
         width: 100%;
-        margin: 0;
       }
     }
   }
@@ -180,7 +141,7 @@ footer {
     }
 
     button {
-      padding: 0 14px;
+      @include padding($all: 0 14px);
     }
   }
 }

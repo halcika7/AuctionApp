@@ -1,56 +1,35 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 .carousel .item {
-  display: flex;
+  @include flex();
 
   .about {
-    margin-left: 78px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    @include margin($left: 78px);
+    @include flex($justify: center, $direction: column);
 
     h2 {
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      font-size: 46px;
-      color: #252525;
-      letter-spacing: 1.61px;
-      margin-bottom: 14px;
-      margin-top: 0;
+      @include margin(0, 14px);
+      @include fontMixin(46px, regular, 1.61px, light_black);
     }
 
     .price {
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      color: #8367D8;
-      letter-spacing: 0.84px;
-      margin-top: 0;
-      margin-bottom: 14px;
+      @include margin(0, 14px);
+      @include fontMixin(24px, regular, 0.84px, purple);
     }
 
     a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 51px;
-      width: 192px;
-      background: #FFFFFF;
-      border: 3px solid #8367D8;
-      box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
-      text-transform: uppercase;
-      font-family: 'Lato', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      color: #252525;
-      letter-spacing: 0.63px;
+      @include flex(center, center);
+      @include fontMixin(18px, bold, 0.63px, light_black, uppercase, none);
+      @include heightWidth(51px, 192px);
+      @include boxShadowBackground(true, white, 3px, purple);
       outline: none;
       cursor: pointer;
-      text-decoration: none;
       position: relative;
 
       span {
-        width: 4px;
-        height: 11px;
-        background: #252525;
+        @include heightWidth(11px, 4px);
+        background: getColor(light_black);
         position: absolute;
         right: 30px;
         border-radius: 15px;
@@ -70,36 +49,27 @@
     }
 
     .description {
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      font-size: 16px;
-      color: #252525;
-      letter-spacing: 0.56px;
-      line-height: 22px;
-      margin-top: 0;
-      margin-bottom: 23px;
+      @include margin(0, 23px);
+      @include fontMixin(16px, regular, 0.56px, light_black, $lineH: 22px);
       width: 323px;
     }
   }
 
   img {
+    @include margin($left: 20px);
     max-width: 484px;
     max-height: 429px;
     object-fit: scale-down;
-    margin-left: 20px;
   }
 }
 
 @media (max-width: 1200px) {
   .carousel .item {
-    flex-wrap: wrap-reverse;
-    justify-content: center;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    @include padding(15px 15px);
+    @include flex($justify: center, $wrap: wrap-reverse);
 
     img {
-      height: 224px;
-      width: auto;
+      @include heightWidth(224px, auto);
       object-fit: contain;
     }
   }
@@ -108,14 +78,12 @@
 @media (max-width: 698px) {
   .carousel .item {
     .about {
-      margin-left: 39px;
-      margin-top: 30px;
+      @include margin($left: 39px, $top: 30px);
     }
 
     img {
-      height: 224px;
+      @include heightWidth(224px, 100%);
       max-width: 484px;
-      width: 100%;
     }
 
     .about .description {

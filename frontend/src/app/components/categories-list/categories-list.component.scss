@@ -1,112 +1,87 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 .wrapper {
   position: relative;
   min-width: 253px;
   height: 563px;
 
   button {
-    height: 40px;
-    width: 253px;
-    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+    @include heightWidth(40px, 253px);
+    @include boxShadowBackground(true);
     border: none;
     display: none;
 
     &.show {
-      border-bottom: 1px solid #8367D8;
+      border-bottom: 1px solid getColor(purple);
     }
   }
 
   .categories {
+    @include margin($all: 0);
+    @include padding($all: 0);
+    @include boxShadowBackground(true, white);
     overflow-y: auto;
     height: 563px;
-    margin: 0;
-    padding: 0;
     min-width: 253px;
     max-width: 253px;
-    background: #FFFFFF;
-    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
-    list-style: none;
   }
 
   .subcategories {
-    margin: 0;
-    padding: 0;
+    @include margin($all: 0);
+    @include padding($all: 0);
     min-width: 253px;
     max-width: 253px;
-    background: #FFFFFF;
-    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
-    list-style: none;
-    box-shadow: none;
+    background: getColor(white);
     box-sizing: border-box;
     display: none;
   }
 
   .categories {
     h3 {
-      font-family: 'Lato', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: #8367D8;
-      letter-spacing: 0.56px;
-      padding-left: 20px;
-      margin-top: 0;
-      padding-top: 25px;
-      margin-bottom: 20px;
+      @include margin(0, 20px);
+      @include padding($top: 25px, $left: 20px);
+      @include fontMixin(16px, bold, 0.56px, purple);
     }
 
     li > {
       p, a {
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 400;
-        font-size: 16px;
-        color: #252525;
-        letter-spacing: 0.56px;
+        @include flex(center);
+        @include margin($all: 0);
+        @include padding($all: 0 20px);
+        @include fontMixin(16px, regular, 0.56px, light_black, $decoration: none);
         height: 49px;
-        border-bottom: 1px solid #ECECEC;
+        border-bottom: 1px solid getColor(lighter_gray);
         cursor: pointer;
-        text-decoration: none;
-        margin: 0;
       }
     }
 
     .subcategories li {
       > a {
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 400;
-        font-size: 16px;
-        color: #252525;
-        letter-spacing: 0.56px;
-        height: 49px;
-        border-bottom: 1px solid #ECECEC;
+        @include flex(center);
+        @include margin($all: 0);
+        @include padding($all: 0 0 0 30px);
+        @include fontMixin(14px, regular, 0.56px, light_black, $decoration: none);
+        border-bottom: 1px solid getColor(lighter_gray);
         cursor: pointer;
-        text-decoration: none;
-        margin: 0;
         border-bottom: none;
-        font-size: 14px;
-        padding: 0;
-        padding-left: 30px;
         height: 30px;
       }
 
       &:last-child > a {
-        border-bottom: 1px solid #ECECEC;
+        border-bottom: 1px solid getColor(lighter_gray);
       }
     }
 
     li > {
       p:hover, a:hover, p.open {
-        color: #8367D8;
-        border-bottom: 1px solid #8367D8;
+        color: getColor(purple);
+        border-bottom: 1px solid getColor(purple);
       }
     }
 
     .subcategories li > a:hover {
-      color: #8367D8;
+      color: getColor(purple);
     }
 
     li > p.open ~ .subcategories {

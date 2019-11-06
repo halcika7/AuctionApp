@@ -1,11 +1,13 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 header {
-  background: #252525;
+  background: getColor(light_black);
   height: 40px;
 }
 
 .top {
-  display: flex;
-  justify-content: space-between;
+  @include flex(false, space-between);
   height: 100%;
 }
 
@@ -15,23 +17,21 @@ header {
   }
 
   .top {
-    flex-direction: column;
-    align-items: center;
+    @include flex(center, $direction: column);
     height: auto;
   }
 
   .links {
-    margin: 10px 0;
+    @include margin($all: 10px 0);
   }
 
   .login {
-    margin: 0 0 15px;
+    @include margin($all: 0 0 15px);
   }
 }
 
 .links, .login, .navigation, .search {
-  display: flex;
-  align-items: center;
+  @include flex(center);
 }
 
 .login > button {
@@ -42,48 +42,32 @@ header {
 }
 
 .links a {
-  height: 25px;
-  width: 25px;
-  margin-right: 10px;
-  background: #9B9B9B;
+  @include flex(center, center);
+  @include margin($right: 10px);
+  @include heightWidth(25px, 25px);
+  background: getColor(gray);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   fa-icon {
-    color: #252525;
-    font-size: 12px;
-    font-weight: bold;
-    margin-top: 2.3px;
+    @include fontMixin(12px, bold, $color: light_black);
+    @include margin(2.3px);
   }
 }
 
 .login {
   span {
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: #9B9B9B;
-    letter-spacing: 0.49px;
-    margin: 0 19px;
+    @include fontMixin(14px, bold, 0.49px, gray);
+    @include margin($all: 0 19px);
   }
 
   a, button {
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: #FFFFFF;
-    letter-spacing: 0.49px;
-    text-decoration: none;
+    @include fontMixin(14px, bold, 0.49px, white, $decoration: none);
   }
 }
 
 .navigation {
+  @include grid(7, $areas: "a a b b b c c");
   height: 80px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-areas: "a a b b b c c";
 
   > {
     div {
@@ -105,20 +89,15 @@ header {
     }
 
     .brand {
-      font-family: 'Lato', sans-serif;
-      font-weight: 300;
-      font-size: 24px;
-      color: #8367D8;
-      letter-spacing: 0.84px;
-      display: flex;
+      @include fontMixin(24px, light, 0.84px, purple);
+      @include flex();
 
       > .brand-icon {
-        margin-right: 14px;
-        padding-top: 2px;
+        @include margin($right: 14PX);
+        @include padding(2px);
 
         span {
-          height: 20px;
-          width: 4px;
+          @include heightWidth(20px, 4px);
           background: #C4BFD6;
           display: inline-block;
           border-radius: 1px;
@@ -142,8 +121,8 @@ header {
   }
 
   .search {
+    @include padding($all: 0 10px);
     height: 68px;
-    padding: 0 10px;
     position: relative;
 
     fa-icon {
@@ -151,106 +130,76 @@ header {
       right: 25px;
       cursor: pointer;
       height: 20px;
-      color: #252525;
+      color: getColor(light_black);
     }
 
     input {
-      background: #FFFFFF;
-      border: 1px solid #E3E3E3;
-      box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+      @include padding($all: 15px 35px 15px 15px);
+      @include fontMixin(18px, regular, 0.63px, light_black);
+      @include boxShadowBackground(true, white, 1px, inputBorder);
       width: 100%;
-      padding: 15px;
-      padding-right: 35px;
-      font-family: 'Lato', sans-serif;
-      font-size: 18px;
-      font-weight: 400;
-      color: #252525;
-      letter-spacing: 0.63px;
       outline: none;
     }
   }
 
   > .nav-links {
+    @include flex(center, space-between);
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
     > a {
       &:first-child:nth-last-child(2) {
-        margin-left: auto;
-        margin-right: 30px;
+        @include margin($left: auto, $right: 30px);
       }
 
-      font-family: 'Lato', sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      color: #252525;
-      letter-spacing: 0.56px;
-      text-decoration: none;
+      @include flex(center);
+      @include fontMixin(16px, light, 0.56px, light_black, $decoration: none);
       height: 100%;
-      display: flex;
-      align-items: center;
       position: relative;
 
       > a {
-        font-family: 'Lato', sans-serif;
-        font-weight: 300;
-        font-size: 16px;
-        color: #252525;
-        letter-spacing: 0.56px;
-        text-decoration: none;
+        @include flex(center);
+        @include fontMixin(16px, light, 0.56px, light_black, $decoration: none);
+        @include margin($all: 0);
         height: 100%;
-        display: flex;
-        align-items: center;
         position: relative;
-        margin: 0;
         pointer-events: none;
       }
 
       &.active {
-        font-weight: 700;
-        font-size: 16px;
-        color: #8367D8;
-        letter-spacing: 0.56px;
+        @include fontMixin(16px, bold, 0.56px, purple);
       }
 
       > a.active {
-        font-weight: 700;
+        @include fontMixin($fontW: bold);
       }
 
       &:hover {
-        font-size: 16px;
-        color: #8367D8;
-        letter-spacing: 0.56px;
+        @include fontMixin(16px, $letterS: 0.56px, $color: purple);
       }
 
       > a {
         &.active, &:hover {
-          font-size: 16px;
-          color: #8367D8;
-          letter-spacing: 0.56px;
+          @include fontMixin(16px, $letterS: 0.56px, $color: purple);
         }
       }
     }
 
     a:first-child {
-      margin-left: 39px;
+      @include margin($left: 39px);
     }
 
     > a {
       > .dropdown {
+        @include padding($all: 9.5px 0);
+        @include margin($all: 0);
         position: absolute;
         top: 100%;
         right: 0;
         width: 172px;
-        background: #FFFFFF;
-        border: 1px solid #ECECEC;
+        background: getColor(white);
+        border: 1px solid getColor(lighter_gray);
         z-index: 100;
-        margin: 0;
         list-style: none;
-        padding: 9.5px 0px;
-        display: none;
       }
 
       &.open > .dropdown {
@@ -261,73 +210,61 @@ header {
 }
 
 .dropdown li a {
-  display: flex;
-  align-items: center;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  color: #9B9B9B;
-  letter-spacing: 0.56px;
-  text-decoration: none;
+  @include flex(center);
+  @include fontMixin(14px, regular, 0.56px, gray, $decoration: none);
+  @include heightWidth(45px, 172px);
   margin: 0 !important;
-  height: 45px;
-  width: 172px;
 
   span {
-    padding-left: 25px;
+    @include padding($left: 25px);
   }
 
   &.active, &:hover {
-    color: #8367D8;
+    color: getColor(purple);
   }
 }
 
 @media (max-width: 1200px) {
   .navigation {
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-areas: "a b b b c c";
+    @include grid(6, $areas: "a b b b c c");
   }
 }
 
 @media (max-width: 866px) {
   .navigation {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-areas: "a a a" "b b b" "c c c";
+    @include grid(3, $areas: "a a a" "b b b" "c c c");
     height: auto;
 
     div {
       &:nth-child(1) {
-        display: flex;
+        @include flex(center, center);
         height: 45px;
-        justify-content: center;
-        align-items: center;
       }
 
       &:nth-child(3) {
         height: 80px;
         justify-content: center;
-        border-bottom: 1px solid #ECECEC;
+        border-bottom: 1px solid getColor(lighter_gray);
       }
     }
 
     > {
       .nav-links {
         > a {
-          margin: 0 15px;
+          @include margin($all: 0 15px);
         }
 
         a:first-child {
-          margin-left: 15px;
+          @include margin($left: 15px);
         }
 
         > a:first-child:nth-last-child(2) {
-          margin-left: 0px;
-          margin-right: 0px;
+          @include margin($left: 0, $right: 0);
         }
       }
 
       .brand > .brand-icon span:nth-child(1) {
-        margin-top: -3px;
+        @include margin($top: -3px);
       }
     }
   }
@@ -335,15 +272,15 @@ header {
 
 @media (max-width: 350px) {
   .navigation {
-    padding: 0;
+    @include padding($all: 0);
 
     > .nav-links {
       > a {
-        margin: 0 7px;
+        @include margin($all: 0 7px);
       }
 
       a:first-child {
-        margin-left: 7px;
+        @include margin($left: 7px);
       }
     }
   }

@@ -1,67 +1,46 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 .page-not-found {
   text-align: center;
 }
 
 .content {
-  margin: 100px 0 200px 0;
+  @include margin($all: 100px 0 200px 0);
 
   a {
-    text-decoration: none;
-    font-size: 24px;
-    color: #8367D8;
-    letter-spacing: 0.84px;
-    text-transform: uppercase;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
+    @include fontMixin(24px, light, 0.84px, purple, uppercase, none);
   }
 }
 
 .not-found {
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 20vw;
-  color: #8367D8;
-  letter-spacing: 10.5px;
+  @include margin($all: 0);
+  @include fontMixin(20vw, regular, 10.5px, purple);
   text-shadow: 8px 10px 0 #DADADA;
-  margin: 0;
 }
 
 .message {
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 36px;
-  color: #252525;
-  letter-spacing: 1.26px;
+  @include fontMixin(36px, regular, 1.26px, light_black);
 }
 
 .content button {
-  background: #FFFFFF;
-  border: 3px solid #8367D8;
-  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
+  @include heightWidth(57px, 179px);
+  @include boxShadowBackground(true, white, 3px, purple);
   outline: none;
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: #252525;
-  letter-spacing: 0.63px;
-  text-transform: uppercase;
-  height: 57px;
-  width: 179px;
   cursor: pointer;
 }
 
 .title {
-  display: flex;
-  justify-content: center;
+  @include flex($justify: center);
 }
 
 .brand-icon {
-  margin-right: 14px;
-  padding-top: 2px;
+  @include margin($right: 14px);
+  @include padding(2px);
 
   span {
-    height: 20px;
-    width: 4px;
+    @include heightWidth(20px, 4px);
     background: #C4BFD6;
     display: inline-block;
     border-radius: 1px;

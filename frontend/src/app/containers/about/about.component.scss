@@ -1,54 +1,44 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
 .about {
-  margin: 100px auto;
+  @include margin($all: 100px auto);
 }
 
 h1 {
-  font-size: 46px;
-  color: #252525;
-  letter-spacing: 1.61px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
+  @include fontMixin(46px, regular, 1.61px, light_black);
 }
 
 .content {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  @include flex($justify: space-between, $wrap: wrap);
 }
 
 .paragraphs {
   max-width: 500px;
 
   p {
-    font-size: 18px;
-    color: #9B9B9B;
-    letter-spacing: 0.63px;
-    line-height: 25px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
-    margin-top: 0;
+    @include margin(0);
+    @include fontMixin(18px, regular, 0.63px, gray, $lineH: 25px);
   }
 }
 
 .images > img {
-  height: 375px;
-  width: auto;
+  @include heightWidth(375px, auto);
 }
 
 .two-images {
   max-width: 508px;
 
   img {
-    height: 181px;
-    width: 244px;
-    margin-top: 5px;
+    @include margin(5px);
+    @include heightWidth(181px, 244px);
 
     &:first-child {
-      margin-right: 10px;
+      @include margin($right: 10px);
     }
 
     &:last-child {
-      margin-left: 10px;
+      @include margin($left: 10px);
     }
   }
 }
@@ -59,8 +49,8 @@ h1 {
   }
 
   .paragraphs {
+    @include margin($bottom: 50px);
     max-width: 700px;
-    margin-bottom: 50px;
   }
 
   .content {
@@ -71,22 +61,20 @@ h1 {
     max-width: 700px;
 
     > img {
-      height: auto;
-      width: 100%;
+      @include heightWidth(auto, 100%);
     }
   }
 
   .two-images {
     img {
-      height: auto;
-      width: 100%;
+      @include heightWidth(auto, 100%);
 
       &:first-child {
-        margin-right: 0px;
+        @include margin($right: 0);
       }
 
       &:last-child {
-        margin-left: 0px;
+        @include margin($left: 0);
       }
     }
 
