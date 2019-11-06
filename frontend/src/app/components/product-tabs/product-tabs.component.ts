@@ -7,7 +7,7 @@ import { Product } from '@app/landing-page/store/landing-page.reducers';
 @Component({
   selector: 'app-product-tabs',
   templateUrl: './product-tabs.component.html',
-  styleUrls: ['./product-tabs.component.css']
+  styleUrls: ['./product-tabs.component.scss']
 })
 export class ProductTabsComponent implements OnInit {
   products: Product[] = [];

@@ -1,0 +1,125 @@
+.carousel .item {
+  display: flex;
+
+  .about {
+    margin-left: 78px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 46px;
+      color: #252525;
+      letter-spacing: 1.61px;
+      margin-bottom: 14px;
+      margin-top: 0;
+    }
+
+    .price {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      color: #8367D8;
+      letter-spacing: 0.84px;
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 51px;
+      width: 192px;
+      background: #FFFFFF;
+      border: 3px solid #8367D8;
+      box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+      text-transform: uppercase;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #252525;
+      letter-spacing: 0.63px;
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+
+      span {
+        width: 4px;
+        height: 11px;
+        background: #252525;
+        position: absolute;
+        right: 30px;
+        border-radius: 15px;
+
+        &:first-child {
+          transform: rotateZ(-45deg) translateY(-4px);
+        }
+
+        &:last-child {
+          transform: rotateZ(45deg) translateY(4px);
+        }
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+
+    .description {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: #252525;
+      letter-spacing: 0.56px;
+      line-height: 22px;
+      margin-top: 0;
+      margin-bottom: 23px;
+      width: 323px;
+    }
+  }
+
+  img {
+    max-width: 484px;
+    max-height: 429px;
+    object-fit: scale-down;
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .carousel .item {
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    img {
+      height: 224px;
+      width: auto;
+      object-fit: contain;
+    }
+  }
+}
+
+@media (max-width: 698px) {
+  .carousel .item {
+    .about {
+      margin-left: 39px;
+      margin-top: 30px;
+    }
+
+    img {
+      height: 224px;
+      max-width: 484px;
+      width: 100%;
+    }
+
+    .about .description {
+      width: 100%;
+    }
+  }
+}

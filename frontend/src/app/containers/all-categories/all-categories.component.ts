@@ -7,7 +7,7 @@ import { Categories } from '@app/containers/all-categories/store/all-categories.
 @Component({
   selector: 'app-all-categories',
   templateUrl: './all-categories.component.html',
-  styleUrls: ['./all-categories.component.css']
+  styleUrls: ['./all-categories.component.scss']
 })
 export class AllCategoriesComponent implements OnInit {
   categories: Categories[] = [];

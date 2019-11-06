@@ -1,0 +1,39 @@
+.breadcrumb {
+  height: 60px;
+  background: #FAFAFA;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+
+  span {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #252525;
+    letter-spacing: 0.63px;
+    text-transform: uppercase;
+  }
+
+  .urls li {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #252525;
+    letter-spacing: 0.56px;
+    list-style: none;
+    text-transform: uppercase;
+    display: inline-block;
+
+    &:last-child {
+      font-weight: 400;
+    }
+
+    &:not(:first-child) {
+      margin-left: 21px;
+    }
+  }
+}

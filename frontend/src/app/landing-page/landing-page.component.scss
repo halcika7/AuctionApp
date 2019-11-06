@@ -7,23 +7,21 @@ section.container-fluid {
   height: 100%;
   width: 100%;
   background: #FAFAFA;
-}
 
-.hero-content .container {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: space-between;
+  .container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 /* Media queries */
 
 @media (max-width: 698px) {
-
   .hero-content .container {
     display: block;
   }
-
 }
 
 @media (max-width: 592px) {

@@ -1,0 +1,136 @@
+.wrapper {
+  position: relative;
+  min-width: 253px;
+  height: 563px;
+
+  button {
+    height: 40px;
+    width: 253px;
+    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+    border: none;
+    display: none;
+
+    &.show {
+      border-bottom: 1px solid #8367D8;
+    }
+  }
+
+  .categories {
+    overflow-y: auto;
+    height: 563px;
+    margin: 0;
+    padding: 0;
+    min-width: 253px;
+    max-width: 253px;
+    background: #FFFFFF;
+    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+    list-style: none;
+  }
+
+  .subcategories {
+    margin: 0;
+    padding: 0;
+    min-width: 253px;
+    max-width: 253px;
+    background: #FFFFFF;
+    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+    list-style: none;
+    box-shadow: none;
+    box-sizing: border-box;
+    display: none;
+  }
+
+  .categories {
+    h3 {
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #8367D8;
+      letter-spacing: 0.56px;
+      padding-left: 20px;
+      margin-top: 0;
+      padding-top: 25px;
+      margin-bottom: 20px;
+    }
+
+    li > {
+      p, a {
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: #252525;
+        letter-spacing: 0.56px;
+        height: 49px;
+        border-bottom: 1px solid #ECECEC;
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0;
+      }
+    }
+
+    .subcategories li {
+      > a {
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: #252525;
+        letter-spacing: 0.56px;
+        height: 49px;
+        border-bottom: 1px solid #ECECEC;
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0;
+        border-bottom: none;
+        font-size: 14px;
+        padding: 0;
+        padding-left: 30px;
+        height: 30px;
+      }
+
+      &:last-child > a {
+        border-bottom: 1px solid #ECECEC;
+      }
+    }
+
+    li > {
+      p:hover, a:hover, p.open {
+        color: #8367D8;
+        border-bottom: 1px solid #8367D8;
+      }
+    }
+
+    .subcategories li > a:hover {
+      color: #8367D8;
+    }
+
+    li > p.open ~ .subcategories {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: 698px) {
+  .categories {
+    display: none;
+  }
+
+  .wrapper {
+    height: unset;
+
+    button {
+      display: block;
+
+      &.show ~ .categories {
+        position: absolute;
+        z-index: 1000;
+        display: block;
+      }
+    }
+  }
+}

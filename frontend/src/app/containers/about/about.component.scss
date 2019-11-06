@@ -18,16 +18,16 @@ h1 {
 
 .paragraphs {
   max-width: 500px;
-}
 
-.paragraphs p {
-  font-size: 18px;
-  color: #9B9B9B;
-  letter-spacing: 0.63px;
-  line-height: 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  margin-top: 0;
+  p {
+    font-size: 18px;
+    color: #9B9B9B;
+    letter-spacing: 0.63px;
+    line-height: 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    margin-top: 0;
+  }
 }
 
 .images > img {
@@ -37,19 +37,20 @@ h1 {
 
 .two-images {
   max-width: 508px;
-}
 
-.two-images img {
-  height: 181px;
-  width: 244px;
-  margin-top: 5px;
-}
+  img {
+    height: 181px;
+    width: 244px;
+    margin-top: 5px;
 
-.two-images img:first-child {
-  margin-right: 10px;
-}
-.two-images img:last-child {
-  margin-left: 10px;
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
 }
 
 @media (max-width: 1200px) {
@@ -68,22 +69,27 @@ h1 {
 
   .images {
     max-width: 700px;
-  }
 
-  .images > img,
-  .two-images img {
-    height: auto;
-    width: 100%;
+    > img {
+      height: auto;
+      width: 100%;
+    }
   }
 
   .two-images {
-    max-width: 100%;
-  }
+    img {
+      height: auto;
+      width: 100%;
 
-  .two-images img:first-child {
-    margin-right: 0px;
-  }
-  .two-images img:last-child {
-    margin-left: 0px;
+      &:first-child {
+        margin-right: 0px;
+      }
+
+      &:last-child {
+        margin-left: 0px;
+      }
+    }
+
+    max-width: 100%;
   }
 }

@@ -8,28 +8,28 @@
 
 .list {
   list-style: none;
-}
 
-.list li.heading {
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  font-size: 24px;
-  color: #252525;
-  letter-spacing: 0.84px;
-  margin: 20px 0;
-}
+  li {
+    &.heading {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      color: #252525;
+      letter-spacing: 0.84px;
+      margin: 20px 0;
+    }
 
-.list li {
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  letter-spacing: 0.56px;
-  margin: 13px 0;
-}
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    margin: 13px 0;
 
-.list li a {
-  color: #252525;
-  text-decoration: none;
+    a {
+      color: #252525;
+      text-decoration: none;
+    }
+  }
 }
 
 @media (max-width: 750px) {
