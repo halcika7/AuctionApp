@@ -1,7 +1,7 @@
 const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
 const { db, Op } = require('../config/database');
-const { STARTS_IN_MAX_DAYS, ENDS_IN_MAX_DAYS } = require('../config/configs');
+const { STARTS_IN_MAX_DAYS, ENDS_IN_MAX_DAYS, AVG_RATING } = require('../config/configs');
 const { addDaysToDate } = require('./addDaysToDate');
 
 function filterProducts({ type, limit, offset = 0 }) {
@@ -48,12 +48,9 @@ function filterProducts({ type, limit, offset = 0 }) {
             }
         ];
         findObj.attributes.push([db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), 'avg_rating']);
-        findObj.having = db.where(
-            db.fn('ROUND', db.fn('AVG', db.col('rating')), 2),
-            {
-                [Op.gte]: 3
-            }
-        );
+        findObj.having = db.where(db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), {
+            [Op.gte]: AVG_RATING
+        });
         findObj.group = ['Product.id'];
         findObj.order = [[db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), 'DESC']];
     }
