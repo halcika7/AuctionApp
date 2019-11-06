@@ -51,7 +51,6 @@ function filterProducts({ type, limit, offset = 0 }) {
         findObj.having = db.where(db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), {
             [Op.gte]: AVG_RATING
         });
-        console.log('TCL: filterProducts -> AVG_RATING', AVG_RATING);
         findObj.group = ['Product.id'];
         findObj.order = [[db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), 'DESC']];
     }
