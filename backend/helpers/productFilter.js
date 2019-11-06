@@ -28,7 +28,7 @@ function filterProducts({ type, limit, offset = 0 }) {
             [Op.gt]: new Date(),
             [Op.lte]: addDaysToDate(STARTS_IN_MAX_DAYS)
         };
-        findObj.order = [['auctionStart', 'DESC']];
+        findObj.order = [['auctionStart', 'ASC']];
     }
 
     if (type === 'lastChance') {
@@ -36,7 +36,7 @@ function filterProducts({ type, limit, offset = 0 }) {
             [Op.gt]: new Date(),
             [Op.lte]: addDaysToDate(ENDS_IN_MAX_DAYS)
         };
-        findObj.order = [['auctionEnd', 'DESC']];
+        findObj.order = [['auctionEnd', 'ASC']];
     }
 
     if (type === 'topRated') {
