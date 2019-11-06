@@ -11,6 +11,7 @@ class ProductService extends BaseService {
             const products = await getFilteredProducts(reqParams);
             return { status: 200, [reqParams.type]: products };
         } catch (error) {
+            console.log('TCL: ProductService -> filterProducts -> error', error);
             return {
                 status: 403,
                 failedMessage: 'Something happened. We were unable to perform request.'

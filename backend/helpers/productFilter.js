@@ -48,6 +48,12 @@ function filterProducts({ type, limit, offset = 0 }) {
             }
         ];
         findObj.attributes.push([db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), 'avg_rating']);
+        findObj.having = db.where(
+            db.fn('ROUND', db.fn('AVG', db.col('rating')), 2),
+            {
+                [Op.gte]: 3
+            }
+        );
         findObj.group = ['Product.id'];
         findObj.order = [[db.fn('ROUND', db.fn('AVG', db.col('rating')), 2), 'DESC']];
     }
