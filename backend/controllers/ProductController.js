@@ -7,18 +7,17 @@ class ProductController extends BaseController {
     }
 
     async getProducts(req, res) {
-        const { failedMessage, status, ...products } = await ProductServiceInstance.filterProducts(
-            req.params
-        );
+        const {
+            failedMessage,
+            status,
+            noMore,
+            ...products
+        } = await ProductServiceInstance.filterProducts(req.params);
 
         if (req.params.offset && !failedMessage) {
             return super.sendResponse(res, status, {
                 ...products,
-                noMore:
-                    products[req.params.type].length === 0 ||
-                    products[req.params.type].length < req.params.limit
-                        ? true
-                        : false
+                noMore
             });
         }
         return super.sendResponseWithMessage(res, status, products, failedMessage);

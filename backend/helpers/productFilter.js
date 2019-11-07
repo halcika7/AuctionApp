@@ -63,6 +63,10 @@ function filterProducts({ type, limit, offset = 0 }) {
 }
 
 exports.getFilteredProducts = async obj => {
-    const filterObject = filterProducts(obj);
-    return await Product.findAll(filterObject);
+    const filterObject = filterProducts(obj),
+        products = await Product.findAll(filterObject);
+    delete filterObject.limit;
+    delete filterObject.offset;
+    const numberOfProducts = await Product.findAll(filterObject);
+    return { products, numberOfProducts: numberOfProducts.length };
 };
