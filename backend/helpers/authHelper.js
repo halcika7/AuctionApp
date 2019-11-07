@@ -45,6 +45,4 @@ exports.createUser = async ({ firstName, lastName, email, password }) => {
     return await User.create({ firstName, lastName, email, password });
 };
 
-exports.responseWithAccessToken = (resp, accessToken) => ({ ...resp, accessToken });
-
 const hashPassword = async password => await bcrypt.hash(password, 10);

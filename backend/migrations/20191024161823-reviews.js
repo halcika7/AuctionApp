@@ -9,7 +9,7 @@ module.exports = {
                 autoIncrement: true
             },
             rating: {
-                type: Sequelize.INTEGER(1),
+                type: Sequelize.SMALLINT,
                 allowNull: false
             },
             userId: {

@@ -3,20 +3,19 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as AuthActions from '../store/auth.actions';
+import * as fromApp from '@app/store/app.reducer';
+import * as AuthActions from '@app/auth/store/auth.actions';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   message: string;
   showErrors = true;
   success = false;
-  private remember: boolean;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
@@ -60,7 +59,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.remember = this.loginForm.value.remember;
     this.store.dispatch(new AuthActions.LoginStart({ ...this.loginForm.value }));
   }
 

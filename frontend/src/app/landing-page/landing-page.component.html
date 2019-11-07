@@ -1,0 +1,19 @@
+<section class="container-fluid">
+  <div class="hero-content">
+    <div class="container">
+      <app-categories-list [categories]="categories"></app-categories-list>
+      <app-carousel [items]="heroProduct"></app-carousel>
+    </div>
+  </div>
+  <app-landing-page-products
+    title="Feature Collection"
+    className="feature-collection"
+    [items]="featuredCollections"
+  ></app-landing-page-products>
+  <app-landing-page-products
+    title="Feature Products"
+    className="feature-products"
+    [items]="featured"
+  ></app-landing-page-products>
+  <app-product-tabs></app-product-tabs>
+</section>

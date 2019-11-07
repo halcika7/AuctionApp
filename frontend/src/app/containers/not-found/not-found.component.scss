@@ -1,0 +1,62 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.page-not-found {
+  text-align: center;
+}
+
+.content {
+  @include margin($all: 100px 0 200px 0);
+
+  a {
+    @include fontMixin(24px, light, 0.84px, purple, uppercase, none);
+  }
+}
+
+.not-found {
+  @include margin($all: 0);
+  @include fontMixin(20vw, regular, 10.5px, purple);
+  text-shadow: 8px 10px 0 #DADADA;
+}
+
+.message {
+  @include fontMixin(36px, regular, 1.26px, light_black);
+}
+
+.content button {
+  @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
+  @include heightWidth(57px, 179px);
+  @include boxShadowBackground(true, white, 3px solid purple);
+  outline: none;
+  cursor: pointer;
+}
+
+.title {
+  @include flex($justify: center);
+}
+
+.brand-icon {
+  @include margin($right: 14px);
+  @include padding(2px);
+
+  span {
+    @include heightWidth(20px, 4px);
+    background: #C4BFD6;
+    display: inline-block;
+    border-radius: 1px;
+
+    &:nth-child(1) {
+      transform: rotate(47deg);
+    }
+
+    &:nth-child(2) {
+      height: 16px;
+      transform: rotate(-45deg) translateX(6.5px) translateY(-4px);
+    }
+
+    &:nth-child(3) {
+      height: 16px;
+      transform: rotate(90deg) translateX(100%) translateY(-3px);
+    }
+  }
+}

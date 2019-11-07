@@ -1,0 +1,15 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.privacy {
+  @include margin($all: 100px auto 180px auto);
+  max-width: 700px;
+}
+
+h1 {
+  @include fontMixin(46px, regular, 1.61px, light_black);
+}
+
+p {
+  @include fontMixin(16px, regular, 0.63px, gray, $lineH: 25px);
+}

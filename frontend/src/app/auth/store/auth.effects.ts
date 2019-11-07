@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, ofType, Effect } from '@ngrx/effects';
-import * as AuthActions from './auth.actions';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import * as AuthActions from '@app/auth/store/auth.actions';
+import { concatMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable()
@@ -10,9 +10,9 @@ export class AuthEffects {
   @Effect()
   authRegister = this.actions$.pipe(
     ofType(AuthActions.REGISTER_START),
-    switchMap((registerData: AuthActions.RegisterStart) => {
+    concatMap((registerData: AuthActions.RegisterStart) => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/register', {
+        .post<any>('/auth/register', {
           email: registerData.payload.email,
           password: registerData.payload.password,
           firstName: registerData.payload.firstName,
@@ -20,7 +20,7 @@ export class AuthEffects {
         })
         .pipe(
           map(resData => new AuthActions.RegisterSuccess(resData)),
-          catchError(({ error }) => of(new AuthActions.RegisterFailed(error)))
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
     })
   );
@@ -28,16 +28,16 @@ export class AuthEffects {
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
-    switchMap((loginData: AuthActions.LoginStart) => {
+    concatMap((loginData: AuthActions.LoginStart) => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/login', {
+        .post<any>('/auth/login', {
           email: loginData.payload.email,
           password: loginData.payload.password,
           remember: loginData.payload.remember
         })
         .pipe(
           map(resData => new AuthActions.LoginSuccess(resData)),
-          catchError(({ error }) => of(new AuthActions.LoginFailed(error)))
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
     })
   );
@@ -45,9 +45,9 @@ export class AuthEffects {
   @Effect()
   logout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT_START),
-    switchMap(() => {
+    concatMap(() => {
       return this.http
-        .post<any>('http://localhost:5000/api/auth/logout', {})
+        .post<any>('/auth/logout', {})
         .pipe(map(() => new AuthActions.LogoutSuccess()));
     })
   );
@@ -55,17 +55,15 @@ export class AuthEffects {
   @Effect()
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
-    switchMap(() => {
-      return this.http
-        .post<{ accessToken: string }>('http://localhost:5000/api/auth/refresh_token', {})
-        .pipe(
-          map(data => new AuthActions.RefreshToken(data)),
-          catchError(data => {
-            localStorage.removeItem('accessToken');
-            sessionStorage.removeItem('accessToken');
-            return of(new AuthActions.RefreshToken(data));
-          })
-        );
+    concatMap(() => {
+      return this.http.post<{ accessToken: string }>('/auth/refresh_token', {}).pipe(
+        map(data => new AuthActions.RefreshToken(data)),
+        catchError(data => {
+          localStorage.removeItem('accessToken');
+          sessionStorage.removeItem('accessToken');
+          return of(new AuthActions.RefreshToken(data));
+        })
+      );
     })
   );
 

@@ -1,0 +1,83 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.about {
+  @include margin($all: 100px auto);
+}
+
+h1 {
+  @include fontMixin(46px, regular, 1.61px, light_black);
+}
+
+.content {
+  @include flex($justify: space-between, $wrap: wrap);
+}
+
+.paragraphs {
+  max-width: 500px;
+
+  p {
+    @include margin(0);
+    @include fontMixin(18px, regular, 0.63px, gray, $lineH: 25px);
+  }
+}
+
+.images > img {
+  @include heightWidth(375px, auto);
+}
+
+.two-images {
+  max-width: 508px;
+
+  img {
+    @include margin(5px);
+    @include heightWidth(181px, 244px);
+
+    &:first-child {
+      @include margin($right: 10px);
+    }
+
+    &:last-child {
+      @include margin($left: 10px);
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  h1 {
+    text-align: center;
+  }
+
+  .paragraphs {
+    @include margin($bottom: 50px);
+    max-width: 700px;
+  }
+
+  .content {
+    justify-content: center;
+  }
+
+  .images {
+    max-width: 700px;
+
+    > img {
+      @include heightWidth(auto, 100%);
+    }
+  }
+
+  .two-images {
+    img {
+      @include heightWidth(auto, 100%);
+
+      &:first-child {
+        @include margin($right: 0);
+      }
+
+      &:last-child {
+        @include margin($left: 0);
+      }
+    }
+
+    max-width: 100%;
+  }
+}

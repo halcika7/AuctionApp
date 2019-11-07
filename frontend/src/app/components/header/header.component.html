@@ -14,12 +14,12 @@
         <fa-icon [icon]="['fab', 'google-plus-g']"></fa-icon>
       </a>
     </div>
-    <div class="login" *ngIf="!isAuthenticated">
+    <div class="login" *ngIf="isAuthenticated === false">
       <a [routerLink]="['/home/auth/login']">Login</a>
       <span>or</span>
       <a [routerLink]="['/home/auth/register']">Create an Account</a>
     </div>
-    <div class="login" *ngIf="isAuthenticated">
+    <div class="login" *ngIf="isAuthenticated === true">
       <button (click)="logout()">Logout</button>
     </div>
   </div>

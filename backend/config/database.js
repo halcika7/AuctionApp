@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Sequelize, Op} = require('sequelize');
 Sequelize.cre;
 const { DB_USERNAME, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME } = require('./configs');
 
@@ -24,4 +24,4 @@ db.authenticate()
     .then(() => console.log('DB connected'))
     .catch(err => console.log(err));
 
-module.exports = db;
+module.exports = {db, Op};

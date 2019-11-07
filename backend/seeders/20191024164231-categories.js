@@ -4,15 +4,16 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     const gg = [
       'Fashion',
-      'Accesories',
-      'Jewlery',
+      'Accessories',
+      'Jewelry',
       'Shoes',
       'Sportware',
-      'Electronics',
       'Home',
+      'Electronics',
       'Mobile',
       'Computer'
   ];
+
   let ctgs = [];
   for (let i = 0; i < gg.length; i++) {
       ctgs.push({

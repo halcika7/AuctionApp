@@ -1,0 +1,30 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.breadcrumb {
+  height: 60px;
+  background: getColor(darker_white2);
+}
+
+.crumbs {
+  @include flex(center, space-between);
+  height: 100%;
+
+  span {
+    @include fontMixin(18px, regular, 0.63px, light_black, uppercase);
+  }
+
+  .urls li {
+    @include fontMixin(16px, light, 0.56px, light_black, uppercase);
+    list-style: none;
+    display: inline-block;
+
+    &:last-child {
+      @include fontMixin($fontW: regular);
+    }
+
+    &:not(:first-child) {
+      @include margin($left: 21px);
+    }
+  }
+}

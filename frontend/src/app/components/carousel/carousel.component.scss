@@ -1,0 +1,93 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.carousel .item {
+  @include flex();
+
+  .about {
+    @include margin($left: 78px);
+    @include flex($justify: center, $direction: column);
+
+    h2 {
+      @include margin(0, 14px);
+      @include fontMixin(46px, regular, 1.61px, light_black);
+    }
+
+    .price {
+      @include margin(0, 14px);
+      @include fontMixin(24px, regular, 0.84px, purple);
+    }
+
+    a {
+      @include flex(center, center);
+      @include fontMixin(18px, bold, 0.63px, light_black, uppercase, none);
+      @include heightWidth(51px, 192px);
+      @include boxShadowBackground(true, white, 3px solid purple);
+      outline: none;
+      cursor: pointer;
+      position: relative;
+
+      span {
+        @include heightWidth(11px, 4px);
+        background: getColor(light_black);
+        position: absolute;
+        right: 30px;
+        border-radius: 15px;
+
+        &:first-child {
+          transform: rotateZ(-45deg) translateY(-4px);
+        }
+
+        &:last-child {
+          transform: rotateZ(45deg) translateY(4px);
+        }
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+
+    .description {
+      @include margin(0, 23px);
+      @include fontMixin(16px, regular, 0.56px, light_black, $lineH: 22px);
+      width: 323px;
+    }
+  }
+
+  img {
+    @include margin($left: 20px);
+    max-width: 484px;
+    max-height: 429px;
+    object-fit: scale-down;
+  }
+}
+
+@media (max-width: 1200px) {
+  .carousel .item {
+    @include padding(15px 15px);
+    @include flex($justify: center, $wrap: wrap-reverse);
+
+    img {
+      @include heightWidth(224px, auto);
+      object-fit: contain;
+    }
+  }
+}
+
+@media (max-width: 698px) {
+  .carousel .item {
+    .about {
+      @include margin($left: 39px, $top: 30px);
+    }
+
+    img {
+      @include heightWidth(224px, 100%);
+      max-width: 484px;
+    }
+
+    .about .description {
+      width: 100%;
+    }
+  }
+}

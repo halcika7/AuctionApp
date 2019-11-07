@@ -6,12 +6,11 @@ const {
     findUserByEmail,
     verifyRefreshToken
 } = require('../helpers/authHelper');
+const BaseService = require('./BaseService');
 
-class AuthService {
+class AuthService extends BaseService {
     constructor() {
-        if (!!AuthService.instance) return AuthService.instance;
-        AuthService.instance = this;
-        return this;
+        super(AuthService);
     }
 
     async register(data) {
@@ -34,7 +33,7 @@ class AuthService {
             if (!isValid && errors) return { status: 403, response: { ...errors } };
             if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
             const accessToken = createAccessToken(user),
-            refreshToken = createRefreshToken(user);
+                refreshToken = createRefreshToken(user);
             return {
                 status: 200,
                 response: { successMessage: 'success', accessToken, remember: data.remember },

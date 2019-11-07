@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = require('../config/database');
+const { db } = require('../config/database');
 
 const Review = db.define(
     'Review',
@@ -10,7 +10,7 @@ const Review = db.define(
             autoIncrement: true
         },
         rating: {
-            type: Sequelize.INTEGER(1),
+            type: Sequelize.SMALLINT,
             allowNull: false
         },
         userId: {

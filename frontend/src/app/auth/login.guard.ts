@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
-import * as fromApp from '../store/app.reducer';
+import * as fromApp from '@app/store/app.reducer';
 import { map } from 'rxjs/operators';
 
 @Injectable({

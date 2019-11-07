@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as AuthActions from '../../auth/store/auth.actions';
+import * as fromApp from '@app/store/app.reducer';
+import * as AuthActions from '@app/auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  isAuthenticated = false;
+  isAuthenticated = null;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.select('auth').subscribe(data => {
-      if (
-        data.accessToken ||
-        localStorage.getItem('accessToken') ||
-        sessionStorage.getItem('accessToken')
-      ) {
-        this.isAuthenticated = true;
-        data.remember
-          ? localStorage.setItem('accessToken', data.accessToken)
-          : sessionStorage.setItem('accessToken', data.accessToken);
-      } else {
-        this.isAuthenticated = false;
+    this.store.select('auth').subscribe(({ accessToken, remember, loading }) => {
+      if (!loading) {
+        if (accessToken && (localStorage.getItem('accessToken') || remember)) {
+          this.isAuthenticated = true;
+          localStorage.setItem('accessToken', accessToken);
+        } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
+          this.isAuthenticated = true;
+          sessionStorage.setItem('accessToken', accessToken);
+        } else {
+          this.isAuthenticated = false;
+        }
       }
     });
   }

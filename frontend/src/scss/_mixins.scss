@@ -1,0 +1,163 @@
+@import './colors';
+@import './fonts';
+
+@mixin flex(
+  $align: false,
+  $justify: false,
+  $direction: false,
+  $wrap: false)
+{
+  display: flex;
+  @if $align {
+    align-items: $align;
+  }
+  @if $justify {
+    justify-content: $justify;
+  }
+
+  @if $direction {
+    flex-direction: $direction;
+  }
+
+  @if $wrap {
+    flex-wrap: $wrap;
+  }
+}
+
+@mixin grid(
+  $columns: false,
+  $gap: false,
+  $areas: false,
+  $autoRows: false) {
+  display: grid;
+  @if $columns {
+    grid-template-columns: repeat($columns, 1fr);
+  }
+
+  @if $gap {
+    grid-gap: $gap;
+  }
+
+  @if $areas {
+    grid-template-areas: $areas;
+  }
+
+  @if $autoRows {
+    grid-auto-rows: minmax($autoRows, auto);
+  }
+}
+
+@mixin  margin(
+  $top: false,
+  $bottom: false,
+  $right: false,
+  $left: false,
+  $all: false) {
+    @if $all {
+      margin: $all;
+    }
+
+    @if $top {
+      margin-top: $top;
+    }
+
+    @if $bottom {
+      margin-bottom: $bottom;
+    }
+
+    @if $right {
+      margin-right: $right;
+    }
+
+    @if $left {
+      margin-left: $left;
+    }
+}
+
+@mixin  padding(
+  $top: false,
+  $bottom: false,
+  $right: false,
+  $left: false,
+  $all: false) {
+    @if $all {
+      padding: $all;
+    }
+
+    @if $top {
+      padding-top: $top;
+    }
+
+    @if $bottom {
+      padding-bottom: $bottom;
+    }
+
+    @if $right {
+      padding-right: $right;
+    }
+
+    @if $left {
+      padding-left: $left;
+    }
+}
+
+@mixin fontMixin(
+  $fontS: false,
+  $fontW: false,
+  $letterS: false,
+  $color: false,
+  $transform: false,
+  $decoration: false,
+  $lineH: false) {
+  @if $fontS {
+    font-size: $fontS;
+  }
+
+  @if $fontW {
+    font-weight: getWeight($fontW);
+  }
+
+  @if $letterS {
+    letter-spacing: $letterS;
+  }
+
+  @if $color {
+    color: getColor($color);
+  }
+
+  @if $transform {
+    text-transform: $transform;
+  }
+
+  @if $decoration {
+    text-decoration: $decoration;
+  }
+
+  @if $lineH {
+    line-height: $lineH;
+  }
+}
+
+@mixin heightWidth($height: false, $width: false) {
+  @if $height {
+    height: $height;
+  }
+
+  @if $width {
+    width: $width;
+  }
+}
+
+@mixin boxShadowBackground($boxS: false, $bckg: false, $border: false) {
+  @if $boxS {
+    box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  }
+
+  @if $bckg {
+    background: getColor($bckg);
+  }
+
+  @if $border {
+    border: $border;
+  }
+}

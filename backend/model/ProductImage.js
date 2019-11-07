@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = require('../config/database');
+const { db } = require('../config/database');
 
 const ProductImage = db.define(
     'ProductImage',
@@ -29,10 +29,5 @@ const ProductImage = db.define(
         modelName: 'ProductImages'
     }
 );
-
-ProductImage.associate = function(models) {
-    // ProductImage.hasMany(db.ProductImages, { foreignKey: 'productId' });
-    ProductImage.hasOne(models.Product);
-};
 
 module.exports = ProductImage;

@@ -12,7 +12,6 @@ app.use(
         credentials: true
     })
 );
-// app.use(cors());
 app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,6 +21,8 @@ app.use(bodyParser.json());
 require('./config/database')
 
 app.use('/api/auth', require('./routes/authentication/authRoutes'));
+app.use('/api/landing', require('./routes/landing-page/landingRoutes'));
+app.use('/api/categories', require('./routes/categories/categories'));
 
 const port = process.env.PORT || 5000;
 

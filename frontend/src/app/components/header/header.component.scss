@@ -1,0 +1,287 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+header {
+  background: getColor(light_black);
+  height: 40px;
+}
+
+.top {
+  @include flex(false, space-between);
+  height: 100%;
+}
+
+@media (max-width: 425px) {
+  header {
+    height: auto;
+  }
+
+  .top {
+    @include flex(center, $direction: column);
+    height: auto;
+  }
+
+  .links {
+    @include margin($all: 10px 0);
+  }
+
+  .login {
+    @include margin($all: 0 0 15px);
+  }
+}
+
+.links, .login, .navigation, .search {
+  @include flex(center);
+}
+
+.login > button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.links a {
+  @include flex(center, center);
+  @include margin($right: 10px);
+  @include heightWidth(25px, 25px);
+  background: getColor(gray);
+  border-radius: 50%;
+
+  fa-icon {
+    @include fontMixin(12px, bold, $color: light_black);
+    @include margin(2.3px);
+  }
+}
+
+.login {
+  span {
+    @include fontMixin(14px, bold, 0.49px, gray);
+    @include margin($all: 0 19px);
+  }
+
+  a, button {
+    @include fontMixin(14px, bold, 0.49px, white, $decoration: none);
+  }
+}
+
+.navigation {
+  @include grid(7, $areas: "a a b b b c c");
+  height: 80px;
+
+  > {
+    div {
+      &:nth-child(1) {
+        grid-area: a;
+      }
+
+      &:nth-child(2) {
+        grid-area: b;
+      }
+
+      &:nth-child(3) {
+        grid-area: c;
+      }
+    }
+
+    .brand, .nav-links {
+      text-transform: uppercase;
+    }
+
+    .brand {
+      @include fontMixin(24px, light, 0.84px, purple);
+      @include flex();
+
+      > .brand-icon {
+        @include margin($right: 14PX);
+        @include padding(2px);
+
+        span {
+          @include heightWidth(20px, 4px);
+          background: #C4BFD6;
+          display: inline-block;
+          border-radius: 1px;
+
+          &:nth-child(1) {
+            transform: rotate(47deg);
+          }
+
+          &:nth-child(2) {
+            height: 16px;
+            transform: rotate(-45deg) translateX(6.5px) translateY(-4px);
+          }
+
+          &:nth-child(3) {
+            height: 16px;
+            transform: rotate(90deg) translateX(100%) translateY(-3px);
+          }
+        }
+      }
+    }
+  }
+
+  .search {
+    @include padding($all: 0 10px);
+    height: 68px;
+    position: relative;
+
+    fa-icon {
+      position: absolute;
+      right: 25px;
+      cursor: pointer;
+      height: 20px;
+      color: getColor(light_black);
+    }
+
+    input {
+      @include padding($all: 15px 35px 15px 15px);
+      @include fontMixin(18px, regular, 0.63px, light_black);
+      @include boxShadowBackground(true, white, 1px solid inputBorder);
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  > .nav-links {
+    @include flex(center, space-between);
+    height: 100%;
+
+    > a {
+      &:first-child:nth-last-child(2) {
+        @include margin($left: auto, $right: 30px);
+      }
+
+      @include flex(center);
+      @include fontMixin(16px, light, 0.56px, light_black, $decoration: none);
+      height: 100%;
+      position: relative;
+
+      > a {
+        @include flex(center);
+        @include fontMixin(16px, light, 0.56px, light_black, $decoration: none);
+        @include margin($all: 0);
+        height: 100%;
+        position: relative;
+        pointer-events: none;
+      }
+
+      &.active {
+        @include fontMixin(16px, bold, 0.56px, purple);
+      }
+
+      > a.active {
+        @include fontMixin($fontW: bold);
+      }
+
+      &:hover {
+        @include fontMixin(16px, $letterS: 0.56px, $color: purple);
+      }
+
+      > a {
+        &.active, &:hover {
+          @include fontMixin(16px, $letterS: 0.56px, $color: purple);
+        }
+      }
+    }
+
+    a:first-child {
+      @include margin($left: 39px);
+    }
+
+    > a {
+      > .dropdown {
+        @include padding($all: 9.5px 0);
+        @include margin($all: 0);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 172px;
+        background: getColor(white);
+        border: 1px solid getColor(lighter_gray);
+        z-index: 100;
+        list-style: none;
+      }
+
+      &.open > .dropdown {
+        display: block;
+      }
+    }
+  }
+}
+
+.dropdown li a {
+  @include flex(center);
+  @include fontMixin(14px, regular, 0.56px, gray, $decoration: none);
+  @include heightWidth(45px, 172px);
+  margin: 0 !important;
+
+  span {
+    @include padding($left: 25px);
+  }
+
+  &.active, &:hover {
+    color: getColor(purple);
+  }
+}
+
+@media (max-width: 1200px) {
+  .navigation {
+    @include grid(6, $areas: "a b b b c c");
+  }
+}
+
+@media (max-width: 866px) {
+  .navigation {
+    @include grid(3, $areas: "a a a" "b b b" "c c c");
+    height: auto;
+
+    div {
+      &:nth-child(1) {
+        @include flex(center, center);
+        height: 45px;
+      }
+
+      &:nth-child(3) {
+        height: 80px;
+        justify-content: center;
+        border-bottom: 1px solid getColor(lighter_gray);
+      }
+    }
+
+    > {
+      .nav-links {
+        > a {
+          @include margin($all: 0 15px);
+        }
+
+        a:first-child {
+          @include margin($left: 15px);
+        }
+
+        > a:first-child:nth-last-child(2) {
+          @include margin($left: 0, $right: 0);
+        }
+      }
+
+      .brand > .brand-icon span:nth-child(1) {
+        @include margin($top: -3px);
+      }
+    }
+  }
+}
+
+@media (max-width: 350px) {
+  .navigation {
+    @include padding($all: 0);
+
+    > .nav-links {
+      > a {
+        @include margin($all: 0 7px);
+      }
+
+      a:first-child {
+        @include margin($left: 7px);
+      }
+    }
+  }
+}

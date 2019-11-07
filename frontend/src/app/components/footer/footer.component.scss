@@ -1,0 +1,147 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+footer {
+  @include flex(center, center);
+  height: 365px;
+  background: getColor(light_black);
+  border: 1px solid getColor(gray2);
+}
+
+.content {
+  @include grid(3, 25px, "a b c");
+
+  > div {
+    &:first-child {
+      grid-area: a;
+    }
+
+    &:nth-child(2) {
+      grid-area: b;
+    }
+
+    &:last-child {
+      width: 427px;
+      grid-area: c;
+    }
+  }
+
+  h4 {
+    @include margin(0);
+    @include fontMixin(16px, regular, 0.56px, white, uppercase);
+    opacity: 0.5;
+  }
+}
+
+.links a {
+  @include margin($bottom: 15px);
+  @include fontMixin(16px, regular, 0.56px, light_gray, $decoration: none);
+  display: block;
+}
+
+.contact p {
+  @include margin(0, 15px);
+  @include fontMixin(16px, regular, 0.56px, light_gray);
+}
+
+.icons {
+  @include flex(center);
+
+  a {
+    @include flex(center, center);
+    @include margin($right: 10px);
+    @include heightWidth(25px, 25px);
+    background: getColor(gray);
+    border-radius: 50%;
+
+    fa-icon {
+      @include fontMixin(12px, bold, $color: light_black);
+    }
+  }
+}
+
+.newsletter {
+  .input {
+    @include flex(center);
+  }
+
+  p {
+    @include margin($bottom: 30px);
+    @include fontMixin(16px, regular, 0.56px, light_gray);
+    max-width: 334px;
+    width: 100%;
+  }
+
+  input {
+    @include padding($all: 17.5px);
+    @include fontMixin(16px, regular, 0.56px, dark_gray);
+    outline: none;
+    background: getColor(dark_gray);
+    width: 275px;
+    border: none;
+  }
+
+  button {
+    @include margin($left: 5px);
+    @include padding($all: 0 23.36px);
+    @include fontMixin(18px, bold, 0.63px, light_gray);
+    border: 3px solid getColor(purple);
+    height: 54px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+
+    fa-icon {
+      @include margin($left: 10px);
+    }
+  }
+}
+
+@media (max-width: 817px) {
+  footer {
+    height: auto;
+  }
+
+  .content {
+    @include grid(2, $areas: "a b" "c c");
+    height: auto;
+
+    > div {
+      @include padding($all: 20px);
+    }
+  }
+}
+
+@media (max-width: 490px) {
+  footer {
+    @include padding($all: 60px 0);
+    height: auto;
+    display: block;
+  }
+
+  .content {
+    @include grid(1, 50px, "a" "b" "c");
+
+    > div {
+      @include padding($all: 0);
+      width: 100%;
+      max-width: 100%;
+
+      &:last-child {
+        @include margin($all: 0);
+        width: 100%;
+      }
+    }
+  }
+
+  .newsletter {
+    input {
+      width: auto;
+      max-width: 150px;
+    }
+
+    button {
+      @include padding($all: 0 14px);
+    }
+  }
+}

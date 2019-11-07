@@ -1,0 +1,16 @@
+@import '../../../scss/colors';
+@import '../../../scss/mixins';
+
+.button-wrapper {
+  @include flex(center, center);
+  width: 100%;
+}
+
+.load-more-button {
+  @include flex(center, center);
+  @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
+  @include heightWidth(51px, 192px);
+  @include boxShadowBackground(true, white, 3px solid purple);
+  outline: none;
+  cursor: pointer;
+}

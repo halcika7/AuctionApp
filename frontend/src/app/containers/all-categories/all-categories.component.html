@@ -1,0 +1,12 @@
+<app-breadcrumb [title]="'All Categories'" [other]="['home /', 'all categories']"></app-breadcrumb>
+
+<section class="container">
+  <div class="all-categories">
+    <ul class="list" *ngFor="let category of categories">
+      <li class="heading">{{ category.name }}</li>
+      <li *ngFor="let sub of category.Subcategories">
+        <a href="">{{ sub.name }}</a>
+      </li>
+    </ul>
+  </div>
+</section>

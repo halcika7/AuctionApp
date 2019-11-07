@@ -1,0 +1,31 @@
+@import '../../scss/colors';
+@import '../../scss/mixins';
+
+section.container-fluid {
+  @include padding($all: 0);
+}
+
+.hero-content {
+  @include heightWidth(100%, 100%);
+  min-height: 563px;
+  background: getColor(darker_white2);
+
+  .container {
+    @include flex(center, space-between);
+    height: 100%;
+  }
+}
+
+/* Media queries */
+
+@media (max-width: 698px) {
+  .hero-content .container {
+    display: block;
+  }
+}
+
+@media (max-width: 592px) {
+  .hero-content {
+    height: auto;
+  }
+}

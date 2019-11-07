@@ -6,6 +6,33 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+// Components
+import { AppComponent } from '@app/app.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { PrivacyComponent } from './containers/privacy/privacy.component';
+import { AboutComponent } from './containers/about/about.component';
+import { ConditionsComponent } from './containers/conditions/conditions.component';
+import { NotFoundComponent } from './containers/not-found/not-found.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { InputComponent } from './components/input/input.component';
+import { CategoriesListComponent } from './components/categories-list/categories-list.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { LandingPageProductsComponent } from './components/landing-page-products/landing-page-products.component';
+import { ProductTabsComponent } from './components/product-tabs/product-tabs.component';
+import { CollectionItemComponent } from './components/collection-item/collection-item.component';
+import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
+
+// ngRx
+import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
+import { LandingPageEffects } from './landing-page/store/landing-page.effects';
+import { CategoriesPageEffects } from './containers/all-categories/store/all-categories.effects';
+
 // Font Awesome Icons
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
@@ -18,24 +45,11 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { faGreaterThan, faSearch, faCheck } from '@fortawesome/free-solid-svg-icons';
 
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
-import { PrivacyComponent } from './containers/privacy/privacy.component';
-import { AboutComponent } from './containers/about/about.component';
-import { ConditionsComponent } from './containers/conditions/conditions.component';
-import { NotFoundComponent } from './containers/not-found/not-found.component';
+// Services, directives and pipes
 import { DropdownDirective } from './shared/directives/dropdown.directive';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { LandingPageComponent } from './home/landing-page/landing-page.component';
-
-import * as fromApp from './store/app.reducer';
-import { AuthEffects } from './auth/store/auth.effects';
-import { AlertComponent } from './components/alert/alert.component';
-import { InputComponent } from './components/input/input.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { DropdownNoautocloseDirective } from './shared/directives/dropdown-noautoclose.directive';
+import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
 
 @NgModule({
   declarations: [
@@ -52,7 +66,15 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     LandingPageComponent,
     AlertComponent,
     InputComponent,
-    DropdownDirective
+    DropdownDirective,
+    CategoriesListComponent,
+    CarouselComponent,
+    LandingPageProductsComponent,
+    ProductTabsComponent,
+    CollectionItemComponent,
+    AllCategoriesComponent,
+    DropdownNoautocloseDirective,
+    TruncateTextPipe
   ],
   imports: [
     BrowserModule,
@@ -61,7 +83,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, LandingPageEffects, CategoriesPageEffects]),
     FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],

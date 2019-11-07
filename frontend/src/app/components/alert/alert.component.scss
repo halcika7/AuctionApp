@@ -1,0 +1,52 @@
+@import '../../../scss/mixins';
+
+.alert-wrapper {
+  @include flex(center, space-between);
+  min-height: 45px;
+  position: relative;
+}
+
+.alert {
+  @include fontMixin(18px, light, 0.63px, red);
+  background: rgba(204, 0, 0, 0.372);
+
+  &.success {
+    background: #F0F3EE;
+
+    button, p {
+      color: #417505;
+    }
+  }
+
+  button {
+    @include fontMixin(18px, bold, $color: gold);
+    position: absolute;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    opacity: 0.3;
+    right: 15px;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:before, &:after {
+      @include margin(-10px);
+      @include heightWidth(20px, 2px);
+      content: ' ';
+      position: absolute;
+      left: 15px;
+      background-color: #333;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+}

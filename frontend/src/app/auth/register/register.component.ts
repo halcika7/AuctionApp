@@ -2,14 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
-import * as AuthActions from '../store/auth.actions';
-import { map } from 'rxjs/operators';
+import * as fromApp from '@app/store/app.reducer';
+import * as AuthActions from '@app/auth/store/auth.actions';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   signupForm: FormGroup;
@@ -62,66 +61,55 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store
-      .select('auth')
-      .pipe(
-        map(storeData => {
-          delete storeData.accessToken;
-          return { ...storeData };
-        })
-      )
-      .subscribe(({ errors, successMessage, errorMessage }) => {
-        if (errors.email && !errorMessage) {
-          this.signupForm.controls.email.setErrors({ async: errors.email });
-          this.signupForm.controls.email.markAsTouched();
-        } else {
-          this.signupForm.controls.email.setErrors({});
-          this.signupForm.controls.email.setValue(this.signupForm.controls.email.value);
-        }
+    this.store.select('auth').subscribe(({ errors, successMessage, errorMessage }) => {
+      if (errors.email && !errorMessage) {
+        this.signupForm.controls.email.setErrors({ async: errors.email });
+        this.signupForm.controls.email.markAsTouched();
+      } else {
+        this.signupForm.controls.email.setErrors({});
+        this.signupForm.controls.email.setValue(this.signupForm.controls.email.value);
+      }
 
-        if (errors.password && !errorMessage) {
-          this.signupForm.controls.password.setErrors({ async: errors.password });
-          this.signupForm.controls.password.markAsTouched();
-        } else {
-          this.signupForm.controls.password.setErrors({});
-          this.signupForm.controls.password.setValue(this.signupForm.controls.password.value);
-        }
+      if (errors.password && !errorMessage) {
+        this.signupForm.controls.password.setErrors({ async: errors.password });
+        this.signupForm.controls.password.markAsTouched();
+      } else {
+        this.signupForm.controls.password.setErrors({});
+        this.signupForm.controls.password.setValue(this.signupForm.controls.password.value);
+      }
 
-        if (errors.firstName && !errorMessage) {
-          this.signupForm.controls.firstName.setErrors({ async: errors.firstName });
-          this.signupForm.controls.firstName.markAsTouched();
-        } else {
-          this.signupForm.controls.firstName.setErrors({});
-          this.signupForm.controls.firstName.setValue(this.signupForm.controls.firstName.value);
-        }
+      if (errors.firstName && !errorMessage) {
+        this.signupForm.controls.firstName.setErrors({ async: errors.firstName });
+        this.signupForm.controls.firstName.markAsTouched();
+      } else {
+        this.signupForm.controls.firstName.setErrors({});
+        this.signupForm.controls.firstName.setValue(this.signupForm.controls.firstName.value);
+      }
 
-        if (errors.lastName && !errorMessage) {
-          this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
-          this.signupForm.controls.lastName.markAsTouched();
-        } else {
-          this.signupForm.controls.lastName.setErrors({});
-          this.signupForm.controls.lastName.setValue(this.signupForm.controls.lastName.value);
-        }
+      if (errors.lastName && !errorMessage) {
+        this.signupForm.controls.lastName.setErrors({ async: errors.lastName });
+        this.signupForm.controls.lastName.markAsTouched();
+      } else {
+        this.signupForm.controls.lastName.setErrors({});
+        this.signupForm.controls.lastName.setValue(this.signupForm.controls.lastName.value);
+      }
 
-        if (successMessage || errorMessage) {
-          this.message = successMessage ? successMessage : errorMessage;
-          this.success = successMessage ? true : false;
-        } else {
-          this.message = '';
-          this.success = null;
-        }
+      if (successMessage || errorMessage) {
+        this.message = successMessage ? successMessage : errorMessage;
+        this.success = successMessage ? true : false;
+      } else {
+        this.message = '';
+        this.success = null;
+      }
 
-        if (successMessage) {
-          this.showErrors = false;
-          this.signupForm.reset();
-
-          setTimeout(() => {
-            this.router.navigate(['/home/auth/login']);
-          }, 2000);
-        } else {
-          this.isClicked = false;
-        }
-      });
+      if (successMessage) {
+        this.showErrors = false;
+        this.signupForm.reset();
+        setTimeout(() => this.router.navigate(['/home/auth/login']), 2000);
+      } else {
+        this.isClicked = false;
+      }
+    });
   }
 
   ngOnDestroy() {

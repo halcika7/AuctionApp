@@ -1,0 +1,427 @@
+@import './scss/colors';
+@import './scss/resets';
+@import './scss/mixins';
+
+app-root {
+  @include flex($direction: column);
+  @include margin(0);
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+app-footer {
+  @include margin(auto);
+}
+
+.container, .container-fluid {
+  @include margin($right: auto, $left: auto);
+  @include padding($right: 15px, $left: 15px);
+  position: relative;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 960px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+    max-width: 100%;
+  }
+}
+
+.form {
+  @include margin($all: 40px auto 212px auto);
+  max-width: 702px;
+  border: 1px solid getColor(light_gray);
+
+  h1 {
+    @include flex(center, center);
+    @include margin(0);
+    @include fontMixin(24px, bold, 0.84px, light_black);
+    @include heightWidth(58px, 100%);
+    background: getColor(darker_white2);
+  }
+
+  .wrapper {
+    @include padding($all: 0 51px 122px 51px);
+  }
+
+  p {
+    @include margin($all: 59px 0 67px 0);
+    @include fontMixin(18px, regular, 0.63px, gray);
+    max-width: 600px;
+  }
+}
+
+.form-group {
+  @include margin($bottom: 40px);
+  position: relative;
+
+  &.flex {
+    @include flex(center);
+  }
+
+  label {
+    @include margin($bottom: 15px);
+    @include fontMixin(18px, light, 0.63px, light_black);
+    display: block;
+  }
+
+  > {
+    input {
+      @include margin($all: 0);
+      @include heightWidth(16px, 16px);
+      background: getColor(lighter_gray);
+      border: 1px solid getColor(light_gray);
+      appearance: none;
+      outline: none;
+      position: relative;
+      cursor: pointer;
+    }
+
+    fa-icon {
+      position: absolute;
+      transform: scale(0);
+      background: transparent;
+      transition: all .123s ease-in-out;
+      pointer-events: none;
+      color: getColor(light_black);
+    }
+
+    input {
+      &:checked + fa-icon {
+        background: getColor(light_blue);
+        transform: scale(1);
+      }
+
+      ~ label {
+        @include margin($bottom: 0);
+        @include padding($left: 10px);
+        @include fontMixin($fontW: regular);
+        display: inline-block;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .input {
+    background: getColor(darker_white);
+
+    input {
+      @include padding($all: 0 30px);
+      @include fontMixin(18px, light);
+      @include heightWidth(54px, 100%);
+      box-sizing: border-box;
+      outline: none;
+      border: 1px solid getColor(light_gray);
+      background: transparent;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .form .wrapper {
+    @include padding($all: 0 30px 122px 30px);
+  }
+
+  .form-group .input input {
+    @include padding($all: 0 15px);
+  }
+}
+
+.wrapper {
+  height: auto;
+
+  button {
+    @include fontMixin(18px, bold, 0.63px, light_black);
+    @include heightWidth(57px, 100%);
+    @include boxShadowBackground(true, white, 3px solid purple);
+    cursor: pointer;
+    outline: none;
+
+    &:disabled {
+      cursor: not-allowed;
+      border: 3px solid getColor(red);
+      background: getColor(darker_white2);
+    }
+  }
+
+  .login-button {
+    @include margin($bottom: 33px);
+    @include boxShadowBackground(true, purple, 3px solid purple);
+    color: getColor(white);
+  }
+
+  button:active {
+    box-shadow: none;
+  }
+
+  .social-login {
+    @include flex($justify: space-between);
+    @include margin($bottom: 59px);
+
+    a {
+      @include flex(center, center);
+      @include fontMixin(16px, bold, 0.56px, white, uppercase, none);
+      @include heightWidth(54px, 280px);
+      @include boxShadowBackground(true);
+
+      &:hover, &:active {
+        box-shadow: none;
+      }
+
+      &.facebook-link {
+        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid blue_purple);
+
+        fa-icon {
+          @include margin($right: 8.5px);
+          @include heightWidth(24px, 24px);
+
+          .svg-inline--fa.fa-w-14 {
+            @include margin($right: 8.5px);
+            @include heightWidth(24px, 24px);
+          }
+        }
+      }
+
+      &.gmail-link {
+        @include boxShadowBackground($bckg: gmail, $border: 3px solid gmail);
+
+        fa-icon {
+          @include margin($right: 8.5px);
+          @include heightWidth(29px, 23px);
+
+          .svg-inline--fa.fa-w-14 {
+            @include margin($right: 8.5px);
+            @include heightWidth(29px, 23px);
+          }
+        }
+      }
+    }
+  }
+
+  > {
+    span {
+      @include margin($top: 30px);
+      @include fontMixin(18px, regular, 0.63px, gray);
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+
+    a {
+      @include margin($top: 30px);
+      width: 100%;
+      display: block;
+      text-align: center;
+      letter-spacing: 0.63px;
+    }
+
+    span a {
+      @include margin($left: 16px);
+      @include fontMixin($color: purple, $decoration: none);
+    }
+
+    a {
+      @include margin($left: 16px);
+      @include fontMixin($color: purple, $decoration: none);
+
+      &.forgot-password {
+        @include fontMixin(18px, $letterS: 0.63px, $color: purple);
+      }
+    }
+  }
+}
+
+@media (max-width: 730px) {
+  .wrapper .social-login {
+    flex-direction: column;
+
+    a {
+      width: 100%;
+
+      &:nth-child(2) {
+        @include margin($top: 33px);
+      }
+    }
+  }
+}
+
+.mb-60 {
+  margin-bottom: 60px !important;
+}
+
+.mb-168 {
+  margin-bottom: 168px;
+}
+
+.pb-76 {
+  padding-bottom: 76px !important;
+}
+
+.pb-51 {
+  padding-bottom: 51px !important;
+}
+
+.mt-43 {
+  margin-top: 43px !important;
+}
+
+.form-group .input input.ng-invalid {
+  &.ng-touched {
+    border: 1px solid getColor(red);
+  }
+
+  ~ span {
+    @include fontMixin(14px, light, $color: red);
+    display: block;
+
+    &.async {
+
+      > span {
+        @include margin($top: 5px);
+        display: block;
+        text-transform: capitalize;
+      }
+    }
+
+    > span {
+      @include margin($top: 5px);
+      display: block;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.feature-collection h3,
+.feature-products h3 {
+  @include padding($bottom: 14px);
+  @include fontMixin(28px, regular, 0.98px, light_black);
+  border-bottom: 4px solid getColor(lighter_gray);
+}
+
+.feature-collection {
+  @include margin($top: 56px);
+}
+
+.feature-products {
+
+  .nav-tabs {
+    @include margin($all: 0);
+    @include padding($all: 0 0 13px 0);
+    @include grid(5);
+    width: 100%;
+    list-style: none;
+    border-bottom: 4px solid getColor(lighter_gray);
+
+    li {
+      height: 34px;
+
+      a {
+        @include padding($bottom: 13px);
+        @include fontMixin(28px, regular, 0.98px, light_black, $decoration: none);
+        height: 34px;
+        display: block;
+        transition: border .23s ease-in-out;
+        border-bottom: 4px solid transparent;
+
+        &.active, &:hover {
+          border-bottom: 4px solid getColor(purple);;
+          transition: border .23s ease-in-out;
+        }
+      }
+    }
+  }
+}
+
+.feature-collection .collections, .feature-products .collections {
+  @include margin(25px, 71px);
+}
+
+.feature-collection .collections,
+.feature-products .collections {
+  @include grid(3, 25px, $autoRows: 350px);
+}
+
+.feature-products .collections {
+  @include grid(4);
+}
+
+.feature-collection .collections .collection {
+  @include margin($bottom: 29px);
+}
+
+.feature-products .collections .collection {
+  @include margin($bottom: 25px);
+}
+
+.collections .collection {
+  > a {
+    text-decoration: none;
+  }
+
+  .img {
+    @include heightWidth(350px, 100%);
+
+    img {
+      @include heightWidth(100%, 100%);
+      object-fit: scale-down;
+    }
+  }
+
+  h5 {
+    @include margin(11px, 7px);
+    @include fontMixin(24px, bold, 0.84px, light_black);
+  }
+
+  p {
+    @include margin($all: 0);
+    @include fontMixin(16px, regular, 0.56px, light_black);
+  }
+}
+
+@media (max-width: 1112px) {
+  .feature-products .collections {
+    @include grid(3);
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-collection .collections, .feature-products .collections {
+    @include grid(2);
+  }
+}
+
+@media (max-width: 550px) {
+  .feature-collection .collections, .feature-products .collections {
+    @include grid(1);
+  }
+}
+
+@media (max-width: 990px) {
+  .feature-products .nav-tabs {
+    @include grid(4);
+  }
+}
+
+@media (max-width: 760px) {
+  .feature-products .nav-tabs {
+    @include grid(3);
+  }
+}
+
+@media (max-width: 592px) {
+  .feature-products .nav-tabs li a {
+    @include fontMixin(20px);
+  }
+}

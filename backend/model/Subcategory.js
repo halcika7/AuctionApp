@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const db = require('../config/database');
+const { db } = require('../config/database');
 
 const Subcategory = db.define(
     'Subcategory',
@@ -29,14 +29,5 @@ const Subcategory = db.define(
         modelName: 'Subcategories'
     }
 );
-
-Subcategory.associate = function(models) {
-    Subcategory.belongsToMany(models.Product, {
-        through: 'Product_Subcategorys',
-        as: 'product_subcategories',
-        foreignKey: 'subcategoryId',
-        otherKey: 'productId'
-    });
-};
 
 module.exports = Subcategory;

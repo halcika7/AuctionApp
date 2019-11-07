@@ -1,0 +1,43 @@
+@import '../../../scss/mixins';
+
+.all-categories {
+  @include margin($all: 50px 0 400px 0);
+  @include grid(4, 25px);
+  width: 100%;
+}
+
+.list {
+  list-style: none;
+
+  li {
+    &.heading {
+      @include margin($all: 20px 0);
+      @include fontMixin(24px, regular, 0.84px, light_black);
+    }
+    @include margin($all: 13px 0);
+    @include fontMixin(16px, light, 0.56px);
+
+    a {
+      color: getColor(light_black);
+      text-decoration: none;
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  .all-categories {
+    @include grid(3);
+  }
+}
+
+@media (max-width: 575px) {
+  .all-categories {
+    @include grid(2);
+  }
+}
+
+@media (max-width: 400px) {
+  .all-categories {
+    @include grid(1);
+  }
+}
