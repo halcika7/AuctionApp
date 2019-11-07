@@ -1,10 +1,12 @@
 const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
+const ProductImage = require('../model/ProductImage');
+const Bid = require('../model/Bid');
 const { db, Op } = require('../config/database');
 const { STARTS_IN_MAX_DAYS, ENDS_IN_MAX_DAYS, AVG_RATING } = require('../config/configs');
 const { addDaysToDate } = require('./addDaysToDate');
 
-function filterProducts({ type, limit, offset = 0 }) {
+function filterProducts({ type, limit, offset = 0, where = null, id = null }) {
     limit = parseInt(limit);
     offset = parseInt(offset);
     let findObj = {
@@ -59,6 +61,16 @@ function filterProducts({ type, limit, offset = 0 }) {
         findObj.attributes.push('details');
     }
 
+    if (where) {
+        findObj.where = {
+            ...findObj.where,
+            ...where,
+            id: {
+                [Op.not]: id
+            }
+        };
+    }
+
     return { ...findObj };
 }
 
@@ -69,4 +81,33 @@ exports.getFilteredProducts = async obj => {
     delete filterObject.offset;
     const numberOfProducts = await Product.findAll(filterObject);
     return { products, numberOfProducts: numberOfProducts.length };
+};
+
+exports.getProductById = async id => {
+    return await Product.findOne({
+        where: {
+            id,
+            auctionEnd: {
+                [Op.gt]: new Date()
+            }
+        },
+        attributes: {
+            include: [
+                [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
+                [db.fn('COUNT', db.col('Bids.price')), 'number_of_bids']
+            ],
+            exclude: ['featured', 'Bids.price']
+        },
+        include: [
+            {
+                model: ProductImage,
+                attributes: ['image']
+            },
+            {
+                model: Bid,
+                attributes: []
+            }
+        ],
+        group: ['Product.id', 'ProductImages.id']
+    });
 };

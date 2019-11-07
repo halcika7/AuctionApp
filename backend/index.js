@@ -23,6 +23,7 @@ require('./config/database')
 app.use('/api/auth', require('./routes/authentication/authRoutes'));
 app.use('/api/landing', require('./routes/landing-page/landingRoutes'));
 app.use('/api/categories', require('./routes/categories/categories'));
+app.use('/api/products', require('./routes/product/product'));
 
 const port = process.env.PORT || 5000;
 

@@ -22,6 +22,18 @@ class ProductController extends BaseController {
         }
         return super.sendResponseWithMessage(res, status, products, failedMessage);
     }
+
+    async singleProduct(req, res) {
+        const { product } = await ProductServiceInstance.getSingleProduct(req.params.id);
+        if (!product) {
+            return res.status(403).json({ error: 'Product not found !' });
+        }
+        const { similarProducts } = await ProductServiceInstance.findSimilarProducts(
+            product.subcategoryId,
+            product.id
+        );
+        return res.status(200).json({ product, similarProducts });
+    }
 }
 
 const ProductControllerInstance = new ProductController();

@@ -1,0 +1,299 @@
+@import '../../scss/mixins';
+@import '../../scss/colors';
+
+.about-product {
+  @include flex();
+  @include margin(40px, 179px);
+}
+
+.details {
+  padding-left: 50px;
+  width: 100%;
+}
+
+.details > h2 {
+  @include fontMixin(46px, regular, 1.61px, light_black);
+  @include margin(0, 14px);
+}
+
+.details h4 {
+  @include fontMixin(24px, regular, 0.84px, purple);
+  @include margin(0, 46px);
+}
+
+.details .bid {
+  @include flex($wrap: wrap);
+  margin-bottom: 66px;
+}
+
+.details .bid .input {
+  margin-right: 21px;
+}
+
+.details .bid .input input {
+  display: block;
+  background: #ECECEC;
+  border: 1px solid #D8D8D8;
+  height: 54px;
+  margin-bottom: 9px;
+  outline: none;
+  padding: 0 15px;
+}
+
+.details .bid .input span {
+  @include fontMixin(15px, regular, 0.52px, gray, $lineH: 22px);
+}
+
+.details .bid button {
+  @include flex(center, center);
+  @include fontMixin(false, bold);
+  @include boxShadowBackground(true, white, 3px solid getColor(purple));
+  @include heightWidth(57px, 100%);
+  @include padding($all: 0);
+  min-width: 192px;
+  max-width: 192px;
+  outline: none;
+  cursor: pointer;
+}
+
+.details .bid button:disabled {
+  border: 3px solid getColor(red);
+  cursor: not-allowed;
+}
+
+.current-bid{
+  margin-bottom: 45px;
+}
+
+.current-bid p {
+  @include fontMixin(16px, regular, 0.56px, gray);
+  @include margin(0, 7px);
+}
+
+.current-bid p > span {
+  @include fontMixin(16px, bold, 0.56px, purple);
+}
+
+.watchlist {
+  margin-bottom: 20px;
+}
+
+.watchlist button {
+  @include flex(center, center);
+  @include heightWidth(36px, 140px);
+  @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
+  @include boxShadowBackground(false, white, 3px solid getColor(lighter_gray));
+  cursor: pointer;
+  outline: none;
+}
+
+.watchlist button fa-icon {
+  color: getColor(lighter_gray);
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.product-details h5 {
+  @include fontMixin(18px, regular, 0.63px, light_black);
+  @include margin(0, 19px, 0, 0);
+  padding-bottom: 6px;
+  border-bottom: 4px solid getColor(lighter_gray);
+}
+
+.product-details p {
+  @include fontMixin(15px, regular, 0.53px, light_black, $lineH: 22px);
+}
+
+@media (max-width: 999px) {
+  .about-product {
+    @include flex($wrap: wrap-reverse);
+  }
+
+  .details {
+    @include padding($bottom: 50px, $left: 0);
+  }
+}
+
+@media (max-width: 435px) {
+  .details .bid button {
+    margin-top: 15px;
+  }
+}
+
+.table-biders {
+  overflow-x: scroll;
+  margin-bottom: 160px;
+  padding-bottom: 40px;
+}
+
+table.biders {
+  width: 100%;
+  color: getColor(light_black);
+  letter-spacing: 0.98px;
+  border-spacing: 0px;
+  border: 1px solid getColor(lighter_gray);
+  min-width: 650px;
+}
+
+table.biders thead tr {
+  background: getColor(lighter_gray);
+  height: 60px;
+}
+
+table.biders thead tr th {
+  @include fontMixin(20px, light);
+}
+
+table.biders thead tr th,
+table.biders tbody tr td {
+  text-align: left;
+  padding-left: 30px;
+}
+
+table.biders thead tr th:not(:first-child),
+table.biders tbody tr td:not(:first-child) {
+  width: 20%;
+}
+
+table.biders img {
+  @include heightWidth(65px, 65px);
+  border-radius: 50%;
+  background: getColor(lighter_gray);
+  padding: 5px;
+}
+
+table.biders tbody tr td {
+  @include fontMixin(18px, light);
+  vertical-align: middle;
+  height: 110px;
+}
+
+table.biders tbody tr td .user {
+  @include flex(center);
+}
+
+table.biders tbody tr td .user span {
+  margin-left: 30px;
+}
+
+// ojpgofjdogopdfjgpo
+.details {
+  > h2, h4 {}
+
+  .bid {
+    margin-bottom: 66px;
+
+    .input {
+      margin-right: 21px;
+
+      input {
+        display: block;
+        background: #ECECEC;
+        border: 1px solid #D8D8D8;
+        height: 54px;
+        margin-bottom: 9px;
+        outline: none;
+        padding: 0 15px;
+      }
+
+      span {}
+    }
+
+    button {
+      min-width: 192px;
+      max-width: 192px;
+      outline: none;
+      cursor: pointer;
+
+      &:disabled {
+        border: 3px solid getColor(red);
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.current-bid {
+  margin-bottom: 45px;
+
+  p > span {}
+}
+
+.watchlist {
+  margin-bottom: 20px;
+
+  button {
+    cursor: pointer;
+    outline: none;
+
+    fa-icon {
+      color: getColor(lighter_gray);
+      font-size: 20px;
+      margin-left: 5px;
+    }
+  }
+}
+
+.product-details {
+  h5 {
+    padding-bottom: 6px;
+    border-bottom: 4px solid getColor(lighter_gray);
+  }
+
+  p {}
+}
+
+@media (max-width: 999px) {
+  .about-product, .details {}
+}
+
+@media (max-width: 435px) {
+  .details .bid button {
+    margin-top: 15px;
+  }
+}
+
+.table-biders {
+  overflow-x: scroll;
+  margin-bottom: 160px;
+  padding-bottom: 40px;
+}
+
+table.biders {
+  width: 100%;
+  letter-spacing: 0.98px;
+  border-spacing: 0px;
+  min-width: 650px;
+
+  thead tr {
+    height: 60px;
+
+    th {
+      text-align: left;
+      padding-left: 30px;
+    }
+  }
+
+  tbody tr td {
+    text-align: left;
+    padding-left: 30px;
+  }
+
+  thead tr th:not(:first-child), tbody tr td:not(:first-child) {
+    width: 20%;
+  }
+
+  img {
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  tbody tr td {
+    vertical-align: middle;
+    height: 110px;
+
+    .user span {
+      margin-left: 30px;
+    }
+  }
+}

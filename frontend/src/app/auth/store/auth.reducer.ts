@@ -1,4 +1,5 @@
 import * as AuthActions from '@app/auth/store/auth.actions';
+import { jwtDecode } from '../../shared/jwtDecode';
 
 export interface State {
   errors: {
@@ -12,6 +13,7 @@ export interface State {
   accessToken: string;
   remember: boolean;
   loading: boolean;
+  userId: string;
 }
 
 const initialState: State = {
@@ -25,10 +27,12 @@ const initialState: State = {
   successMessage: '',
   accessToken: '',
   remember: false,
-  loading: false
+  loading: false,
+  userId: ''
 };
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
+  let id;
   switch (action.type) {
     case AuthActions.REGISTER_START:
     case AuthActions.LOGOUT_START:
@@ -46,12 +50,14 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         errorMessage: action.payload.err ? action.payload.err : state.errorMessage
       };
     case AuthActions.LOGIN_SUCCESS:
+      id = jwtDecode(action.payload.accessToken);
       return {
         ...initialState,
         accessToken: action.payload.accessToken ? action.payload.accessToken : '',
         successMessage: action.payload.successMessage,
         remember: action.payload.remember,
-        loading: false
+        loading: false,
+        userId: id
       };
     case AuthActions.REFRESH_ACCESS_TOKEN_START:
     case AuthActions.LOGIN_START:
@@ -60,10 +66,12 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         loading: true
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
+      id = jwtDecode(action.payload.accessToken);
       return {
         ...initialState,
         accessToken: action.payload.accessToken,
-        loading: false
+        loading: false,
+        userId: id
       };
     default:
       return state;

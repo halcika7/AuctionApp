@@ -3,6 +3,7 @@ const { db } = require('../config/database');
 const ProductImage = require('./ProductImage');
 const ProductReview = require('./ProductReview');
 const Subcategory = require('./Subcategory');
+const Bid = require('./Bid');
 
 const Product = db.define(
     'Product',
@@ -74,5 +75,6 @@ Product.hasMany(ProductImage, { foreignKey: 'productId', sourceKey: 'id' });
 Product.hasMany(ProductReview, { foreignKey: 'productId', sourceKey: 'id' });
 Product.belongsTo(Subcategory, { foreignKey: 'subcategoryId', sourceKey: 'id' });
 ProductReview.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
+Product.hasMany(Bid, { foreignKey: 'productId', sourceKey: 'id' });
 
 module.exports = Product;

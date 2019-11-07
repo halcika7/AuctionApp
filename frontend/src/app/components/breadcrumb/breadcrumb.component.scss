@@ -9,6 +9,7 @@
 .crumbs {
   @include flex(center, space-between);
   height: 100%;
+  padding: 0;
 
   span {
     @include fontMixin(18px, regular, 0.63px, light_black, uppercase);

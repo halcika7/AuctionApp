@@ -9,6 +9,7 @@ header {
 .top {
   @include flex(false, space-between);
   height: 100%;
+  padding: 0;
 }
 
 @media (max-width: 425px) {
@@ -93,7 +94,7 @@ header {
       @include flex();
 
       > .brand-icon {
-        @include margin($right: 14PX);
+        @include margin($right: 14px);
         @include padding(2px);
 
         span {
@@ -200,6 +201,7 @@ header {
         border: 1px solid getColor(lighter_gray);
         z-index: 100;
         list-style: none;
+        display: none;
       }
 
       &.open > .dropdown {

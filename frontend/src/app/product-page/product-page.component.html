@@ -1,0 +1,66 @@
+<app-breadcrumb [title]="'single product'" [other]="['shop /', 'single product']"></app-breadcrumb>
+
+<app-alert *ngIf="message !== ''" [message]="message" [type]="false" [closable]="false"></app-alert>
+
+<section class="about-product container">
+  <app-product-images></app-product-images>
+  <div class="details">
+    <h2>{{ product.name }}</h2>
+    <h4>Start from - {{ product.price | currency }}</h4>
+    <div class="bid" *ngIf="!hide">
+      <div class="input">
+        <input type="number" [min]="minPrice + 0.1" step="0.1" [placeholder]="'Enter bid'" />
+        <span>Enter {{ minPrice | currency }} or more</span>
+      </div>
+      <button class="bid-button" [disabled]="disabled">Place bid</button>
+    </div>
+    <div class="current-bid">
+      <p *ngIf="!hide">
+        Highest bid: <span>{{ product.highest_bid | currency }}</span>
+      </p>
+      <p *ngIf="!hide">Number of bids: {{ product.number_of_bids }}</p>
+      <p *ngIf="!hide">Time: {{ product.auctionEnd | dateAgo: 'left' }}</p>
+      <p *ngIf="!hide">Started: {{ product.auctionStart | dateAgo: 'ago':'Not started yet' }}</p>
+      <p *ngIf="hide">
+        Start's in: {{ product.auctionStart | dateAgo: 'left':'Not started yet':true }}
+      </p>
+    </div>
+    <div class="watchlist">
+      <!-- <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button> -->
+    </div>
+    <div class="product-details">
+      <h5>Details</h5>
+      <p>{{ product.details }}</p>
+    </div>
+  </div>
+</section>
+
+<app-landing-page-products
+  title="Similar Products"
+  className="feature-collection"
+  [items]="similarProducts"
+></app-landing-page-products>
+
+<!-- <section class="container table-biders">
+  <table class="biders">
+    <thead>
+      <tr>
+        <th>Bider</th>
+        <th>Date</th>
+        <th>Bid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="user">
+            <img src="/assets/nike.png" alt="" />
+            <span>John Doe</span>
+          </div>
+        </td>
+        <td>24 March 2019</td>
+        <td>$120.00</td>
+      </tr>
+    </tbody>
+  </table>
+</section> -->

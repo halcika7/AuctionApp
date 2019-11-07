@@ -74,7 +74,7 @@ footer {
 
   input {
     @include padding($all: 17.5px);
-    @include fontMixin(16px, regular, 0.56px, dark_gray);
+    @include fontMixin(16px, regular, 0.56px, light_gray);
     outline: none;
     background: getColor(dark_gray);
     width: 275px;
