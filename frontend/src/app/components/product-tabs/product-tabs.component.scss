@@ -10,7 +10,7 @@
   @include flex(center, center);
   @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
   @include heightWidth(51px, 192px);
-  @include boxShadowBackground(true, white, 3px, purple);
+  @include boxShadowBackground(true, white, 3px solid purple);
   outline: none;
   cursor: pointer;
 }

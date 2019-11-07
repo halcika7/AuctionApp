@@ -136,7 +136,7 @@ header {
     input {
       @include padding($all: 15px 35px 15px 15px);
       @include fontMixin(18px, regular, 0.63px, light_black);
-      @include boxShadowBackground(true, white, 1px, inputBorder);
+      @include boxShadowBackground(true, white, 1px solid inputBorder);
       width: 100%;
       outline: none;
     }
