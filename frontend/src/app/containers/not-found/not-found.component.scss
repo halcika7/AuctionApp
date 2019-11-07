@@ -26,7 +26,7 @@
 .content button {
   @include fontMixin(18px, bold, 0.63px, light_black, uppercase);
   @include heightWidth(57px, 179px);
-  @include boxShadowBackground(true, white, 3px solid purple);
+  @include boxShadowBackground(true, white, 3px solid getColor(purple));
   outline: none;
   cursor: pointer;
 }

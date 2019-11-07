@@ -145,7 +145,7 @@ app-footer {
   button {
     @include fontMixin(18px, bold, 0.63px, light_black);
     @include heightWidth(57px, 100%);
-    @include boxShadowBackground(true, white, 3px solid purple);
+    @include boxShadowBackground(true, white, 3px solid getColor(purple));
     cursor: pointer;
     outline: none;
 
@@ -158,7 +158,7 @@ app-footer {
 
   .login-button {
     @include margin($bottom: 33px);
-    @include boxShadowBackground(true, purple, 3px solid purple);
+    @include boxShadowBackground(true, purple, 3px solid getColor(purple));
     color: getColor(white);
   }
 
@@ -181,7 +181,7 @@ app-footer {
       }
 
       &.facebook-link {
-        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid blue_purple);
+        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid getColor(blue_purple));
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -195,7 +195,7 @@ app-footer {
       }
 
       &.gmail-link {
-        @include boxShadowBackground($bckg: gmail, $border: 3px solid gmail);
+        @include boxShadowBackground($bckg: gmail, $border: 3px solid getColor(gmail));
 
         fa-icon {
           @include margin($right: 8.5px);
