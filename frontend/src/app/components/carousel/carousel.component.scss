@@ -83,6 +83,7 @@
 
     img {
       @include heightWidth(224px, 100%);
+      @include margin($top: 20px, $left: 0);
       max-width: 484px;
     }
 
