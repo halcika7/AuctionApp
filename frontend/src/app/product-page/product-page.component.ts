@@ -21,6 +21,7 @@ export class ProductPageComponent implements OnInit {
   disabled = false;
   userId: string;
   message = ''; // if user is owner or not loggedin
+  noBids = true;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -43,6 +44,7 @@ export class ProductPageComponent implements OnInit {
       this.product = product;
       this.minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
       this.hide = new Date(product.auctionStart) > new Date() ? true : false;
+      this.noBids = product.highest_bid === 0 ? true : false;
       this.similarProducts = similarProducts;
       this.setMessageDisabled();
     });

@@ -44,7 +44,7 @@ import {
   faGooglePlusSquare,
   faGooglePlusG
 } from '@fortawesome/free-brands-svg-icons';
-import { faGreaterThan, faSearch, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faGreaterThan, faSearch, faCheck, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 // Services, directives and pipes
 import { DropdownDirective } from './shared/directives/dropdown.directive';
@@ -112,7 +112,8 @@ export class AppModule {
       faSearch,
       faCheck,
       faFacebookSquare,
-      faGooglePlusSquare
+      faGooglePlusSquare,
+      faHeart
     );
   }
 }

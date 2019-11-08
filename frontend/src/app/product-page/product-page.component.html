@@ -9,24 +9,32 @@
     <h4>Start from - {{ product.price | currency }}</h4>
     <div class="bid" *ngIf="!hide">
       <div class="input">
-        <input type="number" [min]="minPrice + 0.1" step="0.1" [placeholder]="'Enter bid'" />
-        <span>Enter {{ minPrice | currency }} or more</span>
+        <input
+          type="number"
+          [min]="noBids ? minPrice : minPrice + 0.1"
+          step="0.1"
+          [placeholder]="'Enter bid'"
+        />
+        <span *ngIf="noBids">Enter {{ minPrice | currency }} or more</span>
+        <span *ngIf="!noBids">Enter more than {{ minPrice | currency }}</span>
       </div>
       <button class="bid-button" [disabled]="disabled">Place bid</button>
     </div>
     <div class="current-bid">
-      <p *ngIf="!hide">
-        Highest bid: <span>{{ product.highest_bid | currency }}</span>
-      </p>
-      <p *ngIf="!hide">Number of bids: {{ product.number_of_bids }}</p>
-      <p *ngIf="!hide">Time: {{ product.auctionEnd | dateAgo: 'left' }}</p>
-      <p *ngIf="!hide">Started: {{ product.auctionStart | dateAgo: 'ago':'Not started yet' }}</p>
+      <ng-template [ngIf]="!hide">
+        <p>
+          Highest bid: <span>{{ product.highest_bid | currency }}</span>
+        </p>
+        <p>Number of bids: {{ product.number_of_bids }}</p>
+        <p>Time: {{ product.auctionEnd | dateAgo: 'left' }}</p>
+        <p>Started: {{ product.auctionStart | dateAgo: 'ago':'Not started yet' }}</p>
+      </ng-template>
       <p *ngIf="hide">
         Start's in: {{ product.auctionStart | dateAgo: 'left':'Not started yet':true }}
       </p>
     </div>
     <div class="watchlist">
-      <!-- <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button> -->
+      <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button>
     </div>
     <div class="product-details">
       <h5>Details</h5>
