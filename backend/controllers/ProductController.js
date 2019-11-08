@@ -20,19 +20,18 @@ class ProductController extends BaseController {
                 noMore
             });
         }
-        return super.sendResponseWithMessage(res, status, products, failedMessage);
+        return super.sendResponse(res, status, products, { failedMessage });
     }
 
     async getProduct(req, res) {
-        const { product } = await ProductServiceInstance.findProductById(req.params.id);
+        const { product, status } = await ProductServiceInstance.findProductById(req.params.id);
         if (!product) {
-            return res.status(403).json({ error: 'Product not found !' });
+            return super.sendResponse(res, status, { error: 'Product not found !' });
         }
-        const { similarProducts } = await ProductServiceInstance.findSimilarProducts(
-            product.subcategoryId,
-            product.id
-        );
-        return res.status(200).json({ product, similarProducts });
+        const { similarProducts } =
+            (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) ||
+            [];
+        return super.sendResponse(res, status, { product, similarProducts });
     }
 }
 

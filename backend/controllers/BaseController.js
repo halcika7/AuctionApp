@@ -9,11 +9,14 @@ class BaseController {
         return this;
     }
 
+    sendResponseWithError(res, status, error) {
+        return res.status(status).json({ error });
+    }
+
     sendResponseWithMessage(res, status, resObj, failedMessage) {
         if (failedMessage) {
             return res.status(status).json({ failedMessage });
         }
-
         return res.status(status).json(resObj);
     }
 

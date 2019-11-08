@@ -35,8 +35,7 @@ class ProductService extends BaseService {
             return { status: 200, product };
         } catch (error) {
             return {
-                status: 403,
-                error: error
+                status: 403
             };
         }
     }
