@@ -14,14 +14,14 @@ import { Product } from './../landing-page/store/landing-page.reducers';
   styleUrls: ['./product-page.component.scss']
 })
 export class ProductPageComponent implements OnInit {
-  product: FullProduct;
-  similarProducts: Product[] = [];
-  minPrice: any;
-  hide = false;
-  disabled = false;
-  userId: string;
-  message = ''; // if user is owner or not loggedin
-  noBids = true;
+  private _product: FullProduct;
+  private _similarProducts: Product[] = [];
+  private _minPrice: any;
+  private _hide = false;
+  private _disabled = false;
+  private _userId: string;
+  private _message = ''; // if user is owner or not loggedin
+  private _noBids = true;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -65,5 +65,69 @@ export class ProductPageComponent implements OnInit {
         ? 'Please login in order to place bid!'
         : '';
     }
+  }
+
+  set product(product: FullProduct) {
+    this._product = product;
+  }
+
+  get product(): FullProduct {
+    return this._product;
+  }
+
+  set similarProducts(products: Product[]) {
+    this._similarProducts = products;
+  }
+
+  get similarProducts(): Product[] {
+    return this._similarProducts;
+  }
+
+  set minPrice(price: any) {
+    this._minPrice = price;
+  }
+
+  get minPrice(): any {
+    return this._minPrice;
+  }
+
+  set hide(val: boolean) {
+    this._hide = val;
+  }
+
+  get hide(): boolean {
+    return this._hide;
+  }
+
+  set disabled(val: boolean) {
+    this._disabled = val;
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set userId(id: string) {
+    this._userId = id;
+  }
+
+  get userId(): string {
+    return this._userId;
+  }
+
+  set message(message: string) {
+    this._message = message;
+  }
+
+  get message(): string {
+    return this._message;
+  }
+
+  set noBids(val: boolean) {
+    this._noBids = val;
+  }
+
+  get noBids(): boolean {
+    return this._noBids;
   }
 }

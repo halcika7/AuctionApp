@@ -10,7 +10,7 @@ import { Categories } from '@app/containers/all-categories/store/all-categories.
   styleUrls: ['./all-categories.component.scss']
 })
 export class AllCategoriesComponent implements OnInit {
-  categories: Categories[] = [];
+  private _categories: Categories[] = [];
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -20,5 +20,13 @@ export class AllCategoriesComponent implements OnInit {
     });
 
     this.store.dispatch(new CategoriesPageActions.CategoriesStart());
+  }
+
+  set categories(categ: Categories[]) {
+    this._categories = categ;
+  }
+
+  get categories(): Categories[] {
+    return this._categories;
   }
 }

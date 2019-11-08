@@ -8,7 +8,7 @@ import { Categories } from '@app/containers/all-categories/store/all-categories.
 })
 export class CategoriesListComponent implements OnInit {
   @Input() categories: Categories[];
-  isOpen = false;
+  private _isOpen = false;
 
   constructor() {}
 
@@ -16,5 +16,13 @@ export class CategoriesListComponent implements OnInit {
 
   toggle() {
     this.isOpen = !this.isOpen;
+  }
+
+  set isOpen(val: boolean) {
+    this._isOpen = val;
+  }
+
+  get isOpen(): boolean {
+    return this._isOpen;
   }
 }

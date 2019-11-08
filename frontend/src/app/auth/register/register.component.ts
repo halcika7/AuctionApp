@@ -11,12 +11,12 @@ import * as AuthActions from '@app/auth/store/auth.actions';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  signupForm: FormGroup;
-  message: string;
-  success: boolean;
-  isValidForm = false;
-  isClicked = false;
-  showErrors = true;
+  private _signupForm: FormGroup;
+  private _message: string;
+  private _success: boolean;
+  private _isValidForm = false;
+  private _isClicked = false;
+  private _showErrors = true;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
@@ -99,7 +99,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.success = successMessage ? true : false;
       } else {
         this.message = '';
-        this.success = null;
+        this.success = false;
       }
 
       if (successMessage) {
@@ -123,5 +123,53 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   removeMessages() {
     this.store.dispatch(new AuthActions.AuthClearMessagess());
+  }
+
+  set signupForm(form: FormGroup) {
+    this._signupForm = form;
+  }
+
+  get signupForm(): FormGroup {
+    return this._signupForm;
+  }
+
+  set message(message: string) {
+    this._message = message;
+  }
+
+  get message(): string {
+    return this._message;
+  }
+
+  set success(val: boolean) {
+    this._success = val;
+  }
+
+  get success(): boolean {
+    return this._success;
+  }
+
+  set isValidForm(val: boolean) {
+    this._isValidForm = val;
+  }
+
+  get isValidForm(): boolean {
+    return this._isValidForm;
+  }
+
+  set isClicked(val: boolean) {
+    this._isClicked = val;
+  }
+
+  get isClicked(): boolean {
+    return this._isClicked;
+  }
+
+  set showErrors(val: boolean) {
+    this._showErrors = val;
+  }
+
+  get showErrors(): boolean {
+    return this._showErrors;
   }
 }

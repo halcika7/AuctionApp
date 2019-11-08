@@ -9,8 +9,8 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./product-images.component.scss']
 })
 export class ProductImagesComponent implements OnInit {
-  images = [];
-  activeImage: string;
+  private _images = [];
+  private _activeImage: string;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -30,5 +30,21 @@ export class ProductImagesComponent implements OnInit {
 
   imgClicked(e) {
     this.activeImage = e.target.src;
+  }
+
+  set images(images) {
+    this._images = images;
+  }
+
+  get images() {
+    return this._images;
+  }
+
+  set activeImage(url: string) {
+    this._activeImage = url;
+  }
+
+  get activeImage(): string {
+    return this._activeImage;
   }
 }

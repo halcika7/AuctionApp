@@ -12,10 +12,10 @@ import * as AuthActions from '@app/auth/store/auth.actions';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
-  message: string;
-  showErrors = true;
-  success = false;
+  private _loginForm: FormGroup;
+  private _message: string;
+  private _showErrors = true;
+  private _success = false;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
@@ -64,5 +64,29 @@ export class LoginComponent implements OnInit {
 
   removeMessages() {
     this.store.dispatch(new AuthActions.AuthClearMessagess());
+  }
+
+  set loginForm(form: FormGroup) {
+    this._loginForm = form;
+  }
+
+  get loginForm(): FormGroup {
+    return this._loginForm;
+  }
+
+  set message(message: string) {
+    this._message = message;
+  }
+
+  get message(): string {
+    return this._message;
+  }
+
+  get showErrors(): boolean {
+    return this._showErrors;
+  }
+
+  get success(): boolean {
+    return this._success;
   }
 }

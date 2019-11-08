@@ -9,7 +9,7 @@ import * as AuthActions from '@app/auth/store/auth.actions';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  isAuthenticated = null;
+  private _isAuthenticated = null;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -37,5 +37,13 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('accessToken');
     this.store.dispatch(new AuthActions.LogoutStart());
+  }
+
+  set isAuthenticated(val: boolean) {
+    this._isAuthenticated = val;
+  }
+
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated;
   }
 }

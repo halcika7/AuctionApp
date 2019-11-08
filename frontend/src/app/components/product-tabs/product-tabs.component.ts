@@ -10,10 +10,10 @@ import { Product } from '@app/landing-page/store/landing-page.reducers';
   styleUrls: ['./product-tabs.component.scss']
 })
 export class ProductTabsComponent implements OnInit {
-  products: Product[] = [];
-  private offset = 0;
-  active = 'newArrivals';
-  showButton = true;
+  private _products: Product[] = [];
+  private _offset = 0;
+  private _active = 'newArrivals';
+  private _showButton = true;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -54,5 +54,37 @@ export class ProductTabsComponent implements OnInit {
     e.preventDefault();
     this.offset += 8;
     this.store.dispatch(new LandingPageActions.LoadMoreProductsStart(this.active, this.offset));
+  }
+
+  set products(products: Product[]) {
+    this._products = products;
+  }
+
+  get products(): Product[] {
+    return this._products;
+  }
+
+  set offset(val: number) {
+    this._offset = val;
+  }
+
+  get offset(): number {
+    return this._offset;
+  }
+
+  set active(str: string) {
+    this._active = str;
+  }
+
+  get active(): string {
+    return this._active;
+  }
+
+  set showButton(val: boolean) {
+    this._showButton = val;
+  }
+
+  get showButton(): boolean {
+    return this._showButton;
   }
 }

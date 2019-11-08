@@ -12,10 +12,10 @@ import { CategoriesStart } from '@app/containers/all-categories/store/all-catego
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit {
-  featured: Product[] = [];
-  featuredCollections: Product[] = [];
-  categories: Categories[] = [];
-  heroProduct: Product;
+  private _featured: Product[] = [];
+  private _featuredCollections: Product[] = [];
+  private _categories: Categories[] = [];
+  private _heroProduct: Product;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -32,5 +32,37 @@ export class LandingPageComponent implements OnInit {
     this.store.dispatch(new LandingPageActions.LandingPageStart('featuredCollections/3'));
     this.store.dispatch(new LandingPageActions.LandingPageStart('heroProduct/1'));
     this.store.dispatch(new CategoriesStart());
+  }
+
+  set featured(products: Product[]) {
+    this._featured = products;
+  }
+
+  get featured(): Product[] {
+    return this._featured;
+  }
+
+  set featuredCollections(products: Product[]) {
+    this._featuredCollections = products;
+  }
+
+  get featuredCollections(): Product[] {
+    return this._featuredCollections;
+  }
+
+  set categories(categs: Categories[]) {
+    this._categories = categs;
+  }
+
+  get categories(): Categories[] {
+    return this._categories;
+  }
+
+  set heroProduct(prod: Product) {
+    this._heroProduct = prod;
+  }
+
+  get heroProduct(): Product {
+    return this._heroProduct;
   }
 }
