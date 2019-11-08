@@ -4,7 +4,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import * as fromApp from '../store/app.reducer';
 import * as ProductPageActions from './store/product-page.actions';
-import * as AuthActions from '../auth/store/auth.actions';
 import { FullProduct } from './store/product-page.reducer';
 import { Product } from './../landing-page/store/landing-page.reducers';
 

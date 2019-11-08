@@ -11,7 +11,6 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
 import { ProductPageComponent } from './product-page/product-page.component';
 
-import { AuthGuard } from './auth/auth.guard';
 import { LoginGuard } from './auth/login.guard';
 
 const appRoutes: Routes = [
