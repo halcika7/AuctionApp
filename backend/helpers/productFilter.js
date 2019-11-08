@@ -3,10 +3,15 @@ const ProductReview = require('../model/ProductReview');
 const ProductImage = require('../model/ProductImage');
 const Bid = require('../model/Bid');
 const { db, Op } = require('../config/database');
-const { STARTS_IN_MAX_DAYS, ENDS_IN_MAX_DAYS, AVG_RATING } = require('../config/configs');
+const {
+    STARTS_IN_MAX_DAYS,
+    ENDS_IN_MAX_DAYS,
+    AVG_RATING,
+    LIMIT_SIMILAR_PRODUCTS
+} = require('../config/configs');
 const { addDaysToDate } = require('./addDaysToDate');
 
-function filterProducts({ type, limit, offset = 0, where = null, id = null }) {
+function filterProducts({ type, limit, offset = 0 }) {
     limit = parseInt(limit);
     offset = parseInt(offset);
     let findObj = {
@@ -61,21 +66,11 @@ function filterProducts({ type, limit, offset = 0, where = null, id = null }) {
         findObj.attributes.push('details');
     }
 
-    if (where) {
-        findObj.where = {
-            ...findObj.where,
-            ...where,
-            id: {
-                [Op.not]: id
-            }
-        };
-    }
-
     return { ...findObj };
 }
 
 exports.getFilteredProducts = async obj => {
-    const filterObject = filterProducts(obj),
+    let filterObject = filterProducts(obj),
         products = await Product.findAll(filterObject);
     delete filterObject.limit;
     delete filterObject.offset;
@@ -110,4 +105,16 @@ exports.getProductById = async id => {
         ],
         group: ['Product.id', 'ProductImages.id']
     });
+};
+
+exports.getSimilarProducts = async (subcategoryId, productId) => {
+    let findObj = filterProducts({ limit: LIMIT_SIMILAR_PRODUCTS });
+    findObj.where = {
+        ...findObj.where,
+        subcategoryId,
+        id: {
+            [Op.not]: productId
+        }
+    };
+    return await Product.findAll(findObj);
 };

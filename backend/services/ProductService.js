@@ -1,4 +1,8 @@
-const { getFilteredProducts, getProductById } = require('../helpers/productFilter');
+const {
+    getFilteredProducts,
+    getProductById,
+    getSimilarProducts
+} = require('../helpers/productFilter');
 const BaseService = require('./BaseService');
 
 class ProductService extends BaseService {
@@ -25,7 +29,7 @@ class ProductService extends BaseService {
         }
     }
 
-    async getSingleProduct(id) {
+    async findProductById(id) {
         try {
             const product = await getProductById(id);
             return { status: 200, product };
@@ -39,12 +43,8 @@ class ProductService extends BaseService {
 
     async findSimilarProducts(subcategoryId, id) {
         try {
-            const { products } = await getFilteredProducts({
-                limit: 3,
-                where: { subcategoryId },
-                id
-            });
-            return { status: 200, similarProducts: products };
+            const similarProducts = await getSimilarProducts(subcategoryId, id);
+            return { status: 200, similarProducts };
         } catch (error) {
             return {
                 status: 403,

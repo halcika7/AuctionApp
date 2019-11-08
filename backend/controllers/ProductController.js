@@ -23,8 +23,8 @@ class ProductController extends BaseController {
         return super.sendResponseWithMessage(res, status, products, failedMessage);
     }
 
-    async singleProduct(req, res) {
-        const { product } = await ProductServiceInstance.getSingleProduct(req.params.id);
+    async getProduct(req, res) {
+        const { product } = await ProductServiceInstance.findProductById(req.params.id);
         if (!product) {
             return res.status(403).json({ error: 'Product not found !' });
         }

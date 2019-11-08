@@ -11,5 +11,6 @@ module.exports = {
     DB_NAME: process.env.DB_NAME,
     ENDS_IN_MAX_DAYS: 3,
     STARTS_IN_MAX_DAYS: 7,
-    AVG_RATING: 3
+    AVG_RATING: 3,
+    LIMIT_SIMILAR_PRODUCTS: 3
 };
