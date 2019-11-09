@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 export class ProductImagesComponent implements OnInit {
   private _images = [];
   private _activeImage: string;
+  private _currentIndex: number;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -25,11 +26,13 @@ export class ProductImagesComponent implements OnInit {
       .subscribe(({ ProductImages }) => {
         this._images = ProductImages;
         this._activeImage = ProductImages[0].image;
+        this._currentIndex = 0;
       });
   }
 
-  private imgClicked(e) {
-    this._activeImage = e.target.src;
+  private imgClicked(imageUrl: string, index: number) {
+    this._activeImage = imageUrl;
+    this._currentIndex = index;
   }
 
   get images() {
@@ -38,5 +41,9 @@ export class ProductImagesComponent implements OnInit {
 
   get activeImage(): string {
     return this._activeImage;
+  }
+
+  get currentIndex(): number {
+    return this._currentIndex;
   }
 }
