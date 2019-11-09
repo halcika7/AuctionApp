@@ -26,17 +26,17 @@
           Highest bid: <span>{{ product.highest_bid | currency }}</span>
         </p>
         <p>Number of bids: {{ product.number_of_bids }}</p>
-        <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: 'left' }] }} left</p>
+        <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: 'left' }] }}</p>
         <p>
           Started:
-          {{ product.auctionStart | dateAgo: [{ agoOrLeft: 'ago', response: 'Not started yet' }] }} ago
+          {{ product.auctionStart | dateAgo: [{ agoOrLeft: 'ago', response: 'Not started yet' }] }}
         </p>
       </ng-template>
       <p *ngIf="hide">
         Start's in:
         {{
           product.auctionStart
-            | dateAgo: [{ agoOrLeft: 'left', response: 'Not started yet', loop: true }]
+            | dateAgo: [{ agoOrLeft: 'left', response: 'Not started yet', loop: true, append: false }]
         }}
       </p>
     </div>

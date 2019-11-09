@@ -12,6 +12,7 @@ export class DateAgoPipe extends AsyncPipe {
   agoOrLeft: string;
   response: string;
   loop: boolean;
+  append: boolean;
   timer: Observable<string>;
 
   constructor(ref: ChangeDetectorRef) {
@@ -20,10 +21,11 @@ export class DateAgoPipe extends AsyncPipe {
 
   transform(obj: any, args?: any[]): any {
     this.value = new Date(obj);
-    const { agoOrLeft, response, loop } = args[0];
+    const { agoOrLeft, response, loop, append } = args[0];
     this.agoOrLeft = agoOrLeft;
     this.response = response;
     this.loop = loop;
+    this.append = append;
     if (this.value instanceof Date) {
       if (!this.timer) {
         this.timer = this.getObservable();
@@ -64,38 +66,25 @@ export class DateAgoPipe extends AsyncPipe {
           // tslint:disable-next-line: forin
           for (const [i, j] of Object.keys(intervals).entries()) {
             counter = Math.floor(seconds / intervals[j]);
-            // if (this.loop) {
-              seconds %= intervals[j];
-            // }
+            seconds %= intervals[j];
             if (counter > 0) {
               if (counter === 1) {
-                // if (!this.loop) {
-                //   return `${counter} ${j} - ${this.agoOrLeft}`;
-                // } else {
-                  if (Object.keys(intervals).length - 1 === i) {
-                    message += `${counter} ${j}`; // singular (1 day ago)
-                  } else {
-                    message += `${counter} ${j}, `;
-                  }
-                // }
+                if (Object.keys(intervals).length - 1 === i) {
+                  message += `${counter} ${j}`; // singular (1 day ago)
+                } else {
+                  message += `${counter} ${j}, `;
+                }
               } else {
-                // if (!this.loop) {
-                //   return `${counter} ${j}'s - ${this.agoOrLeft}`;
-                // } else {
-                  if (Object.keys(intervals).length - 1 === i) {
-                    message += `${counter} ${j}'s`; // singular (1 day ago)
-                  } else {
-                    message += `${counter} ${j}'s, `;
-                  }
-                // }
+                if (Object.keys(intervals).length - 1 === i) {
+                  message += `${counter} ${j}'s`;
+                } else {
+                  message += `${counter} ${j}'s, `;
+                }
               }
             }
           }
-          // if (this.loop) {
-            return message;
-          // }
+          return this.append ? `${message} ${this.agoOrLeft}` : message;
         }
-        // return this.value.toString();
       })
     );
   }
