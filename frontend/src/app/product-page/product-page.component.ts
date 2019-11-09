@@ -40,23 +40,23 @@ export class ProductPageComponent implements OnInit {
       if (error) {
         this.location.back();
       }
-      this.product = product;
-      this.minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
-      this.hide = new Date(product.auctionStart) > new Date() ? true : false;
-      this.noBids = product.highest_bid === 0 ? true : false;
-      this.similarProducts = similarProducts;
+      this._product = product;
+      this._minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
+      this._hide = new Date(product.auctionStart) > new Date() ? true : false;
+      this._noBids = product.highest_bid === 0 ? true : false;
+      this._similarProducts = similarProducts;
       this.setMessageDisabled();
     });
     this.store.select('auth').subscribe(({ userId }) => {
-      this.userId = userId;
+      this._userId = userId;
       this.setMessageDisabled();
     });
   }
 
   setMessageDisabled() {
     if (this.product.id) {
-      this.disabled = this.product.userId === this.userId || !this.userId ? true : false;
-      this.message = this.hide
+      this._disabled = this.product.userId === this.userId || !this.userId ? true : false;
+      this._message = this.hide
         ? ''
         : this.product.userId === this.userId && this.userId !== ''
         ? 'You can\'t place bid on your own product'
@@ -66,64 +66,32 @@ export class ProductPageComponent implements OnInit {
     }
   }
 
-  set product(product: FullProduct) {
-    this._product = product;
-  }
-
   get product(): FullProduct {
     return this._product;
-  }
-
-  set similarProducts(products: Product[]) {
-    this._similarProducts = products;
   }
 
   get similarProducts(): Product[] {
     return this._similarProducts;
   }
 
-  set minPrice(price: any) {
-    this._minPrice = price;
-  }
-
   get minPrice(): any {
     return this._minPrice;
-  }
-
-  set hide(val: boolean) {
-    this._hide = val;
   }
 
   get hide(): boolean {
     return this._hide;
   }
 
-  set disabled(val: boolean) {
-    this._disabled = val;
-  }
-
   get disabled(): boolean {
     return this._disabled;
-  }
-
-  set userId(id: string) {
-    this._userId = id;
   }
 
   get userId(): string {
     return this._userId;
   }
 
-  set message(message: string) {
-    this._message = message;
-  }
-
   get message(): string {
     return this._message;
-  }
-
-  set noBids(val: boolean) {
-    this._noBids = val;
   }
 
   get noBids(): boolean {

@@ -14,12 +14,8 @@ export class CategoriesListComponent implements OnInit {
 
   ngOnInit() {}
 
-  toggle() {
-    this.isOpen = !this.isOpen;
-  }
-
-  set isOpen(val: boolean) {
-    this._isOpen = val;
+  private toggle() {
+    this._isOpen = !this.isOpen;
   }
 
   get isOpen(): boolean {

@@ -23,25 +23,17 @@ export class ProductImagesComponent implements OnInit {
         }))
       )
       .subscribe(({ ProductImages }) => {
-        this.images = ProductImages;
-        this.activeImage = ProductImages[0].image;
+        this._images = ProductImages;
+        this._activeImage = ProductImages[0].image;
       });
   }
 
-  imgClicked(e) {
-    this.activeImage = e.target.src;
-  }
-
-  set images(images) {
-    this._images = images;
+  private imgClicked(e) {
+    this._activeImage = e.target.src;
   }
 
   get images() {
     return this._images;
-  }
-
-  set activeImage(url: string) {
-    this._activeImage = url;
   }
 
   get activeImage(): string {

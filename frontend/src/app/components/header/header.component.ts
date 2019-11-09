@@ -14,29 +14,25 @@ export class HeaderComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.select('auth').subscribe(({ accessToken, remember, loading }) => {
+    this.store.select('auth').subscribe(({ accessToken, loading, remember }) => {
       if (!loading) {
         if (accessToken && (localStorage.getItem('accessToken') || remember)) {
-          this.isAuthenticated = true;
+          this._isAuthenticated = true;
           localStorage.setItem('accessToken', accessToken);
         } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
-          this.isAuthenticated = true;
+          this._isAuthenticated = true;
           sessionStorage.setItem('accessToken', accessToken);
         } else {
-          this.isAuthenticated = false;
+          this._isAuthenticated = false;
         }
       }
     });
   }
 
-  logout() {
+  private logout() {
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('accessToken');
     this.store.dispatch(new AuthActions.LogoutStart());
-  }
-
-  set isAuthenticated(val: boolean) {
-    this._isAuthenticated = val;
   }
 
   get isAuthenticated(): boolean {

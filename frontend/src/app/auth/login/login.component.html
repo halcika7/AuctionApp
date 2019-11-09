@@ -2,11 +2,11 @@
 <app-alert
   *ngIf="message"
   [message]="message"
-  (closeAlert)="removeMessages()"
+  (closeAlert)="clearMessages()"
   [type]="success"
 ></app-alert>
 <section class="container">
-  <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <h1>Login</h1>
     <div class="wrapper pb-51">
       <app-input
@@ -15,8 +15,8 @@
         placeholder="Enter Email"
         type="email"
         controlName="email"
-        [parentForm]="loginForm"
-        [input]="loginForm.get('email')"
+        [parentForm]="form"
+        [input]="form.get('email')"
         [showErrors]="showErrors"
         pattern="Please enter valid email address !!"
       ></app-input>
@@ -26,8 +26,8 @@
         placeholder="Enter Password"
         type="password"
         controlName="password"
-        [parentForm]="loginForm"
-        [input]="loginForm.get('password')"
+        [parentForm]="form"
+        [input]="form.get('password')"
         [showErrors]="showErrors"
       ></app-input>
       <div class="form-group flex">

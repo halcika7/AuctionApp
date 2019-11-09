@@ -16,14 +16,10 @@ export class AllCategoriesComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('categoriesPage').subscribe(({ categories }) => {
-      this.categories = categories;
+      this._categories = categories;
     });
 
     this.store.dispatch(new CategoriesPageActions.CategoriesStart());
-  }
-
-  set categories(categ: Categories[]) {
-    this._categories = categ;
   }
 
   get categories(): Categories[] {

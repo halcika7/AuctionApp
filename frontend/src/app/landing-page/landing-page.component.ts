@@ -21,12 +21,12 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('landingPage').subscribe(state => {
-      this.featured = state.featured;
-      this.featuredCollections = state.featuredCollections;
-      this.heroProduct = state.heroProduct;
+      this._featured = state.featured;
+      this._featuredCollections = state.featuredCollections;
+      this._heroProduct = state.heroProduct;
     });
     this.store.select('categoriesPage').subscribe(({ categories }) => {
-      this.categories = categories;
+      this._categories = categories;
     });
     this.store.dispatch(new LandingPageActions.LandingPageStart('featured/4'));
     this.store.dispatch(new LandingPageActions.LandingPageStart('featuredCollections/3'));
@@ -34,32 +34,16 @@ export class LandingPageComponent implements OnInit {
     this.store.dispatch(new CategoriesStart());
   }
 
-  set featured(products: Product[]) {
-    this._featured = products;
-  }
-
   get featured(): Product[] {
     return this._featured;
-  }
-
-  set featuredCollections(products: Product[]) {
-    this._featuredCollections = products;
   }
 
   get featuredCollections(): Product[] {
     return this._featuredCollections;
   }
 
-  set categories(categs: Categories[]) {
-    this._categories = categs;
-  }
-
   get categories(): Categories[] {
     return this._categories;
-  }
-
-  set heroProduct(prod: Product) {
-    this._heroProduct = prod;
   }
 
   get heroProduct(): Product {

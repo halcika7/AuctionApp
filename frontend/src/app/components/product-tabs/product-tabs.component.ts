@@ -21,16 +21,16 @@ export class ProductTabsComponent implements OnInit {
     this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
     this.store.select('landingPage').subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
       if (this.active === 'newArrivals') {
-        this.products = newArrivals;
+        this._products = newArrivals;
       } else if (this.active === 'topRated') {
-        this.products = topRated;
+        this._products = topRated;
       } else {
-        this.products = lastChance;
+        this._products = lastChance;
       }
       if (this.products.length < 8 || noMore) {
-        this.showButton = false;
+        this._showButton = false;
       } else {
-        this.showButton = true;
+        this._showButton = true;
       }
     });
   }
@@ -38,8 +38,8 @@ export class ProductTabsComponent implements OnInit {
   tabsChange(e: Event, tab: string) {
     e.preventDefault();
     if (tab !== this.active) {
-      this.offset = 0;
-      this.active = tab;
+      this._offset = 0;
+      this._active = tab;
       if (this.active === 'newArrivals') {
         this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
       } else if (this.active === 'topRated') {
@@ -52,36 +52,20 @@ export class ProductTabsComponent implements OnInit {
 
   loadMore(e: Event) {
     e.preventDefault();
-    this.offset += 8;
+    this._offset += 8;
     this.store.dispatch(new LandingPageActions.LoadMoreProductsStart(this.active, this.offset));
-  }
-
-  set products(products: Product[]) {
-    this._products = products;
   }
 
   get products(): Product[] {
     return this._products;
   }
 
-  set offset(val: number) {
-    this._offset = val;
-  }
-
   get offset(): number {
     return this._offset;
   }
 
-  set active(str: string) {
-    this._active = str;
-  }
-
   get active(): string {
     return this._active;
-  }
-
-  set showButton(val: boolean) {
-    this._showButton = val;
   }
 
   get showButton(): boolean {
