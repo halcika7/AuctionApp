@@ -11,16 +11,21 @@ class ProductController extends BaseController {
             failedMessage,
             status,
             noMore,
-            ...products
+            products
         } = await ProductServiceInstance.filterProducts(req.params);
 
         if (req.params.offset && !failedMessage) {
             return super.sendResponse(res, status, {
-                ...products,
+                [req.params.type]: products,
                 noMore
             });
         }
-        return super.sendResponse(res, status, products, { failedMessage });
+        return super.sendResponse(
+            res,
+            status,
+            { [req.params.type]: products, noMore },
+            { failedMessage }
+        );
     }
 
     async getProduct(req, res) {

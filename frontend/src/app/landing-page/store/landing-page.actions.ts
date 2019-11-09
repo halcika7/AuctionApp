@@ -43,6 +43,7 @@ export class LandingPageSuccess implements Action {
       newArrivals?: Product[];
       featured?: Product[];
       featuredCollections?: Product[];
+      noMore: boolean;
     }
   ) {}
 }

@@ -13,14 +13,16 @@ class ProductService extends BaseService {
     async filterProducts(reqParams) {
         try {
             const { products, numberOfProducts } = await getFilteredProducts(reqParams);
-            const eq = 2 * parseInt(reqParams.limit) + parseInt(reqParams.offset);
+            const eq = isNaN(parseInt(reqParams.limit) + parseInt(reqParams.offset))
+                ? parseInt(reqParams.limit)
+                : parseInt(reqParams.limit) + parseInt(reqParams.offset);
             const noMore =
                 products.length === 0 ||
                 products.length < parseInt(reqParams.limit) ||
                 numberOfProducts === eq
                     ? true
                     : false;
-            return { status: 200, [reqParams.type]: products, noMore };
+            return { status: 200, products, noMore };
         } catch (error) {
             return {
                 status: 403,

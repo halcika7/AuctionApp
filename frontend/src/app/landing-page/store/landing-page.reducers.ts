@@ -46,7 +46,7 @@ export function landingPageReducer(
         topRated: action.payload.topRated ? action.payload.topRated : state.topRated,
         lastChance: action.payload.lastChance ? action.payload.lastChance : state.lastChance,
         heroProduct: action.payload.heroProduct ? action.payload.heroProduct : state.heroProduct,
-        noMore: false
+        noMore: action.payload.noMore
       };
     case LandingPageActions.LANDING_PAGE_FAILED:
       return {
