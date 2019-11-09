@@ -1,19 +1,22 @@
+import { OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthClearMessagess } from '@app/auth/store/auth.actions';
 
-export class Auth {
+export class Auth implements OnDestroy {
   private _message: string;
   private _form: FormGroup;
   private _showErrors = true;
   private _success = false;
   private _isClicked = false;
   private _login = true;
+  private subscription: Subscription;
 
   constructor(private authStore: Store<any>, private Form: FormGroup, private Router: Router) {
     this._form = this.Form;
-    this.authStore
+    this.subscription = this.authStore
       .select('auth')
       .subscribe(({ errorMessage, errors, accessToken, successMessage }) => {
         if (
@@ -74,6 +77,10 @@ export class Auth {
           this.isClicked = false;
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   protected clearMessages() {

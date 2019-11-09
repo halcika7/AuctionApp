@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
@@ -12,7 +13,7 @@ import { Product } from './../landing-page/store/landing-page.reducers';
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.scss']
 })
-export class ProductPageComponent implements OnInit {
+export class ProductPageComponent implements OnInit, OnDestroy {
   private _product: FullProduct;
   private _similarProducts: Product[] = [];
   private _minPrice: any;
@@ -21,6 +22,7 @@ export class ProductPageComponent implements OnInit {
   private _userId: string;
   private _message = ''; // if user is owner or not loggedin
   private _noBids = true;
+  private subscription = new Subscription();
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -29,28 +31,39 @@ export class ProductPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(({ id }: Params) => {
-      if (!id || !parseInt(id, 10)) {
-        this.location.back();
-      }
-      this.store.dispatch(new ProductPageActions.ProductStart(id));
-    });
+    this.subscription.add(
+      this.route.params.subscribe(({ id }: Params) => {
+        if (!id || !parseInt(id, 10)) {
+          this.location.back();
+        }
+        this.store.dispatch(new ProductPageActions.ProductStart(id));
+      })
+    );
 
-    this.store.select('productPage').subscribe(({ product, similarProducts, error }) => {
-      if (error) {
-        this.location.back();
-      }
-      this._product = product;
-      this._minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
-      this._hide = new Date(product.auctionStart) > new Date() ? true : false;
-      this._noBids = product.highest_bid === 0 ? true : false;
-      this._similarProducts = similarProducts;
-      this.setMessageDisabled();
-    });
-    this.store.select('auth').subscribe(({ userId }) => {
-      this._userId = userId;
-      this.setMessageDisabled();
-    });
+    this.subscription.add(
+      this.store.select('productPage').subscribe(({ product, similarProducts, error }) => {
+        if (error) {
+          this.location.back();
+        }
+        this._product = product;
+        this._minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
+        this._hide = new Date(product.auctionStart) > new Date() ? true : false;
+        this._noBids = product.highest_bid === 0 ? true : false;
+        this._similarProducts = similarProducts;
+        this.setMessageDisabled();
+      })
+    );
+
+    this.subscription.add(
+      this.store.select('auth').subscribe(({ userId }) => {
+        this._userId = userId;
+        this.setMessageDisabled();
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   setMessageDisabled() {

@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '@app/store/app.reducer';
 import * as AuthActions from '@app/auth/store/auth.actions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   private _isAuthenticated = null;
+  private subscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.select('auth').subscribe(({ accessToken, loading, remember }) => {
+    this.subscription = this.store.select('auth').subscribe(({ accessToken, loading, remember }) => {
       if (!loading) {
         if (accessToken && (localStorage.getItem('accessToken') || remember)) {
           this._isAuthenticated = true;
@@ -27,6 +29,10 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   private logout() {

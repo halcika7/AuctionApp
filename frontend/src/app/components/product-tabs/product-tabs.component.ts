@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromApp from '@app/store/app.reducer';
 import * as LandingPageActions from '@app/landing-page/store/landing-page.actions';
@@ -9,17 +10,18 @@ import { Product } from '@app/landing-page/store/landing-page.reducers';
   templateUrl: './product-tabs.component.html',
   styleUrls: ['./product-tabs.component.scss']
 })
-export class ProductTabsComponent implements OnInit {
+export class ProductTabsComponent implements OnInit, OnDestroy {
   private _products: Product[] = [];
   private _offset = 0;
   private _active = 'newArrivals';
   private _showButton = true;
+  private subscription: Subscription
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
-    this.store.select('landingPage').subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
+    this.subscription = this.store.select('landingPage').subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
       if (this.active === 'newArrivals') {
         this._products = newArrivals;
       } else if (this.active === 'topRated') {
@@ -33,6 +35,10 @@ export class ProductTabsComponent implements OnInit {
         this._showButton = true;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   tabsChange(e: Event, tab: string) {

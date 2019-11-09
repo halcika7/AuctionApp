@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Auth } from '@app/auth/auth.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import * as AuthActions from '@app/auth/store/auth.actions';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends Auth implements OnInit {
+export class LoginComponent extends Auth implements OnDestroy {
 
   constructor(private store: Store<fromApp.AppState>, protected router: Router) {
     super(
@@ -25,7 +25,9 @@ export class LoginComponent extends Auth implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
 
   private onSubmit() {
     this.store.dispatch(new AuthActions.LoginStart({ ...super.form.value }));

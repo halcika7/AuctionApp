@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -8,15 +9,16 @@ import { map } from 'rxjs/operators';
   templateUrl: './product-images.component.html',
   styleUrls: ['./product-images.component.scss']
 })
-export class ProductImagesComponent implements OnInit {
+export class ProductImagesComponent implements OnInit, OnDestroy {
   private _images = [];
   private _activeImage: string;
   private _currentIndex: number;
+  private subscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store
+    this.subscription = this.store
       .select('productPage')
       .pipe(
         map(state => ({
@@ -28,6 +30,10 @@ export class ProductImagesComponent implements OnInit {
         this._activeImage = ProductImages[0].image;
         this._currentIndex = 0;
       });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   private imgClicked(imageUrl: string, index: number) {

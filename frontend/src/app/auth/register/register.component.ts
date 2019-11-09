@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromApp from '@app/store/app.reducer';
 import * as AuthActions from '@app/auth/store/auth.actions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,7 @@ import * as AuthActions from '@app/auth/store/auth.actions';
 })
 export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   private _isValidForm = false;
+  private formSubscription: Subscription
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {
     super(
@@ -54,7 +56,7 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
 
   ngOnInit() {
     super.clearMessages();
-    super.form.statusChanges.subscribe(validity => {
+    this.formSubscription = super.form.statusChanges.subscribe(validity => {
       if (validity === 'VALID') {
         this._isValidForm = true;
       } else {
@@ -65,6 +67,8 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     super.clearMessages();
+    this.formSubscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   private onSubmit() {
