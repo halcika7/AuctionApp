@@ -303,18 +303,14 @@ app-footer {
   }
 }
 
-.feature-collection h3,
 .feature-products h3 {
   @include padding($bottom: 14px);
   @include fontMixin(28px, regular, 0.98px, light_black);
   border-bottom: 4px solid getColor(lighter_gray);
 }
 
-.feature-collection {
-  @include margin($top: 56px);
-}
-
 .feature-products {
+  @include margin(56px, 71px);
 
   .nav-tabs {
     @include margin($all: 0);
@@ -344,25 +340,23 @@ app-footer {
   }
 }
 
-.feature-collection .collections, .feature-products .collections {
-  @include margin(25px, 71px);
-}
-
-.feature-collection .collections,
 .feature-products .collections {
-  @include grid(3, 25px, $autoRows: 350px);
-}
-
-.feature-products .collections {
-  @include grid(4);
-}
-
-.feature-collection .collections .collection {
-  @include margin($bottom: 29px);
+  @include grid($autoRows: 350px, $autoCols: true, $templateCols: auto auto auto auto);
 }
 
 .feature-products .collections .collection {
-  @include margin($bottom: 25px);
+  @include margin($all: 25px 25px 25px 25px);
+  box-sizing: border-box;
+}
+
+.feature-products .collections app-collection-item:first-child .collection,
+.feature-products .collections app-collection-item:nth-child(5n) .collection{
+  margin-left: 0px;
+}
+
+.feature-products .collections app-collection-item:nth-child(4n) .collection,
+.feature-products .collections app-collection-item:last-child > .collection{
+  margin-right: 0px;
 }
 
 .collections .collection {
@@ -392,19 +386,19 @@ app-footer {
 
 @media (max-width: 1112px) {
   .feature-products .collections {
-    @include grid(3);
+    @include grid($templateCols: auto auto auto);
   }
 }
 
 @media (max-width: 768px) {
-  .feature-collection .collections, .feature-products .collections {
-    @include grid(2);
+  .feature-products .collections {
+    @include grid($templateCols: auto auto);
   }
 }
 
 @media (max-width: 550px) {
-  .feature-collection .collections, .feature-products .collections {
-    @include grid(1);
+  .feature-products .collections {
+    @include grid($templateCols: auto);
   }
 }
 

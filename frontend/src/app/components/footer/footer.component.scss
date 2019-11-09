@@ -9,7 +9,7 @@ footer {
 }
 
 .content {
-  @include grid(3, 25px, "a b c");
+  @include grid(3, $gap:25px, $areas:"a b c");
 
   > div {
     &:first-child {
