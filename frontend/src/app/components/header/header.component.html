@@ -40,7 +40,7 @@
   <div class="nav-links">
     <a [routerLink]="['/home']" routerLinkActive="active" >home</a>
     <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
-    <a href="#" appDropdown (click)="clicked($event)" *ngIf="isAuthenticated">
+    <span appDropdown *ngIf="isAuthenticated">
       <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
       <ul class="dropdown">
         <li>
@@ -59,6 +59,6 @@
           <a href=""><span>Settings</span></a>
         </li>
       </ul>
-    </a>
+    </span>
   </div>
 </nav>

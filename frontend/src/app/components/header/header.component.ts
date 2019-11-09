@@ -29,10 +29,6 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  clicked(e: Event) {
-    e.preventDefault();
-  }
-
   logout() {
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('accessToken');

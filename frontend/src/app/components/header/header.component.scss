@@ -147,7 +147,8 @@ header {
     @include flex(center, space-between);
     height: 100%;
 
-    > a {
+    > a,
+    > span {
       &:first-child:nth-last-child(2) {
         @include margin($left: auto, $right: 30px);
       }
@@ -189,7 +190,13 @@ header {
       @include margin($left: 39px);
     }
 
-    > a {
+    > span {
+      cursor: pointer;
+
+      &:hover > a {
+        @include fontMixin(16px, $letterS: 0.56px, $color: purple);
+      }
+
       > .dropdown {
         @include padding($all: 9.5px 0);
         @include margin($all: 0);
