@@ -6,10 +6,11 @@ const { db, Op } = require('../config/database');
 const {
     STARTS_IN_MAX_DAYS,
     ENDS_IN_MAX_DAYS,
+    STARTED_DAYS_AGO,
     AVG_RATING,
     LIMIT_SIMILAR_PRODUCTS
 } = require('../config/configs');
-const { addDaysToDate } = require('./addDaysToDate');
+const { addSubtractDaysToDate } = require('./addSubtractDaysToDate');
 
 function filterProducts({ type, limit, offset = 0 }) {
     limit = parseInt(limit);
@@ -32,8 +33,8 @@ function filterProducts({ type, limit, offset = 0 }) {
 
     if (type === 'newArrivals') {
         findObj.where.auctionStart = {
-            [Op.gt]: new Date(),
-            [Op.lte]: addDaysToDate(STARTS_IN_MAX_DAYS)
+            [Op.gt]: addSubtractDaysToDate(STARTED_DAYS_AGO, false),
+            [Op.lte]: addSubtractDaysToDate(STARTS_IN_MAX_DAYS)
         };
         findObj.order = [['auctionStart', 'ASC']];
     }
@@ -41,7 +42,7 @@ function filterProducts({ type, limit, offset = 0 }) {
     if (type === 'lastChance') {
         findObj.where.auctionEnd = {
             [Op.gt]: new Date(),
-            [Op.lte]: addDaysToDate(ENDS_IN_MAX_DAYS)
+            [Op.lte]: addSubtractDaysToDate(ENDS_IN_MAX_DAYS)
         };
         findObj.order = [['auctionEnd', 'ASC']];
     }
