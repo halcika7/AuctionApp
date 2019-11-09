@@ -1,5 +1,5 @@
-@import '../../scss/colors';
-@import '../../scss/mixins';
+@import 'variables';
+@import 'mixins';
 
 section.container-fluid {
   @include padding($all: 0);

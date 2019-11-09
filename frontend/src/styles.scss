@@ -1,6 +1,6 @@
-@import './scss/colors';
-@import './scss/resets';
-@import './scss/mixins';
+@import 'variables';
+@import 'resets';
+@import 'mixins';
 
 app-root {
   @include flex($direction: column);
