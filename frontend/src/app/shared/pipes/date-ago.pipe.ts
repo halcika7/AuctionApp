@@ -21,7 +21,7 @@ export class DateAgoPipe extends AsyncPipe {
 
   transform(obj: any, args?: any[]): any {
     this.value = new Date(obj);
-    const { agoOrLeft, response, loop, append } = args[0];
+    const { agoOrLeft, response, loop, append = true } = args[0];
     this.agoOrLeft = agoOrLeft;
     this.response = response;
     this.loop = loop;

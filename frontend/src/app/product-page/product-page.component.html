@@ -36,7 +36,8 @@
         Start's in:
         {{
           product.auctionStart
-            | dateAgo: [{ agoOrLeft: 'left', response: 'Not started yet', loop: true, append: false }]
+            | dateAgo
+              : [{ agoOrLeft: 'left', response: 'Not started yet', loop: true, append: false }]
         }}
       </p>
     </div>
