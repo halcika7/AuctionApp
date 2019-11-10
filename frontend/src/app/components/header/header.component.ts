@@ -16,19 +16,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.subscription = this.store.select('auth').subscribe(({ accessToken, loading, remember }) => {
-      if (!loading) {
-        if (accessToken && (localStorage.getItem('accessToken') || remember)) {
-          this._isAuthenticated = true;
-          localStorage.setItem('accessToken', accessToken);
-        } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
-          this._isAuthenticated = true;
-          sessionStorage.setItem('accessToken', accessToken);
-        } else {
-          this._isAuthenticated = false;
+    this.subscription = this.store
+      .select('auth')
+      .subscribe(({ accessToken, loading, remember }) => {
+        if (!loading) {
+          if (accessToken && (localStorage.getItem('accessToken') || remember)) {
+            this._isAuthenticated = true;
+            localStorage.setItem('accessToken', accessToken);
+          } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
+            this._isAuthenticated = true;
+            sessionStorage.setItem('accessToken', accessToken);
+          } else {
+            this._isAuthenticated = false;
+          }
         }
-      }
-    });
+      });
   }
 
   ngOnDestroy() {

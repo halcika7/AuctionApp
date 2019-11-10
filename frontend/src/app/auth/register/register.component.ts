@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   private _isValidForm = false;
-  private formSubscription: Subscription
+  private formSubscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {
     super(

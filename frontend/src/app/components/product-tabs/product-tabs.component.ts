@@ -15,26 +15,28 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
   private _offset = 0;
   private _active = 'newArrivals';
   private _showButton = true;
-  private subscription: Subscription
+  private subscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.store.dispatch(new LandingPageActions.LandingPageStart('newArrivals/8'));
-    this.subscription = this.store.select('landingPage').subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
-      if (this.active === 'newArrivals') {
-        this._products = newArrivals;
-      } else if (this.active === 'topRated') {
-        this._products = topRated;
-      } else {
-        this._products = lastChance;
-      }
-      if (this.products.length < 8 || noMore) {
-        this._showButton = false;
-      } else {
-        this._showButton = true;
-      }
-    });
+    this.subscription = this.store
+      .select('landingPage')
+      .subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
+        if (this.active === 'newArrivals') {
+          this._products = newArrivals;
+        } else if (this.active === 'topRated') {
+          this._products = topRated;
+        } else {
+          this._products = lastChance;
+        }
+        if (this.products.length < 8 || noMore) {
+          this._showButton = false;
+        } else {
+          this._showButton = true;
+        }
+      });
   }
 
   ngOnDestroy() {

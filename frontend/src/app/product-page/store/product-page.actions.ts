@@ -18,10 +18,7 @@ export class ProductSuccess implements Action {
 
 export class ProductFailed implements Action {
   readonly type = PRODUCT_FAILED;
-  constructor(public payload: { error: { error: string; } }) {}
+  constructor(public payload: { error: { error: string } }) {}
 }
 
-export type ProductPageActions =
-  | ProductStart
-  | ProductSuccess
-  | ProductFailed;
+export type ProductPageActions = ProductStart | ProductSuccess | ProductFailed;
