@@ -1,11 +1,10 @@
-import { OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthClearMessagess } from '@app/auth/store/auth.actions';
 
-export class Auth implements OnDestroy {
+export class Auth {
   private _message: string;
   private _form: FormGroup;
   private _showErrors = true;
@@ -79,7 +78,7 @@ export class Auth implements OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  protected destroy() {
     this.subscription.unsubscribe();
   }
 

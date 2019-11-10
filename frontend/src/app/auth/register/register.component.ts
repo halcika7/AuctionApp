@@ -68,7 +68,7 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   ngOnDestroy() {
     super.clearMessages();
     this.formSubscription.unsubscribe();
-    super.ngOnDestroy();
+    super.destroy();
   }
 
   private onSubmit() {

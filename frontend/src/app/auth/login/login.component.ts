@@ -25,7 +25,7 @@ export class LoginComponent extends Auth implements OnDestroy {
   }
 
   ngOnDestroy() {
-    super.ngOnDestroy();
+    super.destroy();
   }
 
   private onSubmit() {
