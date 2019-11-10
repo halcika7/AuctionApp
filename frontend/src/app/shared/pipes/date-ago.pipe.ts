@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   pure: false
 })
 export class DateAgoPipe extends AsyncPipe {
-  value: Date;
+  value: Date | string;
   agoOrLeft: string;
   response: string;
   loop: boolean;
@@ -21,70 +21,57 @@ export class DateAgoPipe extends AsyncPipe {
 
   transform(obj: any, args?: any[]): any {
     this.value = new Date(obj);
-    const { agoOrLeft, response, loop, append = true } = args[0];
+    const { agoOrLeft = 'left', response = '', loop = false, append = true } = args[0];
     this.agoOrLeft = agoOrLeft;
     this.response = response;
     this.loop = loop;
     this.append = append;
-    if (this.value instanceof Date) {
-      if (!this.timer) {
-        this.timer = this.getObservable();
-      }
-
-      return super.transform(this.timer);
+    if (!this.timer) {
+      this.timer = this.getObservable();
     }
-
-    return super.transform(obj);
+    return super.transform(this.timer);
   }
 
   getObservable() {
     return interval(1000).pipe(
       map(() => {
-        if (this.value) {
-          let seconds =
-            this.agoOrLeft === 'left' || this.loop
-              ? Math.floor((+this.value - +new Date()) / 1000)
-              : Math.floor((+new Date() - +this.value) / 1000);
-          if (this.agoOrLeft === 'ago' && this.value > new Date()) {
-            return this.response;
-          }
-          if (seconds < 29) {
-            // less than 30 seconds ago will show as 'Just now'
-            return 'Just now';
-          }
-          const intervals = {
-            year: 31536000,
-            month: 2592000,
-            week: 604800,
-            day: 86400,
-            hour: 3600,
-            minute: 60,
-            second: 1
-          };
-          let counter;
-          let message = '';
-          // tslint:disable-next-line: forin
-          for (const [i, j] of Object.keys(intervals).entries()) {
-            counter = Math.floor(seconds / intervals[j]);
-            seconds %= intervals[j];
-            if (counter > 0) {
-              if (counter === 1) {
-                if (Object.keys(intervals).length - 1 === i) {
-                  message += `${counter} ${j}`; // singular (1 day ago)
-                } else {
-                  message += `${counter} ${j}, `;
-                }
-              } else {
-                if (Object.keys(intervals).length - 1 === i) {
-                  message += `${counter} ${j}'s`;
-                } else {
-                  message += `${counter} ${j}'s, `;
-                }
-              }
+        let seconds =
+          this.agoOrLeft === 'left' || this.loop
+            ? Math.floor((+this.value - +new Date()) / 1000)
+            : Math.floor((+new Date() - +this.value) / 1000);
+        if (this.agoOrLeft === 'ago' && this.value > new Date()) {
+          return this.response;
+        }
+        if (seconds < 29) {
+          return 'Just now';
+        }
+        const intervals = {
+          year: 31536000,
+          month: 2592000,
+          week: 604800,
+          day: 86400,
+          hour: 3600,
+          minute: 60,
+          second: 1
+        };
+        let counter = 0;
+        let message = '';
+        for (const [i, j] of Object.keys(intervals).entries()) {
+          counter = Math.floor(seconds / intervals[j]);
+          seconds %= intervals[j];
+          if (counter > 0) {
+            if (counter === 1) {
+              message +=
+                Object.keys(intervals).length - 1 === i ? `${counter} ${j}` : `${counter} ${j}, `;
+            } else {
+              message +=
+                Object.keys(intervals).length - 1 === i
+                  ? `${counter} ${j}'s`
+                  : `${counter} ${j}'s, `;
             }
           }
-          return this.append ? `${message} ${this.agoOrLeft}` : message;
         }
+        return this.append ? `${message} ${this.agoOrLeft}` : message;
       })
     );
   }
