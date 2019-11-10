@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   pure: false
 })
 export class DateAgoPipe extends AsyncPipe {
-  value: Date | string;
+  value: Date;
   agoOrLeft: string;
   response: string;
   loop: boolean;
