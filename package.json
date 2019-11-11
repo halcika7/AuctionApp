@@ -4,6 +4,7 @@
     "description": "Auction App",
     "main": "index.js",
     "scripts": {
+        "start": "node index",
       "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm build --prefix frontend && npm install --prefix backend && npm run migrate --prefix backend && npm run seed --prefix backend"
     },
     "keywords": [],
