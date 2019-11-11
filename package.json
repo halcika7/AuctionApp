@@ -4,7 +4,7 @@
     "description": "Auction App",
     "main": "index.js",
     "scripts": {
-        "heroku-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix ./fontend && ng build --prefix ./fronted && heroku restart && heroku pg:reset DATABASE --confirm atlantbh-auctionapp && heroku run rake db:migrate && heroku run rake db:seed"
+        "heroku-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix fontend && ng build --prefix fronted && heroku restart && heroku pg:reset DATABASE --confirm atlantbh-auctionapp && heroku run rake db:migrate && heroku run rake db:seed"
     },
     "keywords": [],
     "author": "",
