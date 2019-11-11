@@ -26,10 +26,11 @@ module.exports = {
         "dialect": "postgres"
     },
     "production": {
-        "username": "username",
-        "password": "pass",
-        "database": "namedb",
-        "host": "127.0.0.1",
+        "username": DB_USERNAME,
+        "password": DB_PASSWORD,
+        "database": DB_NAME,
+        "host": DB_HOST,
+        "port": DB_PORT,
         "dialect": "postgres"
     }
 }

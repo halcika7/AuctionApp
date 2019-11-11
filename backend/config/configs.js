@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
+    URL: process.env.URL,
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
     DB_USERNAME: process.env.DB_USER,

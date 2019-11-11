@@ -12,7 +12,8 @@
     "create-db": "node ./config/createDb.js",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\""
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "heroku-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix ../fontend && ng build --prefix ../fronted && heroku restart && heroku pg:reset DATABASE --confirm atlantbh-auctionapp && heroku run rake db:migrate && heroku run rake db:seed"
   },
   "keywords": [],
   "author": "",
