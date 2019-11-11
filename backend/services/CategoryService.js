@@ -1,5 +1,5 @@
-const Category = require('../model/Category');
-const Subcategory = require('../model/Subcategory');
+const Category = require('../models/Category');
+const Subcategory = require('../models/Subcategory');
 const BaseService = require('./BaseService');
 
 class CategoryService extends BaseService {

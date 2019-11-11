@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../model/User');
+const User = require('../models/User');
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require('../config/configs');
 
 exports.createAccessToken = ({ id, email }) =>

@@ -1,7 +1,7 @@
-const Product = require('../model/Product');
-const ProductReview = require('../model/ProductReview');
-const ProductImage = require('../model/ProductImage');
-const Bid = require('../model/Bid');
+const Product = require('../models/Product');
+const ProductReview = require('../models/ProductReview');
+const ProductImage = require('../models/ProductImage');
+const Bid = require('../models/Bid');
 const { db, Op } = require('../config/database');
 const {
     STARTS_IN_MAX_DAYS,
