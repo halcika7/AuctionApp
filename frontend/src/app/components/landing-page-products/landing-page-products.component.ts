@@ -7,7 +7,6 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LandingPageProductsComponent implements OnInit {
   @Input() title: string;
-  @Input() className = 'feature-collection';
   @Input() items: [];
 
   constructor() {}

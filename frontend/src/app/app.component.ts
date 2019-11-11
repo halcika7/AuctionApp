@@ -12,7 +12,7 @@ import * as AuthActions from './auth/store/auth.actions';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  notFound = false;
+  private _notFound = false;
 
   constructor(
     private location: Location,
@@ -25,13 +25,17 @@ export class AppComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (this.location.path() === '/404') {
-          this.notFound = true;
+          this._notFound = true;
         } else {
-          this.notFound = false;
+          this._notFound = false;
         }
       });
     if (localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')) {
       this.store.dispatch(new AuthActions.RefreshTokenStart());
     }
+  }
+
+  get notFount(): boolean {
+    return this._notFound;
   }
 }

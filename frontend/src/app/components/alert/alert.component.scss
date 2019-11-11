@@ -1,4 +1,4 @@
-@import '../../../scss/mixins';
+@import 'mixins';
 
 .alert-wrapper {
   @include flex(center, space-between);

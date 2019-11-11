@@ -1,0 +1,85 @@
+<app-breadcrumb
+  [title]="'single product'"
+  [other]="[{ value: 'shop /', link: '/shop' }, { value: 'single product', link: '' }]"
+></app-breadcrumb>
+
+<app-alert *ngIf="message !== ''" [message]="message" [type]="false" [closable]="false"></app-alert>
+
+<section class="about-product container">
+  <app-product-images></app-product-images>
+  <div class="details">
+    <h2>{{ product.name }}</h2>
+    <h4>Start from - {{ product.price | currency }}</h4>
+    <div class="bid" *ngIf="!hide">
+      <div class="input">
+        <input
+          type="number"
+          [min]="noBids ? minPrice : minPrice + 0.1"
+          step="0.1"
+          [placeholder]="'Enter bid'"
+        />
+        <span *ngIf="noBids">Enter {{ minPrice | currency }} or more</span>
+        <span *ngIf="!noBids">Enter more than {{ minPrice | currency }}</span>
+      </div>
+      <button class="bid-button" [disabled]="disabled">Place bid</button>
+    </div>
+    <div class="current-bid">
+      <ng-template [ngIf]="!hide">
+        <p>
+          Highest bid: <span>{{ product.highest_bid | currency }}</span>
+        </p>
+        <p>Number of bids: {{ product.number_of_bids }}</p>
+        <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: 'left' }] }}</p>
+        <p>
+          Started:
+          {{ product.auctionStart | dateAgo: [{ agoOrLeft: 'ago', response: 'Not started yet' }] }}
+        </p>
+      </ng-template>
+      <p *ngIf="hide">
+        Starts in:
+        {{
+          product.auctionStart
+            | dateAgo
+              : [{ agoOrLeft: 'left', response: 'Not started yet', loop: true, append: false }]
+        }}
+      </p>
+    </div>
+    <div class="watchlist">
+      <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button>
+    </div>
+    <div class="product-details">
+      <h5>Details</h5>
+      <p>{{ product.details }}</p>
+    </div>
+  </div>
+</section>
+
+<app-landing-page-products
+  title="Similar Products"
+  className="feature-collection"
+  [items]="similarProducts"
+></app-landing-page-products>
+
+<!-- <section class="container table-biders">
+  <table class="biders">
+    <thead>
+      <tr>
+        <th>Bider</th>
+        <th>Date</th>
+        <th>Bid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="user">
+            <img src="/assets/nike.png" alt="" />
+            <span>John Doe</span>
+          </div>
+        </td>
+        <td>24 March 2019</td>
+        <td>$120.00</td>
+      </tr>
+    </tbody>
+  </table>
+</section> -->

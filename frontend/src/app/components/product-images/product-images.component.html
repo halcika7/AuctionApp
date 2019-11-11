@@ -1,0 +1,12 @@
+<div class="pictures">
+  <div class="big-picture">
+    <img [src]="activeImage" alt="" />
+  </div>
+  <div class="pagination">
+    <ng-template ngFor let-imgs let-index="index" [ngForOf]="images">
+      <div class="img" [ngClass]="{ active: currentIndex === index }">
+        <img [src]="imgs.image" alt="" (click)="imgClicked(imgs.image, index)" />
+      </div>
+    </ng-template>
+  </div>
+</div>

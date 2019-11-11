@@ -32,7 +32,7 @@ class AuthController extends BaseController {
         }
         return super.sendResponseWithMessage(
             res,
-            status ? status : 400,
+            status,
             response,
             !token ? { accessToken: '' } : undefined
         );

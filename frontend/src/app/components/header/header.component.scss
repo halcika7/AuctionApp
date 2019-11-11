@@ -1,5 +1,5 @@
-@import '../../../scss/colors';
-@import '../../../scss/mixins';
+@import 'variables';
+@import 'mixins';
 
 header {
   background: getColor(light_black);
@@ -9,6 +9,7 @@ header {
 .top {
   @include flex(false, space-between);
   height: 100%;
+  padding: 0;
 }
 
 @media (max-width: 425px) {
@@ -92,8 +93,12 @@ header {
       @include fontMixin(24px, light, 0.84px, purple);
       @include flex();
 
+      > a {
+        @include fontMixin(24px, light, 0.84px, purple, $decoration: none);
+      }
+
       > .brand-icon {
-        @include margin($right: 14PX);
+        @include margin($right: 14px);
         @include padding(2px);
 
         span {
@@ -146,7 +151,8 @@ header {
     @include flex(center, space-between);
     height: 100%;
 
-    > a {
+    > a,
+    > span {
       &:first-child:nth-last-child(2) {
         @include margin($left: auto, $right: 30px);
       }
@@ -188,7 +194,13 @@ header {
       @include margin($left: 39px);
     }
 
-    > a {
+    > span {
+      cursor: pointer;
+
+      &:hover > a {
+        @include fontMixin(16px, $letterS: 0.56px, $color: purple);
+      }
+
       > .dropdown {
         @include padding($all: 9.5px 0);
         @include margin($all: 0);
@@ -200,6 +212,7 @@ header {
         border: 1px solid getColor(lighter_gray);
         z-index: 100;
         list-style: none;
+        display: none;
       }
 
       &.open > .dropdown {

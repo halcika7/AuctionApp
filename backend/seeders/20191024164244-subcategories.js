@@ -4,7 +4,7 @@ const faker = require('faker');
 module.exports = {
     up: (queryInterface, Sequelize) => {
         const fashionSubcategories = ['Jeans', 'Vintage'];
-        const accessoriesSub = ["Women's Accessories"]; 
+        const accessoriesSub = ["Women's Accessories"];
         const jewelrySub = ['Wristwatches'];
         const shoesSubcategories = ['Sneakers'];
         const sportwareSubcategories = ['Sweatshirts'];
@@ -21,16 +21,16 @@ module.exports = {
                     CategoriesId
                 });
             }
-        }
-        helperFunction(fashionSubcategories, 1)
-        helperFunction(accessoriesSub, 2)
-        helperFunction(jewelrySub, 3)
-        helperFunction(shoesSubcategories, 4)
-        helperFunction(sportwareSubcategories, 5)
-        helperFunction(homeSubcategories, 6)
-        helperFunction(electronicsSubcategories, 7)
-        helperFunction(mobileSUbcategories, 8)
-        helperFunction(computerSubcategories, 9)
+        };
+        helperFunction(fashionSubcategories, 1);
+        helperFunction(accessoriesSub, 2);
+        helperFunction(jewelrySub, 3);
+        helperFunction(shoesSubcategories, 4);
+        helperFunction(sportwareSubcategories, 5);
+        helperFunction(homeSubcategories, 6);
+        helperFunction(electronicsSubcategories, 7);
+        helperFunction(mobileSUbcategories, 8);
+        helperFunction(computerSubcategories, 9);
 
         return queryInterface.bulkInsert('Subcategories', subcategories, {});
     },

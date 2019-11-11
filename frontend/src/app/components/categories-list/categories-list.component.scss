@@ -1,5 +1,5 @@
-@import '../../../scss/colors';
-@import '../../../scss/mixins';
+@import 'variables';
+@import 'mixins';
 
 .wrapper {
   position: relative;
@@ -95,6 +95,10 @@
     display: none;
   }
 
+  .categories h3 {
+    display: none;
+  }
+
   .wrapper {
     height: unset;
 
@@ -105,6 +109,7 @@
         position: absolute;
         z-index: 1000;
         display: block;
+        height: 500px;
       }
     }
   }

@@ -11,16 +11,32 @@ class ProductController extends BaseController {
             failedMessage,
             status,
             noMore,
-            ...products
+            products
         } = await ProductServiceInstance.filterProducts(req.params);
 
         if (req.params.offset && !failedMessage) {
             return super.sendResponse(res, status, {
-                ...products,
+                [req.params.type]: products,
                 noMore
             });
         }
-        return super.sendResponseWithMessage(res, status, products, failedMessage);
+        return super.sendResponse(
+            res,
+            status,
+            { [req.params.type]: products, noMore },
+            { failedMessage }
+        );
+    }
+
+    async getProduct(req, res) {
+        const { product, status } = await ProductServiceInstance.findProductById(req.params.id);
+        if (!product) {
+            return super.sendResponse(res, status, { error: 'Product not found !' });
+        }
+        const { similarProducts } =
+            (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) ||
+            [];
+        return super.sendResponse(res, status, { product, similarProducts });
     }
 }
 

@@ -2,7 +2,12 @@
   <div class="container crumbs">
     <span>{{ title }}</span>
     <ul class="urls">
-      <li *ngFor="let str of other">{{ str }}</li>
+      <li *ngFor="let str of other; let index = index">
+        <a [routerLink]="[str.link]" *ngIf="str.link !== ''; else notLink" >{{ str.value }}</a>
+        <ng-template #notLink>
+          {{ str.value }}
+        </ng-template>
+      </li>
     </ul>
   </div>
 </div>

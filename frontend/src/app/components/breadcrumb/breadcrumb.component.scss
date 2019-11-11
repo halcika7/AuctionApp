@@ -1,5 +1,5 @@
-@import '../../../scss/colors';
-@import '../../../scss/mixins';
+@import 'variables';
+@import 'mixins';
 
 .breadcrumb {
   height: 60px;
@@ -9,6 +9,7 @@
 .crumbs {
   @include flex(center, space-between);
   height: 100%;
+  padding: 0;
 
   span {
     @include fontMixin(18px, regular, 0.63px, light_black, uppercase);
@@ -18,6 +19,10 @@
     @include fontMixin(16px, light, 0.56px, light_black, uppercase);
     list-style: none;
     display: inline-block;
+
+    > a {
+      @include fontMixin(16px, light, 0.56px, light_black, uppercase, $decoration: none);
+    }
 
     &:last-child {
       @include fontMixin($fontW: regular);

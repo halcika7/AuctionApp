@@ -1,0 +1,178 @@
+@import 'mixins';
+@import 'variables';
+
+.about-product {
+  @include flex();
+  @include margin(40px, 179px);
+}
+
+.details {
+  padding-left: 50px;
+  width: 100%;
+
+  > h2 {
+    @include fontMixin(46px, regular, 1.61px, light_black);
+    @include margin(0, 14px);
+  }
+
+  h4 {
+    @include fontMixin(24px, regular, 0.84px, purple);
+    @include margin(0, 46px);
+  }
+
+  .bid {
+    @include flex($wrap: wrap);
+    margin-bottom: 66px;
+
+    .input {
+      margin-right: 21px;
+
+      input {
+        display: block;
+        background: #ECECEC;
+        border: 1px solid #D8D8D8;
+        height: 54px;
+        margin-bottom: 9px;
+        outline: none;
+        padding: 0 15px;
+      }
+
+      span {
+        @include fontMixin(15px, regular, 0.52px, gray, $lineH: 22px);
+      }
+    }
+
+    button {
+      @include flex(center, center);
+      @include fontMixin($fontW: bold);
+      @include boxShadowBackground(true, white, 3px solid getColor(purple));
+      @include heightWidth(57px, 100%);
+      padding: 0;
+      min-width: 192px;
+      max-width: 192px;
+      outline: none;
+      cursor: pointer;
+
+      &:disabled {
+        border: 3px solid getColor(red);
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.current-bid {
+  margin-bottom: 45px;
+
+  p {
+    @include fontMixin(16px, regular, 0.56px, gray);
+    @include margin(0, 7px);
+
+    > span {
+      @include fontMixin(16px, bold, 0.56px, purple);
+    }
+  }
+}
+
+.watchlist {
+  margin-bottom: 20px;
+
+  button {
+    @include flex(center, center);
+    @include heightWidth(36px, 140px);
+    @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
+    @include boxShadowBackground(false, white, 3px solid getColor(lighter_gray));
+    cursor: pointer;
+    outline: none;
+
+    fa-icon {
+      @include fontMixin(20px, $color: lighter_gray);
+      margin-left: 5px;
+    }
+  }
+}
+
+.product-details {
+  h5 {
+    @include fontMixin(18px, regular, 0.63px, light_black);
+    @include margin($all: 0 0 19px);
+    padding-bottom: 6px;
+    border-bottom: 4px solid getColor(lighter_gray);
+  }
+
+  p {
+    @include fontMixin(15px, regular, 0.53px, light_black, $lineH: 22px);
+  }
+}
+
+@media (max-width: 999px) {
+  .about-product {
+    @include flex($wrap: wrap-reverse);
+  }
+
+  .details {
+    @include padding($left: 0, $bottom: 50px);
+  }
+}
+
+@media (max-width: 435px) {
+  .details .bid button {
+    margin-top: 15px;
+  }
+}
+
+.table-biders {
+  overflow-x: scroll;
+  margin-bottom: 160px;
+  padding-bottom: 40px;
+}
+
+table.biders {
+  width: 100%;
+  color: getColor(light_black);
+  letter-spacing: 0.98px;
+  border-spacing: 0px;
+  border: 1px solid getColor(lighter_gray);
+  min-width: 650px;
+
+  thead tr {
+    background: getColor(lighter_gray);
+    height: 60px;
+
+    th {
+      @include fontMixin(20px, light);
+      text-align: left;
+      padding-left: 30px;
+    }
+  }
+
+  tbody tr td {
+    text-align: left;
+    padding-left: 30px;
+  }
+
+  thead tr th:not(:first-child), tbody tr td:not(:first-child) {
+    width: 20%;
+  }
+
+  img {
+    @include heightWidth(65px, 65px);
+    @include padding($all: 5px);
+    border-radius: 50%;
+    background: getColor(lighter_gray);
+  }
+
+  tbody tr td {
+    @include fontMixin(18px, light);
+    vertical-align: middle;
+    height: 110px;
+
+    .user {
+      @include flex(center);
+
+      span {
+        margin-left: 30px;
+      }
+    }
+  }
+}

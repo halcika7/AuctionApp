@@ -4,7 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'truncateText'
 })
 export class TruncateTextPipe implements PipeTransform {
-  transform(value: string, length = 100): any {
+  transform(value: string, length: number = 100): Error | string {
+    if(typeof value !==  'string') {
+      return new Error('Value must be a string');
+    }
     if (value.length <= length) {
       return value;
     }

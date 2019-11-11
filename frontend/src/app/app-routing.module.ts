@@ -9,8 +9,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
+import { ProductPageComponent } from './product-page/product-page.component';
 
-import { AuthGuard } from './auth/auth.guard';
 import { LoginGuard } from './auth/login.guard';
 
 const appRoutes: Routes = [
@@ -40,7 +40,8 @@ const appRoutes: Routes = [
     children: [
       { path: 'about', component: AboutComponent },
       { path: 'privacy', component: PrivacyComponent },
-      { path: 'terms', component: ConditionsComponent }
+      { path: 'terms', component: ConditionsComponent },
+      { path: 'products/:id', component: ProductPageComponent }
     ]
   },
   { path: '404', component: NotFoundComponent },

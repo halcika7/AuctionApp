@@ -1,5 +1,5 @@
-@import '../../../scss/colors';
-@import '../../../scss/mixins';
+@import 'variables';
+@import 'mixins';
 
 footer {
   @include flex(center, center);
@@ -9,7 +9,7 @@ footer {
 }
 
 .content {
-  @include grid(3, 25px, "a b c");
+  @include grid(3, $gap:25px, $areas:"a b c");
 
   > div {
     &:first-child {
@@ -74,7 +74,7 @@ footer {
 
   input {
     @include padding($all: 17.5px);
-    @include fontMixin(16px, regular, 0.56px, dark_gray);
+    @include fontMixin(16px, regular, 0.56px, light_gray);
     outline: none;
     background: getColor(dark_gray);
     width: 275px;

@@ -32,6 +32,7 @@ import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { LandingPageEffects } from './landing-page/store/landing-page.effects';
 import { CategoriesPageEffects } from './containers/all-categories/store/all-categories.effects';
+import { ProductPageEffects } from './product-page/store/product-page.effects';
 
 // Font Awesome Icons
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -43,13 +44,16 @@ import {
   faGooglePlusSquare,
   faGooglePlusG
 } from '@fortawesome/free-brands-svg-icons';
-import { faGreaterThan, faSearch, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faGreaterThan, faSearch, faCheck, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 // Services, directives and pipes
 import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { DropdownNoautocloseDirective } from './shared/directives/dropdown-noautoclose.directive';
 import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
+import { ProductPageComponent } from './product-page/product-page.component';
+import { ProductImagesComponent } from './components/product-images/product-images.component';
+import { DateAgoPipe } from './shared/pipes/date-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -74,7 +78,10 @@ import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
     CollectionItemComponent,
     AllCategoriesComponent,
     DropdownNoautocloseDirective,
-    TruncateTextPipe
+    TruncateTextPipe,
+    ProductPageComponent,
+    ProductImagesComponent,
+    DateAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -83,7 +90,12 @@ import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects, LandingPageEffects, CategoriesPageEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      LandingPageEffects,
+      CategoriesPageEffects,
+      ProductPageEffects
+    ]),
     FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],
@@ -100,7 +112,8 @@ export class AppModule {
       faSearch,
       faCheck,
       faFacebookSquare,
-      faGooglePlusSquare
+      faGooglePlusSquare,
+      faHeart
     );
   }
 }

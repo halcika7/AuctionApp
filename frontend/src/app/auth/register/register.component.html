@@ -2,11 +2,11 @@
 <app-alert
   *ngIf="message"
   [message]="message"
-  (closeAlert)="removeMessages()"
+  (closeAlert)="clearMessages()"
   [type]="success"
 ></app-alert>
 <section class="container">
-  <form class="form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <h1>Register</h1>
     <div class="wrapper pb-51">
       <app-input
@@ -15,8 +15,8 @@
         placeholder="Enter First Name"
         type="text"
         controlName="firstName"
-        [parentForm]="signupForm"
-        [input]="signupForm.get('firstName')"
+        [parentForm]="form"
+        [input]="form.get('firstName')"
         [showErrors]="showErrors"
       ></app-input>
       <app-input
@@ -25,8 +25,8 @@
         placeholder="Enter Last Name"
         type="text"
         controlName="lastName"
-        [parentForm]="signupForm"
-        [input]="signupForm.get('lastName')"
+        [parentForm]="form"
+        [input]="form.get('lastName')"
         [showErrors]="showErrors"
       ></app-input>
       <app-input
@@ -35,8 +35,8 @@
         placeholder="Enter Email"
         type="email"
         controlName="email"
-        [parentForm]="signupForm"
-        [input]="signupForm.get('email')"
+        [parentForm]="form"
+        [input]="form.get('email')"
         pattern="Please enter valid email address !!"
         [showErrors]="showErrors"
       ></app-input>
@@ -46,8 +46,8 @@
         placeholder="Enter Password"
         type="password"
         controlName="password"
-        [parentForm]="signupForm"
-        [input]="signupForm.get('password')"
+        [parentForm]="form"
+        [input]="form.get('password')"
         pattern="Possword must include at least one of each type: lowercase, uppercase, number and
         special symbol such as (!@#$%)!!"
         [showErrors]="showErrors"

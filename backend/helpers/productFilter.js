@@ -1,8 +1,16 @@
 const Product = require('../model/Product');
 const ProductReview = require('../model/ProductReview');
+const ProductImage = require('../model/ProductImage');
+const Bid = require('../model/Bid');
 const { db, Op } = require('../config/database');
-const { STARTS_IN_MAX_DAYS, ENDS_IN_MAX_DAYS, AVG_RATING } = require('../config/configs');
-const { addDaysToDate } = require('./addDaysToDate');
+const {
+    STARTS_IN_MAX_DAYS,
+    ENDS_IN_MAX_DAYS,
+    STARTED_DAYS_AGO,
+    AVG_RATING,
+    LIMIT_SIMILAR_PRODUCTS
+} = require('../config/configs');
+const { addSubtractDaysToDate } = require('./addSubtractDaysToDate');
 
 function filterProducts({ type, limit, offset = 0 }) {
     limit = parseInt(limit);
@@ -25,8 +33,8 @@ function filterProducts({ type, limit, offset = 0 }) {
 
     if (type === 'newArrivals') {
         findObj.where.auctionStart = {
-            [Op.gt]: new Date(),
-            [Op.lte]: addDaysToDate(STARTS_IN_MAX_DAYS)
+            [Op.gt]: addSubtractDaysToDate(STARTED_DAYS_AGO, false),
+            [Op.lte]: addSubtractDaysToDate(STARTS_IN_MAX_DAYS)
         };
         findObj.order = [['auctionStart', 'ASC']];
     }
@@ -34,7 +42,7 @@ function filterProducts({ type, limit, offset = 0 }) {
     if (type === 'lastChance') {
         findObj.where.auctionEnd = {
             [Op.gt]: new Date(),
-            [Op.lte]: addDaysToDate(ENDS_IN_MAX_DAYS)
+            [Op.lte]: addSubtractDaysToDate(ENDS_IN_MAX_DAYS)
         };
         findObj.order = [['auctionEnd', 'ASC']];
     }
@@ -63,10 +71,51 @@ function filterProducts({ type, limit, offset = 0 }) {
 }
 
 exports.getFilteredProducts = async obj => {
-    const filterObject = filterProducts(obj),
-        products = await Product.findAll(filterObject);
+    let filterObject = filterProducts(obj);
+    const products = await Product.findAll(filterObject);
     delete filterObject.limit;
     delete filterObject.offset;
     const numberOfProducts = await Product.findAll(filterObject);
     return { products, numberOfProducts: numberOfProducts.length };
+};
+
+exports.getProductById = async id => {
+    return await Product.findOne({
+        where: {
+            id,
+            auctionEnd: {
+                [Op.gt]: new Date()
+            }
+        },
+        attributes: {
+            include: [
+                [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
+                [db.fn('COUNT', db.col('Bids.price')), 'number_of_bids']
+            ],
+            exclude: ['featured', 'Bids.price']
+        },
+        include: [
+            {
+                model: ProductImage,
+                attributes: ['image']
+            },
+            {
+                model: Bid,
+                attributes: []
+            }
+        ],
+        group: ['Product.id', 'ProductImages.id']
+    });
+};
+
+exports.getSimilarProducts = async (subcategoryId, productId) => {
+    let findObj = filterProducts({ limit: LIMIT_SIMILAR_PRODUCTS });
+    findObj.where = {
+        ...findObj.where,
+        subcategoryId,
+        id: {
+            [Op.not]: productId
+        }
+    };
+    return await Product.findAll(findObj);
 };

@@ -8,13 +8,17 @@ import { Categories } from '@app/containers/all-categories/store/all-categories.
 })
 export class CategoriesListComponent implements OnInit {
   @Input() categories: Categories[];
-  isOpen = false;
+  private _isOpen = false;
 
   constructor() {}
 
   ngOnInit() {}
 
-  toggle() {
-    this.isOpen = !this.isOpen;
+  private toggle() {
+    this._isOpen = !this.isOpen;
+  }
+
+  get isOpen(): boolean {
+    return this._isOpen;
   }
 }
