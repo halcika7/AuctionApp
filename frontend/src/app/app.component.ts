@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  get notFount(): boolean {
+  get notFound(): boolean {
     return this._notFound;
   }
 }
