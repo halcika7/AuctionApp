@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
-const { URL } = require('./config/configs');
+const { URL } = require('./backend/config/configs');
 
 app.use(
     cors({
@@ -19,12 +19,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-require('./config/database');
+require('./backend/config/database');
 
-app.use('/api/auth', require('./routes/authentication/authRoutes'));
-app.use('/api/landing', require('./routes/landing-page/landingRoutes'));
-app.use('/api/categories', require('./routes/categories/categories'));
-app.use('/api/products', require('./routes/product/product'));
+app.use('/api/auth', require('./backend/routes/authentication/authRoutes'));
+app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
+app.use('/api/categories', require('./backend/routes/categories/categories'));
+app.use('/api/products', require('./backend/routes/product/product'));
 
 // static assets for production
 if(process.env.NODE_ENV === 'production') {
