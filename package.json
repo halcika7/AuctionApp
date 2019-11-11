@@ -13,7 +13,7 @@
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "heroku-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix ./fontend && ng build --prefix ./fronted && --prefix ./backend npm run create-db && --prefix ./backend npm run migrate && --prefix ./backend npm run seed"
+    "heroku-build": "NPM_CONFIG_PRODUCTION=false npm install && npm install --prefix ./fontend && ng build --prefix ./fronted && --prefix ./backend npm run create-db && --prefix ./backend npm run migrate && --prefix ./backend npm run seed"
   },
   "keywords": [],
   "author": "",
