@@ -82,7 +82,7 @@ export class Auth {
     this.subscription.unsubscribe();
   }
 
-  protected clearMessages() {
+  clearMessages() {
     this.authStore.dispatch(new AuthClearMessagess());
   }
 

@@ -28,7 +28,7 @@ export class LoginComponent extends Auth implements OnDestroy {
     super.destroy();
   }
 
-  protected onSubmit() {
+  onSubmit() {
     this.store.dispatch(new AuthActions.LoginStart({ ...super.form.value }));
   }
 }

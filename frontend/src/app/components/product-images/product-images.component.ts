@@ -36,7 +36,7 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  protected imgClicked(imageUrl: string, index: number) {
+  imgClicked(imageUrl: string, index: number) {
     this._activeImage = imageUrl;
     this._currentIndex = index;
   }

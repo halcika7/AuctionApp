@@ -43,7 +43,7 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  protected tabsChange(e: Event, tab: string) {
+  tabsChange(e: Event, tab: string) {
     e.preventDefault();
     if (tab !== this.active) {
       this._offset = 0;
@@ -58,7 +58,7 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected loadMore(e: Event) {
+  loadMore(e: Event) {
     e.preventDefault();
     this._offset += 8;
     this.store.dispatch(new LandingPageActions.LoadMoreProductsStart(this.active, this.offset));

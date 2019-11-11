@@ -71,7 +71,7 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
     super.destroy();
   }
 
-  protected onSubmit() {
+  onSubmit() {
     super.isClicked = true;
     this.store.dispatch(new AuthActions.RegisterStart({ ...super.form.value }));
   }
