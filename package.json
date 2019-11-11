@@ -5,7 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend"
+    "server": "nodemon index",
+    "frontend": "npm start --prefix frontend",
+    "frontend-install": "npm install --prefix frontend",
+    "backend-install": "npm install",
+    "create-db": "node ./backend/config/createDb.js",
+    "migrate": "npx sequelize-cli db:migrate --prefix backend",
+    "seed": "npx sequelize-cli db:seed:all --prefix backend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && heroku restart && heroku pg:reset DATABASE --confirm atlantbh-auctionapp && npm run migrate && npm run seed"
   },
   "keywords": [],
   "author": "",
