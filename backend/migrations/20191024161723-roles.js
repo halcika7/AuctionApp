@@ -2,7 +2,6 @@
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        console.log.lg('####################### ===>  runing migration')
         return queryInterface.createTable('Roles', {
             id: {
                 type: Sequelize.BIGINT,
