@@ -3,10 +3,10 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import * as fromApp from '../store/app.reducer';
+import * as fromApp from '@app/store/app.reducer';
 import * as ProductPageActions from './store/product-page.actions';
 import { FullProduct } from './store/product-page.reducer';
-import { Product } from './../landing-page/store/landing-page.reducers';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 @Component({
   selector: 'app-product-page',

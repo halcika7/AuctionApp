@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { FullProduct } from './product-page.reducer';
-import { Product } from './../../landing-page/store/landing-page.reducers';
+import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 export const PRODUCT_START = 'PRODUCT_START';
 export const PRODUCT_SUCCESS = 'PRODUCT_SUCCESS';

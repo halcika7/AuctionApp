@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../store/app.reducer';
+import * as fromApp from '@app/store/app.reducer';
 import * as LandingPageActions from './store/landing-page.actions';
 import { Product } from '@app/landing-page/store/landing-page.reducers';
 import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';

@@ -1,5 +1,5 @@
 import * as AuthActions from '@app/auth/store/auth.actions';
-import { jwtDecode } from '../../shared/jwtDecode';
+import { jwtDecode } from '@app/shared/jwtDecode';
 
 export interface State {
   errors: {
