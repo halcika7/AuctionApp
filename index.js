@@ -29,10 +29,10 @@ app.use('/api/products', require('./backend/routes/product/product'));
 // static assets for production
 if(process.env.NODE_ENV === 'production') {
     //Set static folder
-    app.use(express.static('./backend/frontend'));
+    app.use(express.static('frontend'));
 
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
+        res.sendFile(path.resolve(__dirname, 'frontend', 'index.html'));
     });
 }
 
