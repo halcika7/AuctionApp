@@ -35,6 +35,10 @@ export function landingPageReducer(
   action: LandingPageActions.LandingPageActions
 ) {
   switch (action.type) {
+    case LandingPageActions.CLEAR_LANDING_STATE:
+      return {
+        ...initialState
+      };
     case LandingPageActions.LANDING_PAGE_SUCCESS:
       return {
         ...state,

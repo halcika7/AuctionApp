@@ -6,6 +6,13 @@ export const PRODUCT_START = 'PRODUCT_START';
 export const PRODUCT_SUCCESS = 'PRODUCT_SUCCESS';
 export const PRODUCT_FAILED = 'PRODUCT_FAILED';
 
+export const CLEAR_PRODUCT_STATE = 'CLEAR_PRODUCT_STATE';
+
+export class ClearProductState implements Action {
+  readonly type = CLEAR_PRODUCT_STATE;
+  constructor() {}
+}
+
 export class ProductStart implements Action {
   readonly type = PRODUCT_START;
   constructor(public id: string) {}
@@ -21,4 +28,4 @@ export class ProductFailed implements Action {
   constructor(public payload: { error: { error: string } }) {}
 }
 
-export type ProductPageActions = ProductStart | ProductSuccess | ProductFailed;
+export type ProductPageActions = ProductStart | ProductSuccess | ProductFailed | ClearProductState;

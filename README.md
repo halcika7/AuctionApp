@@ -4,7 +4,7 @@
 
 ** After downloading or cloning add the following file **
 
----> Add .env in backend/ root folder :
+---> Add .env in root folder :
 ```
     ACCESS_TOKEN_SECRET=
     REFRESH_TOKEN_SECRET=
@@ -13,6 +13,7 @@
     DB_PORT=
     DB_HOST=
     DB_NAME=
+    URL=http://localhost:3000 /* example */
     NODE_ENV=
 ```
 ** Run the following commands **
@@ -20,8 +21,6 @@
 ```bash
     cd path/to/project/folder
 
-    cd backend/
-    
     npm run backend-install
     npm run frontend-install
     npm run create-db

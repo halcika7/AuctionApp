@@ -42,6 +42,7 @@ export function productPageReducer(
 ) {
   switch (action.type) {
     case ProductPageActions.PRODUCT_START:
+    case ProductPageActions.CLEAR_PRODUCT_STATE:
       return { ...initialState };
     case ProductPageActions.PRODUCT_SUCCESS:
       return {

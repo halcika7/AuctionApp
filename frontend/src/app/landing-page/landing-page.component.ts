@@ -41,6 +41,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(new LandingPageActions.ClearLandingState());
     this.subscription.unsubscribe();
   }
 

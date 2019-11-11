@@ -62,6 +62,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(new ProductPageActions.ClearProductState());
     this.subscription.unsubscribe();
   }
 
