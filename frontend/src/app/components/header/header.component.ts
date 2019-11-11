@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private logout() {
+  protected logout() {
     localStorage.removeItem('accessToken');
     sessionStorage.removeItem('accessToken');
     this.store.dispatch(new AuthActions.LogoutStart());

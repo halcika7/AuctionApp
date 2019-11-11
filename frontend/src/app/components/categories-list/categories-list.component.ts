@@ -14,7 +14,7 @@ export class CategoriesListComponent implements OnInit {
 
   ngOnInit() {}
 
-  private toggle() {
+  protected toggle() {
     this._isOpen = !this.isOpen;
   }
 

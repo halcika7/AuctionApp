@@ -65,7 +65,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  setMessageDisabled() {
+  private setMessageDisabled() {
     if (this.product.id) {
       this._disabled = this.product.userId === this.userId || !this.userId ? true : false;
       this._message = this.hide
