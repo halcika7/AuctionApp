@@ -27,12 +27,14 @@ export class DateAgoPipe extends AsyncPipe {
     this.loop = loop;
     this.append = append;
     if (!this.timer) {
-      this.timer = this.getObservable();
+      this.timer = this.getConvertedDate();
     }
     return super.transform(this.timer);
   }
 
-  getObservable() {
+  // https://medium.com/@thunderroid/angular-date-ago-pipe-minutes-hours-days-months-years-ago-c4b5efae5fe5
+  // returns converted date into years, months, weeks, days, hours, minutes, seconds - ago or left
+  getConvertedDate() {
     return interval(1000).pipe(
       map(() => {
         let seconds =
@@ -66,8 +68,8 @@ export class DateAgoPipe extends AsyncPipe {
             } else {
               message +=
                 Object.keys(intervals).length - 1 === i
-                  ? `${counter} ${j}'s`
-                  : `${counter} ${j}'s, `;
+                  ? `${counter} ${j}s`
+                  : `${counter} ${j}s, `;
             }
           }
         }

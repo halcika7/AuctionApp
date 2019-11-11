@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as fromApp from '@app/store/app.reducer';
 import * as ProductPageActions from './store/product-page.actions';
 import { FullProduct } from './store/product-page.reducer';
@@ -27,14 +26,14 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
-    private location: Location
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.subscription.add(
       this.route.params.subscribe(({ id }: Params) => {
         if (!id || !parseInt(id, 10)) {
-          this.location.back();
+          this.router.navigate(['/404']);
         }
         this.store.dispatch(new ProductPageActions.ProductStart(id));
       })
@@ -43,7 +42,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.store.select('productPage').subscribe(({ product, similarProducts, error }) => {
         if (error) {
-          this.location.back();
+          this.router.navigate(['/404']);
         }
         this._product = product;
         this._minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
