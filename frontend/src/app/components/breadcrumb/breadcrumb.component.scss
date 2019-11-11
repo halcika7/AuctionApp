@@ -20,6 +20,10 @@
     list-style: none;
     display: inline-block;
 
+    > a {
+      @include fontMixin(16px, light, 0.56px, light_black, uppercase, $decoration: none);
+    }
+
     &:last-child {
       @include fontMixin($fontW: regular);
     }

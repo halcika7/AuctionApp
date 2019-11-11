@@ -93,6 +93,10 @@ header {
       @include fontMixin(24px, light, 0.84px, purple);
       @include flex();
 
+      > a {
+        @include fontMixin(24px, light, 0.84px, purple, $decoration: none);
+      }
+
       > .brand-icon {
         @include margin($right: 14px);
         @include padding(2px);

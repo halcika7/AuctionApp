@@ -1,4 +1,7 @@
-<app-breadcrumb [title]="'single product'" [other]="['shop /', 'single product']"></app-breadcrumb>
+<app-breadcrumb
+  [title]="'single product'"
+  [other]="[{ value: 'shop /', link: '/shop' }, { value: 'single product', link: '' }]"
+></app-breadcrumb>
 
 <app-alert *ngIf="message !== ''" [message]="message" [type]="false" [closable]="false"></app-alert>
 
