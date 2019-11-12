@@ -30,6 +30,7 @@ class AuthService extends BaseService {
     async login(data) {
         try {
             const { errors, errorMessage, isValid, user } = await loginValidation(data);
+            console.log('TCL: AuthService -> login -> user', user);
             if (!isValid && errors) return { status: 403, response: { ...errors } };
             if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
             const accessToken = createAccessToken(user),
@@ -51,6 +52,7 @@ class AuthService extends BaseService {
         try {
             const payload = verifyRefreshToken(token),
                 user = await findUserByEmail(payload.email, false);
+            console.log('TCL: AuthService -> refreshToken -> payload', payload);
             if (!user) {
                 return { status: 400, response: { accessToken: '' } };
             }

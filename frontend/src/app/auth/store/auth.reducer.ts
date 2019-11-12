@@ -67,7 +67,6 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
       id = jwtDecode(action.payload.accessToken);
-      console.log('TCL: authReducer -> id', id);
       return {
         ...initialState,
         accessToken: action.payload.accessToken,

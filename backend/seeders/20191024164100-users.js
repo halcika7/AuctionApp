@@ -9,6 +9,7 @@ module.exports = {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: faker.internet.email(),
+                photo: 'https://static.thenounproject.com/png/363633-200.png',
                 password: '$2a$10$EvaQJZf.TU7POOzXv.n69.xbrtamfBQU5GAx/rfm86JftI6jlFk9m',
                 roleId: Math.floor(Math.random() * 2 + 1)
             });

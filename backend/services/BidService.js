@@ -71,7 +71,7 @@ class BidService extends BaseService {
                 where: {
                     productId
                 },
-                attributes: ['price'],
+                attributes: ['price', 'dateBid'],
                 include: [
                     {
                         model: User,
