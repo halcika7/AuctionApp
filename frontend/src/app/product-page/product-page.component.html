@@ -33,6 +33,7 @@
             step="0.1"
             placeholder="Enter bid"
             (change)="valueChange($event)"
+            [value]="enteredPrice"
             name="price"
           />
           <span *ngIf="noBids">Enter {{ minPrice | currency }} or more</span>

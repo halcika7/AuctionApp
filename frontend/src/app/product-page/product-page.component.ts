@@ -23,7 +23,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _message = ''; // if user is owner or not loggedin
   private _noBids = true;
   private _validation = '';
-  private _enteredPrice = 0;
+  private _enteredPrice = null;
   private subscription = new Subscription();
 
   successMessage = '';
@@ -53,6 +53,9 @@ export class ProductPageComponent implements OnInit, OnDestroy {
           if (error) {
             this.router.navigate(['/404']);
           }
+          if (successMessage) {
+            this._enteredPrice = null;
+          }
           this._product = product;
           this._bids = bids;
           this._similarProducts = similarProducts;
@@ -77,6 +80,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.store.dispatch(new ProductPageActions.ClearProductState());
     this.subscription.unsubscribe();
+    this._enteredPrice = null;
   }
 
   private setMessageDisabled() {
@@ -111,6 +115,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
       );
     }
+    this._enteredPrice = null;
   }
 
   clearMessages() {
