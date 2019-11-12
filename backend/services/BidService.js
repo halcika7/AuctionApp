@@ -24,32 +24,28 @@ class BidService extends BaseService {
                 attributes: ['price'],
                 order: [['price', 'DESC']]
             });
-            if (userID === userId) {
-                return {
-                    status: 403,
-                    failedMessage: 'You are not allowed to place bit on your own product',
-                    highest_bid: highestBid
-                };
-            }
             if (!auctionEnd) {
                 return {
                     status: 403,
-                    failedMessage: 'Auction ended.Your bid was unsuccessfull!!',
-                    highest_bid: highestBid
+                    failedMessage: 'Auction ended.Your bid was unsuccessfull!!'
+                };
+            }
+            if (userID === userId) {
+                return {
+                    status: 403,
+                    failedMessage: 'You are not allowed to place bit on your own product'
                 };
             }
             if (!highestBid && price > bid) {
                 return {
                     status: 403,
-                    failedMessage: 'Please bid higher than product price!',
-                    highest_bid: highestBid
+                    failedMessage: 'Please bid higher than product price!'
                 };
             }
             if (highestBid && highestBid.price >= bid) {
                 return {
                     status: 403,
-                    failedMessage: 'There are higher bids!',
-                    highest_bid: highestBid
+                    failedMessage: 'There are higher bids!'
                 };
             }
 

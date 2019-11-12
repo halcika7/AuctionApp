@@ -1,4 +1,4 @@
-const { decodeToken, createAccessToken, findUserByEmail } = require('../helpers/authHelper');
+const { decodeToken, findUserByEmail } = require('../helpers/authHelper');
 
 module.exports = async (req, res, next) => {
     try {
@@ -9,17 +9,7 @@ module.exports = async (req, res, next) => {
         const user = await findUserByEmail(decoded.email, false);
         if (
             !authorization ||
-            !decoded ||
-            !decoded.id ||
-            !decoded.email ||
-            !decoded.exp ||
-            !decoded.iat ||
             !refreshToken ||
-            !decodedRefresh ||
-            !decodedRefresh.id ||
-            !decodedRefresh.email ||
-            !decodedRefresh.exp ||
-            !decodedRefresh.iat ||
             Date.now() >= decodedRefresh.exp * 1000 ||
             !user
         ) {

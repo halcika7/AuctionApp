@@ -30,7 +30,6 @@ export class ProductPageEffects {
       return this.http.post<any>('/bids/make', { productId, bid }).pipe(
         map(data => new ProductPageActions.ProductBidSuccess(data)),
         catchError(data => {
-          console.log('TCL: data', data);
           if (data.error.authorizationError) {
             return of(new LogoutStart());
           }
