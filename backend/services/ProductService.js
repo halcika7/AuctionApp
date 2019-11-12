@@ -41,7 +41,6 @@ class ProductService extends BaseService {
                 id === product.userId && (await BidService.filterBidsForProduct(productId));
             return { status: 200, product, bids };
         } catch (error) {
-            console.log('TCL: ProductService -> findProductById -> error', error);
             return {
                 status: 403
             };
@@ -53,7 +52,6 @@ class ProductService extends BaseService {
             const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
             return { status: 200, similarProducts };
         } catch (error) {
-            console.log('TCL: ProductService -> findSimilarProducts -> error', error);
             return {
                 status: 200,
                 similarProducts: []
