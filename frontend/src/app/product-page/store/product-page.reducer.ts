@@ -89,7 +89,8 @@ export function productPageReducer(
             typeof state.product.number_of_bids === 'string'
               ? parseInt(state.product.number_of_bids) + 1
               : state.product.number_of_bids + 1
-        }
+        },
+        similarProducts: state.similarProducts
       };
     case ProductPageActions.PRODUCT_BID_FAILED:
       return {
