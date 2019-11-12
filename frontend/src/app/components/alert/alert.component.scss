@@ -18,6 +18,14 @@
     }
   }
 
+  &.gold {
+    background: getColor(light_orange);
+
+    button, p {
+      color: getColor(gold);
+    }
+  }
+
   button {
     @include fontMixin(18px, bold, $color: gold);
     position: absolute;

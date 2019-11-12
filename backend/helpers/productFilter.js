@@ -21,7 +21,7 @@ function filterProducts({ type, limit, offset = 0 }) {
                 [Op.gt]: new Date()
             }
         },
-        attributes: ['id', 'name', 'price', 'picture'],
+        attributes: ['id', 'name', 'price', 'picture', 'subcategoryId'],
         order: db.random(),
         limit,
         offset
@@ -118,4 +118,17 @@ exports.getSimilarProducts = async (subcategoryId, productId) => {
         }
     };
     return await Product.findAll(findObj);
+};
+
+exports.getAuctionEndProduct = async id => {
+    return await Product.findOne({
+        raw: true,
+        where: {
+            id,
+            auctionEnd: {
+                [Op.gt]: new Date()
+            }
+        },
+        attributes: ['auctionEnd', 'price', 'userId']
+    });
 };

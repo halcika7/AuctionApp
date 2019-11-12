@@ -22,15 +22,6 @@ module.exports = {
                     key: 'id'
                 }
             },
-            ownerId: {
-                type: Sequelize.BIGINT,
-                references: {
-                    model: {
-                        tableName: 'Users'
-                    },
-                    key: 'id'
-                }
-            },
             userId: {
                 type: Sequelize.BIGINT,
                 references: {
@@ -39,6 +30,10 @@ module.exports = {
                     },
                     key: 'id'
                 }
+            },
+            dateBid: {
+                type: Sequelize.DATE,
+                defaultValue: Date.now()
             }
         });
     },

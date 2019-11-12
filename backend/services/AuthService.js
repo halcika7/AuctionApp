@@ -65,7 +65,7 @@ class AuthService extends BaseService {
     }
 
     setRefreshTokenCookie(res, token) {
-        return res.cookie('jid', token, { httpOnly: true, path: '/api/auth/refresh_token' });
+        return res.cookie('jid', token, { httpOnly: true });
     }
 }
 

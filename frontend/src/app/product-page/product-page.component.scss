@@ -21,8 +21,11 @@
   }
 
   .bid {
-    @include flex($wrap: wrap);
     margin-bottom: 66px;
+
+    .wrap {
+      @include flex($wrap: wrap);
+    }
 
     .input {
       margin-right: 21px;
@@ -57,6 +60,11 @@
         border: 3px solid getColor(red);
         cursor: not-allowed;
       }
+    }
+
+    > p {
+      @include margin($all: 0);
+      color: getColor(red);
     }
   }
 }
@@ -122,7 +130,7 @@
 }
 
 .table-biders {
-  overflow-x: scroll;
+  overflow-x: auto;
   margin-bottom: 160px;
   padding-bottom: 40px;
 }
@@ -149,6 +157,16 @@ table.biders {
   tbody tr td {
     text-align: left;
     padding-left: 30px;
+
+    &.highest {
+      color: getColor(light_green);
+    }
+    &.second {
+      color: getColor(gold);
+    }
+    &.third {
+      color: getColor(light_purple);
+    }
   }
 
   thead tr th:not(:first-child), tbody tr td:not(:first-child) {

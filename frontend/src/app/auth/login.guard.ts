@@ -27,7 +27,7 @@ export class LoginGuard implements CanActivate {
           localStorage.getItem('accessToken') ||
           sessionStorage.getItem('accessToken')
         ) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/home']);
         }
         return true;
       })

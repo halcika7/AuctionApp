@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { db } = require('../config/database');
+const User = require('./User');
 
 const Bid = db.define(
     'Bid',
@@ -23,15 +24,6 @@ const Bid = db.define(
                 key: 'id'
             }
         },
-        ownerId: {
-            type: Sequelize.BIGINT,
-            references: {
-                model: {
-                    tableName: 'Users'
-                },
-                key: 'id'
-            }
-        },
         userId: {
             type: Sequelize.BIGINT,
             references: {
@@ -40,6 +32,10 @@ const Bid = db.define(
                 },
                 key: 'id'
             }
+        },
+        dateBid: {
+            type: Sequelize.DATE,
+            defaultValue: Date.now()
         }
     },
     {
@@ -47,5 +43,7 @@ const Bid = db.define(
         modelName: 'Bids'
     }
 );
+
+Bid.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
 
 module.exports = Bid;

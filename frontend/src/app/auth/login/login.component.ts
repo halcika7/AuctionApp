@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Auth } from '@app/auth/auth.model';
+import { Component, OnDestroy } from '@angular/core';
+import { Auth } from '@app/auth/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -25,7 +25,8 @@ export class LoginComponent extends Auth implements OnDestroy {
   }
 
   ngOnDestroy() {
-    super.destroy();
+    this.subscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   onSubmit() {

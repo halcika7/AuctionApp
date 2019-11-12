@@ -3,7 +3,9 @@ const {
     getProductById,
     getSimilarProducts
 } = require('../helpers/productFilter');
+const { decodeToken } = require('../helpers/authHelper');
 const BaseService = require('./BaseService');
+const BidService = require('./BidService');
 
 class ProductService extends BaseService {
     constructor() {
@@ -31,11 +33,15 @@ class ProductService extends BaseService {
         }
     }
 
-    async findProductById(id) {
+    async findProductById(productId, token) {
         try {
-            const product = await getProductById(id);
-            return { status: 200, product };
+            const product = await getProductById(productId);
+            const { id } = decodeToken(token) || { id: undefined };
+            const { bids } =
+                id === product.userId && (await BidService.filterBidsForProduct(productId));
+            return { status: 200, product, bids };
         } catch (error) {
+            console.log('TCL: ProductService -> findProductById -> error', error);
             return {
                 status: 403
             };
@@ -44,12 +50,13 @@ class ProductService extends BaseService {
 
     async findSimilarProducts(subcategoryId, id) {
         try {
-            const similarProducts = await getSimilarProducts(subcategoryId, id);
+            const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
             return { status: 200, similarProducts };
         } catch (error) {
+            console.log('TCL: ProductService -> findSimilarProducts -> error', error);
             return {
-                status: 403,
-                failedMessage: 'Something happened. We were unable to perform request.'
+                status: 200,
+                similarProducts: []
             };
         }
     }

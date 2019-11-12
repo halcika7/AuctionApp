@@ -57,23 +57,19 @@ export class DateAgoPipe extends AsyncPipe {
           second: 1
         };
         let counter = 0;
-        let message = '';
+        let vals = [];
         for (const [i, j] of Object.keys(intervals).entries()) {
           counter = Math.floor(seconds / intervals[j]);
           seconds %= intervals[j];
           if (counter > 0) {
             if (counter === 1) {
-              message +=
-                Object.keys(intervals).length - 1 === i ? `${counter} ${j}` : `${counter} ${j}, `;
+              vals.push(`${counter} ${j}`);
             } else {
-              message +=
-                Object.keys(intervals).length - 1 === i
-                  ? `${counter} ${j}s`
-                  : `${counter} ${j}s, `;
+              vals.push(`${counter} ${j}s`);
             }
           }
         }
-        return this.append ? `${message} ${this.agoOrLeft}` : message;
+        return this.append ? vals.join(', ').concat(` ${this.agoOrLeft}`) : vals.join(', ');
       })
     );
   }

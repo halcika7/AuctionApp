@@ -41,7 +41,7 @@ const appRoutes: Routes = [
       { path: 'about', component: AboutComponent },
       { path: 'privacy', component: PrivacyComponent },
       { path: 'terms', component: ConditionsComponent },
-      { path: 'products/:id', component: ProductPageComponent }
+      { path: 'products/:subcategoryId/:id', component: ProductPageComponent }
     ]
   },
   { path: '404', component: NotFoundComponent },

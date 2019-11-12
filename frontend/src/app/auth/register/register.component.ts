@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Auth } from '@app/auth/auth.model';
+import { Auth } from '@app/auth/auth';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -68,7 +68,6 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   ngOnDestroy() {
     super.clearMessages();
     this.formSubscription.unsubscribe();
-    super.destroy();
   }
 
   onSubmit() {

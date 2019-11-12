@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as fromApp from '@app/store/app.reducer';
 import * as ProductPageActions from './store/product-page.actions';
-import { FullProduct } from './store/product-page.reducer';
+import { FullProduct, Bid } from './store/product-page.reducer';
 import { Product } from '@app/landing-page/store/landing-page.reducers';
 
 @Component({
@@ -14,6 +14,7 @@ import { Product } from '@app/landing-page/store/landing-page.reducers';
 })
 export class ProductPageComponent implements OnInit, OnDestroy {
   private _product: FullProduct;
+  private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
   private _minPrice: any;
   private _hide = false;
@@ -21,7 +22,12 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _userId: string;
   private _message = ''; // if user is owner or not loggedin
   private _noBids = true;
+  private _validation = '';
+  private _enteredPrice = 0;
   private subscription = new Subscription();
+
+  successMessage = '';
+  failedMessage = '';
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -31,26 +37,33 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this.route.params.subscribe(({ id }: Params) => {
-        if (!id || !parseInt(id, 10)) {
+      this.route.params.subscribe(({ id, subcategoryId }: Params) => {
+        if (!id || !subcategoryId) {
           this.router.navigate(['/404']);
         }
         this.store.dispatch(new ProductPageActions.ProductStart(id));
+        this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
       })
     );
 
     this.subscription.add(
-      this.store.select('productPage').subscribe(({ product, similarProducts, error }) => {
-        if (error) {
-          this.router.navigate(['/404']);
-        }
-        this._product = product;
-        this._minPrice = product.highest_bid > product.price ? product.highest_bid : product.price;
-        this._hide = new Date(product.auctionStart) > new Date() ? true : false;
-        this._noBids = product.highest_bid === 0 ? true : false;
-        this._similarProducts = similarProducts;
-        this.setMessageDisabled();
-      })
+      this.store
+        .select('productPage')
+        .subscribe(({ product, similarProducts, bids, error, failedMessage, successMessage }) => {
+          if (error) {
+            this.router.navigate(['/404']);
+          }
+          this._product = product;
+          this._bids = bids;
+          this._similarProducts = similarProducts;
+          this._minPrice =
+            product.highest_bid >= product.price ? product.highest_bid : product.price;
+          this._hide = new Date(product.auctionStart) > new Date() ? true : false;
+          this._noBids = product.highest_bid === 0 ? true : false;
+          this.failedMessage = failedMessage;
+          this.successMessage = successMessage;
+          this.setMessageDisabled();
+        })
     );
 
     this.subscription.add(
@@ -68,7 +81,13 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   private setMessageDisabled() {
     if (this.product.id) {
-      this._disabled = this.product.userId === this.userId || !this.userId ? true : false;
+      this._disabled =
+        this.product.userId === this.userId ||
+        !this.userId ||
+        (this.product.highest_bid === 0 && this._enteredPrice < this.minPrice) ||
+        (this.product.highest_bid !== 0 && this._enteredPrice <= this.minPrice)
+          ? true
+          : false;
       this._message = this.hide
         ? ''
         : this.product.userId === this.userId && this.userId !== ''
@@ -76,7 +95,26 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         : !this.userId
         ? 'Please login in order to place bid!'
         : '';
+      this._validation = this.disabled ? 'Please enter higher value' : '';
     }
+  }
+
+  valueChange(e) {
+    this._enteredPrice = e.target.value;
+    this.setMessageDisabled();
+  }
+
+  onSubmit(input: HTMLInputElement) {
+    this.setMessageDisabled();
+    if (!this.disabled) {
+      this.store.dispatch(
+        new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
+      );
+    }
+  }
+
+  clearMessages() {
+    this.store.dispatch(new ProductPageActions.ClearProductMessages());
   }
 
   get product(): FullProduct {
@@ -109,5 +147,17 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get noBids(): boolean {
     return this._noBids;
+  }
+
+  get bids(): Bid[] {
+    return this._bids;
+  }
+
+  get validation(): string {
+    return this._validation;
+  }
+
+  get enteredPrice(): number {
+    return this._enteredPrice;
   }
 }
