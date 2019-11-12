@@ -28,7 +28,7 @@ export class Auth implements OnInit, OnDestroy {
             sessionStorage.getItem('accessToken')
           ) {
             this.subscription.unsubscribe();
-            this.Router.navigate(['/']);
+            setTimeout(() => this.Router.navigate(['/']), 1200);
           }
 
           if (errors.email && !errorMessage) {
