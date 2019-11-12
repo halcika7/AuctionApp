@@ -57,10 +57,13 @@ export class DateAgoPipe extends AsyncPipe {
           second: 1
         };
         let counter = 0;
-        let vals = [];
+        const vals = [];
         for (const [i, j] of Object.keys(intervals).entries()) {
           counter = Math.floor(seconds / intervals[j]);
           seconds %= intervals[j];
+          if (i === Object.keys(intervals).length - 1 && counter === 0) {
+            vals.push(`${counter} ${j}s`);
+          }
           if (counter > 0) {
             if (counter === 1) {
               vals.push(`${counter} ${j}`);
@@ -69,6 +72,9 @@ export class DateAgoPipe extends AsyncPipe {
             }
           }
         }
+        // agoOrLeft => pipe argument which can be left or ago and based on that we concat that on the end of the string
+        // third option is when calculating time left until auction begins then append is true
+        // and do not add left or ago to the end of string
         return this.append ? vals.join(', ').concat(` ${this.agoOrLeft}`) : vals.join(', ');
       })
     );
