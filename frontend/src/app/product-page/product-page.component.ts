@@ -25,7 +25,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _validation = '';
   private _enteredPrice = null;
   private subscription = new Subscription();
-
   successMessage = '';
   failedMessage = '';
 

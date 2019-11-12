@@ -26,6 +26,9 @@ import { LandingPageProductsComponent } from './components/landing-page-products
 import { ProductTabsComponent } from './components/product-tabs/product-tabs.component';
 import { CollectionItemComponent } from './components/collection-item/collection-item.component';
 import { AllCategoriesComponent } from './containers/all-categories/all-categories.component';
+import { ProductPageComponent } from './product-page/product-page.component';
+import { ProductImagesComponent } from './components/product-images/product-images.component';
+import { ProductBidsComponent } from './components/product-bids/product-bids.component';
 
 // ngRx
 import * as fromApp from './store/app.reducer';
@@ -51,8 +54,6 @@ import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { DropdownNoautocloseDirective } from './shared/directives/dropdown-noautoclose.directive';
 import { TruncateTextPipe } from './shared/pipes/truncate-text.pipe';
-import { ProductPageComponent } from './product-page/product-page.component';
-import { ProductImagesComponent } from './components/product-images/product-images.component';
 import { DateAgoPipe } from './shared/pipes/date-ago.pipe';
 
 @NgModule({
@@ -81,7 +82,8 @@ import { DateAgoPipe } from './shared/pipes/date-ago.pipe';
     TruncateTextPipe,
     ProductPageComponent,
     ProductImagesComponent,
-    DateAgoPipe
+    DateAgoPipe,
+    ProductBidsComponent
   ],
   imports: [
     BrowserModule,

@@ -123,7 +123,7 @@ module.exports = {
                     featured: faker.random.boolean(),
                     auctionStart: startDate,
                     auctionEnd: newDate,
-                    userId: Math.floor(Math.random() * 100 + 1),
+                    userId: Math.floor(Math.random() * 2 + 1),
                     subcategoryId
                 });
             }

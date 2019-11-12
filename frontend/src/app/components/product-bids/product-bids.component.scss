@@ -1,0 +1,68 @@
+@import 'mixins';
+@import 'variables';
+
+.table-biders {
+  overflow-x: auto;
+  margin-bottom: 160px;
+  padding-bottom: 40px;
+}
+
+table.biders {
+  width: 100%;
+  color: getColor(light_black);
+  letter-spacing: 0.98px;
+  border-spacing: 0px;
+  border: 1px solid getColor(lighter_gray);
+  min-width: 650px;
+
+  thead tr {
+    background: getColor(lighter_gray);
+    height: 60px;
+
+    th {
+      @include fontMixin(20px, light);
+      text-align: left;
+      padding-left: 30px;
+    }
+  }
+
+  tbody tr td {
+    text-align: left;
+    padding-left: 30px;
+
+    &.highest {
+      color: getColor(light_green);
+    }
+    &.second {
+      color: getColor(gold);
+    }
+    &.third {
+      color: getColor(light_purple);
+    }
+  }
+
+  thead tr th:not(:first-child), tbody tr td:not(:first-child) {
+    width: 20%;
+  }
+
+  img {
+    @include heightWidth(65px, 65px);
+    @include padding($all: 5px);
+    border-radius: 50%;
+    background: getColor(lighter_gray);
+  }
+
+  tbody tr td {
+    @include fontMixin(18px, light);
+    vertical-align: middle;
+    height: 110px;
+
+    .user {
+      @include flex(center);
+
+      span {
+        margin-left: 30px;
+      }
+    }
+  }
+}
