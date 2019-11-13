@@ -29,7 +29,7 @@ export class LoginComponent extends Auth implements OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    super.ngOnDestroy();
+    super.destroy();
   }
 
   onSubmit() {

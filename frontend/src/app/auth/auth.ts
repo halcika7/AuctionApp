@@ -5,98 +5,94 @@ import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
 
-export class Auth implements OnInit, OnDestroy {
+export class Auth {
   private _message: string;
   private _form: FormGroup;
   private _showErrors = true;
   private _success = false;
   private _isClicked = false;
   private _login = true;
-  subscription: Subscription = new Subscription();
+  subscription: Subscription;
 
   constructor(
     private authStore: Store<any>,
     private Form: FormGroup,
     private Router: Router
-  ) {}
-
-  ngOnInit() {
+  ) {
     this._form = this.Form;
-    this.subscription.add(
-      this.authStore
-        .select("auth")
-        .subscribe(({ errorMessage, errors, accessToken, successMessage }) => {
-          if (
-            accessToken ||
-            localStorage.getItem("accessToken") ||
-            sessionStorage.getItem("accessToken")
-          ) {
-            this.subscription.unsubscribe();
-            setTimeout(() => this.Router.navigate(["/"]), 1200);
-          }
+    this.subscription = this.authStore
+      .select("auth")
+      .subscribe(({ errorMessage, errors, accessToken, successMessage }) => {
+        if (
+          accessToken ||
+          localStorage.getItem("accessToken") ||
+          sessionStorage.getItem("accessToken")
+        ) {
+          this.subscription.unsubscribe();
+          setTimeout(() => this.Router.navigate(["/"]), 1200);
+        }
 
-          if (errors.email && !errorMessage) {
-            this.form.controls.email.setErrors({ async: errors.email });
-            this.form.controls.email.markAsTouched();
-          } else {
-            this.form.controls.email.setErrors({});
-            this.form.controls.email.setValue(this.form.controls.email.value);
-          }
+        if (errors.email && !errorMessage) {
+          this.form.controls.email.setErrors({ async: errors.email });
+          this.form.controls.email.markAsTouched();
+        } else {
+          this.form.controls.email.setErrors({});
+          this.form.controls.email.setValue(this.form.controls.email.value);
+        }
 
-          if (errors.password && !errorMessage) {
-            this.form.controls.password.setErrors({ async: errors.password });
-            this.form.controls.password.markAsTouched();
+        if (errors.password && !errorMessage) {
+          this.form.controls.password.setErrors({ async: errors.password });
+          this.form.controls.password.markAsTouched();
+        } else {
+          this.form.controls.password.setErrors({});
+          this.form.controls.password.setValue(
+            this.form.controls.password.value
+          );
+        }
+
+        if (!this._login) {
+          if (errors.firstName && !errorMessage) {
+            this.form.controls.firstName.setErrors({
+              async: errors.firstName
+            });
+            this.form.controls.firstName.markAsTouched();
           } else {
-            this.form.controls.password.setErrors({});
-            this.form.controls.password.setValue(
-              this.form.controls.password.value
+            this.form.controls.firstName.setErrors({});
+            this.form.controls.firstName.setValue(
+              this.form.controls.firstName.value
             );
           }
 
-          if (!this._login) {
-            if (errors.firstName && !errorMessage) {
-              this.form.controls.firstName.setErrors({
-                async: errors.firstName
-              });
-              this.form.controls.firstName.markAsTouched();
-            } else {
-              this.form.controls.firstName.setErrors({});
-              this.form.controls.firstName.setValue(
-                this.form.controls.firstName.value
-              );
-            }
-
-            if (errors.lastName && !errorMessage) {
-              this.form.controls.lastName.setErrors({ async: errors.lastName });
-              this.form.controls.lastName.markAsTouched();
-            } else {
-              this.form.controls.lastName.setErrors({});
-              this.form.controls.lastName.setValue(
-                this.form.controls.lastName.value
-              );
-            }
-          }
-
-          if (successMessage || errorMessage) {
-            this._message = successMessage ? successMessage : errorMessage;
-            this._success = successMessage ? true : false;
+          if (errors.lastName && !errorMessage) {
+            this.form.controls.lastName.setErrors({ async: errors.lastName });
+            this.form.controls.lastName.markAsTouched();
           } else {
-            this._message = "";
-            this._success = false;
+            this.form.controls.lastName.setErrors({});
+            this.form.controls.lastName.setValue(
+              this.form.controls.lastName.value
+            );
           }
+        }
 
-          if (successMessage) {
-            this._showErrors = false;
-            this.form.reset();
-            setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000);
-          } else {
-            this.isClicked = false;
-          }
-        })
-    );
+        if (successMessage || errorMessage) {
+          this._message = successMessage ? successMessage : errorMessage;
+          this._success = successMessage ? true : false;
+        } else {
+          this._message = "";
+          this._success = false;
+        }
+
+        if (successMessage) {
+          this._showErrors = false;
+          this.form.reset();
+          setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000);
+        } else {
+          this.isClicked = false;
+        }
+      });
   }
 
-  ngOnDestroy() {
+  destroy() {
     this.subscription.unsubscribe();
   }
 
