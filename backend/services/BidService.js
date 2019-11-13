@@ -41,13 +41,13 @@ class BidService extends BaseService {
       if (userID === userId) {
         return {
           status: 403,
-          message: "You are not allowed to place bit on your own product"
+          message: "You are not allowed to place bid on your own product"
         };
       }
       if (bid > MAX_BID) {
         return {
           status: 403,
-          message: "Please bid higher than product price!"
+          message: `Maximum bid allowed is $${MAX_BID}!`
         };
       }
       if (!highestBid && price > bid) {
