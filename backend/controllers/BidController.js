@@ -9,13 +9,13 @@ class BidController extends BaseController {
   async makeBid(req, res) {
     const { productId, bid } = req.body;
     const { userId } = req;
-    const {
-      message,
-      status,
-      highest_bid
-    } = await BidService.createBid(userId, productId, bid);
+    const { message, status, highest_bid } = await BidService.createBid(
+      userId,
+      productId,
+      bid
+    );
     if (status === 403) {
-      return super.sendResponse(res, status, { message, highest_bid });
+      return super.sendResponse(res, status, { message });
     }
     return super.sendResponse(res, status, { message, highest_bid });
   }

@@ -17,6 +17,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
   private _minPrice: any;
+  private _maxPrice: number = 20000;
   private _hide = false;
   private _disabled = false;
   private _userId: string;
@@ -94,7 +95,8 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         !this.userId ||
         (this.product.highest_bid === 0 &&
           this._enteredPrice < this._minPrice) ||
-        (this.product.highest_bid !== 0 && this._enteredPrice <= this._minPrice)
+        (this.product.highest_bid !== 0 && this._enteredPrice <= this._minPrice) ||
+        this._enteredPrice > this.maxPrice
           ? true
           : false;
       if (!this.statusCode) {
@@ -168,5 +170,13 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get statusCode(): number {
     return this._statusCode;
+  }
+
+  get minPrice(): number {
+    return this._minPrice;
+  }
+
+  get maxPrice(): number {
+    return this._maxPrice;
   }
 }

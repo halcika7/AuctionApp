@@ -2,7 +2,7 @@ const BaseService = require("./BaseService");
 const Bid = require("../models/Bid");
 const User = require("../models/User");
 const { getAuctionEndProduct } = require("../helpers/productFilter");
-const { LIMIT_BIDS } = require("../config/configs");
+const { LIMIT_BIDS, MAX_BID } = require("../config/configs");
 
 class BidService extends BaseService {
   constructor() {
@@ -23,7 +23,7 @@ class BidService extends BaseService {
         where: {
           productId
         },
-        attributes: ["price"],
+        attributes: ["price", "userId"],
         order: [["price", "DESC"]]
       });
       if (!auctionEnd) {
@@ -32,10 +32,22 @@ class BidService extends BaseService {
           message: "Auction ended.Your bid was unsuccessfull!!"
         };
       }
+      if (highestBid.userId === userID) {
+        return {
+          status: 403,
+          message: "You are already highest bidder"
+        };
+      }
       if (userID === userId) {
         return {
           status: 403,
           message: "You are not allowed to place bit on your own product"
+        };
+      }
+      if (bid > MAX_BID) {
+        return {
+          status: 403,
+          message: "Please bid higher than product price!"
         };
       }
       if (!highestBid && price > bid) {
@@ -51,7 +63,7 @@ class BidService extends BaseService {
         };
       }
 
-      await Bid.create({ price: bid, userId, productId });
+      await Bid.create({ price: bid, userId: userID, productId });
 
       return {
         status: 200,

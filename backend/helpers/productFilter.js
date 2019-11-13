@@ -101,9 +101,12 @@ exports.getProductById = async id => {
           db.fn("coalesce", db.fn("MAX", db.col("Bids.price")), 0),
           "highest_bid"
         ],
-        [db.fn("COUNT", db.col("Bids.price")), "number_of_bids"]
+        [
+          db.fn("coalesce", db.fn("COUNT", db.col("Bids.price")), 0),
+          "number_of_bids"
+        ]
       ],
-      exclude: ["featured", "Bids.price"]
+      exclude: ["featured"]
     },
     include: [
       {
