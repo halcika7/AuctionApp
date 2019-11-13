@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FullProduct, Bid } from "./product-page.reducer";
-import { Product } from "@app/landing-page/store/landing-page.reducers";
+import { Store } from "@ngrx/store";
 import { Actions, ofType, Effect } from "@ngrx/effects";
-import * as ProductPageActions from "./product-page.actions";
-import { LogoutStart } from "@app/auth/store/auth.actions";
 import { switchMap, map, catchError } from "rxjs/operators";
 import { of } from "rxjs";
+import { Product } from "@app/landing-page/store/landing-page.reducers";
+import * as ProductPageActions from "./product-page.actions";
+import { LogoutStart, RefreshToken } from "@app/auth/store/auth.actions";
 
 @Injectable()
 export class ProductPageEffects {
@@ -32,8 +33,20 @@ export class ProductPageEffects {
       return this.http
         .post<any>("/bids/make", { productId, bid })
         .pipe(
-          map(data => new ProductPageActions.ProductBidSuccess(data)),
+          map(data => {
+            if (data.accessToken) {
+              this.store.dispatch(
+                new RefreshToken({ accessToken: data.accessToken })
+              );
+            }
+            return new ProductPageActions.ProductBidSuccess(data);
+          }),
           catchError(data => {
+            if (data.accessToken) {
+              this.store.dispatch(
+                new RefreshToken({ accessToken: data.accessToken })
+              );
+            }
             if (data.error.authorizationError) {
               return of(new LogoutStart());
             }
@@ -55,5 +68,9 @@ export class ProductPageEffects {
     })
   );
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private store: Store<any>
+  ) {}
 }

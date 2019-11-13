@@ -1,4 +1,8 @@
-const { decodeToken, findUserByEmail } = require("../helpers/authHelper");
+const {
+  decodeToken,
+  findUserByEmail,
+  createAccessToken
+} = require("../helpers/authHelper");
 
 module.exports = async (req, res, next) => {
   try {
@@ -10,6 +14,8 @@ module.exports = async (req, res, next) => {
     if (
       !authorization ||
       !refreshToken ||
+      !decoded ||
+      !decodedRefresh ||
       Date.now() >= decodedRefresh.exp * 1000 ||
       !user
     ) {
@@ -17,6 +23,15 @@ module.exports = async (req, res, next) => {
         .status(401)
         .json({ authorizationError: "Unauthorized request" });
     }
+
+    if (decoded.exp * 1000 <= Date.now()) {
+      const accessToken = createAccessToken({
+        id: decoded.id,
+        email: decoded.email
+      });
+      req.accessToken = accessToken;
+    }
+
     if (decoded.id) {
       req.userId = decoded.id;
     }

@@ -60,7 +60,11 @@ export class ProductBidStart implements Action {
 export class ProductBidSuccess implements Action {
   readonly type = PRODUCT_BID_SUCCESS;
   constructor(
-    public payload: { message: string; highest_bid: string | number }
+    public payload: {
+      message: string;
+      highest_bid: string | number;
+      accessToken?: string;
+    }
   ) {}
 }
 
@@ -71,6 +75,7 @@ export class ProductBidFailed implements Action {
       error: {
         message?: string;
         authorizationError?: string;
+        accessToken?: string;
       };
     }
   ) {}
