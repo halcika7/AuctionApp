@@ -1,12 +1,7 @@
-@import 'variables';
-@import 'fonts';
+@import "variables";
+@import "fonts";
 
-@mixin flex(
-  $align: false,
-  $justify: false,
-  $direction: false,
-  $wrap: false)
-{
+@mixin flex($align: false, $justify: false, $direction: false, $wrap: false) {
   display: flex;
   @if $align {
     align-items: $align;
@@ -31,7 +26,7 @@
   $autoRows: false,
   $autoCols: false,
   $templateCols: false
-  ) {
+) {
   display: grid;
 
   @if $columns {
@@ -59,58 +54,60 @@
   }
 }
 
-@mixin  margin(
+@mixin margin(
   $top: false,
   $bottom: false,
   $right: false,
   $left: false,
-  $all: false) {
-    @if $all {
-      margin: $all;
-    }
+  $all: false
+) {
+  @if $all {
+    margin: $all;
+  }
 
-    @if $top {
-      margin-top: $top;
-    }
+  @if $top {
+    margin-top: $top;
+  }
 
-    @if $bottom {
-      margin-bottom: $bottom;
-    }
+  @if $bottom {
+    margin-bottom: $bottom;
+  }
 
-    @if $right {
-      margin-right: $right;
-    }
+  @if $right {
+    margin-right: $right;
+  }
 
-    @if $left {
-      margin-left: $left;
-    }
+  @if $left {
+    margin-left: $left;
+  }
 }
 
-@mixin  padding(
+@mixin padding(
   $top: false,
   $bottom: false,
   $right: false,
   $left: false,
-  $all: false) {
-    @if $all {
-      padding: $all;
-    }
+  $all: false
+) {
+  @if $all {
+    padding: $all;
+  }
 
-    @if $top {
-      padding-top: $top;
-    }
+  @if $top {
+    padding-top: $top;
+  }
 
-    @if $bottom {
-      padding-bottom: $bottom;
-    }
+  @if $bottom {
+    padding-bottom: $bottom;
+  }
 
-    @if $right {
-      padding-right: $right;
-    }
+  @if $right {
+    padding-right: $right;
+  }
 
-    @if $left {
-      padding-left: $left;
-    }
+  @if $left {
+    padding-left: $left;
+  }
 }
 
 @mixin fontMixin(
@@ -120,7 +117,8 @@
   $color: false,
   $transform: false,
   $decoration: false,
-  $lineH: false) {
+  $lineH: false
+) {
   @if $fontS {
     font-size: $fontS;
   }

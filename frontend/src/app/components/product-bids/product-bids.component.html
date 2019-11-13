@@ -15,8 +15,14 @@
             <span>{{ bid.User.firstName }} {{ bid.User.lastName }}</span>
           </div>
         </td>
-        <td>{{ bid.dateBid | date: 'd MMMM y' }}</td>
-        <td [ngClass]="{ highest: index === 0, second: index === 1, third: index === 2 }">
+        <td>{{ bid.dateBid | date: "d MMMM y" }}</td>
+        <td
+          [ngClass]="{
+            highest: index === 0,
+            second: index === 1,
+            third: index === 2
+          }"
+        >
           {{ bid.price | currency }}
         </td>
       </tr>

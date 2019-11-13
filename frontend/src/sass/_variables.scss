@@ -1,50 +1,39 @@
 $colors: (
   black: #000000,
   light_black: #252525,
-
-  white: #FFFFFF,
-  white2: #FFFFFE,
-  darker_white: #FCFCFC,
-  darker_white2: #FAFAFA,
-
-  lighter_gray: #ECECEC,
-  lighter_gray2: #E4E5EC,
-  light_gray: #D8D8D8,
-  gray: #9B9B9B,
+  white: #ffffff,
+  white2: #fffffe,
+  darker_white: #fcfcfc,
+  darker_white2: #fafafa,
+  lighter_gray: #ececec,
+  lighter_gray2: #e4e5ec,
+  light_gray: #d8d8d8,
+  gray: #9b9b9b,
   gray2: #979797,
-  dark_gray: #3B3B3B,
-
-  purple: #8367D8,
-  light_purple: #C4BFD6,
-
-  blue: #0072CE,
-  blue2: #0066CC,
-  dark_blue: #26337A,
+  dark_gray: #3b3b3b,
+  purple: #8367d8,
+  light_purple: #c4bfd6,
+  blue: #0072ce,
+  blue2: #0066cc,
+  dark_blue: #26337a,
   darker_blue: #000066,
-  light_blue: #5B9ED6,
+  light_blue: #5b9ed6,
   blue_purple: #475993,
   blue_purple2: #415994,
-  turquoise: #67B8BF,
-
-  light_green: #6CC047,
+  turquoise: #67b8bf,
+  light_green: #6cc047,
   dark_green: #417505,
-
-  red: #CC0000,
-  light_red: #CD5542,
-  marron: #A6555F,
-
-  orange: #FF9900,
-  darker_orange: #EC982D,
-  light_orange: #F6F2E5,
-
-  gmail: #CD5542,
-
-  gold: #AB944E,
-
-  inputBorder: #E3E3E3
-
+  red: #cc0000,
+  light_red: #cd5542,
+  marron: #a6555f,
+  orange: #ff9900,
+  darker_orange: #ec982d,
+  light_orange: #f6f2e5,
+  gmail: #cd5542,
+  gold: #ab944e,
+  inputBorder: #e3e3e3
 );
 
 @function getColor($colorName) {
-  @return map-get($colors, $colorName)
+  @return map-get($colors, $colorName);
 }

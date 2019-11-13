@@ -1,6 +1,6 @@
-@import 'variables';
-@import 'resets';
-@import 'mixins';
+@import "variables";
+@import "resets";
+@import "mixins";
 
 app-root {
   @include flex($direction: column);
@@ -13,7 +13,8 @@ app-footer {
   @include margin(auto);
 }
 
-.container, .container-fluid {
+.container,
+.container-fluid {
   @include margin($right: auto, $left: auto);
   @include padding($right: 15px, $left: 15px);
   position: relative;
@@ -93,7 +94,7 @@ app-footer {
       position: absolute;
       transform: scale(0);
       background: transparent;
-      transition: all .123s ease-in-out;
+      transition: all 0.123s ease-in-out;
       pointer-events: none;
       color: getColor(light_black);
     }
@@ -176,12 +177,16 @@ app-footer {
       @include heightWidth(54px, 280px);
       @include boxShadowBackground(true);
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         box-shadow: none;
       }
 
       &.facebook-link {
-        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid getColor(blue_purple));
+        @include boxShadowBackground(
+          $bckg: blue_purple,
+          $border: 3px solid getColor(blue_purple)
+        );
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -195,7 +200,10 @@ app-footer {
       }
 
       &.gmail-link {
-        @include boxShadowBackground($bckg: gmail, $border: 3px solid getColor(gmail));
+        @include boxShadowBackground(
+          $bckg: gmail,
+          $border: 3px solid getColor(gmail)
+        );
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -287,7 +295,6 @@ app-footer {
     display: block;
 
     &.async {
-
       > span {
         @include margin($top: 5px);
         display: block;
@@ -325,15 +332,22 @@ app-footer {
 
       a {
         @include padding($bottom: 13px);
-        @include fontMixin(28px, regular, 0.98px, light_black, $decoration: none);
+        @include fontMixin(
+          28px,
+          regular,
+          0.98px,
+          light_black,
+          $decoration: none
+        );
         height: 34px;
         display: block;
-        transition: border .23s ease-in-out;
+        transition: border 0.23s ease-in-out;
         border-bottom: 4px solid transparent;
 
-        &.active, &:hover {
-          border-bottom: 4px solid getColor(purple);;
-          transition: border .23s ease-in-out;
+        &.active,
+        &:hover {
+          border-bottom: 4px solid getColor(purple);
+          transition: border 0.23s ease-in-out;
         }
       }
     }
@@ -341,7 +355,11 @@ app-footer {
 }
 
 .feature-products .collections {
-  @include grid($autoRows: 350px, $autoCols: true, $templateCols: auto auto auto auto);
+  @include grid(
+    $autoRows: 350px,
+    $autoCols: true,
+    $templateCols: auto auto auto auto
+  );
 }
 
 .feature-products .collections .collection {
@@ -350,12 +368,12 @@ app-footer {
 }
 
 .feature-products .collections app-collection-item:first-child .collection,
-.feature-products .collections app-collection-item:nth-child(5n) .collection{
+.feature-products .collections app-collection-item:nth-child(5n) .collection {
   margin-left: 0px;
 }
 
 .feature-products .collections app-collection-item:nth-child(4n) .collection,
-.feature-products .collections app-collection-item:last-child > .collection{
+.feature-products .collections app-collection-item:last-child > .collection {
   margin-right: 0px;
 }
 

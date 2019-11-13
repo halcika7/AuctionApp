@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@import "mixins";
+@import "variables";
 
 .table-biders {
   overflow-x: auto;
@@ -41,7 +41,8 @@ table.biders {
     }
   }
 
-  thead tr th:not(:first-child), tbody tr td:not(:first-child) {
+  thead tr th:not(:first-child),
+  tbody tr td:not(:first-child) {
     width: 20%;
   }
 

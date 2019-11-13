@@ -1,4 +1,4 @@
-import * as LandingPageActions from '@app/landing-page/store/landing-page.actions';
+import * as LandingPageActions from "@app/landing-page/store/landing-page.actions";
 
 export interface Product {
   name: string;
@@ -27,7 +27,7 @@ const initialState: State = {
   topRated: [],
   lastChance: [],
   heroProduct: null,
-  failedMessage: '',
+  failedMessage: "",
   noMore: false
 };
 
@@ -43,14 +43,24 @@ export function landingPageReducer(
     case LandingPageActions.LANDING_PAGE_SUCCESS:
       return {
         ...state,
-        featured: action.payload.featured ? action.payload.featured : state.featured,
+        featured: action.payload.featured
+          ? action.payload.featured
+          : state.featured,
         featuredCollections: action.payload.featuredCollections
           ? action.payload.featuredCollections
           : state.featuredCollections,
-        newArrivals: action.payload.newArrivals ? action.payload.newArrivals : state.newArrivals,
-        topRated: action.payload.topRated ? action.payload.topRated : state.topRated,
-        lastChance: action.payload.lastChance ? action.payload.lastChance : state.lastChance,
-        heroProduct: action.payload.heroProduct ? action.payload.heroProduct : state.heroProduct,
+        newArrivals: action.payload.newArrivals
+          ? action.payload.newArrivals
+          : state.newArrivals,
+        topRated: action.payload.topRated
+          ? action.payload.topRated
+          : state.topRated,
+        lastChance: action.payload.lastChance
+          ? action.payload.lastChance
+          : state.lastChance,
+        heroProduct: action.payload.heroProduct
+          ? action.payload.heroProduct
+          : state.heroProduct,
         noMore: action.payload.noMore
       };
     case LandingPageActions.LANDING_PAGE_FAILED:

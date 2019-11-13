@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import "variables";
+@import "mixins";
 
 header {
   background: getColor(light_black);
@@ -31,7 +31,10 @@ header {
   }
 }
 
-.links, .login, .navigation, .search {
+.links,
+.login,
+.navigation,
+.search {
   @include flex(center);
 }
 
@@ -61,7 +64,8 @@ header {
     @include margin($all: 0 19px);
   }
 
-  a, button {
+  a,
+  button {
     @include fontMixin(14px, bold, 0.49px, white, $decoration: none);
   }
 }
@@ -85,7 +89,8 @@ header {
       }
     }
 
-    .brand, .nav-links {
+    .brand,
+    .nav-links {
       text-transform: uppercase;
     }
 
@@ -103,7 +108,7 @@ header {
 
         span {
           @include heightWidth(20px, 4px);
-          background: #C4BFD6;
+          background: #c4bfd6;
           display: inline-block;
           border-radius: 1px;
 
@@ -141,7 +146,11 @@ header {
     input {
       @include padding($all: 15px 35px 15px 15px);
       @include fontMixin(18px, regular, 0.63px, light_black);
-      @include boxShadowBackground(true, white, 1px solid getColor(inputBorder));
+      @include boxShadowBackground(
+        true,
+        white,
+        1px solid getColor(inputBorder)
+      );
       width: 100%;
       outline: none;
     }
@@ -184,7 +193,8 @@ header {
       }
 
       > a {
-        &.active, &:hover {
+        &.active,
+        &:hover {
           @include fontMixin(16px, $letterS: 0.56px, $color: purple);
         }
       }
@@ -232,7 +242,8 @@ header {
     @include padding($left: 25px);
   }
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     color: getColor(purple);
   }
 }

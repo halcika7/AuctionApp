@@ -1,21 +1,17 @@
 <app-breadcrumb
   [title]="'single product'"
-  [other]="[{ value: 'shop /', link: '/shop' }, { value: 'single product', link: '' }]"
+  [other]="[
+    { value: 'shop /', link: '/shop' },
+    { value: 'single product', link: '' }
+  ]"
 ></app-breadcrumb>
 
-<app-alert *ngIf="message" [message]="message" [type]="false" [closable]="false"></app-alert>
 <app-alert
-  *ngIf="successMessage"
-  [message]="successMessage"
-  [type]="true"
-  [closable]="true"
-  (closeAlert)="clearMessages()"
-></app-alert>
-<app-alert
-  *ngIf="failedMessage"
-  [message]="failedMessage"
-  [gold]="true"
-  [closable]="true"
+  *ngIf="message"
+  [message]="message"
+  [gold]="statusCode === 500"
+  [type]="statusCode === 200"
+  [closable]="!statusCode ? false : true"
   (closeAlert)="clearMessages()"
 ></app-alert>
 
@@ -37,7 +33,9 @@
             name="price"
           />
           <span *ngIf="noBids">Enter {{ minPrice | currency }} or more</span>
-          <span *ngIf="!noBids">Enter higher than {{ minPrice | currency }}</span>
+          <span *ngIf="!noBids"
+            >Enter higher than {{ minPrice | currency }}</span
+          >
         </div>
         <button class="bid-button" [disabled]="disabled">Place bid</button>
       </div>
@@ -48,10 +46,13 @@
           Highest bid: <span>{{ product.highest_bid | currency }}</span>
         </p>
         <p>Number of bids: {{ product.number_of_bids }}</p>
-        <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: 'left' }] }}</p>
+        <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: "left" }] }}</p>
         <p>
           Started:
-          {{ product.auctionStart | dateAgo: [{ agoOrLeft: 'ago', response: 'Not started yet' }] }}
+          {{
+            product.auctionStart
+              | dateAgo: [{ agoOrLeft: "ago", response: "Not started yet" }]
+          }}
         </p>
       </ng-template>
       <p *ngIf="hide">
@@ -59,7 +60,14 @@
         {{
           product.auctionStart
             | dateAgo
-              : [{ agoOrLeft: 'left', response: 'Not started yet', loop: true, append: false }]
+              : [
+                  {
+                    agoOrLeft: "left",
+                    response: "Not started yet",
+                    loop: true,
+                    append: false
+                  }
+                ]
         }}
       </p>
     </div>

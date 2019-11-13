@@ -1,5 +1,7 @@
 <div class="wrapper">
-  <button [ngClass]="{ show: isOpen ? true : false }" (click)="toggle()">Categories</button>
+  <button [ngClass]="{ show: isOpen ? true : false }" (click)="toggle()">
+    Categories
+  </button>
   <ul class="categories">
     <h3>Categories</h3>
     <li *ngFor="let category of categories">

@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromApp from '@app/store/app.reducer';
-import * as AuthActions from '@app/auth/store/auth.actions';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Store } from "@ngrx/store";
+import * as fromApp from "@app/store/app.reducer";
+import * as AuthActions from "@app/auth/store/auth.actions";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  selector: "app-header",
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.scss"]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private _isAuthenticated = null;
@@ -17,15 +17,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.store
-      .select('auth')
+      .select("auth")
       .subscribe(({ accessToken, loading, remember }) => {
         if (!loading) {
-          if (accessToken && (localStorage.getItem('accessToken') || remember)) {
+          if (
+            accessToken &&
+            (localStorage.getItem("accessToken") || remember)
+          ) {
             this._isAuthenticated = true;
-            localStorage.setItem('accessToken', accessToken);
-          } else if (accessToken && (sessionStorage.getItem('accessToken') || !remember)) {
+            localStorage.setItem("accessToken", accessToken);
+          } else if (
+            accessToken &&
+            (sessionStorage.getItem("accessToken") || !remember)
+          ) {
             this._isAuthenticated = true;
-            sessionStorage.setItem('accessToken', accessToken);
+            sessionStorage.setItem("accessToken", accessToken);
           } else {
             this._isAuthenticated = false;
           }
@@ -38,8 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem('accessToken');
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
     this.store.dispatch(new AuthActions.LogoutStart());
   }
 

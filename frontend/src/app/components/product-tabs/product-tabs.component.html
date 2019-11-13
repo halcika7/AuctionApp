@@ -29,11 +29,16 @@
     <div class="collections">
       <p *ngIf="products.length === 0; else newA">No products</p>
       <ng-template #newA>
-        <app-collection-item *ngFor="let item of products" [item]="item"></app-collection-item>
+        <app-collection-item
+          *ngFor="let item of products"
+          [item]="item"
+        ></app-collection-item>
       </ng-template>
     </div>
     <div class="button-wrapper" *ngIf="showButton">
-      <button class="load-more-button" type="button" (click)="loadMore($event)">Load More</button>
+      <button class="load-more-button" type="button" (click)="loadMore($event)">
+        Load More
+      </button>
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@import "mixins";
+@import "variables";
 
 .about-product {
   @include flex();
@@ -32,8 +32,8 @@
 
       input {
         display: block;
-        background: #ECECEC;
-        border: 1px solid #D8D8D8;
+        background: #ececec;
+        border: 1px solid #d8d8d8;
         height: 54px;
         margin-bottom: 9px;
         outline: none;
@@ -89,7 +89,11 @@
     @include flex(center, center);
     @include heightWidth(36px, 140px);
     @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
-    @include boxShadowBackground(false, white, 3px solid getColor(lighter_gray));
+    @include boxShadowBackground(
+      false,
+      white,
+      3px solid getColor(lighter_gray)
+    );
     cursor: pointer;
     outline: none;
 

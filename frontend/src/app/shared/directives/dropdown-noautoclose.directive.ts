@@ -1,12 +1,17 @@
-import { Directive, HostBinding, HostListener, ElementRef } from '@angular/core';
+import {
+  Directive,
+  HostBinding,
+  HostListener,
+  ElementRef
+} from "@angular/core";
 
 @Directive({
-  selector: '[appDropdownNoautoclose]'
+  selector: "[appDropdownNoautoclose]"
 })
 export class DropdownNoautocloseDirective {
-  @HostBinding('class.open') isOpen = false;
+  @HostBinding("class.open") isOpen = false;
 
-  @HostListener('click') toggleOpen() {
+  @HostListener("click") toggleOpen() {
     this.isOpen = !this.isOpen;
   }
   constructor(private elRef: ElementRef) {}

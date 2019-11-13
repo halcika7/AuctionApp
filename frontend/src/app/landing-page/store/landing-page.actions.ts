@@ -1,16 +1,16 @@
-import { Action } from '@ngrx/store';
-import { Product } from '@app/landing-page/store/landing-page.reducers';
-import { Categories } from '@app/containers/all-categories/store/all-categories.reducer';
+import { Action } from "@ngrx/store";
+import { Product } from "@app/landing-page/store/landing-page.reducers";
+import { Categories } from "@app/containers/all-categories/store/all-categories.reducer";
 
-export const LOAD_MORE_START = 'LOAD_MORE_START';
-export const LOAD_MORE_SUCCESS = 'LOAD_MORE_SUCCESS';
-export const LOAD_MORE_FAILED = 'LOAD_MORE_FAILED';
+export const LOAD_MORE_START = "LOAD_MORE_START";
+export const LOAD_MORE_SUCCESS = "LOAD_MORE_SUCCESS";
+export const LOAD_MORE_FAILED = "LOAD_MORE_FAILED";
 
-export const LANDING_PAGE_START = 'LANDING_PAGE_START';
-export const LANDING_PAGE_SUCCESS = 'LANDING_PAGE_SUCCESS';
-export const LANDING_PAGE_FAILED = 'LANDING_PAGE_FAILED';
+export const LANDING_PAGE_START = "LANDING_PAGE_START";
+export const LANDING_PAGE_SUCCESS = "LANDING_PAGE_SUCCESS";
+export const LANDING_PAGE_FAILED = "LANDING_PAGE_FAILED";
 
-export const CLEAR_LANDING_STATE = 'CLEAR_LANDING_STATE';
+export const CLEAR_LANDING_STATE = "CLEAR_LANDING_STATE";
 
 export class ClearLandingState implements Action {
   readonly type = CLEAR_LANDING_STATE;

@@ -1,16 +1,16 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: 'truncateText'
+  name: "truncateText"
 })
 export class TruncateTextPipe implements PipeTransform {
   transform(value: string, length: number = 100): Error | string {
-    if(typeof value !==  'string') {
-      return new Error('Value must be a string');
+    if (typeof value !== "string") {
+      return new Error("Value must be a string");
     }
     if (value.length <= length) {
       return value;
     }
-    return value.slice(0, length).concat('...');
+    return value.slice(0, length).concat("...");
   }
 }

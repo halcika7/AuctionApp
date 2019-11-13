@@ -21,8 +21,8 @@ export interface State {
   similarProducts: Product[];
   error: string;
   bids: Bid[];
-  failedMessage: string;
-  successMessage: string;
+  message: string;
+  code: number;
 }
 
 const initialState: State = {
@@ -43,8 +43,8 @@ const initialState: State = {
   similarProducts: [],
   error: '',
   bids: [],
-  failedMessage: '',
-  successMessage: ''
+  message: '',
+  code: null
 };
 
 export function productPageReducer(
@@ -74,14 +74,14 @@ export function productPageReducer(
     case ProductPageActions.CLEAR_PRODUCT_MESSAGES:
       return {
         ...state,
-        successMessage: '',
-        failedMessage: ''
+        message: '',
+        code: null
       };
     case ProductPageActions.PRODUCT_BID_SUCCESS:
       return {
         ...initialState,
-        successMessage: action.payload.successMessage,
-        failedMessage: '',
+        message: action.payload.message,
+        code: 200,
         product: {
           ...state.product,
           highest_bid: action.payload.highest_bid,
@@ -95,8 +95,8 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_BID_FAILED:
       return {
         ...state,
-        successMessage: '',
-        failedMessage: action.payload.error.failedMessage
+        message: action.payload.error.message,
+        code: 500
       };
     default:
       return state;

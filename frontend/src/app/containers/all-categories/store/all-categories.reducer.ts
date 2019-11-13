@@ -1,4 +1,4 @@
-import * as CategoriesPageActions from '@app/containers/all-categories/store/all-categories.actions';
+import * as CategoriesPageActions from "@app/containers/all-categories/store/all-categories.actions";
 
 export interface Category {
   id: string;
@@ -16,7 +16,7 @@ export interface State {
 
 const initialState: State = {
   categories: [],
-  failedMessage: ''
+  failedMessage: ""
 };
 
 export function categoriesPageReducer(
