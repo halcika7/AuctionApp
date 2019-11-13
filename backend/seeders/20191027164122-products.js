@@ -112,7 +112,7 @@ module.exports = {
         let date = new Date();
         let startDate = new Date(date);
         let newDate = new Date(startDate);
-        startDate.setDate(startDate.getDate() + faker.random.number(4));
+        startDate.setDate(startDate.getDate() + faker.random.number(1));
         newDate.setDate(startDate.getDate() + faker.random.number(30));
 
         products.push({
