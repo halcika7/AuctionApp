@@ -93,8 +93,8 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         this.product.userId === this.userId ||
         !this.userId ||
         (this.product.highest_bid === 0 &&
-          this._enteredPrice < this.minPrice) ||
-        (this.product.highest_bid !== 0 && this._enteredPrice <= this.minPrice)
+          this._enteredPrice < this._minPrice) ||
+        (this.product.highest_bid !== 0 && this._enteredPrice <= this._minPrice)
           ? true
           : false;
       if (!this.statusCode) {
@@ -136,10 +136,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get similarProducts(): Product[] {
     return this._similarProducts;
-  }
-
-  get minPrice(): any {
-    return this._minPrice;
   }
 
   get hide(): boolean {

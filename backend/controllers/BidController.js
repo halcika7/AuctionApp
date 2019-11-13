@@ -14,7 +14,7 @@ class BidController extends BaseController {
       status,
       highest_bid
     } = await BidService.createBid(userId, productId, bid);
-    if (staus === 403) {
+    if (status === 403) {
       return super.sendResponse(res, status, { message, highest_bid });
     }
     return super.sendResponse(res, status, { message, highest_bid });
