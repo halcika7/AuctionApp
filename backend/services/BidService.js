@@ -32,7 +32,7 @@ class BidService extends BaseService {
           message: "Auction ended.Your bid was unsuccessfull!!"
         };
       }
-      if (highestBid.userId === userID) {
+      if (highestBid && highestBid.userId === userID) {
         return {
           status: 403,
           message: "You are already highest bidder"
