@@ -48,7 +48,7 @@ class AuthService extends BaseService {
       return {
         status: 200,
         response: {
-          successMessage: "success",
+          successMessage: "You're successfully logedin",
           accessToken,
           remember: data.remember
         },
