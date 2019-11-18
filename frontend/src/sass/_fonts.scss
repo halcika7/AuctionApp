@@ -5,5 +5,5 @@ $weight: (
 );
 
 @function getWeight($weightName) {
-  @return map-get($weight, $weightName)
+  @return map-get($weight, $weightName);
 }

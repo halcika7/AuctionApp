@@ -1,8 +1,0 @@
-{
-    "scripts": {
-      "create-db": "node ./config/createDb.js",
-      "migrate": "npx sequelize-cli db:migrate",
-      "seed": "npx sequelize-cli db:seed:all"
-    }
-  }
-  

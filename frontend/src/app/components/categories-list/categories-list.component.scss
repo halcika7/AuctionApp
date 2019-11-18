@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import "variables";
+@import "mixins";
 
 .wrapper {
   position: relative;
@@ -45,11 +45,18 @@
     }
 
     li > {
-      p, a {
+      p,
+      a {
         @include flex(center);
         @include margin($all: 0);
         @include padding($all: 0 20px);
-        @include fontMixin(16px, regular, 0.56px, light_black, $decoration: none);
+        @include fontMixin(
+          16px,
+          regular,
+          0.56px,
+          light_black,
+          $decoration: none
+        );
         height: 49px;
         border-bottom: 1px solid getColor(lighter_gray);
         cursor: pointer;
@@ -61,7 +68,13 @@
         @include flex(center);
         @include margin($all: 0);
         @include padding($all: 0 0 0 30px);
-        @include fontMixin(14px, regular, 0.56px, light_black, $decoration: none);
+        @include fontMixin(
+          14px,
+          regular,
+          0.56px,
+          light_black,
+          $decoration: none
+        );
         border-bottom: 1px solid getColor(lighter_gray);
         cursor: pointer;
         border-bottom: none;
@@ -74,7 +87,9 @@
     }
 
     li > {
-      p:hover, a:hover, p.open {
+      p:hover,
+      a:hover,
+      p.open {
         color: getColor(purple);
         border-bottom: 1px solid getColor(purple);
       }

@@ -1,21 +1,44 @@
-const { verifyAccessToken } = require('../helpers/authHelper');
-const { setRefreshTokenCookie } = require('../services/AuthService');
+const {
+  decodeToken,
+  findUserByEmail,
+  createAccessToken
+} = require("../helpers/authHelper");
 
-module.exports = (req, res, next) => {
-    const authorization = req.headers['authorization'];
-    if (!authorization) {
-        return helper(res);
+module.exports = async (req, res, next) => {
+  try {
+    const authorization = req.headers.authorization.split(" ")[1] || null;
+    const refreshToken = req.cookies.jid;
+    const decoded = decodeToken(authorization);
+    const decodedRefresh = decodeToken(refreshToken);
+    const user = await findUserByEmail(decoded.email, false);
+    if (
+      !authorization ||
+      !refreshToken ||
+      !decoded ||
+      !decodedRefresh ||
+      Date.now() >= decodedRefresh.exp * 1000 ||
+      !user
+    ) {
+      return res
+        .status(401)
+        .json({ authorizationError: "Unauthorized request. Please login" });
     }
-    try {
-        const payload = verifyAccessToken(authorization);
-        req.payload = payload;
-    } catch (error) {
-        return helper(res);
+
+    if (decoded.exp * 1000 <= Date.now()) {
+      const accessToken = createAccessToken({
+        id: decoded.id,
+        email: decoded.email
+      });
+      req.accessToken = accessToken;
     }
-    return next();
+
+    if (decoded.id) {
+      req.userId = decoded.id;
+    }
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ authorizationError: "Unauthorized request. Please login" });
+  }
+  return next();
 };
-
-function helper(res) {
-    setRefreshTokenCookie(res, '');
-    return res.status(200).json({ authorizationError: 'Unauthorized request', accessToken: '' });
-}

@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromApp from '@app/store/app.reducer';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Store } from "@ngrx/store";
+import * as fromApp from "@app/store/app.reducer";
+import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'app-product-images',
-  templateUrl: './product-images.component.html',
-  styleUrls: ['./product-images.component.scss']
+  selector: "app-product-images",
+  templateUrl: "./product-images.component.html",
+  styleUrls: ["./product-images.component.scss"]
 })
 export class ProductImagesComponent implements OnInit, OnDestroy {
   private _images = [];
@@ -19,10 +19,13 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.store
-      .select('productPage')
+      .select("productPage")
       .pipe(
         map(state => ({
-          ProductImages: [{ image: state.product.picture }, ...state.product.ProductImages]
+          ProductImages: [
+            { image: state.product.picture },
+            ...state.product.ProductImages
+          ]
         }))
       )
       .subscribe(({ ProductImages }) => {

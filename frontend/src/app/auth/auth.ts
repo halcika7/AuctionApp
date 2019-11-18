@@ -1,8 +1,9 @@
-import { FormGroup } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { AuthClearMessagess } from '@app/auth/store/auth.actions';
+import { OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
+import { FormGroup } from "@angular/forms";
+import { Store } from "@ngrx/store";
+import { Router } from "@angular/router";
+import { AuthClearMessagess } from "@app/auth/store/auth.actions";
 
 export class Auth {
   private _message: string;
@@ -11,19 +12,24 @@ export class Auth {
   private _success = false;
   private _isClicked = false;
   private _login = true;
-  private subscription: Subscription;
+  subscription: Subscription;
 
-  constructor(private authStore: Store<any>, private Form: FormGroup, private Router: Router) {
+  constructor(
+    private authStore: Store<any>,
+    private Form: FormGroup,
+    private Router: Router
+  ) {
     this._form = this.Form;
     this.subscription = this.authStore
-      .select('auth')
+      .select("auth")
       .subscribe(({ errorMessage, errors, accessToken, successMessage }) => {
         if (
           accessToken ||
-          localStorage.getItem('accessToken') ||
-          sessionStorage.getItem('accessToken')
+          localStorage.getItem("accessToken") ||
+          sessionStorage.getItem("accessToken")
         ) {
-          this.Router.navigate(['/']);
+          this.subscription.unsubscribe();
+          setTimeout(() => this.Router.navigate(["/"]), 1200);
         }
 
         if (errors.email && !errorMessage) {
@@ -39,16 +45,22 @@ export class Auth {
           this.form.controls.password.markAsTouched();
         } else {
           this.form.controls.password.setErrors({});
-          this.form.controls.password.setValue(this.form.controls.password.value);
+          this.form.controls.password.setValue(
+            this.form.controls.password.value
+          );
         }
 
         if (!this._login) {
           if (errors.firstName && !errorMessage) {
-            this.form.controls.firstName.setErrors({ async: errors.firstName });
+            this.form.controls.firstName.setErrors({
+              async: errors.firstName
+            });
             this.form.controls.firstName.markAsTouched();
           } else {
             this.form.controls.firstName.setErrors({});
-            this.form.controls.firstName.setValue(this.form.controls.firstName.value);
+            this.form.controls.firstName.setValue(
+              this.form.controls.firstName.value
+            );
           }
 
           if (errors.lastName && !errorMessage) {
@@ -56,7 +68,9 @@ export class Auth {
             this.form.controls.lastName.markAsTouched();
           } else {
             this.form.controls.lastName.setErrors({});
-            this.form.controls.lastName.setValue(this.form.controls.lastName.value);
+            this.form.controls.lastName.setValue(
+              this.form.controls.lastName.value
+            );
           }
         }
 
@@ -64,21 +78,21 @@ export class Auth {
           this._message = successMessage ? successMessage : errorMessage;
           this._success = successMessage ? true : false;
         } else {
-          this._message = '';
+          this._message = "";
           this._success = false;
         }
 
         if (successMessage) {
           this._showErrors = false;
           this.form.reset();
-          setTimeout(() => this.Router.navigate(['/home/auth/login']), 2000);
+          setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000);
         } else {
           this.isClicked = false;
         }
       });
   }
 
-  protected destroy() {
+  destroy() {
     this.subscription.unsubscribe();
   }
 

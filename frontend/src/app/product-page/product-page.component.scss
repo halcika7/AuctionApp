@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@import "mixins";
+@import "variables";
 
 .about-product {
   @include flex();
@@ -21,16 +21,19 @@
   }
 
   .bid {
-    @include flex($wrap: wrap);
     margin-bottom: 66px;
+
+    .wrap {
+      @include flex($wrap: wrap);
+    }
 
     .input {
       margin-right: 21px;
 
       input {
         display: block;
-        background: #ECECEC;
-        border: 1px solid #D8D8D8;
+        background: #ececec;
+        border: 1px solid #d8d8d8;
         height: 54px;
         margin-bottom: 9px;
         outline: none;
@@ -52,11 +55,15 @@
       max-width: 192px;
       outline: none;
       cursor: pointer;
-
+      
       &:disabled {
-        border: 3px solid getColor(red);
         cursor: not-allowed;
       }
+    }
+
+    > p {
+      @include margin($all: 0);
+      color: getColor(red);
     }
   }
 }
@@ -81,7 +88,11 @@
     @include flex(center, center);
     @include heightWidth(36px, 140px);
     @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
-    @include boxShadowBackground(false, white, 3px solid getColor(lighter_gray));
+    @include boxShadowBackground(
+      false,
+      white,
+      3px solid getColor(lighter_gray)
+    );
     cursor: pointer;
     outline: none;
 
@@ -118,61 +129,5 @@
 @media (max-width: 435px) {
   .details .bid button {
     margin-top: 15px;
-  }
-}
-
-.table-biders {
-  overflow-x: scroll;
-  margin-bottom: 160px;
-  padding-bottom: 40px;
-}
-
-table.biders {
-  width: 100%;
-  color: getColor(light_black);
-  letter-spacing: 0.98px;
-  border-spacing: 0px;
-  border: 1px solid getColor(lighter_gray);
-  min-width: 650px;
-
-  thead tr {
-    background: getColor(lighter_gray);
-    height: 60px;
-
-    th {
-      @include fontMixin(20px, light);
-      text-align: left;
-      padding-left: 30px;
-    }
-  }
-
-  tbody tr td {
-    text-align: left;
-    padding-left: 30px;
-  }
-
-  thead tr th:not(:first-child), tbody tr td:not(:first-child) {
-    width: 20%;
-  }
-
-  img {
-    @include heightWidth(65px, 65px);
-    @include padding($all: 5px);
-    border-radius: 50%;
-    background: getColor(lighter_gray);
-  }
-
-  tbody tr td {
-    @include fontMixin(18px, light);
-    vertical-align: middle;
-    height: 110px;
-
-    .user {
-      @include flex(center);
-
-      span {
-        margin-left: 30px;
-      }
-    }
   }
 }

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://atlantbh-auctionapp.herokuapp.com/api'
+  apiUrl: "https://atlantbh-auctionapp.herokuapp.com/api"
 };

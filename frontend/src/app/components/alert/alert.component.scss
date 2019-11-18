@@ -1,4 +1,4 @@
-@import 'mixins';
+@import "mixins";
 
 .alert-wrapper {
   @include flex(center, space-between);
@@ -11,10 +11,20 @@
   background: rgba(204, 0, 0, 0.372);
 
   &.success {
-    background: #F0F3EE;
+    background: #f0f3ee;
 
-    button, p {
+    button,
+    p {
       color: #417505;
+    }
+  }
+
+  &.gold {
+    background: getColor(light_orange);
+
+    button,
+    p {
+      color: getColor(gold);
     }
   }
 
@@ -27,17 +37,19 @@
     cursor: pointer;
     opacity: 0.3;
     right: 15px;
+    height: 15px;
+    width: 15px;
 
     &:hover {
       opacity: 1;
     }
 
-    &:before, &:after {
+    &:before,
+    &:after {
       @include margin(-10px);
       @include heightWidth(20px, 2px);
-      content: ' ';
+      content: " ";
       position: absolute;
-      left: 15px;
       background-color: #333;
     }
 

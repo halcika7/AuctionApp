@@ -8,12 +8,11 @@
     "server": "nodemon index",
     "frontend": "npm start --prefix frontend",
     "frontend-install": "npm install --prefix frontend",
-    "backend-install": "npm install",
     "create-db": "node ./backend/config/createDb.js",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && npm run migrate --prefix backend && npm run seed --prefix backend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
   "author": "",

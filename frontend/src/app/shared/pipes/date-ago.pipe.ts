@@ -1,10 +1,10 @@
-import { Pipe, ChangeDetectorRef } from '@angular/core';
-import { interval, Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
-import { map } from 'rxjs/operators';
+import { Pipe, ChangeDetectorRef } from "@angular/core";
+import { interval, Observable } from "rxjs";
+import { AsyncPipe } from "@angular/common";
+import { map } from "rxjs/operators";
 
 @Pipe({
-  name: 'dateAgo',
+  name: "dateAgo",
   pure: false
 })
 export class DateAgoPipe extends AsyncPipe {
@@ -21,7 +21,12 @@ export class DateAgoPipe extends AsyncPipe {
 
   transform(obj: any, args?: any[]): any {
     this.value = new Date(obj);
-    const { agoOrLeft = 'left', response = '', loop = false, append = true } = args[0];
+    const {
+      agoOrLeft = "left",
+      response = "",
+      loop = false,
+      append = true
+    } = args[0];
     this.agoOrLeft = agoOrLeft;
     this.response = response;
     this.loop = loop;
@@ -38,14 +43,14 @@ export class DateAgoPipe extends AsyncPipe {
     return interval(1000).pipe(
       map(() => {
         let seconds =
-          this.agoOrLeft === 'left' || this.loop
+          this.agoOrLeft === "left" || this.loop
             ? Math.floor((+this.value - +new Date()) / 1000)
             : Math.floor((+new Date() - +this.value) / 1000);
-        if (this.agoOrLeft === 'ago' && this.value > new Date()) {
+        if (this.agoOrLeft === "ago" && this.value > new Date()) {
           return this.response;
         }
         if (seconds < 29) {
-          return 'Just now';
+          return "Just now";
         }
         const intervals = {
           year: 31536000,
@@ -57,23 +62,27 @@ export class DateAgoPipe extends AsyncPipe {
           second: 1
         };
         let counter = 0;
-        let message = '';
+        const vals = [];
         for (const [i, j] of Object.keys(intervals).entries()) {
           counter = Math.floor(seconds / intervals[j]);
           seconds %= intervals[j];
+          if (i === Object.keys(intervals).length - 1 && counter === 0) {
+            vals.push(`${counter} ${j}s`);
+          }
           if (counter > 0) {
             if (counter === 1) {
-              message +=
-                Object.keys(intervals).length - 1 === i ? `${counter} ${j}` : `${counter} ${j}, `;
+              vals.push(`${counter} ${j}`);
             } else {
-              message +=
-                Object.keys(intervals).length - 1 === i
-                  ? `${counter} ${j}s`
-                  : `${counter} ${j}s, `;
+              vals.push(`${counter} ${j}s`);
             }
           }
         }
-        return this.append ? `${message} ${this.agoOrLeft}` : message;
+        // agoOrLeft => pipe argument which can be left or ago and based on that we concat that on the end of the string
+        // third option is when we calculatr time left until auction begins then append is true
+        // and do not add left or ago to the end of string
+        return this.append
+          ? vals.join(", ").concat(` ${this.agoOrLeft}`)
+          : vals.join(", ");
       })
     );
   }

@@ -1,5 +1,5 @@
-import * as AuthActions from '@app/auth/store/auth.actions';
-import { jwtDecode } from '@app/shared/jwtDecode';
+import * as AuthActions from "@app/auth/store/auth.actions";
+import { jwtDecode } from "@app/shared/jwtDecode";
 
 export interface State {
   errors: {
@@ -18,20 +18,23 @@ export interface State {
 
 const initialState: State = {
   errors: {
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: ''
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: ""
   },
-  errorMessage: '',
-  successMessage: '',
-  accessToken: '',
+  errorMessage: "",
+  successMessage: "",
+  accessToken: "",
   remember: false,
   loading: false,
-  userId: ''
+  userId: ""
 };
 
-export function authReducer(state = initialState, action: AuthActions.AuthActions) {
+export function authReducer(
+  state = initialState,
+  action: AuthActions.AuthActions
+) {
   let id;
   switch (action.type) {
     case AuthActions.REGISTER_START:
@@ -47,13 +50,17 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,
-        errorMessage: action.payload.err ? action.payload.err : state.errorMessage
+        errorMessage: action.payload.err
+          ? action.payload.err
+          : state.errorMessage
       };
     case AuthActions.LOGIN_SUCCESS:
       id = jwtDecode(action.payload.accessToken);
       return {
         ...initialState,
-        accessToken: action.payload.accessToken ? action.payload.accessToken : '',
+        accessToken: action.payload.accessToken
+          ? action.payload.accessToken
+          : "",
         successMessage: action.payload.successMessage,
         remember: action.payload.remember,
         loading: false,

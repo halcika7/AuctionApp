@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'variables';
+@import "mixins";
+@import "variables";
 
 .pictures {
   @include grid(4, $areas: "a a a a" "b b b b");
@@ -42,7 +42,8 @@
 }
 
 @media (max-width: 999px) {
-  .pictures, .big-picture > img {
+  .pictures,
+  .big-picture > img {
     width: 100%;
   }
 }

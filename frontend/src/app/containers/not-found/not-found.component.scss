@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@import "variables";
+@import "mixins";
 
 .page-not-found {
   text-align: center;
@@ -16,7 +16,7 @@
 .not-found {
   @include margin($all: 0);
   @include fontMixin(20vw, regular, 10.5px, purple);
-  text-shadow: 8px 10px 0 #DADADA;
+  text-shadow: 8px 10px 0 #dadada;
 }
 
 .message {
@@ -41,7 +41,7 @@
 
   span {
     @include heightWidth(20px, 4px);
-    background: #C4BFD6;
+    background: #c4bfd6;
     display: inline-block;
     border-radius: 1px;
 
