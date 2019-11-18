@@ -37,6 +37,8 @@
     cursor: pointer;
     opacity: 0.3;
     right: 15px;
+    height: 15px;
+    width: 15px;
 
     &:hover {
       opacity: 1;
@@ -48,7 +50,6 @@
       @include heightWidth(20px, 2px);
       content: " ";
       position: absolute;
-      left: 15px;
       background-color: #333;
     }
 

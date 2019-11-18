@@ -95,7 +95,9 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_BID_FAILED:
       return {
         ...state,
-        message: action.payload.error.message,
+        message: action.payload.error.message
+          ? action.payload.error.message
+          : "Please login in order to place bid!",
         code: 500
       };
     default:

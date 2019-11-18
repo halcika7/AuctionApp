@@ -9,9 +9,9 @@
 <app-alert
   *ngIf="message"
   [message]="message"
-  [gold]="statusCode === 500"
+  [gold]="statusCode === 500 || !statusCode"
   [type]="statusCode === 200"
-  [closable]="!statusCode ? false : true"
+  [closable]="statusCode ? true : false"
   (closeAlert)="clearMessages()"
 ></app-alert>
 
@@ -37,7 +37,7 @@
             >Enter higher than {{ minPrice | currency }}</span
           >
         </div>
-        <button class="bid-button" [disabled]="disabled">Place bid</button>
+        <button class="bid-button">Place bid</button>
       </div>
     </form>
     <div class="current-bid">
@@ -71,8 +71,8 @@
         }}
       </p>
     </div>
-    <div class="watchlist">
-      <!-- <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button> -->
+    <div class="watchlist" *ngIf="userId !== product.userId">
+      <button>Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button>
     </div>
     <div class="product-details">
       <h5>Details</h5>

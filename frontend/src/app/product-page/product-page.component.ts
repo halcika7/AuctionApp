@@ -17,9 +17,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
   private _minPrice: any;
-  private _maxPrice: number = 20000;
   private _hide = false;
-  private _disabled = false;
   private _userId: string;
   private _message: string;
   private _statusCode: number;
@@ -89,43 +87,26 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   }
 
   private setMessageDisabled() {
-    if (this.product.id) {
-      this._disabled =
-        this.product.userId === this.userId ||
-        !this.userId ||
-        (this.product.highest_bid === 0 &&
-          this._enteredPrice < this._minPrice) ||
-        (this.product.highest_bid !== 0 && this._enteredPrice <= this._minPrice) ||
-        this._enteredPrice > this.maxPrice
-          ? true
-          : false;
-      if (!this.statusCode) {
-        this._message = this.hide
-          ? ""
-          : this.product.userId === this.userId && this.userId !== ""
-          ? "You can't place bid on your own product"
-          : !this.userId
-          ? "Please login in order to place bid!"
-          : "";
-      }
+    if (this.product.id && !this.statusCode) {
+      this._message = this.hide
+        ? ""
+        : this.product.userId === this.userId && this.userId !== ""
+        ? "You can't place bid on your own product"
+        : "";
     }
   }
 
   valueChange(e) {
-    this._enteredPrice = e.target.value;
-    this.setMessageDisabled();
+    this._enteredPrice = parseFloat(e.target.value) || null;
   }
 
   onSubmit(input: HTMLInputElement) {
-    this.setMessageDisabled();
-    if (!this.disabled) {
-      this.store.dispatch(
-        new ProductPageActions.ProductBidStart(
-          this.product.id,
-          parseFloat(input.value)
-        )
-      );
-    }
+    this.store.dispatch(
+      new ProductPageActions.ProductBidStart(
+        this.product.id,
+        parseFloat(input.value)
+      )
+    );
   }
 
   clearMessages() {
@@ -142,10 +123,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get hide(): boolean {
     return this._hide;
-  }
-
-  get disabled(): boolean {
-    return this._disabled;
   }
 
   get userId(): string {
@@ -174,9 +151,5 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get minPrice(): number {
     return this._minPrice;
-  }
-
-  get maxPrice(): number {
-    return this._maxPrice;
   }
 }

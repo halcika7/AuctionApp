@@ -55,11 +55,6 @@
       max-width: 192px;
       outline: none;
       cursor: pointer;
-
-      &:disabled {
-        border: 3px solid getColor(red);
-        cursor: not-allowed;
-      }
     }
 
     > p {

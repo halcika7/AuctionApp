@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
     ) {
       return res
         .status(401)
-        .json({ authorizationError: "Unauthorized request" });
+        .json({ authorizationError: "Unauthorized request. Please login" });
     }
 
     if (decoded.exp * 1000 <= Date.now()) {
@@ -36,7 +36,9 @@ module.exports = async (req, res, next) => {
       req.userId = decoded.id;
     }
   } catch (error) {
-    return res.status(401).json({ authorizationError: "Unauthorized request" });
+    return res
+      .status(401)
+      .json({ authorizationError: "Unauthorized request. Please login" });
   }
   return next();
 };

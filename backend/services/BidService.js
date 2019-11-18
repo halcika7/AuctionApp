@@ -53,7 +53,7 @@ class BidService extends BaseService {
       if (!highestBid && price > bid) {
         return {
           status: 403,
-          message: "Please bid higher than product price!"
+          message: "Please bid higher or equal to product price!"
         };
       }
       if (highestBid && highestBid.price >= bid) {

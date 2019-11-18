@@ -48,7 +48,7 @@ export class ProductPageEffects {
               );
             }
             if (data.error.authorizationError) {
-              return of(new LogoutStart());
+              this.store.dispatch(new LogoutStart())
             }
             return of(new ProductPageActions.ProductBidFailed(data));
           })
