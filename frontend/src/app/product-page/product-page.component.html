@@ -11,7 +11,7 @@
   [message]="message"
   [gold]="statusCode === 500 || !statusCode"
   [type]="statusCode === 200"
-  [closable]="statusCode ? true : false"
+  [closable]="statusCode === 200 ? true : false"
   (closeAlert)="clearMessages()"
 ></app-alert>
 
@@ -31,13 +31,14 @@
             (keyup)="valueChange($event)"
             [value]="enteredPrice"
             name="price"
+            [disabled]="disabled"
           />
           <span *ngIf="noBids">Enter {{ minPrice | currency }} or more</span>
           <span *ngIf="!noBids"
             >Enter higher than {{ minPrice | currency }}</span
           >
         </div>
-        <button class="bid-button">Place bid</button>
+        <button class="bid-button" [disabled]="disabled">Place bid</button>
       </div>
     </form>
     <div class="current-bid">

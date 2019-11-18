@@ -152,8 +152,8 @@ app-footer {
 
     &:disabled {
       cursor: not-allowed;
-      border: 3px solid getColor(red);
       background: getColor(darker_white2);
+      color: getColor(gray);
     }
   }
 

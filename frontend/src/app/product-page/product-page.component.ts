@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ɵConsole } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Params, Router } from "@angular/router";
@@ -23,6 +23,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _statusCode: number;
   private _noBids = true;
   private _enteredPrice = null;
+  private _disabled = false;
   private subscription = new Subscription();
 
   constructor(
@@ -34,6 +35,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
+        this._enteredPrice = null;
         if (!id || !subcategoryId) {
           this.router.navigate(["/404"]);
         }
@@ -67,6 +69,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
             this._noBids = product.highest_bid === 0 ? true : false;
             this._message = message;
             this._statusCode = code;
+            this._disabled = this.statusCode === 500 ? true : false;
             this.setMessageDisabled();
           }
         )
@@ -94,6 +97,11 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         ? "You can't place bid on your own product"
         : "";
     }
+    this._disabled =
+      this._message === "You can't place bid on your own product" ||
+      this._message === "Please login in order to place bid!"
+        ? true
+        : false;
   }
 
   valueChange(e) {
@@ -151,5 +159,9 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get minPrice(): number {
     return this._minPrice;
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
   }
 }
