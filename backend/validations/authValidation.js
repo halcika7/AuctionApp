@@ -63,7 +63,7 @@ exports.forgotPasswordValidation = async email => {
     errors.email = "User not found with provided email";
   }
 
-  return returnDataHelper(errors, false, { user });
+  return returnDataHelper(errors, "", { user });
 };
 
 exports.resetPasswordValidation = async (resetPasswordToken, password) => {

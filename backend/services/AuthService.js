@@ -85,8 +85,8 @@ class AuthService extends BaseService {
 
   async forgotPassword(email) {
     try {
-      const { errors, isValid, user } = await forgotPasswordValidation(data);
-      if (!isValid) return { status: 403, response: { ...errors } };
+      const { errors, isValid, user } = await forgotPasswordValidation(email);
+      if (!isValid && errors) return { status: 403, response: { ...errors } };
       const resetPasswordToken = createAccessToken(user, "1d");
       const { err } = sendEmail(
         email,
@@ -105,6 +105,7 @@ class AuthService extends BaseService {
         }
       };
     } catch (error) {
+      console.log("TCL: AuthService -> forgotPassword -> error", error);
       return { status: 403, response: { message: "Something happend" } };
     }
   }
