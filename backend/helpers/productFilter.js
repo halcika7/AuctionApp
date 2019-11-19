@@ -44,6 +44,9 @@ function filterProducts({ type, limit, offset = 0 }) {
       [Op.gt]: new Date(),
       [Op.lte]: addSubtractDaysToDate(ENDS_IN_MAX_DAYS)
     };
+    findObj.where.auctionStart = {
+      [Op.lte]: new Date()
+    };
     findObj.order = [["auctionEnd", "ASC"]];
   }
 

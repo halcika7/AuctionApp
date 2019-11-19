@@ -73,7 +73,7 @@ export class AuthClearMessagess implements Action {
 }
 export class AuthFailed implements Action {
   readonly type = AUTH_FAILED;
-  constructor(public payload: { errors?: any; err?: string }) {}
+  constructor(public payload: { errors?: any; message?: string }) {}
 }
 
 export class ResetTokenExpired implements Action {

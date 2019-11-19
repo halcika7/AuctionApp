@@ -1,6 +1,7 @@
 const {
   registerValidation,
   loginValidation,
+  forgotPasswordValidation,
   resetPasswordValidation
 } = require("../validations/authValidation");
 const {
@@ -33,7 +34,7 @@ class AuthService extends BaseService {
       return {
         status: 403,
         response: {
-          err: "Something happened. We were unable to create an account."
+          message: "Something happened. We were unable to create an account."
         }
       };
     }
@@ -41,9 +42,9 @@ class AuthService extends BaseService {
 
   async login(data) {
     try {
-      const { errors, errorMessage, isValid, user } = await loginValidation(data);
+      const { errors, message, isValid, user } = await loginValidation(data);
       if (!isValid && errors) return { status: 403, response: { ...errors } };
-      if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
+      if (!isValid && message) return { status: 403, response: { message } };
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
       return {
@@ -56,11 +57,10 @@ class AuthService extends BaseService {
         refreshToken
       };
     } catch (error) {
-      console.log("TCL: AuthService -> login -> error", error);
       return {
         status: 403,
         response: {
-          err: "Something happened. We were unable to perform login."
+          message: "Something happened. We were unable to perform login."
         }
       };
     }
@@ -85,16 +85,8 @@ class AuthService extends BaseService {
 
   async forgotPassword(email) {
     try {
-      if (!email) {
-        return { status: 403, response: { errors: { email: "Email is required" } } };
-      }
-      const user = await findUserByEmail(email);
-      if (!user) {
-        return {
-          status: 403,
-          response: { errors: { email: "User not found with provided email" } }
-        };
-      }
+      const { errors, isValid, user } = await forgotPasswordValidation(data);
+      if (!isValid) return { status: 403, response: { ...errors } };
       const resetPasswordToken = createAccessToken(user, "1d");
       const { err } = sendEmail(
         email,
@@ -102,7 +94,7 @@ class AuthService extends BaseService {
         "Need to reset your password? Just click the link below and you'll be on your way. If you did not make this request, please ignore this email."
       );
       if (err) {
-        return { status: 403, response: { err: "Something happend" } };
+        return { status: 403, response: { message: "Something happend" } };
       }
       await User.update({ resetPasswordToken }, { where: { email } });
 
@@ -113,18 +105,18 @@ class AuthService extends BaseService {
         }
       };
     } catch (error) {
-      return { status: 403, response: { err: "Something happend" } };
+      return { status: 403, response: { message: "Something happend" } };
     }
   }
 
   async resetPassword({ resetPasswordToken, password }) {
     try {
-      const { errors, errorMessage, isValid, email } = await resetPasswordValidation(
+      const { errors, message, isValid, email } = await resetPasswordValidation(
         resetPasswordToken,
         password
       );
       if (!isValid && errors) return { status: 403, response: { ...errors } };
-      if (!isValid && errorMessage) return { status: 403, response: { err: errorMessage } };
+      if (!isValid && message) return { status: 403, response: { message } };
       const hashedPassword = await hashPassword(password);
       await User.update(
         { resetPasswordToken: null, password: hashedPassword },
@@ -140,7 +132,7 @@ class AuthService extends BaseService {
       return {
         status: 403,
         response: {
-          err: "Something happened. We were unable to perform request."
+          message: "Something happened. We were unable to perform request."
         }
       };
     }

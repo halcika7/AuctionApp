@@ -21,7 +21,7 @@ export class Auth {
     this._form = this.Form;
     this.subscription = this.authStore
       .select("auth")
-      .subscribe(({ errorMessage, errors, accessToken, successMessage, resetTokenExpired }) => {
+      .subscribe(({ errors, accessToken, message, resetTokenExpired, success }) => {
         if (
           accessToken ||
           localStorage.getItem("accessToken") ||
@@ -32,7 +32,7 @@ export class Auth {
         }
 
         if (this.form.controls.email) {
-          if (errors.email && !errorMessage) {
+          if (errors.email && !message) {
             this.form.controls.email.setErrors({ async: errors.email });
             this.form.controls.email.markAsTouched();
           } else {
@@ -42,7 +42,7 @@ export class Auth {
         }
 
         if (this.form.controls.password) {
-          if (errors.password && !errorMessage) {
+          if (errors.password && !message) {
             this.form.controls.password.setErrors({ async: errors.password });
             this.form.controls.password.markAsTouched();
           } else {
@@ -52,7 +52,7 @@ export class Auth {
         }
 
         if (this._register) {
-          if (errors.firstName && !errorMessage) {
+          if (errors.firstName && !message) {
             this.form.controls.firstName.setErrors({
               async: errors.firstName
             });
@@ -62,7 +62,7 @@ export class Auth {
             this.form.controls.firstName.setValue(this.form.controls.firstName.value);
           }
 
-          if (errors.lastName && !errorMessage) {
+          if (errors.lastName && !message) {
             this.form.controls.lastName.setErrors({ async: errors.lastName });
             this.form.controls.lastName.markAsTouched();
           } else {
@@ -71,12 +71,12 @@ export class Auth {
           }
         }
 
-        this._message = successMessage ? successMessage : errorMessage;
-        this._success = successMessage ? true : false;
+        this._message = message;
+        this._success = success;
 
         this._expiredToken = resetTokenExpired;
 
-        if (successMessage) {
+        if (this._success) {
           this._showErrors = false;
           this.form.reset();
           this._register || this._resetPassword

@@ -28,7 +28,7 @@ exports.registerValidation = async data => {
 
 exports.loginValidation = async data => {
   let errors = {};
-  let errorMessage = "";
+  let message = "";
   const user = await findUserByEmail(data.email);
 
   emailValidation(data.email, errors);
@@ -36,40 +36,53 @@ exports.loginValidation = async data => {
   if (isEmpty(data.password)) errors.password = "Password is required";
 
   if (!user && !isEmpty(data.password) && !isEmpty(data.email) && Validator.isEmail(data.email)) {
-    errorMessage = "Incorrect email or password";
+    message = "Incorrect email or password";
   }
 
   if (!isEmpty(data.password) && user) {
     const byCrypt = await comparePassword(data.password, user.password);
     if (!byCrypt) {
-      errorMessage = "Incorrect email or password";
+      message = "Incorrect email or password";
     }
   }
 
   if (user && user.resetPasswordToken) {
-    errorMessage = "Please reset your password";
+    message = "Please reset your password";
   }
 
-  return returnDataHelper(errors, errorMessage, { user });
+  return returnDataHelper(errors, message, { user });
+};
+
+exports.forgotPasswordValidation = async email => {
+  let errors = {};
+  const user = await findUserByEmail(email);
+  if (!email) {
+    errors.email = "Email is required";
+  }
+  if (!user) {
+    errors.email = "User not found with provided email";
+  }
+
+  return returnDataHelper(errors, false, { user });
 };
 
 exports.resetPasswordValidation = async (resetPasswordToken, password) => {
   let errors = {};
-  let errorMessage = "";
+  let message = "";
   const decodedToken = decodeToken(resetPasswordToken);
   const user = await findUserByEmail(decodedToken.email);
   const samePasswords = await comparePassword(password, user.password);
 
   if (isEmpty(decodedToken)) {
-    errorMessage = "Token not provided";
+    message = "Token not provided";
   } else if (Date.now() > decodedToken.exp * 1000) {
-    errorMessage = "Token expired";
+    message = "Token expired";
   }
 
   if (!user) {
-    errorMessage = "User not found";
+    message = "User not found";
   } else if (user.resetPasswordToken !== resetPasswordToken) {
-    errorMessage = "Invalid token";
+    message = "Invalid token";
   }
 
   passwordValidation(password, errors);
@@ -78,7 +91,7 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
     errors.password = "Password already in use";
   }
 
-  return returnDataHelper(errors, errorMessage, { email: user.email });
+  return returnDataHelper(errors, message, { email: user.email });
 };
 
 function emailValidation(email, errors) {
@@ -112,11 +125,11 @@ function nameValidation(type, value, errors, resp) {
   }
 }
 
-function returnDataHelper(errors, errorMessage, returnValue) {
+function returnDataHelper(errors, message, returnValue) {
   if (!isEmpty(errors)) {
     return { errors: { errors }, isValid: false };
-  } else if (!isEmpty(errorMessage)) {
-    return { errorMessage, isValid: false };
+  } else if (!isEmpty(message)) {
+    return { message, isValid: false };
   } else {
     return { isValid: true, ...returnValue };
   }

@@ -8,11 +8,10 @@ export interface State {
     email: string;
     password: string;
   };
-  errorMessage: string;
-  successMessage: string;
+  message: string;
+  success: boolean;
   accessToken: string;
   remember: boolean;
-  loading: boolean;
   userId: string;
   resetTokenExpired: string;
 }
@@ -24,11 +23,10 @@ const initialState: State = {
     firstName: "",
     lastName: ""
   },
-  errorMessage: "",
-  successMessage: "",
+  message: "",
+  success: false,
   accessToken: "",
   remember: false,
-  loading: false,
   userId: "",
   resetTokenExpired: ""
 };
@@ -39,42 +37,32 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
     case AuthActions.REGISTER_START:
     case AuthActions.LOGOUT_START:
     case AuthActions.AUTH_CLEAR_MESSAGESS:
+    case AuthActions.REFRESH_ACCESS_TOKEN_START:
+    case AuthActions.LOGIN_START:
       return { ...initialState };
     case AuthActions.REGISTER_SUCCESS:
     case AuthActions.FORGOT_PASSWORD_SUCCESS:
     case AuthActions.RESET_PASSWORD_SUCCESS:
       return {
         ...initialState,
-        successMessage: action.payload.message
-      };
-    case AuthActions.AUTH_FAILED:
-      return {
-        ...initialState,
-        errors: action.payload.errors ? action.payload.errors : state.errors,
-        errorMessage: action.payload.err ? action.payload.err : state.errorMessage
+        message: action.payload.message,
+        success: true
       };
     case AuthActions.LOGIN_SUCCESS:
       id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
         accessToken: action.payload.accessToken ? action.payload.accessToken : "",
-        successMessage: action.payload.message,
+        message: action.payload.message,
         remember: action.payload.remember,
-        loading: false,
-        userId: id
-      };
-    case AuthActions.REFRESH_ACCESS_TOKEN_START:
-    case AuthActions.LOGIN_START:
-      return {
-        ...initialState,
-        loading: true
+        userId: id,
+        success: true
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
       id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
         accessToken: action.payload.accessToken,
-        loading: false,
         userId: id
       };
     case AuthActions.RESET_TOKEN_EXPIRED: {
@@ -83,6 +71,13 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         resetTokenExpired: "Reset password token expired"
       };
     }
+    case AuthActions.AUTH_FAILED:
+      return {
+        ...initialState,
+        errors: action.payload.errors ? action.payload.errors : state.errors,
+        message: action.payload.message ? action.payload.message : state.message,
+        success: false
+      };
     default:
       return state;
   }

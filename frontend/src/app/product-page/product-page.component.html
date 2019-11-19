@@ -9,9 +9,9 @@
 <app-alert
   *ngIf="message"
   [message]="message"
-  [gold]="statusCode === 500 || !statusCode"
-  [type]="statusCode === 200"
-  [closable]="statusCode === 200 ? true : false"
+  [gold]="!success"
+  [type]="success"
+  [closable]="success"
   (closeAlert)="clearMessages()"
 ></app-alert>
 
