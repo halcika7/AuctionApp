@@ -14,6 +14,7 @@
     DB_HOST=
     DB_NAME=
     URL=http://localhost:3000 /* example */
+    SEND_GRID=/* API_KEY */
     NODE_ENV=
 ```
 ** Run the following commands **

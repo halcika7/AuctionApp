@@ -12,9 +12,7 @@ class AuthController extends BaseController {
   }
 
   async loginUser(req, res) {
-    const { status, response, refreshToken } = await AuthServiceInstance.login(
-      req.body
-    );
+    const { status, response, refreshToken } = await AuthServiceInstance.login(req.body);
     if (!response.errors && !response.err) {
       AuthServiceInstance.setRefreshTokenCookie(res, refreshToken);
     }
@@ -28,11 +26,7 @@ class AuthController extends BaseController {
 
   async refreshToken(req, res) {
     const token = req.cookies.jid;
-    const {
-      status,
-      response,
-      refreshToken
-    } = await AuthServiceInstance.refreshToken(token);
+    const { status, response, refreshToken } = await AuthServiceInstance.refreshToken(token);
     if (!response.authorizationError && token) {
       AuthServiceInstance.setRefreshTokenCookie(res, refreshToken);
     }
@@ -42,6 +36,16 @@ class AuthController extends BaseController {
       response,
       !token ? { accessToken: "" } : undefined
     );
+  }
+
+  async forgotPassword(req, res) {
+    const { status, response } = await AuthServiceInstance.forgotPassword(req.body.email);
+    return super.sendResponse(res, status, response);
+  }
+
+  async resetPassword(req, res) {
+    const { status, response } = await AuthServiceInstance.resetPassword(req.body);
+    return super.sendResponse(res, status, response);
   }
 }
 

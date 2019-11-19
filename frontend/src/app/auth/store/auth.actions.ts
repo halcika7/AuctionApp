@@ -14,6 +14,14 @@ export const REFRESH_ACCESS_TOKEN_START = "REFRESH_ACCESS_TOKEN_START";
 export const AUTH_CLEAR_MESSAGESS = "AUTH_CLEAR_MESSAGESS";
 export const AUTH_FAILED = "AUTH_FAILED";
 
+export const RESET_TOKEN_EXPIRED = "RESET_TOKEN_EXPIRED";
+
+export const FORGOT_PASSWORD_START = "FORGOT_PASSWORD_START";
+export const FORGOT_PASSWORD_SUCCESS = "FORGOT_PASSWORD_SUCCESS";
+
+export const RESET_PASSWORD_START = "RESET_PASSWORD_START";
+export const RESET_PASSWORD_SUCCESS = "RESET_PASSWORD_SUCCESS";
+
 export class RegisterStart implements Action {
   readonly type = REGISTER_START;
   constructor(
@@ -27,20 +35,18 @@ export class RegisterStart implements Action {
 }
 export class RegisterSuccess implements Action {
   readonly type = REGISTER_SUCCESS;
-  constructor(public payload: { successMessage: string }) {}
+  constructor(public payload: { message: string }) {}
 }
 
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
-  constructor(
-    public payload: { email: string; password: string; remember: boolean }
-  ) {}
+  constructor(public payload: { email: string; password: string; remember: boolean }) {}
 }
 export class LoginSuccess implements Action {
   readonly type = LOGIN_SUCCESS;
   constructor(
     public payload: {
-      successMessage: string;
+      message: string;
       accessToken: string;
       remember: boolean;
     }
@@ -70,6 +76,28 @@ export class AuthFailed implements Action {
   constructor(public payload: { errors?: any; err?: string }) {}
 }
 
+export class ResetTokenExpired implements Action {
+  readonly type = RESET_TOKEN_EXPIRED;
+}
+
+export class ForgotPasswordStart implements Action {
+  readonly type = FORGOT_PASSWORD_START;
+  constructor(public email: string) {}
+}
+export class ForgotPasswordSuccess implements Action {
+  readonly type = FORGOT_PASSWORD_SUCCESS;
+  constructor(public payload: { message: string }) {}
+}
+
+export class ResetPasswordStart implements Action {
+  readonly type = RESET_PASSWORD_START;
+  constructor(public resetPasswordToken: string, public password: string) {}
+}
+export class ResetPasswordSuccess implements Action {
+  readonly type = RESET_PASSWORD_SUCCESS;
+  constructor(public payload: { message: string }) {}
+}
+
 export type AuthActions =
   | RegisterStart
   | RegisterSuccess
@@ -80,4 +108,9 @@ export type AuthActions =
   | RefreshTokenStart
   | RefreshToken
   | AuthClearMessagess
-  | AuthFailed;
+  | AuthFailed
+  | ForgotPasswordStart
+  | ForgotPasswordSuccess
+  | ResetPasswordStart
+  | ResetPasswordSuccess
+  | ResetTokenExpired;

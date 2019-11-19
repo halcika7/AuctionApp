@@ -14,6 +14,7 @@ export interface State {
   remember: boolean;
   loading: boolean;
   userId: string;
+  resetTokenExpired: string;
 }
 
 const initialState: State = {
@@ -28,13 +29,11 @@ const initialState: State = {
   accessToken: "",
   remember: false,
   loading: false,
-  userId: ""
+  userId: "",
+  resetTokenExpired: ""
 };
 
-export function authReducer(
-  state = initialState,
-  action: AuthActions.AuthActions
-) {
+export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   let id;
   switch (action.type) {
     case AuthActions.REGISTER_START:
@@ -42,26 +41,24 @@ export function authReducer(
     case AuthActions.AUTH_CLEAR_MESSAGESS:
       return { ...initialState };
     case AuthActions.REGISTER_SUCCESS:
+    case AuthActions.FORGOT_PASSWORD_SUCCESS:
+    case AuthActions.RESET_PASSWORD_SUCCESS:
       return {
         ...initialState,
-        successMessage: action.payload.successMessage
+        successMessage: action.payload.message
       };
     case AuthActions.AUTH_FAILED:
       return {
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,
-        errorMessage: action.payload.err
-          ? action.payload.err
-          : state.errorMessage
+        errorMessage: action.payload.err ? action.payload.err : state.errorMessage
       };
     case AuthActions.LOGIN_SUCCESS:
-      id = jwtDecode(action.payload.accessToken);
+      id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
-        accessToken: action.payload.accessToken
-          ? action.payload.accessToken
-          : "",
-        successMessage: action.payload.successMessage,
+        accessToken: action.payload.accessToken ? action.payload.accessToken : "",
+        successMessage: action.payload.message,
         remember: action.payload.remember,
         loading: false,
         userId: id
@@ -73,13 +70,19 @@ export function authReducer(
         loading: true
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
-      id = jwtDecode(action.payload.accessToken);
+      id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
         accessToken: action.payload.accessToken,
         loading: false,
         userId: id
       };
+    case AuthActions.RESET_TOKEN_EXPIRED: {
+      return {
+        ...initialState,
+        resetTokenExpired: "Reset password token expired"
+      };
+    }
     default:
       return state;
   }

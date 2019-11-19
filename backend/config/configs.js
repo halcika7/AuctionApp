@@ -17,4 +17,5 @@ module.exports = {
   LIMIT_SIMILAR_PRODUCTS: 3,
   LIMIT_BIDS: 10,
   MAX_BID: 20000,
+  SEND_GRID: process.env.SEND_GRID
 };

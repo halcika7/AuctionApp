@@ -53,11 +53,10 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
       }),
       router
     );
-    super.login = false;
+    super.register = true;
   }
 
   ngOnInit() {
-    super.clearMessages();
     this.formSubscription = super.form.statusChanges.subscribe(validity => {
       if (validity === "VALID") {
         this._isValidForm = true;
@@ -68,8 +67,8 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    super.clearMessages();
     this.formSubscription.unsubscribe();
+    super.destroy();
   }
 
   onSubmit() {

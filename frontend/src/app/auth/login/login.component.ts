@@ -12,10 +12,7 @@ import * as AuthActions from "@app/auth/store/auth.actions";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent extends Auth implements OnDestroy {
-  constructor(
-    private store: Store<fromApp.AppState>,
-    protected router: Router
-  ) {
+  constructor(private store: Store<fromApp.AppState>, protected router: Router) {
     super(
       store,
       new FormGroup({
