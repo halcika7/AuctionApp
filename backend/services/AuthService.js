@@ -88,7 +88,7 @@ class AuthService extends BaseService {
       const { errors, isValid, user } = await forgotPasswordValidation(email);
       if (!isValid && errors) return { status: 403, response: { ...errors } };
       const resetPasswordToken = createAccessToken(user, "1d");
-      const { err } = sendEmail(
+      const { err } = await sendEmail(
         email,
         resetPasswordToken,
         "Need to reset your password? Just click the link below and you'll be on your way. If you did not make this request, please ignore this email."

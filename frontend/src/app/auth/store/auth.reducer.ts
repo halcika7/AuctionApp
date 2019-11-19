@@ -14,6 +14,7 @@ export interface State {
   remember: boolean;
   userId: string;
   resetTokenExpired: string;
+  loading: boolean;
 }
 
 const initialState: State = {
@@ -28,7 +29,8 @@ const initialState: State = {
   accessToken: "",
   remember: false,
   userId: "",
-  resetTokenExpired: ""
+  resetTokenExpired: "",
+  loading: false
 };
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
@@ -37,9 +39,13 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
     case AuthActions.REGISTER_START:
     case AuthActions.LOGOUT_START:
     case AuthActions.AUTH_CLEAR_MESSAGESS:
+      return { ...initialState };
     case AuthActions.REFRESH_ACCESS_TOKEN_START:
     case AuthActions.LOGIN_START:
-      return { ...initialState };
+      return {
+        ...initialState,
+        loading: true
+      };
     case AuthActions.REGISTER_SUCCESS:
     case AuthActions.FORGOT_PASSWORD_SUCCESS:
     case AuthActions.RESET_PASSWORD_SUCCESS:
@@ -56,14 +62,16 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         message: action.payload.message,
         remember: action.payload.remember,
         userId: id,
-        success: true
+        success: true,
+        loading: false
       };
     case AuthActions.REFRESH_ACCESS_TOKEN:
       id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
         accessToken: action.payload.accessToken,
-        userId: id
+        userId: id,
+        loading: false
       };
     case AuthActions.RESET_TOKEN_EXPIRED: {
       return {
