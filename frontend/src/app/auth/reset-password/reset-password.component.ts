@@ -34,7 +34,7 @@ export class ResetPasswordComponent extends Auth implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (!localStorage.getItem("resetPasswordToken")) {
+    if (!sessionStorage.getItem("resetPasswordToken")) {
       this.router.navigate(["/404"]);
     }
     this.formSubscription = super.form.statusChanges.subscribe(validity => {

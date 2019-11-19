@@ -36,10 +36,6 @@ export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
       this.route.params.subscribe(({ token }: Params) => {
         if (token) {
           const decodedResetToken = jwtDecode(token);
-          console.log(
-            "TCL: ForgotPasswordComponent -> ngOnInit -> decodedResetToken",
-            decodedResetToken
-          );
           if (Object.keys(decodedResetToken).length === 0) {
             this.router.navigate(["/404"]);
           } else if (Date.now() > decodedResetToken.exp * 1000) {
