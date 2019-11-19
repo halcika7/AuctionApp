@@ -105,7 +105,6 @@ class AuthService extends BaseService {
         }
       };
     } catch (error) {
-      console.log("TCL: AuthService -> forgotPassword -> error", error);
       return { status: 403, response: { message: "Something happend" } };
     }
   }

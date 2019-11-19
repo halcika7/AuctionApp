@@ -55,7 +55,7 @@ export class ResetPasswordComponent extends Auth implements OnInit, OnDestroy {
     super.isClicked = true;
     this.store.dispatch(
       new AuthActions.ResetPasswordStart(
-        localStorage.getItem("resetPasswordToken"),
+        sessionStorage.getItem("resetPasswordToken"),
         super.form.controls.password.value
       )
     );
