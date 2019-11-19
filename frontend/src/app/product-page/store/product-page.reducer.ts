@@ -57,12 +57,8 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_START:
       return {
         ...initialState,
-        message:
-          state.message === "Please login in order to place bid!"
-            ? state.message
-            : "",
-        code:
-          state.message === "Please login in order to place bid!" ? 500 : null
+        message: state.message === "Please login in order to place bid!" ? state.message : "",
+        code: state.message === "Please login in order to place bid!" ? 500 : null
       };
     case ProductPageActions.PRODUCT_SUCCESS:
       return {

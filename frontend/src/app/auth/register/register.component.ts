@@ -45,9 +45,7 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
           Validators.minLength(6),
           Validators.maxLength(30),
           Validators.pattern(
-            new RegExp(
-              "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})"
-            )
+            new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})")
           )
         ])
       }),

@@ -1,11 +1,5 @@
 const { Sequelize, Op } = require("sequelize");
-const {
-  DB_USERNAME,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_HOST,
-  DB_NAME
-} = require("./configs");
+const { DB_USERNAME, DB_PASSWORD, DB_PORT, DB_HOST, DB_NAME } = require("./configs");
 
 const db = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: DB_HOST,

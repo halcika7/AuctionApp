@@ -11,9 +11,7 @@ class BidService extends BaseService {
 
   async createBid(userID, productId, bid) {
     try {
-      const { auctionEnd, price, userId } = (await getAuctionEndProduct(
-        productId
-      )) || {
+      const { auctionEnd, price, userId } = (await getAuctionEndProduct(productId)) || {
         auctionEnd: null,
         price: null,
         userId: null

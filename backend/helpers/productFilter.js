@@ -55,20 +55,12 @@ function filterProducts({ type, limit, offset = 0 }) {
         attributes: []
       }
     ];
-    findObj.attributes.push([
-      db.fn("ROUND", db.fn("AVG", db.col("rating")), 2),
-      "avg_rating"
-    ]);
-    findObj.having = db.where(
-      db.fn("ROUND", db.fn("AVG", db.col("rating")), 2),
-      {
-        [Op.gte]: AVG_RATING
-      }
-    );
+    findObj.attributes.push([db.fn("ROUND", db.fn("AVG", db.col("rating")), 2), "avg_rating"]);
+    findObj.having = db.where(db.fn("ROUND", db.fn("AVG", db.col("rating")), 2), {
+      [Op.gte]: AVG_RATING
+    });
     findObj.group = ["Product.id"];
-    findObj.order = [
-      [db.fn("ROUND", db.fn("AVG", db.col("rating")), 2), "DESC"]
-    ];
+    findObj.order = [[db.fn("ROUND", db.fn("AVG", db.col("rating")), 2), "DESC"]];
   }
 
   if (type === "heroProduct") {
@@ -97,14 +89,8 @@ exports.getProductById = async id => {
     },
     attributes: {
       include: [
-        [
-          db.fn("coalesce", db.fn("MAX", db.col("Bids.price")), 0),
-          "highest_bid"
-        ],
-        [
-          db.fn("coalesce", db.fn("COUNT", db.col("Bids.price")), 0),
-          "number_of_bids"
-        ]
+        [db.fn("coalesce", db.fn("MAX", db.col("Bids.price")), 0), "highest_bid"],
+        [db.fn("coalesce", db.fn("COUNT", db.col("Bids.price")), 0), "number_of_bids"]
       ],
       exclude: ["featured"]
     },

@@ -1,10 +1,4 @@
-const {
-  DB_HOST,
-  DB_NAME,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USERNAME
-} = require("./configs");
+const { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } = require("./configs");
 
 module.exports = {
   local: {

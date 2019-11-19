@@ -40,39 +40,32 @@ export class ProductPageComponent implements OnInit, OnDestroy {
           this.router.navigate(["/404"]);
         }
         this.store.dispatch(new ProductPageActions.ProductStart(id));
-        this.store.dispatch(
-          new ProductPageActions.SimilarProductStart(id, subcategoryId)
-        );
+        this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
       })
     );
 
     this.subscription.add(
       this.store
         .select("productPage")
-        .subscribe(
-          ({ product, similarProducts, bids, error, message, code }) => {
-            if (error) {
-              this.router.navigate(["/404"]);
-            }
-            if (code === 200) {
-              this._enteredPrice = null;
-            }
-            this._product = product;
-            this._bids = bids;
-            this._similarProducts = similarProducts;
-            this._minPrice =
-              product.highest_bid >= product.price
-                ? product.highest_bid
-                : product.price;
-            this._hide =
-              new Date(product.auctionStart) > new Date() ? true : false;
-            this._noBids = product.highest_bid === 0 ? true : false;
-            this._message = message;
-            this._statusCode = code;
-            this._disabled = this.statusCode === 500 ? true : false;
-            this.setMessageDisabled();
+        .subscribe(({ product, similarProducts, bids, error, message, code }) => {
+          if (error) {
+            this.router.navigate(["/404"]);
           }
-        )
+          if (code === 200) {
+            this._enteredPrice = null;
+          }
+          this._product = product;
+          this._bids = bids;
+          this._similarProducts = similarProducts;
+          this._minPrice =
+            product.highest_bid >= product.price ? product.highest_bid : product.price;
+          this._hide = new Date(product.auctionStart) > new Date() ? true : false;
+          this._noBids = product.highest_bid === 0 ? true : false;
+          this._message = message;
+          this._statusCode = code;
+          this._disabled = this.statusCode === 500 ? true : false;
+          this.setMessageDisabled();
+        })
     );
 
     this.subscription.add(
@@ -110,10 +103,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   onSubmit(input: HTMLInputElement) {
     this.store.dispatch(
-      new ProductPageActions.ProductBidStart(
-        this.product.id,
-        parseFloat(input.value)
-      )
+      new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
     );
   }
 

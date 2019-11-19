@@ -183,10 +183,7 @@ app-footer {
       }
 
       &.facebook-link {
-        @include boxShadowBackground(
-          $bckg: blue_purple,
-          $border: 3px solid getColor(blue_purple)
-        );
+        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid getColor(blue_purple));
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -200,10 +197,7 @@ app-footer {
       }
 
       &.gmail-link {
-        @include boxShadowBackground(
-          $bckg: gmail,
-          $border: 3px solid getColor(gmail)
-        );
+        @include boxShadowBackground($bckg: gmail, $border: 3px solid getColor(gmail));
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -332,13 +326,7 @@ app-footer {
 
       a {
         @include padding($bottom: 13px);
-        @include fontMixin(
-          28px,
-          regular,
-          0.98px,
-          light_black,
-          $decoration: none
-        );
+        @include fontMixin(28px, regular, 0.98px, light_black, $decoration: none);
         height: 34px;
         display: block;
         transition: border 0.23s ease-in-out;
@@ -355,11 +343,7 @@ app-footer {
 }
 
 .feature-products .collections {
-  @include grid(
-    $autoRows: 350px,
-    $autoCols: true,
-    $templateCols: auto auto auto auto
-  );
+  @include grid($autoRows: 350px, $autoCols: true, $templateCols: auto auto auto auto);
 }
 
 .feature-products .collections .collection {

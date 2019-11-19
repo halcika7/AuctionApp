@@ -30,10 +30,7 @@ export class AppComponent implements OnInit {
           this._notFound = false;
         }
       });
-    if (
-      localStorage.getItem("accessToken") ||
-      sessionStorage.getItem("accessToken")
-    ) {
+    if (localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")) {
       this.store.dispatch(new AuthActions.RefreshTokenStart());
     }
   }
