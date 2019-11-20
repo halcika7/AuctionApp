@@ -2,6 +2,12 @@
   <a [routerLink]="['/shop/products', item.subcategoryId, item.id]">
     <div class="img">
       <img [src]="item.picture" [alt]="item.name" />
+      <div class="buttons">
+        <a href="">Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></a>
+        <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+          >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
+        ></a>
+      </div>
     </div>
     <h5>{{ item.name }}</h5>
     <p>Start From {{ item.price | currency }}</p>

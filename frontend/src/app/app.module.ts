@@ -54,7 +54,8 @@ import {
   faGreaterThan,
   faSearch,
   faCheck,
-  faHeart
+  faHeart,
+  faGavel
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -63,6 +64,7 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
+import { ShopPageComponent } from './shop-page/shop-page.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,8 @@ import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
     ProductPageComponent,
     ProductImagesComponent,
     DateAgoPipe,
-    ProductBidsComponent
+    ProductBidsComponent,
+    ShopPageComponent
   ],
   imports: [
     BrowserModule,
@@ -129,7 +132,8 @@ export class AppModule {
       faCheck,
       faFacebookSquare,
       faGooglePlusSquare,
-      faHeart
+      faHeart,
+      faGavel
     );
   }
 }

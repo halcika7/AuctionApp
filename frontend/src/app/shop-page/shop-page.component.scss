@@ -1,0 +1,122 @@
+@import "mixins";
+
+.shop-page {
+  display: flex;
+  flex-direction: row;
+}
+
+.filters {
+  width: 265px;
+  min-width: 265px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 31px;
+}
+
+.products {
+  width: 100%;
+}
+
+.categories,
+.colors {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  padding: 15px 20px;
+  margin: 0;
+  margin-bottom: 20px;
+  max-height: 576px;
+  overflow-y: auto;
+}
+
+.categories ul,
+.colors ul {
+  margin: 0;
+  padding: 0;
+  display: none;
+}
+
+.categories h4,
+.colors h4 {
+  @include fontMixin(14px, bold, 0.49px, purple);
+  margin: 0;
+  margin-bottom: 31px;
+}
+
+.categories > li,
+.colors > li {
+  @include fontMixin(14px, regular, 0.49px, light_black);
+  margin: 0 0 23px;
+  position: relative;
+  cursor: pointer;
+}
+
+.categories li > ul > li {
+  cursor: pointer;
+}
+
+.categories > li:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 5px;
+  height: 16px;
+  background: #111;
+}
+
+.categories > li:after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  width: 16px;
+  height: 5px;
+  background: #111;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.categories > li.open:before {
+  content: "";
+  display: none;
+}
+
+.categories > li.open:after {
+  top: 8px;
+}
+
+.categories > li.open > ul {
+  display: block;
+}
+
+.categories ul > li {
+  @include fontMixin(14px, regular, 0.49px, gray);
+  margin-bottom: 19px;
+}
+
+.categories ul > li:first-child {
+  margin-top: 31px;
+}
+
+.categories ul > li:last-child {
+  margin-bottom: 31px;
+}
+
+@media (max-width: 790px) {
+  .shop-page {
+    flex-direction: column;
+  }
+
+  .filters {
+    @include grid($templateCols: 48% 48%, $gap: 10px);
+    justify-content: center;
+    width: 100%;
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .filters {
+    @include grid($templateCols: 100%);
+  }
+}

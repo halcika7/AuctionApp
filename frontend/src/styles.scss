@@ -2,6 +2,10 @@
 @import "resets";
 @import "mixins";
 
+.paddingL15 {
+  @include padding($left: 15px !important);
+}
+
 app-root {
   @include flex($direction: column);
   @include margin(0);
@@ -183,10 +187,7 @@ app-footer {
       }
 
       &.facebook-link {
-        @include boxShadowBackground(
-          $bckg: blue_purple,
-          $border: 3px solid getColor(blue_purple)
-        );
+        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid getColor(blue_purple));
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -200,10 +201,7 @@ app-footer {
       }
 
       &.gmail-link {
-        @include boxShadowBackground(
-          $bckg: gmail,
-          $border: 3px solid getColor(gmail)
-        );
+        @include boxShadowBackground($bckg: gmail, $border: 3px solid getColor(gmail));
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -332,13 +330,7 @@ app-footer {
 
       a {
         @include padding($bottom: 13px);
-        @include fontMixin(
-          28px,
-          regular,
-          0.98px,
-          light_black,
-          $decoration: none
-        );
+        @include fontMixin(28px, regular, 0.98px, light_black, $decoration: none);
         height: 34px;
         display: block;
         transition: border 0.23s ease-in-out;
@@ -355,26 +347,24 @@ app-footer {
 }
 
 .feature-products .collections {
-  @include grid(
-    $autoRows: 350px,
-    $autoCols: true,
-    $templateCols: auto auto auto auto
-  );
+  @include grid($autoRows: 350px, $autoCols: true, $templateCols: 280px 280px 280px 280px);
+  @include margin(25px, 25px);
+  justify-content: space-between;
+
+  &.three-cols {
+    @include grid($templateCols: 280px 280px 280px);
+  }
+
+  &.three-cols.auto {
+    @include grid($templateCols: auto auto auto);
+  }
 }
 
 .feature-products .collections .collection {
-  @include margin($all: 25px 25px 25px 25px);
+  @include margin($all: 25px auto);
   box-sizing: border-box;
-}
-
-.feature-products .collections app-collection-item:first-child .collection,
-.feature-products .collections app-collection-item:nth-child(5n) .collection {
-  margin-left: 0px;
-}
-
-.feature-products .collections app-collection-item:nth-child(4n) .collection,
-.feature-products .collections app-collection-item:last-child > .collection {
-  margin-right: 0px;
+  width: 100%;
+  max-width: 265px;
 }
 
 .collections .collection {
@@ -384,10 +374,38 @@ app-footer {
 
   .img {
     @include heightWidth(350px, 100%);
+    position: relative;
+    overflow: hidden;
 
     img {
       @include heightWidth(100%, 100%);
       object-fit: scale-down;
+      transform: translateY(0%);
+      transition: all 0.125s ease-in-out;
+    }
+
+    > .buttons {
+      @include heightWidth(350px, 100%);
+      @include flex(center, center);
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: rgba(131, 103, 216, 0.3);
+      z-index: 2;
+      transform: translateY(100%);
+      transition: all 0.125s ease-in-out;
+
+      > a {
+        @include flex(center, center);
+        @include heightWidth(36px, 100%);
+        @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px, $decoration: none);
+        @include margin($all: 5px);
+        background: getColor(white);
+
+        > fa-icon {
+          @include margin($left: 5px);
+        }
+      }
     }
   }
 
@@ -400,23 +418,70 @@ app-footer {
     @include margin($all: 0);
     @include fontMixin(16px, regular, 0.56px, light_black);
   }
-}
 
-@media (max-width: 1112px) {
-  .feature-products .collections {
-    @include grid($templateCols: auto auto auto);
+  &:hover {
+    .img {
+      img {
+        transform: translateY(-100%);
+      }
+
+      > .buttons {
+        transform: translateY(0%);
+      }
+    }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199px) {
   .feature-products .collections {
-    @include grid($templateCols: auto auto);
+    @include grid($templateCols: 33.3333% 33.3333% 33.3333%);
+    &.three-cols.auto {
+      @include grid($templateCols: 50% 50%);
+
+      .collection {
+        @include margin($all: 25px auto );
+      }
+    }
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 855px) {
   .feature-products .collections {
-    @include grid($templateCols: auto);
+    @include grid($templateCols: 50% 50%);
+
+    &.three-cols {
+      @include grid($templateCols: 50% 50%);
+    }
+  }
+}
+
+@media (max-width: 790px) {
+  .feature-products {
+    @include padding($all: 0 !important);
+  }
+
+  .feature-products .collections {
+    &.three-cols.auto {
+      @include grid($templateCols: 50% 50%);
+    }
+  }
+}
+
+@media (max-width: 667px) {
+  .feature-products .collections {
+    @include grid($templateCols: 100%);
+
+    &.three-cols {
+      @include grid($templateCols: 100%);
+    }
+  }
+}
+
+@media (max-width: 530px) {
+  .feature-products .collections {
+    &.three-cols.auto {
+      @include grid($templateCols: 100%);
+    }
   }
 }
 

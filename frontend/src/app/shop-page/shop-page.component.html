@@ -1,0 +1,169 @@
+<app-breadcrumb
+  title="shop"
+  [other]="[
+    { value: 'shop /', link: '/shop' },
+    { value: 'all categories', link: '' }
+  ]"
+></app-breadcrumb>
+
+<section class="shop-page container">
+  <div class="filters">
+    <ul class="categories">
+      <h4>Product Categories</h4>
+      <li appDropdownNoautoclose>
+        Women
+        <ul>
+          <li>Accessories</li>
+          <li>Bag</li>
+          <li>Clothes</li>
+          <li>Bad & Bath</li>
+          <li>Swimming costume</li>
+          <li>Spot Tops & Shoes</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Men
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Kids
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Accesories
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Home
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Art
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+      <li appDropdownNoautoclose>
+        Computers
+        <ul>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+          <li>categ</li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="colors">
+      <h4>Colors</h4>
+      <li>
+        <p>Black</p>
+      </li>
+      <li>
+        <p>White</p>
+      </li>
+      <li>
+        <p>Red</p>
+      </li>
+      <li>
+        <p>Blue</p>
+      </li>
+      <li>
+        <p>Green</p>
+      </li>
+      <li>
+        <p>Orange</p>
+      </li>
+    </ul>
+    <ul class="colors">
+      <h4>Sizes</h4>
+      <li>
+        <p>Small (24)</p>
+      </li>
+      <li>
+        <p>Medium (45)</p>
+      </li>
+      <li>
+        <p>Large (28)</p>
+      </li>
+      <li>
+        <p>Extra Large (2)</p>
+      </li>
+    </ul>
+  </div>
+  <div class="products">
+    <app-landing-page-products
+      className="three-cols auto"
+      padding="paddingL15"
+      [containerClass]="false"
+      [items]="[
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100
+        }
+      ]"
+    ></app-landing-page-products>
+  </div>
+</section>
