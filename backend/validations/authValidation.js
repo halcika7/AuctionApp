@@ -50,7 +50,7 @@ exports.loginValidation = async data => {
     message = "Please reset your password";
   }
 
-  return returnDataHelper(errors, message, { user });
+  return returnData(errors, message, { user });
 };
 
 exports.forgotPasswordValidation = async email => {
@@ -63,7 +63,7 @@ exports.forgotPasswordValidation = async email => {
     errors.email = "User not found with provided email";
   }
 
-  return returnDataHelper(errors, "", { user });
+  return returnData(errors, "", { user });
 };
 
 exports.resetPasswordValidation = async (resetPasswordToken, password) => {
@@ -91,7 +91,7 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
     errors.password = "Password already in use";
   }
 
-  return returnDataHelper(errors, message, { email: user.email });
+  return returnData(errors, message, { email: user.email });
 };
 
 function emailValidation(email, errors) {
@@ -125,7 +125,7 @@ function nameValidation(type, value, errors, resp) {
   }
 }
 
-function returnDataHelper(errors, message, returnValue) {
+function returnData(errors, message, returnValue) {
   if (!isEmpty(errors)) {
     return { errors: { errors }, isValid: false };
   } else if (!isEmpty(message)) {

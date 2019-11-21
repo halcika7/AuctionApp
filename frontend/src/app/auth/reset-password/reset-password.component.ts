@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "@app/auth/auth";
+import { PASSWORD_VALIDATOR } from '../validators';
 
 @Component({
   selector: "app-reset-password",
@@ -19,14 +20,7 @@ export class ResetPasswordComponent extends Auth implements OnInit, OnDestroy {
     super(
       store,
       new FormGroup({
-        password: new FormControl("", [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(30),
-          Validators.pattern(
-            new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})")
-          )
-        ])
+        ...PASSWORD_VALIDATOR()
       }),
       router
     );

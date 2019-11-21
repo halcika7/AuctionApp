@@ -89,6 +89,10 @@ export class Auth {
   }
 
   destroy() {
+    for (let control in this.form.controls) {
+      this.form.controls[control].setErrors({});
+      this.form.controls[control].markAsUntouched({});
+    }
     this.subscription.unsubscribe();
   }
 

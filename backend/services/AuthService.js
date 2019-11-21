@@ -101,7 +101,8 @@ class AuthService extends BaseService {
       return {
         status: 200,
         response: {
-          message: "Successfull forgot password request. Please visit your email !"
+          message:
+            "You have successfully requested a password reset. Please check your email for further instructions."
         }
       };
     } catch (error) {
