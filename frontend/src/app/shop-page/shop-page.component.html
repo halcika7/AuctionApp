@@ -88,6 +88,16 @@
         </ul>
       </li>
     </ul>
+    <div class="price">
+      <h4>Filter By Price</h4>
+      <ng5-slider
+        [(value)]="minValue"
+        [(highValue)]="maxValue"
+        [options]="options"
+      ></ng5-slider>
+      <p>$40-$400</p>
+      <p>The average price is $200.</p>
+    </div>
     <ul class="colors">
       <h4>Colors</h4>
       <li>
@@ -126,8 +136,32 @@
     </ul>
   </div>
   <div class="products">
+    <div class="navigation">
+      <div class="dropdown">
+        <p appDropdownNoautoclose>Default Sorting</p>
+        <ul>
+          <li class="active">Default Sorting</li>
+          <li>Sort by Popularity</li>
+          <li>Sort by Rating</li>
+          <li>Sort by price</li>
+        </ul>
+      </div>
+      <div class="gridlist">
+        <span
+          [ngClass]="{ active: productsLayout !== 'list' }"
+          (click)="changeProductsLayout('three-cols auto')"
+          ><fa-icon [icon]="['fas', 'th']"></fa-icon>Grid</span
+        >
+        <span
+          [ngClass]="{ active: productsLayout === 'list' }"
+          (click)="changeProductsLayout('list')"
+          ><fa-icon [icon]="['fas', 'th-list']"></fa-icon>List</span
+        >
+      </div>
+    </div>
     <app-landing-page-products
-      className="three-cols auto"
+      [list]="productsLayout === 'list' ? true : false"
+      [className]="productsLayout"
       padding="paddingL15"
       [containerClass]="false"
       [items]="[
@@ -137,7 +171,9 @@
           picture:
             'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
           name: 'prod1',
-          price: 100
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
         },
         {
           subcategoryId: 1,
@@ -145,7 +181,9 @@
           picture:
             'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
           name: 'prod1',
-          price: 100
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
         },
         {
           subcategoryId: 1,
@@ -153,7 +191,9 @@
           picture:
             'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
           name: 'prod1',
-          price: 100
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
         },
         {
           subcategoryId: 1,
@@ -161,9 +201,62 @@
           picture:
             'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
           name: 'prod1',
-          price: 100
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
+        },
+        {
+          subcategoryId: 1,
+          id: 1,
+          picture:
+            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
+          name: 'prod1',
+          price: 100,
+          details:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
         }
       ]"
     ></app-landing-page-products>
+    <button>LOAD MORE</button>
   </div>
 </section>

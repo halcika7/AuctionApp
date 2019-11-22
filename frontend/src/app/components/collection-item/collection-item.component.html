@@ -3,7 +3,7 @@
     <div class="img">
       <img [src]="item.picture" [alt]="item.name" />
       <div class="buttons">
-        <a href="">Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></a>
+        <button type="button">Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button>
         <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
           >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
         ></a>

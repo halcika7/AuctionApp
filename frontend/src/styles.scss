@@ -187,7 +187,10 @@ app-footer {
       }
 
       &.facebook-link {
-        @include boxShadowBackground($bckg: blue_purple, $border: 3px solid getColor(blue_purple));
+        @include boxShadowBackground(
+          $bckg: blue_purple,
+          $border: 3px solid getColor(blue_purple)
+        );
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -201,7 +204,10 @@ app-footer {
       }
 
       &.gmail-link {
-        @include boxShadowBackground($bckg: gmail, $border: 3px solid getColor(gmail));
+        @include boxShadowBackground(
+          $bckg: gmail,
+          $border: 3px solid getColor(gmail)
+        );
 
         fa-icon {
           @include margin($right: 8.5px);
@@ -330,7 +336,13 @@ app-footer {
 
       a {
         @include padding($bottom: 13px);
-        @include fontMixin(28px, regular, 0.98px, light_black, $decoration: none);
+        @include fontMixin(
+          28px,
+          regular,
+          0.98px,
+          light_black,
+          $decoration: none
+        );
         height: 34px;
         display: block;
         transition: border 0.23s ease-in-out;
@@ -347,7 +359,11 @@ app-footer {
 }
 
 .feature-products .collections {
-  @include grid($autoRows: 350px, $autoCols: true, $templateCols: 280px 280px 280px 280px);
+  @include grid(
+    $autoRows: 350px,
+    $autoCols: true,
+    $templateCols: 280px 280px 280px 280px
+  );
   @include margin(25px, 25px);
   justify-content: space-between;
 
@@ -357,6 +373,14 @@ app-footer {
 
   &.three-cols.auto {
     @include grid($templateCols: auto auto auto);
+  }
+
+  &.list {
+    display: block;
+
+    .collection {
+      @include margin($all: 25px 0);
+    }
   }
 }
 
@@ -395,12 +419,22 @@ app-footer {
       transform: translateY(100%);
       transition: all 0.125s ease-in-out;
 
-      > a {
+      > a,
+      > button {
         @include flex(center, center);
         @include heightWidth(36px, 100%);
-        @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px, $decoration: none);
+        @include fontMixin(
+          15px,
+          regular,
+          0.52px,
+          light_black,
+          $lineH: 22px,
+          $decoration: none
+        );
         @include margin($all: 5px);
         background: getColor(white);
+        border: none;
+        cursor: pointer;
 
         > fa-icon {
           @include margin($left: 5px);
@@ -432,6 +466,77 @@ app-footer {
   }
 }
 
+.collections.list .collection {
+  @include flex();
+  max-width: 100%;
+
+  .image {
+    @include heightWidth(280px);
+    min-width: 212px;
+    max-width: 212px;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      @include heightWidth(280px, 100%);
+      object-fit: scale-down;
+    }
+  }
+
+  .details {
+    box-sizing: border-box;
+    padding-left: 20px;
+
+    > a {
+      text-decoration: none;
+
+      h3 {
+        @include fontMixin(24px, bold, 0.84px, light_black);
+        margin: 0;
+        border: none;
+      }
+    }
+
+    > p.details {
+      @include fontMixin(16px, regular, 0.56px, gray, $lineH: 21px);
+      padding-left: 0;
+    }
+
+    .price {
+      @include fontMixin(24px, regular, 0.84px, purple);
+      @include margin($all: 36px 0 21px);
+    }
+
+    > .buttons {
+      @include flex(center, start);
+
+      > a,
+      > button {
+        @include flex(center, center);
+        @include heightWidth(36px, 120px);
+        @include fontMixin(
+          15px,
+          regular,
+          0.52px,
+          light_black,
+          $lineH: 22px,
+          $decoration: none
+        );
+        @include margin($right: 5px);
+        background: getColor(white);
+        border: 3px solid getColor(lighter_gray) !important;
+        cursor: pointer;
+        padding: 0;
+        box-sizing: border-box;
+
+        > fa-icon {
+          @include margin($left: 5px);
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 1199px) {
   .feature-products .collections {
     @include grid($templateCols: 33.3333% 33.3333% 33.3333%);
@@ -439,7 +544,7 @@ app-footer {
       @include grid($templateCols: 50% 50%);
 
       .collection {
-        @include margin($all: 25px auto );
+        @include margin($all: 25px auto);
       }
     }
   }
@@ -481,6 +586,17 @@ app-footer {
   .feature-products .collections {
     &.three-cols.auto {
       @include grid($templateCols: 100%);
+    }
+  }
+}
+
+@media (max-width: 490px) {
+  .feature-products .collections.list .collection {
+    flex-wrap: wrap;
+    padding-left: 0;
+
+    > .image {
+      display: none;
     }
   }
 }

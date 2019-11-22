@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
+import { Ng5SliderModule } from 'ng5-slider';
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -55,7 +56,9 @@ import {
   faSearch,
   faCheck,
   faHeart,
-  faGavel
+  faGavel,
+  faThList,
+  faTh
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -65,6 +68,7 @@ import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noaut
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
 import { ShopPageComponent } from './shop-page/shop-page.component';
+import { CollectionListItemComponent } from './components/collection-list-item/collection-list-item.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +98,8 @@ import { ShopPageComponent } from './shop-page/shop-page.component';
     ProductImagesComponent,
     DateAgoPipe,
     ProductBidsComponent,
-    ShopPageComponent
+    ShopPageComponent,
+    CollectionListItemComponent
   ],
   imports: [
     BrowserModule,
@@ -109,7 +114,8 @@ import { ShopPageComponent } from './shop-page/shop-page.component';
       CategoriesPageEffects,
       ProductPageEffects
     ]),
-    FontAwesomeModule
+    FontAwesomeModule,
+    Ng5SliderModule
   ],
   providers: [
     {
@@ -133,7 +139,9 @@ export class AppModule {
       faFacebookSquare,
       faGooglePlusSquare,
       faHeart,
-      faGavel
+      faGavel,
+      faTh,
+      faThList
     );
   }
 }

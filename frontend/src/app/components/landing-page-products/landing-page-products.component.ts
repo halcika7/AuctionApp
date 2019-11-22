@@ -10,6 +10,7 @@ export class LandingPageProductsComponent implements OnInit {
   @Input() className: string;
   @Input() padding: string;
   @Input() containerClass: boolean = true;
+  @Input() list: boolean = false;
   @Input() items: [];
 
   constructor() {}
