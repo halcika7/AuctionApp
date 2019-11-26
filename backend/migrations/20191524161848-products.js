@@ -58,6 +58,15 @@ module.exports = {
           },
           key: "id"
         }
+      },
+      brandId: {
+        type: Sequelize.BIGINT,
+        references: {
+          model: {
+            tableName: "Brands"
+          },
+          key: "id"
+        }
       }
     });
   },

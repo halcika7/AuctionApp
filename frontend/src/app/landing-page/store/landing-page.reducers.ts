@@ -1,10 +1,10 @@
 import * as LandingPageActions from "@app/landing-page/store/landing-page.actions";
 
 export interface Product {
-  name: string;
   id: string;
-  price: number;
-  picture: string;
+  name?: string;
+  price?: number;
+  picture?: string;
   subcategoryId?: string;
   details?: string;
 }

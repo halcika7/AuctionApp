@@ -37,6 +37,7 @@ import { AuthEffects } from "./auth/store/auth.effects";
 import { LandingPageEffects } from "./landing-page/store/landing-page.effects";
 import { CategoriesPageEffects } from "./containers/all-categories/store/all-categories.effects";
 import { ProductPageEffects } from "./product-page/store/product-page.effects";
+import { ShopPageEffects } from "./shop-page/store/shop-page.effects";
 
 // Font Awesome Icons
 import {
@@ -112,7 +113,8 @@ import { CollectionListItemComponent } from './components/collection-list-item/c
       AuthEffects,
       LandingPageEffects,
       CategoriesPageEffects,
-      ProductPageEffects
+      ProductPageEffects,
+      ShopPageEffects
     ]),
     FontAwesomeModule,
     Ng5SliderModule

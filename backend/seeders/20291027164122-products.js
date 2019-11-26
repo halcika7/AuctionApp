@@ -107,37 +107,39 @@ module.exports = {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqLMVRlATdIpPWmZjGo_kOwilvRedGfwmrpdQboTF6eBkpXXx6&s"
     ];
 
-    const helperFunction = (index, j, subcategoryId) => {
+    const helperFunction = (index, j, subcategoryId, { min, max }) => {
       for (let i = index; i < j; i++) {
         let date = new Date();
         let startDate = new Date(date);
         let newDate = new Date(startDate);
         startDate.setDate(startDate.getDate() + faker.random.number(1));
         newDate.setDate(startDate.getDate() + faker.random.number(30));
+        let brandId = min === max ? min : Math.floor(Math.random() * (max - min + 1) + min);
 
         products.push({
           name: faker.commerce.productName(),
           details: faker.lorem.paragraph(),
           picture: images[i],
-          price: faker.commerce.price(),
+          price: faker.commerce.price() + 1,
           featured: faker.random.boolean(),
           auctionStart: startDate,
           auctionEnd: newDate,
           userId: Math.floor(Math.random() * 2 + 1),
-          subcategoryId
+          subcategoryId,
+          brandId
         });
       }
     };
-    helperFunction(0, 10, 1);
-    helperFunction(10, 20, 2);
-    helperFunction(20, 30, 3);
-    helperFunction(30, 40, 4);
-    helperFunction(40, 50, 5);
-    helperFunction(50, 60, 6);
-    helperFunction(60, 70, 7);
-    helperFunction(70, 80, 8);
-    helperFunction(80, 90, 9);
-    helperFunction(90, 100, 10);
+    helperFunction(0, 10, 1, { min: 5, max: 5 });
+    helperFunction(10, 20, 2, { min: 5, max: 5 });
+    helperFunction(20, 30, 3, { min: 9, max: 9 });
+    helperFunction(30, 40, 4, { min: 4, max: 4 });
+    helperFunction(40, 50, 5, { min: 1, max: 2 });
+    helperFunction(50, 60, 6, { min: 1, max: 2 });
+    helperFunction(60, 70, 7, { min: 10, max: 10 });
+    helperFunction(70, 80, 8, { min: 11, max: 11 });
+    helperFunction(80, 90, 9, { min: 7, max: 8 });
+    helperFunction(90, 100, 10, { min: 6, max: 8 });
     return queryInterface.bulkInsert("Products", products, {});
   },
 

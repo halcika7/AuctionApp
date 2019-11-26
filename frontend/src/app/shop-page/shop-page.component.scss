@@ -41,6 +41,10 @@
   overflow-y: auto;
 }
 
+.price {
+  max-height: 200px;
+}
+
 .categories ul,
 .colors ul {
   margin: 0;
@@ -62,6 +66,20 @@
   margin: 0 0 23px;
   position: relative;
   cursor: pointer;
+}
+
+.colors > li {
+  @include fontMixin(
+    14px,
+    regular,
+    0.49px,
+    light_black,
+    $transform: capitalize
+  );
+}
+
+.colors > li.active {
+  color: getColor(purple);
 }
 
 .categories li > ul > li {
@@ -101,8 +119,15 @@
   display: block;
 }
 
-.categories ul > li {
-  @include fontMixin(14px, regular, 0.49px, gray);
+.categories ul > li,
+.categories ul > li > a {
+  @include fontMixin(14px, regular, 0.49px, gray, $decoration: none);
+  margin-bottom: 19px;
+}
+
+.categories ul > li.active > a,
+.categories ul > li.active {
+  @include fontMixin(14px, regular, 0.49px, purple, $decoration: none);
   margin-bottom: 19px;
 }
 
@@ -112,27 +137,6 @@
 
 .categories ul > li:last-child {
   margin-bottom: 31px;
-}
-
-@media (max-width: 790px) {
-  .shop-page {
-    flex-direction: column;
-  }
-
-  .filters {
-    @include grid($templateCols: 48% 48%, $gap: 10px);
-    justify-content: center;
-    width: 100%;
-    max-height: 500px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
-}
-
-@media (max-width: 500px) {
-  .filters {
-    @include grid($templateCols: 100%);
-  }
 }
 
 ::ng-deep {
@@ -291,11 +295,23 @@
 }
 
 @media (max-width: 790px) {
+  .shop-page {
+    flex-direction: column;
+  }
+
+  .filters {
+    display: block;
+    column-count: 2;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
   .products .navigation {
     margin-top: 40px;
     padding: 0;
   }
-
 }
 
 @media (max-width: 540px) {
@@ -305,6 +321,12 @@
 
   .products .navigation .dropdown {
     margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 500px) {
+  .filters {
+    @include grid($templateCols: 100%);
   }
 }
 

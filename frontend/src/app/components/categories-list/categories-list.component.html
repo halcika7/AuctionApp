@@ -8,10 +8,12 @@
       <p appDropdown>{{ category.name }}</p>
       <ul class="subcategories">
         <li *ngFor="let subCat of category.Subcategories">
-          <a href="">{{ subCat.name }}</a>
+          <a [routerLink]="['/shop', category.id, subCat.id]">{{
+            subCat.name
+          }}</a>
         </li>
       </ul>
     </li>
-    <li><a [routerLink]="['/home/categories']">All Categories</a></li>
+    <li><a [routerLink]="['/shop']">All Categories</a></li>
   </ul>
 </div>

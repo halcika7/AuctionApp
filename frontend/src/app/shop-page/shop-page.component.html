@@ -2,7 +2,7 @@
   title="shop"
   [other]="[
     { value: 'shop /', link: '/shop' },
-    { value: 'all categories', link: '' }
+    { value: subcategory, link: '' }
   ]"
 ></app-breadcrumb>
 
@@ -10,128 +10,61 @@
   <div class="filters">
     <ul class="categories">
       <h4>Product Categories</h4>
-      <li appDropdownNoautoclose>
-        Women
+      <li
+        [defaultOpen]="categoryId === category.id"
+        appDropdownNoautoclose
+        *ngFor="let category of categories"
+      >
+        {{ category.name }}
         <ul>
-          <li>Accessories</li>
-          <li>Bag</li>
-          <li>Clothes</li>
-          <li>Bad & Bath</li>
-          <li>Swimming costume</li>
-          <li>Spot Tops & Shoes</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Men
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Kids
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Accesories
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Home
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Art
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-        </ul>
-      </li>
-      <li appDropdownNoautoclose>
-        Computers
-        <ul>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
-          <li>categ</li>
+          <li
+            [ngClass]="{ active: subcategoryId === subcategory.id }"
+            *ngFor="let subcategory of category.Subcategories"
+          >
+            <a [routerLink]="['/shop', category.id, subcategory.id]"
+              >{{ subcategory.name }} ({{ subcategory.number_of_products }})</a
+            >
+          </li>
         </ul>
       </li>
     </ul>
-    <div class="price">
-      <h4>Filter By Price</h4>
-      <ng5-slider
-        [(value)]="minValue"
-        [(highValue)]="maxValue"
-        [options]="options"
-      ></ng5-slider>
-      <p>$40-$400</p>
-      <p>The average price is $200.</p>
-    </div>
     <ul class="colors">
-      <h4>Colors</h4>
-      <li>
-        <p>Black</p>
-      </li>
-      <li>
-        <p>White</p>
-      </li>
-      <li>
-        <p>Red</p>
-      </li>
-      <li>
-        <p>Blue</p>
-      </li>
-      <li>
-        <p>Green</p>
-      </li>
-      <li>
-        <p>Orange</p>
+      <h4>Brands</h4>
+      <li
+        *ngFor="let brand of brands"
+        [ngClass]="{ active: brandId === brand.id }"
+      >
+        <p (click)="filterClicked(true, brand.id)">
+          {{ brand.name }} ({{ brand.number_of_products }})
+        </p>
       </li>
     </ul>
-    <ul class="colors">
-      <h4>Sizes</h4>
-      <li>
-        <p>Small (24)</p>
-      </li>
-      <li>
-        <p>Medium (45)</p>
-      </li>
-      <li>
-        <p>Large (28)</p>
-      </li>
-      <li>
-        <p>Extra Large (2)</p>
+    <ng-template [ngIf]="showIfKeysLength(prices)">
+      <div class="price">
+        <h4>Filter By Price</h4>
+        <ng5-slider
+          [value]="minValue"
+          [highValue]="maxValue"
+          [options]="options"
+          (userChangeEnd)="changeValues($event)"
+        ></ng5-slider>
+        <p>
+          {{ prices.min_price | currency }} - {{ prices.max_price | currency }}
+        </p>
+        <p>The average price is {{ prices.avg_price | currency }}.</p>
+      </div>
+    </ng-template>
+    <ul class="colors" *ngFor="let filter of filters">
+      <h4>{{ filter.name }}</h4>
+      <li
+        *ngFor="let vals of filter.FilterValues"
+        [ngClass]="{
+          active: checkActivity(vals.id)
+        }"
+      >
+        <p (click)="filterClicked(false, filter.id, vals.id)">
+          {{ vals.value }} ({{ vals.Products.length }})
+        </p>
       </li>
     </ul>
   </div>
@@ -141,9 +74,10 @@
         <p appDropdownNoautoclose>Default Sorting</p>
         <ul>
           <li class="active">Default Sorting</li>
-          <li>Sort by Popularity</li>
-          <li>Sort by Rating</li>
-          <li>Sort by price</li>
+          <li>Sort by Price Descending</li>
+          <li>Sort by Price Ascending</li>
+          <li>Sort by Time Left Descending</li>
+          <li>Sort by Time Left Ascending</li>
         </ul>
       </div>
       <div class="gridlist">
@@ -164,98 +98,7 @@
       [className]="productsLayout"
       padding="paddingL15"
       [containerClass]="false"
-      [items]="[
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        },
-        {
-          subcategoryId: 1,
-          id: 1,
-          picture:
-            'https://www.dailyrepublic.com/files/2019/02/SPORTS-MICHAEL-JORDAN-BIRTHDAY-PHOTOS-56-MCT.jpg',
-          name: 'prod1',
-          price: 100,
-          details:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit odio a erat lobortis auctor. Curabitur sodales pharetra placerat. Aenean auctor luctus tempus. Cras laoreet et magna in dignissim. Nam et tincidunt augue. Vivamus quis malesuada velit. In hac habitasse platea dictumst.'
-        }
-      ]"
+      [items]="products"
     ></app-landing-page-products>
     <button>LOAD MORE</button>
   </div>

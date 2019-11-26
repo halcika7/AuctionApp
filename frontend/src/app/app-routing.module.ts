@@ -40,6 +40,7 @@ const appRoutes: Routes = [
     path: "shop",
     children: [
       { path: "", component: ShopPageComponent },
+      { path: ":categoryId/:subcategoryId", component: ShopPageComponent },
       { path: "about", component: AboutComponent },
       { path: "privacy", component: PrivacyComponent },
       { path: "terms", component: ConditionsComponent },

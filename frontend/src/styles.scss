@@ -392,10 +392,6 @@ app-footer {
 }
 
 .collections .collection {
-  > a {
-    text-decoration: none;
-  }
-
   .img {
     @include heightWidth(350px, 100%);
     position: relative;
@@ -445,7 +441,10 @@ app-footer {
 
   h5 {
     @include margin(11px, 7px);
-    @include fontMixin(24px, bold, 0.84px, light_black);
+
+    > a {
+      @include fontMixin(24px, bold, 0.84px, light_black, $decoration: none);
+    }
   }
 
   p {
@@ -508,7 +507,7 @@ app-footer {
     }
 
     > .buttons {
-      @include flex(center, start);
+      @include flex(center, flex-start);
 
       > a,
       > button {

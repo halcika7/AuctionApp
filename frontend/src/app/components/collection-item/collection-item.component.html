@@ -1,15 +1,19 @@
 <div class="collection">
-  <a [routerLink]="['/shop/products', item.subcategoryId, item.id]">
-    <div class="img">
-      <img [src]="item.picture" [alt]="item.name" />
-      <div class="buttons">
-        <button type="button">Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon></button>
-        <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
-          >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
-        ></a>
-      </div>
+  <div class="img">
+    <img [src]="item.picture" [alt]="item.name" />
+    <div class="buttons">
+      <button type="button">
+        Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
+      </button>
+      <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+        >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
+      ></a>
     </div>
-    <h5>{{ item.name }}</h5>
-    <p>Start From {{ item.price | currency }}</p>
-  </a>
+  </div>
+  <h5>
+    <a [routerLink]="['/shop/products', item.subcategoryId, item.id]">{{
+      item.name
+    }}</a>
+  </h5>
+  <p>Start From {{ item.price | currency }}</p>
 </div>
