@@ -3,7 +3,7 @@ const {
   loginValidation,
   forgotPasswordValidation,
   resetPasswordValidation
-} = require("../validations/authValidation");
+} = require('../validations/authValidation');
 const {
   createAccessToken,
   createRefreshToken,
@@ -11,10 +11,10 @@ const {
   findUserByEmail,
   verifyRefreshToken,
   hashPassword
-} = require("../helpers/authHelper");
-const { sendEmail } = require("../helpers/sendEmail");
-const BaseService = require("./BaseService");
-const User = require("../models/User");
+} = require('../helpers/authHelper');
+const { sendEmail } = require('../helpers/sendEmail');
+const BaseService = require('./BaseService');
+const User = require('../models/User');
 
 class AuthService extends BaseService {
   constructor() {
@@ -28,13 +28,13 @@ class AuthService extends BaseService {
       await createUser(data);
       return {
         status: 200,
-        response: { message: "Account successfully created !" }
+        response: { message: 'Account successfully created !' }
       };
     } catch (error) {
       return {
         status: 403,
         response: {
-          message: "Something happened. We were unable to create an account."
+          message: 'Something happened. We were unable to create an account.'
         }
       };
     }
@@ -60,7 +60,7 @@ class AuthService extends BaseService {
       return {
         status: 403,
         response: {
-          message: "Something happened. We were unable to perform login."
+          message: 'Something happened. We were unable to perform login.'
         }
       };
     }
@@ -71,7 +71,7 @@ class AuthService extends BaseService {
       const payload = verifyRefreshToken(token),
         user = await findUserByEmail(payload.email, false);
       if (!user) {
-        return { status: 400, response: { accessToken: "" } };
+        return { status: 400, response: { accessToken: '' } };
       }
       return {
         status: 200,
@@ -79,7 +79,7 @@ class AuthService extends BaseService {
         refreshToken: createRefreshToken(user)
       };
     } catch (error) {
-      return { status: 400, response: { accessToken: "" } };
+      return { status: 400, response: { accessToken: '' } };
     }
   }
 
@@ -87,14 +87,14 @@ class AuthService extends BaseService {
     try {
       const { errors, isValid, user } = await forgotPasswordValidation(email);
       if (!isValid && errors) return { status: 403, response: { ...errors } };
-      const resetPasswordToken = createAccessToken(user, "1d");
+      const resetPasswordToken = createAccessToken(user, '1d');
       const { err } = await sendEmail(
         email,
         resetPasswordToken,
         "Need to reset your password? Just click the link below and you'll be on your way. If you did not make this request, please ignore this email."
       );
       if (err) {
-        return { status: 403, response: { message: "Something happend" } };
+        return { status: 403, response: { message: err } };
       }
       await User.update({ resetPasswordToken }, { where: { email } });
 
@@ -102,11 +102,12 @@ class AuthService extends BaseService {
         status: 200,
         response: {
           message:
-            "You have successfully requested a password reset. Please check your email for further instructions."
+            'You have successfully requested a password reset. Please check your email for further instructions.'
         }
       };
     } catch (error) {
-      return { status: 403, response: { message: "Something happend" } };
+      console.log('TCL: AuthService -> forgotPassword -> error', error);
+      return { status: 403, response: { message: 'Something happend' } };
     }
   }
 
@@ -126,21 +127,21 @@ class AuthService extends BaseService {
       return {
         status: 200,
         response: {
-          message: "Password updated!"
+          message: 'Password updated!'
         }
       };
     } catch (error) {
       return {
         status: 403,
         response: {
-          message: "Something happened. We were unable to perform request."
+          message: 'Something happened. We were unable to perform request.'
         }
       };
     }
   }
 
   setRefreshTokenCookie(res, token) {
-    return res.cookie("jid", token, { httpOnly: true });
+    return res.cookie('jid', token, { httpOnly: true });
   }
 }
 
