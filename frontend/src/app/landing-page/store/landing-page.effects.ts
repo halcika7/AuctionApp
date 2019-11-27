@@ -13,9 +13,7 @@ export class LandingPageEffects {
     switchMap(({ productType, offset }) => {
       return this.http.get<any>(`/landing/${productType}/8/${offset}`).pipe(
         map(data => new LandingPageActions.LoadMoreProductsSuccess(data)),
-        catchError(({ error }) =>
-          of(new LandingPageActions.LandingPageFailed(error.failedMessage))
-        )
+        catchError(({ error }) => of(new LandingPageActions.LandingPageFailed(error.failedMessage)))
       );
     })
   );
@@ -26,9 +24,7 @@ export class LandingPageEffects {
     concatMap(({ path }) => {
       return this.http.get<any>(`/landing/${path}`).pipe(
         map(data => new LandingPageActions.LandingPageSuccess(data)),
-        catchError(({ error }) =>
-          of(new LandingPageActions.LandingPageFailed(error.failedMessage))
-        )
+        catchError(({ error }) => of(new LandingPageActions.LandingPageFailed(error.failedMessage)))
       );
     })
   );

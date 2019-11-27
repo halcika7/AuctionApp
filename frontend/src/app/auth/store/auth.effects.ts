@@ -56,15 +56,42 @@ export class AuthEffects {
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
     concatMap(() => {
+      return this.http.post<{ accessToken: string }>("/auth/refresh_token", {}).pipe(
+        map(data => new AuthActions.RefreshToken(data)),
+        catchError(data => {
+          localStorage.removeItem("accessToken");
+          sessionStorage.removeItem("accessToken");
+          return of(new AuthActions.RefreshToken(data));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  forgotPassword = this.actions$.pipe(
+    ofType(AuthActions.FORGOT_PASSWORD_START),
+    concatMap(({ email }) => {
       return this.http
-        .post<{ accessToken: string }>("/auth/refresh_token", {})
+        .patch<any>("/auth/forgotpassword", { email })
         .pipe(
-          map(data => new AuthActions.RefreshToken(data)),
-          catchError(data => {
-            localStorage.removeItem("accessToken");
-            sessionStorage.removeItem("accessToken");
-            return of(new AuthActions.RefreshToken(data));
-          })
+          map(data => new AuthActions.ForgotPasswordSuccess(data)),
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+        );
+    })
+  );
+
+  @Effect()
+  resetPassword = this.actions$.pipe(
+    ofType(AuthActions.RESET_PASSWORD_START),
+    concatMap(({ resetPasswordToken, password }) => {
+      return this.http
+        .patch<any>("/auth/resetpassword", { resetPasswordToken, password })
+        .pipe(
+          map(data => {
+            sessionStorage.removeItem("resetPasswordToken");
+            return new AuthActions.ForgotPasswordSuccess(data);
+          }),
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
     })
   );

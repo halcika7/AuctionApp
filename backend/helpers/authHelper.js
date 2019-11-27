@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-const {
-  ACCESS_TOKEN_SECRET,
-  REFRESH_TOKEN_SECRET
-} = require("../config/configs");
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../config/configs");
 
-exports.createAccessToken = ({ id, email }) =>
-  jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+exports.createAccessToken = ({ id, email }, expiresIn = "15min") =>
+  jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn });
 
 exports.createRefreshToken = ({ id, email }) =>
   jwt.sign({ id, email }, REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
@@ -30,8 +27,7 @@ exports.verifyAccessToken = token => {
 
 exports.decodeToken = token => jwt.decode(token);
 
-exports.comparePassword = async (psd1, psd2) =>
-  await bcrypt.compare(psd1, psd2);
+exports.comparePassword = async (psd1, psd2) => await bcrypt.compare(psd1, psd2);
 
 exports.findUserByEmail = async (email, withPassword = true) => {
   const exclude = withPassword
@@ -45,8 +41,8 @@ exports.findUserByEmail = async (email, withPassword = true) => {
 };
 
 exports.createUser = async ({ firstName, lastName, email, password }) => {
-  password = await hashPassword(password);
+  password = await this.hashPassword(password);
   return await User.create({ firstName, lastName, email, password });
 };
 
-const hashPassword = async password => await bcrypt.hash(password, 10);
+exports.hashPassword = async password => await bcrypt.hash(password, 10);

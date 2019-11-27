@@ -48,17 +48,14 @@
         controlName="password"
         [parentForm]="form"
         [input]="form.get('password')"
-        pattern="Possword must include at least one of each type: lowercase, uppercase, number and
+        pattern="Password must include at least one of each type: lowercase, uppercase, number and
         special symbol such as (!@#$%)!!"
         [showErrors]="showErrors"
       ></app-input>
       <button type="submit" [disabled]="!isValidForm || isClicked">
         Register
       </button>
-      <span
-        >Already have an account?
-        <a [routerLink]="['/home/auth/login']">Login</a></span
-      >
+      <span>Already have an account? <a [routerLink]="['/home/auth/login']">Login</a></span>
     </div>
   </form>
 </section>

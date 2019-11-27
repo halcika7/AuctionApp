@@ -14,13 +14,7 @@ export const PRODUCT_BID_START = "PRODUCT_BID_START";
 export const PRODUCT_BID_SUCCESS = "PRODUCT_BID_SUCCESS";
 export const PRODUCT_BID_FAILED = "PRODUCT_BID_FAILED";
 
-export const CLEAR_PRODUCT_STATE = "CLEAR_PRODUCT_STATE";
 export const CLEAR_PRODUCT_MESSAGES = "CLEAR_PRODUCT_MESSAGES";
-
-export class ClearProductState implements Action {
-  readonly type = CLEAR_PRODUCT_STATE;
-  constructor() {}
-}
 
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
@@ -90,5 +84,4 @@ export type ProductPageActions =
   | ProductBidFailed
   | SimilarProductStart
   | SimilarProductSuccess
-  | ClearProductState
   | ClearProductMessages;

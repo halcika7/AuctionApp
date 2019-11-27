@@ -22,10 +22,7 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
       .select("productPage")
       .pipe(
         map(state => ({
-          ProductImages: [
-            { image: state.product.picture },
-            ...state.product.ProductImages
-          ]
+          ProductImages: [{ image: state.product.picture }, ...state.product.ProductImages]
         }))
       )
       .subscribe(({ ProductImages }) => {

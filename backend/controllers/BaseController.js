@@ -3,9 +3,7 @@ class BaseController {
     if (!!ChildClass.instance) {
       return ChildClass.instance;
     }
-
     ChildClass.instance = this;
-
     return this;
   }
 

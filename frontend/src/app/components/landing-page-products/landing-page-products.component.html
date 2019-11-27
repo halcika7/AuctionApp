@@ -4,10 +4,7 @@
     <p *ngIf="items.length === 0; else prods">No Products...</p>
     <ng-template #prods>
       <div class="collections">
-        <app-collection-item
-          *ngFor="let item of items"
-          [item]="item"
-        ></app-collection-item>
+        <app-collection-item *ngFor="let item of items" [item]="item"></app-collection-item>
       </div>
     </ng-template>
   </div>

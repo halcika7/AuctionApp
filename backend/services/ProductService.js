@@ -14,9 +14,7 @@ class ProductService extends BaseService {
 
   async filterProducts(reqParams) {
     try {
-      const { products, numberOfProducts } = await getFilteredProducts(
-        reqParams
-      );
+      const { products, numberOfProducts } = await getFilteredProducts(reqParams);
       const eq = isNaN(parseInt(reqParams.limit) + parseInt(reqParams.offset))
         ? parseInt(reqParams.limit)
         : parseInt(reqParams.limit) + parseInt(reqParams.offset);
@@ -39,9 +37,7 @@ class ProductService extends BaseService {
     try {
       const product = await getProductById(productId);
       const { id } = decodeToken(token) || { id: undefined };
-      const { bids } =
-        id === product.userId &&
-        (await BidService.filterBidsForProduct(productId));
+      const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
       return { status: 200, product, bids };
     } catch (error) {
       return {
@@ -52,8 +48,7 @@ class ProductService extends BaseService {
 
   async findSimilarProducts(subcategoryId, id) {
     try {
-      const similarProducts =
-        (await getSimilarProducts(subcategoryId, id)) || [];
+      const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
       return { status: 200, similarProducts };
     } catch (error) {
       return {

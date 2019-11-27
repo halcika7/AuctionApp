@@ -20,7 +20,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _hide = false;
   private _userId: string;
   private _message: string;
-  private _statusCode: number;
+  private _success: boolean;
   private _noBids = true;
   private _enteredPrice = null;
   private _disabled = false;
@@ -40,39 +40,32 @@ export class ProductPageComponent implements OnInit, OnDestroy {
           this.router.navigate(["/404"]);
         }
         this.store.dispatch(new ProductPageActions.ProductStart(id));
-        this.store.dispatch(
-          new ProductPageActions.SimilarProductStart(id, subcategoryId)
-        );
+        this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
       })
     );
 
     this.subscription.add(
       this.store
         .select("productPage")
-        .subscribe(
-          ({ product, similarProducts, bids, error, message, code }) => {
-            if (error) {
-              this.router.navigate(["/404"]);
-            }
-            if (code === 200) {
-              this._enteredPrice = null;
-            }
-            this._product = product;
-            this._bids = bids;
-            this._similarProducts = similarProducts;
-            this._minPrice =
-              product.highest_bid >= product.price
-                ? product.highest_bid
-                : product.price;
-            this._hide =
-              new Date(product.auctionStart) > new Date() ? true : false;
-            this._noBids = product.highest_bid === 0 ? true : false;
-            this._message = message;
-            this._statusCode = code;
-            this._disabled = this.statusCode === 500 ? true : false;
-            this.setMessageDisabled();
+        .subscribe(({ product, similarProducts, bids, error, message, success }) => {
+          if (error) {
+            this.router.navigate(["/404"]);
           }
-        )
+          if (success) {
+            this._enteredPrice = null;
+          }
+          this._product = product;
+          this._bids = bids;
+          this._similarProducts = similarProducts;
+          this._minPrice =
+            product.highest_bid >= product.price ? product.highest_bid : product.price;
+          this._hide = new Date(product.auctionStart) > new Date() ? true : false;
+          this._noBids = product.highest_bid === 0 ? true : false;
+          this._message = message;
+          this._success = success;
+          this._disabled = !this._success;
+          this.setMessageDisabled();
+        })
     );
 
     this.subscription.add(
@@ -84,13 +77,12 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new ProductPageActions.ClearProductState());
     this.subscription.unsubscribe();
     this._enteredPrice = null;
   }
 
   private setMessageDisabled() {
-    if (this.product.id && !this.statusCode) {
+    if (this.product.id && !this._message) {
       this._message = this.hide
         ? ""
         : this.product.userId === this.userId && this.userId !== ""
@@ -110,10 +102,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   onSubmit(input: HTMLInputElement) {
     this.store.dispatch(
-      new ProductPageActions.ProductBidStart(
-        this.product.id,
-        parseFloat(input.value)
-      )
+      new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
     );
   }
 
@@ -153,8 +142,8 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     return this._enteredPrice;
   }
 
-  get statusCode(): number {
-    return this._statusCode;
+  get success(): boolean {
+    return this._success;
   }
 
   get minPrice(): number {

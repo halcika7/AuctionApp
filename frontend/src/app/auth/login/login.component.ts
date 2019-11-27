@@ -1,10 +1,11 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Auth } from "@app/auth/auth";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
+import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from "../validators";
 
 @Component({
   selector: "app-login",
@@ -12,15 +13,12 @@ import * as AuthActions from "@app/auth/store/auth.actions";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent extends Auth implements OnDestroy {
-  constructor(
-    private store: Store<fromApp.AppState>,
-    protected router: Router
-  ) {
+  constructor(private store: Store<fromApp.AppState>, protected router: Router) {
     super(
       store,
       new FormGroup({
-        email: new FormControl("", [Validators.required, Validators.email]),
-        password: new FormControl("", [Validators.required]),
+        ...EMAIL_VALIDATOR(true),
+        ...PASSWORD_VALIDATOR(true),
         remember: new FormControl(false)
       }),
       router
@@ -28,7 +26,6 @@ export class LoginComponent extends Auth implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
     super.destroy();
   }
 

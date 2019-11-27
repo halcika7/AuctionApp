@@ -1,9 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler
-} from "@angular/common/http";
+import { HttpInterceptor, HttpRequest, HttpHandler } from "@angular/common/http";
 import { environment as dev } from "@env/environment";
 import { environment as prod } from "@env/environment.prod";
 
@@ -16,8 +12,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       ? localStorage.getItem("accessToken")
       : sessionStorage.getItem("accessToken");
     const modifiedReq = req.clone({
-      url:
-        dev.production === false ? dev.apiUrl + req.url : prod.apiUrl + req.url,
+      url: dev.production === false ? dev.apiUrl + req.url : prod.apiUrl + req.url,
       headers: req.headers.set("Authorization", "Bearer " + token),
       withCredentials: true
     });

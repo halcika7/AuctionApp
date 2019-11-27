@@ -38,10 +38,7 @@ import { CategoriesPageEffects } from "./containers/all-categories/store/all-cat
 import { ProductPageEffects } from "./product-page/store/product-page.effects";
 
 // Font Awesome Icons
-import {
-  FontAwesomeModule,
-  FaIconLibrary
-} from "@fortawesome/angular-fontawesome";
+import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faFacebookF,
   faFacebookSquare,
@@ -50,12 +47,7 @@ import {
   faGooglePlusSquare,
   faGooglePlusG
 } from "@fortawesome/free-brands-svg-icons";
-import {
-  faGreaterThan,
-  faSearch,
-  faCheck,
-  faHeart
-} from "@fortawesome/free-solid-svg-icons";
+import { faGreaterThan, faSearch, faCheck, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
 import { DropdownDirective } from "./shared/directives/dropdown.directive";
@@ -63,6 +55,8 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
+import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
+import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 
 @NgModule({
   declarations: [
@@ -91,7 +85,9 @@ import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
     ProductPageComponent,
     ProductImagesComponent,
     DateAgoPipe,
-    ProductBidsComponent
+    ProductBidsComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

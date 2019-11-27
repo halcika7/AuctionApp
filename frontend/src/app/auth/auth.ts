@@ -11,18 +11,17 @@ export class Auth {
   private _showErrors = true;
   private _success = false;
   private _isClicked = false;
-  private _login = true;
+  private _register = false;
+  private _resetPassword = false;
+  private _expiredToken: string;
   subscription: Subscription;
 
-  constructor(
-    private authStore: Store<any>,
-    private Form: FormGroup,
-    private Router: Router
-  ) {
+  constructor(private authStore: Store<any>, private Form: FormGroup, private Router: Router) {
+    this.clearMessages();
     this._form = this.Form;
     this.subscription = this.authStore
       .select("auth")
-      .subscribe(({ errorMessage, errors, accessToken, successMessage }) => {
+      .subscribe(({ errors, accessToken, message, resetTokenExpired, success }) => {
         if (
           accessToken ||
           localStorage.getItem("accessToken") ||
@@ -32,60 +31,57 @@ export class Auth {
           setTimeout(() => this.Router.navigate(["/"]), 1200);
         }
 
-        if (errors.email && !errorMessage) {
-          this.form.controls.email.setErrors({ async: errors.email });
-          this.form.controls.email.markAsTouched();
-        } else {
-          this.form.controls.email.setErrors({});
-          this.form.controls.email.setValue(this.form.controls.email.value);
+        if (this.form.controls.email) {
+          if (errors.email && !message) {
+            this.form.controls.email.setErrors({ async: errors.email });
+            this.form.controls.email.markAsTouched();
+          } else {
+            this.form.controls.email.setErrors({});
+            this.form.controls.email.setValue(this.form.controls.email.value);
+          }
         }
 
-        if (errors.password && !errorMessage) {
-          this.form.controls.password.setErrors({ async: errors.password });
-          this.form.controls.password.markAsTouched();
-        } else {
-          this.form.controls.password.setErrors({});
-          this.form.controls.password.setValue(
-            this.form.controls.password.value
-          );
+        if (this.form.controls.password) {
+          if (errors.password && !message) {
+            this.form.controls.password.setErrors({ async: errors.password });
+            this.form.controls.password.markAsTouched();
+          } else {
+            this.form.controls.password.setErrors({});
+            this.form.controls.password.setValue(this.form.controls.password.value);
+          }
         }
 
-        if (!this._login) {
-          if (errors.firstName && !errorMessage) {
+        if (this._register) {
+          if (errors.firstName && !message) {
             this.form.controls.firstName.setErrors({
               async: errors.firstName
             });
             this.form.controls.firstName.markAsTouched();
           } else {
             this.form.controls.firstName.setErrors({});
-            this.form.controls.firstName.setValue(
-              this.form.controls.firstName.value
-            );
+            this.form.controls.firstName.setValue(this.form.controls.firstName.value);
           }
 
-          if (errors.lastName && !errorMessage) {
+          if (errors.lastName && !message) {
             this.form.controls.lastName.setErrors({ async: errors.lastName });
             this.form.controls.lastName.markAsTouched();
           } else {
             this.form.controls.lastName.setErrors({});
-            this.form.controls.lastName.setValue(
-              this.form.controls.lastName.value
-            );
+            this.form.controls.lastName.setValue(this.form.controls.lastName.value);
           }
         }
 
-        if (successMessage || errorMessage) {
-          this._message = successMessage ? successMessage : errorMessage;
-          this._success = successMessage ? true : false;
-        } else {
-          this._message = "";
-          this._success = false;
-        }
+        this._message = message;
+        this._success = success;
 
-        if (successMessage) {
+        this._expiredToken = resetTokenExpired;
+
+        if (this._success) {
           this._showErrors = false;
           this.form.reset();
-          setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000);
+          this._register || this._resetPassword
+            ? setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000)
+            : setTimeout(() => this.Router.navigate(["/home"]), 2000);
         } else {
           this.isClicked = false;
         }
@@ -93,6 +89,10 @@ export class Auth {
   }
 
   destroy() {
+    for (let control in this.form.controls) {
+      this.form.controls[control].setErrors({});
+      this.form.controls[control].markAsUntouched({});
+    }
     this.subscription.unsubscribe();
   }
 
@@ -124,7 +124,15 @@ export class Auth {
     return this._isClicked;
   }
 
-  set login(val: boolean) {
-    this._login = val;
+  set register(val: boolean) {
+    this._register = val;
+  }
+
+  set resetPassword(val: boolean) {
+    this._resetPassword = val;
+  }
+
+  get tokenExpired(): string {
+    return this._expiredToken;
   }
 }
