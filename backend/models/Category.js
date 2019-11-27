@@ -1,9 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
-const Subcategory = require("./Subcategory");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Category = db.define(
-  "Category",
+  'Category',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -18,14 +17,8 @@ const Category = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: "Categories"
+    modelName: 'Categories'
   }
 );
-
-Category.hasMany(Subcategory, { foreignKey: "CategoriesId", sourceKey: "id" });
-Subcategory.belongsTo(Category, {
-  foreignKey: "CategoriesId",
-  sourceKey: "id"
-});
 
 module.exports = Category;

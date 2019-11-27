@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
-import { Ng5SliderModule } from 'ng5-slider';
+import { Ng5SliderModule } from "ng5-slider";
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -24,12 +24,12 @@ import { InputComponent } from "./components/input/input.component";
 import { CategoriesListComponent } from "./components/categories-list/categories-list.component";
 import { CarouselComponent } from "./components/carousel/carousel.component";
 import { LandingPageProductsComponent } from "./components/landing-page-products/landing-page-products.component";
-import { ProductTabsComponent } from "./components/product-tabs/product-tabs.component";
+import { ProductTabsComponent } from "./product-page/product-tabs/product-tabs.component";
 import { CollectionItemComponent } from "./components/collection-item/collection-item.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
-import { ProductImagesComponent } from "./components/product-images/product-images.component";
-import { ProductBidsComponent } from "./components/product-bids/product-bids.component";
+import { ProductImagesComponent } from "./product-page/product-images/product-images.component";
+import { ProductBidsComponent } from "./product-page/product-bids/product-bids.component";
 
 // ngRx
 import * as fromApp from "./store/app.reducer";
@@ -68,8 +68,11 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
-import { ShopPageComponent } from './shop-page/shop-page.component';
-import { CollectionListItemComponent } from './components/collection-list-item/collection-list-item.component';
+import { ShopPageComponent } from "./shop-page/shop-page.component";
+import { CollectionListItemComponent } from "./components/collection-list-item/collection-list-item.component";
+import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component";
+import { ShopFiltersComponent } from "./shop-page/shop-filters/shop-filters.component";
+import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-navigation.component";
 
 @NgModule({
   declarations: [
@@ -100,7 +103,10 @@ import { CollectionListItemComponent } from './components/collection-list-item/c
     DateAgoPipe,
     ProductBidsComponent,
     ShopPageComponent,
-    CollectionListItemComponent
+    CollectionListItemComponent,
+    ShopPriceComponent,
+    ShopFiltersComponent,
+    ShopNavigationComponent
   ],
   imports: [
     BrowserModule,

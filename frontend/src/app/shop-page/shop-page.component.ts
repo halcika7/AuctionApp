@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Options } from "ng5-slider";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import { Categories } from "@app/containers/all-categories/store/all-categories.reducer";
@@ -15,15 +14,7 @@ import { Product } from "@app/landing-page/store/landing-page.reducers";
   styleUrls: ["./shop-page.component.scss"]
 })
 export class ShopPageComponent implements OnInit, OnDestroy {
-  productsLayout = "three-cols auto";
   prices: Prices = {};
-  minValue: number;
-  maxValue: number;
-  options: Options = {
-    floor: 0,
-    ceil: 0,
-    step: 0.1
-  };
   categories: Categories[] = [];
   products: Product[] = [];
   brands: Brand[] = [];
@@ -48,58 +39,31 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new CategoriesStart("/categories/true"));
     this.route.params.subscribe(({ categoryId, subcategoryId }: Params) => {
-      this.filterProduct = {
-        subcategoryId: null,
-        min: null,
-        max: null,
-        brandId: null,
-        filterValueIds: [],
-        offSet: 0
-      };
+      this.resetProductFilter(true);
       if (categoryId && subcategoryId) {
         this.categoryId = categoryId;
         this.subcategoryId = subcategoryId;
         this.filterProduct.subcategoryId = subcategoryId;
         this.checkActiveSubcategory();
       }
-
       this.dispatchActions(true);
     });
-    this.store.dispatch(new CategoriesStart("/categories/true"));
     this.store.select("categoriesPage").subscribe(({ categories }) => {
       this.categories = categories;
       this.checkActiveSubcategory();
     });
-
     this.store
       .select("shopPage")
       .subscribe(({ brands, prices, filters, products }) => {
+        console.log("TCL: products", products);
         this.products = products;
         if (this.showIfKeysLength(prices)) {
           this.prices = prices;
-          this.minValue = prices.min_price;
-          this.maxValue = prices.max_price;
-          this.options = {
-            floor: this.minValue,
-            ceil: this.maxValue,
-            step: 0.1
-          };
-          if (this.products.length === 0) {
-            this.filterProduct = {
-              ...this.filterProduct,
-              min: null,
-              max: null,
-              brandId: null,
-              filterValueIds: [],
-              offSet: 0
-            };
-            // this.store.dispatch(
-            //   new ShopPageActions.ShopStart(
-            //     `/shop/products?filters=${JSON.stringify(this.filterProduct)}`
-            //   )
-            // );
-          }
+        }
+        if (this.products.length === 0) {
+          this.resetProductFilter();
         }
         this.brands = brands;
         this.filters = filters;
@@ -108,10 +72,6 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new ShopPageActions.ClearShopPageState());
-  }
-
-  changeProductsLayout(layout: string) {
-    this.productsLayout = layout;
   }
 
   private checkActiveSubcategory() {
@@ -157,10 +117,9 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   }
 
   checkActivity(id): boolean {
-    const findIndex = this.filterProduct.filterValueIds.findIndex(
-      Id => Id === id
-    );
-    return findIndex !== -1 ? true : false;
+    return this.filterProduct.filterValueIds.findIndex(Id => Id === id) !== -1
+      ? true
+      : false;
   }
 
   private dispatchActions(refreshBrands = false) {
@@ -186,5 +145,20 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         `/shop/filters?filters=${JSON.stringify(this.filterProduct)}`
       )
     );
+  }
+
+  private resetProductFilter(resetSubcategory = false) {
+    this.filterProduct = {
+      ...this.filterProduct,
+      min: null,
+      max: null,
+      brandId: null,
+      filterValueIds: [],
+      offSet: 0
+    };
+
+    if (resetSubcategory) {
+      this.filterProduct.subcategoryId = null;
+    }
   }
 }

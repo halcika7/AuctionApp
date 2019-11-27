@@ -6,7 +6,7 @@
     <a [routerLink]="['/shop/products', item.subcategoryId, item.id]">
       <h3>{{ item.name }}</h3>
     </a>
-    <p class="details">{{ item.details | truncateText:200 }}</p>
+    <p class="details">{{ item.details | truncateText: 200 }}</p>
     <p class="price">Starts from {{ item.price | currency }}</p>
     <div class="buttons">
       <button type="button">

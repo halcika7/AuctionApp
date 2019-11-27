@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Brand = db.define(
-  "Brand",
+  'Brand',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -16,7 +16,7 @@ const Brand = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: "Brands"
+    modelName: 'Brands'
   }
 );
 

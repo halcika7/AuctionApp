@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const BrandSubcategory = db.define(
-  "BrandSubcategory",
+  'BrandSubcategory',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -13,24 +13,24 @@ const BrandSubcategory = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Brands"
+          tableName: 'Brands'
         },
-        key: "id"
+        key: 'id'
       }
     },
     subcategoryId: {
-        type: Sequelize.BIGINT,
-        references: {
-          model: {
-            tableName: "Subcategories"
-          },
-          key: "id"
-        }
+      type: Sequelize.BIGINT,
+      references: {
+        model: {
+          tableName: 'Subcategories'
+        },
+        key: 'id'
       }
+    }
   },
   {
     sequelize: Sequelize,
-    modelName: "BrandSubcategories"
+    modelName: 'BrandSubcategories'
   }
 );
 

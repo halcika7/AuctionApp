@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const gg = [
-      "Fashion",
-      "Accessories",
-      "Jewelry",
-      "Shoes",
-      "Sportware",
-      "Home",
-      "Electronics",
-      "Mobile",
-      "Computer"
+      'Fashion',
+      'Accessories',
+      'Jewelry',
+      'Shoes',
+      'Sportware',
+      'Home',
+      'Electronics',
+      'Mobile',
+      'Computer'
     ];
 
     let ctgs = [];
@@ -20,10 +20,10 @@ module.exports = {
         name: gg[i]
       });
     }
-    return queryInterface.bulkInsert("Categories", ctgs, {});
+    return queryInterface.bulkInsert('Categories', ctgs, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("Categories", null, {});
+    return queryInterface.bulkDelete('Categories', null, {});
   }
 };

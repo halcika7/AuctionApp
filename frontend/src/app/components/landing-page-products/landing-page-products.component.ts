@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./landing-page-products.component.scss"]
 })
 export class LandingPageProductsComponent implements OnInit {
-  @Input() title: string = '';
+  @Input() title: string = "";
   @Input() className: string;
   @Input() padding: string;
   @Input() containerClass: boolean = true;

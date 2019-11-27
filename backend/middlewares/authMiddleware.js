@@ -1,12 +1,8 @@
-const {
-  decodeToken,
-  findUserByEmail,
-  createAccessToken
-} = require("../helpers/authHelper");
+const { decodeToken, findUserByEmail, createAccessToken } = require('../helpers/authHelper');
 
 module.exports = async (req, res, next) => {
   try {
-    const authorization = req.headers.authorization.split(" ")[1] || null;
+    const authorization = req.headers.authorization.split(' ')[1] || null;
     const refreshToken = req.cookies.jid;
     const decoded = decodeToken(authorization);
     const decodedRefresh = decodeToken(refreshToken);
@@ -19,9 +15,7 @@ module.exports = async (req, res, next) => {
       Date.now() >= decodedRefresh.exp * 1000 ||
       !user
     ) {
-      return res
-        .status(401)
-        .json({ authorizationError: "Unauthorized request. Please login" });
+      return res.status(401).json({ authorizationError: 'Unauthorized request. Please login' });
     }
 
     if (decoded.exp * 1000 <= Date.now()) {
@@ -36,9 +30,7 @@ module.exports = async (req, res, next) => {
       req.userId = decoded.id;
     }
   } catch (error) {
-    return res
-      .status(401)
-      .json({ authorizationError: "Unauthorized request. Please login" });
+    return res.status(401).json({ authorizationError: 'Unauthorized request. Please login' });
   }
   return next();
 };

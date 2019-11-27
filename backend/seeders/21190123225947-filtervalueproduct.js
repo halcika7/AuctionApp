@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -222,7 +222,7 @@ module.exports = {
       { filterValueId: 5, productId: 80 },
       { filterValueId: 36, productId: 80 },
       { filterValueId: 46, productId: 80 },
-      { filterValueId: 87, productId: 80 },//Camera
+      { filterValueId: 87, productId: 80 }, //Camera
       { filterValueId: 1, productId: 81 },
       { filterValueId: 31, productId: 81 },
       { filterValueId: 37, productId: 81 },
@@ -272,7 +272,7 @@ module.exports = {
       { filterValueId: 36, productId: 90 },
       { filterValueId: 41, productId: 90 },
       { filterValueId: 62, productId: 90 },
-      { filterValueId: 89, productId: 90 },//Phones
+      { filterValueId: 89, productId: 90 }, //Phones
       { filterValueId: 1, productId: 91 },
       { filterValueId: 31, productId: 91 },
       { filterValueId: 51, productId: 91 },
@@ -332,12 +332,12 @@ module.exports = {
       { filterValueId: 54, productId: 100 },
       { filterValueId: 64, productId: 100 },
       { filterValueId: 73, productId: 100 },
-      { filterValueId: 89, productId: 100 }//Laptops
+      { filterValueId: 89, productId: 100 } //Laptops
     ];
-    return queryInterface.bulkInsert("FilterValueProducts", filtervalueproducts, {});
+    return queryInterface.bulkInsert('FilterValueProducts', filtervalueproducts, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("FilterValueProducts", null, {});
+    return queryInterface.bulkDelete('FilterValueProducts', null, {});
   }
 };

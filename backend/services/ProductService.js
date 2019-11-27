@@ -2,10 +2,10 @@ const {
   getFilteredProducts,
   getProductById,
   getSimilarProducts
-} = require("../helpers/productFilter");
-const { decodeToken } = require("../helpers/authHelper");
-const BaseService = require("./BaseService");
-const BidService = require("./BidService");
+} = require('../helpers/productFilter');
+const { decodeToken } = require('../helpers/authHelper');
+const BaseService = require('./BaseService');
+const BidService = require('./BidService');
 
 class ProductService extends BaseService {
   constructor() {
@@ -14,9 +14,7 @@ class ProductService extends BaseService {
 
   async filterProducts(reqParams) {
     try {
-      const { products, numberOfProducts } = await getFilteredProducts(
-        reqParams
-      );
+      const { products, numberOfProducts } = await getFilteredProducts(reqParams);
       const eq = isNaN(parseInt(reqParams.limit) + parseInt(reqParams.offset))
         ? parseInt(reqParams.limit)
         : parseInt(reqParams.limit) + parseInt(reqParams.offset);
@@ -28,10 +26,7 @@ class ProductService extends BaseService {
           : false;
       return { status: 200, products, noMore };
     } catch (error) {
-      return {
-        status: 403,
-        failedMessage: "Something happened. We were unable to perform request."
-      };
+      return super.returnGenericFailed();
     }
   }
 
@@ -39,27 +34,19 @@ class ProductService extends BaseService {
     try {
       const product = await getProductById(productId);
       const { id } = decodeToken(token) || { id: undefined };
-      const { bids } =
-        id === product.userId &&
-        (await BidService.filterBidsForProduct(productId));
+      const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
       return { status: 200, product, bids };
     } catch (error) {
-      return {
-        status: 403
-      };
+      return super.returnResponse(403, {});
     }
   }
 
   async findSimilarProducts(subcategoryId, id) {
     try {
-      const similarProducts =
-        (await getSimilarProducts(subcategoryId, id)) || [];
+      const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
       return { status: 200, similarProducts };
     } catch (error) {
-      return {
-        status: 200,
-        similarProducts: []
-      };
+      return super.returnResponse(403, { similarProducts: [] });
     }
   }
 }

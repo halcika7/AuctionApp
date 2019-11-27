@@ -507,7 +507,7 @@ app-footer {
     }
 
     > .buttons {
-      @include flex(center, flex-start);
+      @include flex(center, flex-start, $wrap: wrap);
 
       > a,
       > button {
@@ -521,7 +521,7 @@ app-footer {
           $lineH: 22px,
           $decoration: none
         );
-        @include margin($right: 5px);
+        @include margin($right: 5px, $top: 10px);
         background: getColor(white);
         border: 3px solid getColor(lighter_gray) !important;
         cursor: pointer;

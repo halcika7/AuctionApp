@@ -1,14 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
-const ProductImage = require("./ProductImage");
-const ProductReview = require("./ProductReview");
-const Subcategory = require("./Subcategory");
-const Bid = require("./Bid");
-const Brand = require("./Brand");
-const FilterValue = require("./FilterValue");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Product = db.define(
-  "Product",
+  'Product',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -52,61 +46,34 @@ const Product = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Users"
+          tableName: 'Users'
         },
-        key: "id"
+        key: 'id'
       }
     },
     subcategoryId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Subcategories"
+          tableName: 'Subcategories'
         },
-        key: "id"
+        key: 'id'
       }
     },
     brandId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Brands"
+          tableName: 'Brands'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "Products"
+    modelName: 'Products'
   }
 );
-
-Product.hasMany(ProductImage, { foreignKey: "productId", sourceKey: "id" });
-Product.hasMany(ProductReview, { foreignKey: "productId", sourceKey: "id" });
-ProductReview.belongsTo(Product, { foreignKey: "productId", sourceKey: "id" });
-Product.hasMany(Bid, { foreignKey: "productId", sourceKey: "id" });
-
-Product.belongsTo(Subcategory, {
-  foreignKey: "subcategoryId",
-  sourceKey: "id"
-});
-Subcategory.hasMany(Product, {
-  foreignKey: "subcategoryId",
-  sourceKey: "id"
-});
-Product.belongsTo(Brand, { foreignKey: "brandId", sourceKey: "id" });
-Brand.hasMany(Product, { foreignKey: "brandId", sourceKey: "id" });
-
-Product.belongsToMany(FilterValue, {
-  through: "FilterValueProducts",
-  foreignKey: "productId",
-  otherKey: "filterValueId"
-});
-FilterValue.belongsToMany(Product, {
-  through: "FilterValueProducts",
-  foreignKey: "filterValueId",
-  otherKey: "productId"
-});
 
 module.exports = Product;

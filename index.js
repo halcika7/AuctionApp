@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 require('./backend/config/database');
+require('./backend/models/Associations');
 
 app.use('/api/auth', require('./backend/routes/authentication/authRoutes'));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));

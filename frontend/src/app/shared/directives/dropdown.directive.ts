@@ -1,4 +1,11 @@
-import { Directive, HostBinding, HostListener, ElementRef, OnInit, Input } from "@angular/core";
+import {
+  Directive,
+  HostBinding,
+  HostListener,
+  ElementRef,
+  OnInit,
+  Input
+} from "@angular/core";
 
 @Directive({
   selector: "[appDropdown]"
@@ -13,7 +20,7 @@ export class DropdownDirective implements OnInit {
   constructor(private elRef: ElementRef) {}
 
   ngOnInit() {
-    if(this.defaultOpen) {
+    if (this.defaultOpen) {
       this.isOpen = this.defaultOpen;
     }
   }

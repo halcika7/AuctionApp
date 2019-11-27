@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const OptionalInfo = db.define(
-  "OptionalInfo",
+  'OptionalInfo',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -32,7 +32,7 @@ const OptionalInfo = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: "OptionalInfos"
+    modelName: 'OptionalInfos'
   }
 );
 

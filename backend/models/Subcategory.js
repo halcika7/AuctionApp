@@ -1,11 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
-const Brand = require("./Brand");
-const Filter = require("./Filter");
-const FilterValue = require("./FilterValue");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Subcategory = db.define(
-  "Subcategory",
+  'Subcategory',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -21,43 +18,16 @@ const Subcategory = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Categories"
+          tableName: 'Categories'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "Subcategories"
+    modelName: 'Subcategories'
   }
 );
-
-Subcategory.belongsToMany(Brand, {
-  through: "BrandSubcategories",
-  foreignKey: "subcategoryId",
-  otherKey: "brandId"
-});
-Brand.belongsToMany(Subcategory, {
-  through: "BrandSubcategories",
-  foreignKey: "brandId",
-  otherKey: "subcategoryId"
-});
-
-Subcategory.belongsToMany(Filter, {
-  through: "FilterSubcategories",
-  foreignKey: "subcategoryId",
-  otherKey: "filterId"
-});
-Filter.belongsToMany(Subcategory, {
-  through: "FilterSubcategories",
-  foreignKey: "filterId",
-  otherKey: "subcategoryId"
-});
-
-Filter.hasMany(FilterValue, {
-  foreignKey: "filterId",
-  sourceKey: "id"
-});
 
 module.exports = Subcategory;

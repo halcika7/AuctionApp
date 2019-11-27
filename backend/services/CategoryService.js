@@ -1,8 +1,8 @@
-const Category = require("../models/Category");
-const Subcategory = require("../models/Subcategory");
-const Product = require("../models/Product");
-const BaseService = require("./BaseService");
-const { db } = require("../config/database");
+const Category = require('../models/Category');
+const Subcategory = require('../models/Subcategory');
+const Product = require('../models/Product');
+const BaseService = require('./BaseService');
+const { db } = require('../config/database');
 
 class CategoryService extends BaseService {
   constructor() {
@@ -12,36 +12,33 @@ class CategoryService extends BaseService {
   async getCategoriesWithSubcategories() {
     try {
       const findObj = {
-        attributes: ["id", "name"],
+        attributes: ['id', 'name'],
         include: [
           {
             model: Subcategory,
-            attributes: ["id", "name"]
+            attributes: ['id', 'name']
           }
         ],
-        order: [["id", "ASC"]]
+        order: [['id', 'ASC']]
       };
       const categories = await Category.findAll(findObj);
-      return { status: 200, categories };
+      return super.returnResponse(200, { categories });
     } catch (error) {
-      return {
-        status: 403,
-        failedMessage: "Something happened. We were unable to perform request."
-      };
+      return super.returnGenericFailed();
     }
   }
 
   async getShopCategories() {
     try {
       const categories = await Category.findAll({
-        attributes: ["id", "name"],
+        attributes: ['id', 'name'],
         include: [
           {
             model: Subcategory,
             attributes: [
-              "id",
-              "name",
-              [db.fn("COUNT", db.col("Subcategories.Products.id")), "number_of_products"]
+              'id',
+              'name',
+              [db.fn('COUNT', db.col('Subcategories.Products.id')), 'number_of_products']
             ],
             include: [
               {
@@ -51,15 +48,12 @@ class CategoryService extends BaseService {
             ]
           }
         ],
-        group: ["Category.id", "Subcategories.id"],
-        order: [["id", "ASC"]]
+        group: ['Category.id', 'Subcategories.id'],
+        order: [['id', 'ASC']]
       });
-      return { status: 200, categories };
+      return super.returnResponse(200, { categories });
     } catch (error) {
-      return {
-        status: 403,
-        failedMessage: "Something happened. We were unable to perform request."
-      };
+      return super.returnGenericFailed();
     }
   }
 }

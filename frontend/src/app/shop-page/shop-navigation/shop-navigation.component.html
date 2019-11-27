@@ -1,0 +1,34 @@
+<div class="products">
+  <div class="navigation">
+    <div class="dropdown">
+      <p appDropdownNoautoclose>Sort by Time Left Descending</p>
+      <ul>
+        <li class="active">Default Sorting</li>
+        <li>Sort by Price Descending</li>
+        <li>Sort by Price Ascending</li>
+        <li>Sort by Time Left Descending</li>
+        <li>Sort by Time Left Ascending</li>
+      </ul>
+    </div>
+    <div class="gridlist">
+      <span
+        [ngClass]="{ active: productsLayout !== 'list' }"
+        (click)="changeProductsLayout('three-cols auto')"
+        ><fa-icon [icon]="['fas', 'th']"></fa-icon>Grid</span
+      >
+      <span
+        [ngClass]="{ active: productsLayout === 'list' }"
+        (click)="changeProductsLayout('list')"
+        ><fa-icon [icon]="['fas', 'th-list']"></fa-icon>List</span
+      >
+    </div>
+  </div>
+  <app-landing-page-products
+    [list]="productsLayout === 'list' ? true : false"
+    [className]="productsLayout"
+    padding="paddingL15"
+    [containerClass]="false"
+    [items]="products"
+  ></app-landing-page-products>
+  <button>LOAD MORE</button>
+</div>

@@ -1,8 +1,8 @@
-const BaseService = require("./BaseService");
-const Bid = require("../models/Bid");
-const User = require("../models/User");
-const { getAuctionEndProduct } = require("../helpers/productFilter");
-const { LIMIT_BIDS, MAX_BID } = require("../config/configs");
+const BaseService = require('./BaseService');
+const Bid = require('../models/Bid');
+const User = require('../models/User');
+const { getAuctionEndProduct } = require('../helpers/productFilter');
+const { LIMIT_BIDS, MAX_BID } = require('../config/configs');
 
 class BidService extends BaseService {
   constructor() {
@@ -11,9 +11,7 @@ class BidService extends BaseService {
 
   async createBid(userID, productId, bid) {
     try {
-      const { auctionEnd, price, userId } = (await getAuctionEndProduct(
-        productId
-      )) || {
+      const { auctionEnd, price, userId } = (await getAuctionEndProduct(productId)) || {
         auctionEnd: null,
         price: null,
         userId: null
@@ -23,58 +21,51 @@ class BidService extends BaseService {
         where: {
           productId
         },
-        attributes: ["price", "userId"],
-        order: [["price", "DESC"]]
+        attributes: ['price', 'userId'],
+        order: [['price', 'DESC']]
       });
       if (!auctionEnd) {
-        return {
-          status: 403,
-          message: "Auction ended.Your bid was unsuccessfull!!"
-        };
+        return super.returnResponse(403, {
+          message: 'Auction ended.Your bid was unsuccessfull!!'
+        });
       }
       if (highestBid && highestBid.userId === userID) {
-        return {
-          status: 403,
-          message: "You are already highest bidder"
-        };
+        return super.returnResponse(403, {
+          message: 'You are already highest bidder'
+        });
       }
       if (userID === userId) {
-        return {
-          status: 403,
-          message: "You are not allowed to place bid on your own product"
-        };
+        return super.returnResponse(403, {
+          message: 'You are not allowed to place bid on your own product'
+        });
       }
       if (bid > MAX_BID) {
-        return {
-          status: 403,
+        return super.returnResponse(403, {
           message: `Maximum bid allowed is $${MAX_BID}!`
-        };
+        });
       }
       if (!highestBid && price > bid) {
-        return {
-          status: 403,
-          message: "Please bid higher or equal to product price!"
-        };
+        return super.returnResponse(403, {
+          message: 'Please bid higher or equal to product price!'
+        });
       }
       if (highestBid && highestBid.price >= bid) {
-        return {
-          status: 403,
-          message: "There are higher bids!"
-        };
+        return super.returnResponse(403, {
+          message: 'There are higher bids!'
+        });
       }
 
       await Bid.create({ price: bid, userId: userID, productId });
 
       return {
         status: 200,
-        message: "Congrats! You are the highest bider",
+        message: 'Congrats! You are the highest bider',
         highest_bid: bid
       };
     } catch (error) {
-      return {
-        status: 403,
-        message: "Something happend..try again later !!"
-      };
+      return super.returnResponse(403, {
+        message: 'Something happend..try again later !!'
+      });
     }
   }
 
@@ -84,14 +75,14 @@ class BidService extends BaseService {
         where: {
           productId
         },
-        attributes: ["price", "dateBid"],
+        attributes: ['price', 'dateBid'],
         include: [
           {
             model: User,
-            attributes: ["firstName", "lastName", "photo"]
+            attributes: ['firstName', 'lastName', 'photo']
           }
         ],
-        order: [["price", "DESC"]],
+        order: [['price', 'DESC']],
         limit: LIMIT_BIDS
       });
 

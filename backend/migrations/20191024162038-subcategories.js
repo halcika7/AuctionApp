@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Subcategories", {
+    return queryInterface.createTable('Subcategories', {
       id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -17,15 +17,15 @@ module.exports = {
         type: Sequelize.BIGINT,
         references: {
           model: {
-            tableName: "Categories"
+            tableName: 'Categories'
           },
-          key: "id"
+          key: 'id'
         }
       }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.tropTable("Subcategories");
+    return queryInterface.tropTable('Subcategories');
   }
 };

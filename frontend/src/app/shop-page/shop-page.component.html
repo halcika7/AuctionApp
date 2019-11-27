@@ -40,19 +40,10 @@
       </li>
     </ul>
     <ng-template [ngIf]="showIfKeysLength(prices)">
-      <div class="price">
-        <h4>Filter By Price</h4>
-        <ng5-slider
-          [value]="minValue"
-          [highValue]="maxValue"
-          [options]="options"
-          (userChangeEnd)="changeValues($event)"
-        ></ng5-slider>
-        <p>
-          {{ prices.min_price | currency }} - {{ prices.max_price | currency }}
-        </p>
-        <p>The average price is {{ prices.avg_price | currency }}.</p>
-      </div>
+      <app-shop-price
+        [prices]="prices"
+        (changeValues)="changeValues($event)"
+      ></app-shop-price>
     </ng-template>
     <ul class="colors" *ngFor="let filter of filters">
       <h4>{{ filter.name }}</h4>
@@ -68,38 +59,5 @@
       </li>
     </ul>
   </div>
-  <div class="products">
-    <div class="navigation">
-      <div class="dropdown">
-        <p appDropdownNoautoclose>Default Sorting</p>
-        <ul>
-          <li class="active">Default Sorting</li>
-          <li>Sort by Price Descending</li>
-          <li>Sort by Price Ascending</li>
-          <li>Sort by Time Left Descending</li>
-          <li>Sort by Time Left Ascending</li>
-        </ul>
-      </div>
-      <div class="gridlist">
-        <span
-          [ngClass]="{ active: productsLayout !== 'list' }"
-          (click)="changeProductsLayout('three-cols auto')"
-          ><fa-icon [icon]="['fas', 'th']"></fa-icon>Grid</span
-        >
-        <span
-          [ngClass]="{ active: productsLayout === 'list' }"
-          (click)="changeProductsLayout('list')"
-          ><fa-icon [icon]="['fas', 'th-list']"></fa-icon>List</span
-        >
-      </div>
-    </div>
-    <app-landing-page-products
-      [list]="productsLayout === 'list' ? true : false"
-      [className]="productsLayout"
-      padding="paddingL15"
-      [containerClass]="false"
-      [items]="products"
-    ></app-landing-page-products>
-    <button>LOAD MORE</button>
-  </div>
+  <app-shop-navigation [products]="products"></app-shop-navigation>
 </section>

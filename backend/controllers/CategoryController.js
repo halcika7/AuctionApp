@@ -1,5 +1,5 @@
-const CategoryServiceInstance = require("../services/CategoryService");
-const BaseController = require("./BaseController");
+const CategoryServiceInstance = require('../services/CategoryService');
+const BaseController = require('./BaseController');
 
 class CategoryController extends BaseController {
   constructor() {

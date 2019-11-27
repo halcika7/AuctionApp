@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -35,12 +35,12 @@ module.exports = {
       { filterId: 5, subcategoryId: 10 },
       { filterId: 6, subcategoryId: 10 },
       { filterId: 7, subcategoryId: 10 },
-      { filterId: 9, subcategoryId: 10 },
+      { filterId: 9, subcategoryId: 10 }
     ];
-    return queryInterface.bulkInsert("FilterSubcategories", filtersubcategories, {});
+    return queryInterface.bulkInsert('FilterSubcategories', filtersubcategories, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("FilterSubcategories", null, {});
+    return queryInterface.bulkDelete('FilterSubcategories', null, {});
   }
 };

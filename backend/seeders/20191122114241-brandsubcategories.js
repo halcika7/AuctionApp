@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -26,10 +26,10 @@ module.exports = {
       { brandId: 10, subcategoryId: 7 },
       { brandId: 11, subcategoryId: 8 }
     ];
-    return queryInterface.bulkInsert("BrandSubcategories", brandsubs, {});
+    return queryInterface.bulkInsert('BrandSubcategories', brandsubs, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("BrandSubcategories", null, {});
+    return queryInterface.bulkDelete('BrandSubcategories', null, {});
   }
 };

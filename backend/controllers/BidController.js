@@ -1,5 +1,5 @@
-const BaseController = require("./BaseController");
-const BidService = require("../services/BidService");
+const BaseController = require('./BaseController');
+const BidService = require('../services/BidService');
 
 class BidController extends BaseController {
   constructor() {
@@ -9,11 +9,7 @@ class BidController extends BaseController {
   async makeBid(req, res) {
     const { productId, bid } = req.body;
     const { userId, accessToken } = req;
-    const { message, status, highest_bid } = await BidService.createBid(
-      userId,
-      productId,
-      bid
-    );
+    const { message, status, highest_bid } = await BidService.createBid(userId, productId, bid);
     if (status === 403) {
       return super.sendResponse(res, status, { message, accessToken });
     }

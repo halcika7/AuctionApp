@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Brands", {
+    return queryInterface.createTable('Brands', {
       id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -16,6 +16,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Brands");
+    return queryInterface.dropTable('Brands');
   }
 };

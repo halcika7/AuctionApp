@@ -1,10 +1,4 @@
-const {
-  DB_HOST,
-  DB_NAME,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USERNAME
-} = require("./configs");
+const { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } = require('./configs');
 
 module.exports = {
   local: {
@@ -13,7 +7,7 @@ module.exports = {
     database: DB_NAME,
     host: DB_HOST,
     port: DB_PORT,
-    dialect: "postgres"
+    dialect: 'postgres'
   },
   development: {
     username: DB_USERNAME,
@@ -21,7 +15,7 @@ module.exports = {
     database: DB_NAME,
     host: DB_HOST,
     port: DB_PORT,
-    dialect: "postgres"
+    dialect: 'postgres'
   },
   test: {
     username: DB_USERNAME,
@@ -29,7 +23,7 @@ module.exports = {
     database: DB_NAME,
     host: DB_HOST,
     port: DB_PORT,
-    dialect: "postgres"
+    dialect: 'postgres'
   },
   production: {
     username: DB_USERNAME,
@@ -37,6 +31,6 @@ module.exports = {
     database: DB_NAME,
     host: DB_HOST,
     port: DB_PORT,
-    dialect: "postgres"
+    dialect: 'postgres'
   }
 };

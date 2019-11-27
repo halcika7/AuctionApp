@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const FilterSubcategory = db.define(
-  "FilterSubcategories",
+  'FilterSubcategories',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -13,24 +13,24 @@ const FilterSubcategory = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Filters"
+          tableName: 'Filters'
         },
-        key: "id"
+        key: 'id'
       }
     },
     subcategoryId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Subcategories"
+          tableName: 'Subcategories'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "FilterSubcategories"
+    modelName: 'FilterSubcategories'
   }
 );
 

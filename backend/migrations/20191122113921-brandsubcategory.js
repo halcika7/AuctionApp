@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("BrandSubcategories", {
+    return queryInterface.createTable('BrandSubcategories', {
       id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -12,24 +12,24 @@ module.exports = {
         type: Sequelize.BIGINT,
         references: {
           model: {
-            tableName: "Brands"
+            tableName: 'Brands'
           },
-          key: "id"
+          key: 'id'
         }
       },
       subcategoryId: {
-          type: Sequelize.BIGINT,
-          references: {
-            model: {
-              tableName: "Subcategories"
-            },
-            key: "id"
-          }
+        type: Sequelize.BIGINT,
+        references: {
+          model: {
+            tableName: 'Subcategories'
+          },
+          key: 'id'
         }
+      }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("BrandSubcategories");
+    return queryInterface.dropTable('BrandSubcategories');
   }
 };

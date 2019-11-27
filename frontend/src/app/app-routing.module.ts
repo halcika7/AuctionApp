@@ -10,7 +10,7 @@ import { LoginComponent } from "./auth/login/login.component";
 import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
-import { ShopPageComponent } from './shop-page/shop-page.component';
+import { ShopPageComponent } from "./shop-page/shop-page.component";
 
 import { LoginGuard } from "./auth/login.guard";
 

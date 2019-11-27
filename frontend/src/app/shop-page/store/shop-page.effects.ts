@@ -20,7 +20,9 @@ export class ShopPageEffects {
     ofType(ShopPageActions.SHOP_PAGE_START),
     concatMap(({ url }) => {
       return this.http.get<dataInterface>(url).pipe(
-        map(data => new ShopPageActions.ShopSuccess(data)),
+        map(data => {
+          return new ShopPageActions.ShopSuccess(data);
+        }),
         catchError(({ error }) =>
           of(new ShopPageActions.ShopFailed(error.failedMessage))
         )

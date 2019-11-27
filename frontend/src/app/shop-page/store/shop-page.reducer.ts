@@ -1,5 +1,5 @@
 import * as ShopPageActions from "@app/shop-page/store/shop-page.actions";
-import { Product } from '@app/landing-page/store/landing-page.reducers';
+import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export interface Brand {
   id: string;
@@ -15,14 +15,14 @@ export interface Prices {
 
 export interface FilterValues {
   id: string;
-  name: string;
-  Products: Product[]
+  value: string;
+  Products: Product[];
 }
 
 export interface Filters {
   id: string;
   name: string;
-  FilterValues: FilterValues[]
+  FilterValues: FilterValues[];
 }
 
 export interface State {
@@ -55,8 +55,12 @@ export function shopPageReducer(
         ...state,
         brands: action.payload.Brands ? action.payload.Brands : state.brands,
         prices: action.payload.prices ? action.payload.prices : state.prices,
-        filters: action.payload.Filters ? action.payload.Filters : state.filters,
-        products: action.payload.products ? action.payload.products : state.products
+        filters: action.payload.Filters
+          ? action.payload.Filters
+          : state.filters,
+        products: action.payload.products
+          ? action.payload.products
+          : state.products
       };
     case ShopPageActions.SHOP_PAGE_FAILED:
       return {
