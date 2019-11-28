@@ -1,12 +1,15 @@
 <div class="products">
   <div class="navigation">
     <div class="dropdown">
-      <p appDropdown>Sort by Time Left Descending</p>
+      <p appDropdown>{{ orderByText }}</p>
       <ul>
-        <li>Sort by Price Descending</li>
-        <li>Sort by Price Ascending</li>
-        <li>Sort by Time Left Descending</li>
-        <li>Sort by Time Left Ascending</li>
+        <li
+          (click)="changeOrderByChanged(i)"
+          *ngFor="let order of orderBy; let i = index"
+          [ngClass]="{ active: order === orderByText }"
+        >
+          {{ order }}
+        </li>
       </ul>
     </div>
     <div class="gridlist">

@@ -6,7 +6,12 @@ import { Categories } from "@app/containers/all-categories/store/all-categories.
 import { CategoriesStart } from "@app/containers/all-categories/store/all-categories.actions";
 import * as ShopPageActions from "./store/shop-page.actions";
 import { ActivatedRoute, Params } from "@angular/router";
-import { Brand, Prices, Filters, MappedPriceRange } from "./store/shop-page.reducer";
+import {
+  Brand,
+  Prices,
+  Filters,
+  MappedPriceRange
+} from "./store/shop-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 @Component({
@@ -33,7 +38,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     max: null,
     brandId: null,
     filterValueIds: [],
-    offSet: 0
+    offSet: 0,
+    orderBy: null
   };
 
   touched: boolean = false;
@@ -116,6 +122,16 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     this.filterProduct.brandId = val;
     this.filterProduct.offSet = 0;
     this.touched = true;
+  }
+
+  changeOrderBy(val: string | null) {
+    this.filterProduct.orderBy = val;
+    this.filterProduct.offSet = 0;
+    this.store.dispatch(
+      new ShopPageActions.ShopStart(
+        `/shop/products?filters=${JSON.stringify(this.filterProduct)}`
+      )
+    );
   }
 
   loadMoreProducts() {

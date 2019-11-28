@@ -20,7 +20,8 @@ function filterProducts({
   filterValueIds,
   brandId,
   min,
-  max
+  max,
+  orderBy
 }) {
   limit = parseInt(limit) ? parseInt(limit) : limit;
   offset = parseInt(offset) ? parseInt(offset) : offset;
@@ -120,6 +121,18 @@ function filterProducts({
     price += `) group by price_range order by price_range;`;
   }
 
+  if (orderBy) {
+    query +=
+      orderBy == 'Sort by Price Descending'
+        ? ' ORDER BY p.price DESC '
+        : orderBy == 'Sort by Price Ascending'
+        ? ' ORDER BY p.price ASC '
+        : orderBy == 'Sort by Time Left Descending'
+        ? ' ORDER BY p."auctionEnd" DESC '
+        : orderBy == 'Sort by Time Ascending'
+        ? ' ORDER BY p."auctionEnd" ASC '
+        : '';
+  }
   query += `LIMIT ${limit} OFFSET ${offset};`;
 
   return { query, query2, replacements, price };

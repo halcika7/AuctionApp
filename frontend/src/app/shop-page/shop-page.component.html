@@ -44,5 +44,10 @@
       Clear Filters
     </button>
   </div>
-  <app-shop-navigation [products]="products" [noMore]="noMore" (loadMore)="loadMoreProducts()"></app-shop-navigation>
+  <app-shop-navigation
+    [products]="products"
+    [noMore]="noMore"
+    (loadMore)="loadMoreProducts()"
+    (changeOrderBy)="changeOrderBy($event)"
+  ></app-shop-navigation>
 </section>

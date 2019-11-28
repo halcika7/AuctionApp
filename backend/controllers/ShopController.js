@@ -37,15 +37,23 @@ class ShopController extends BaseController {
   }
 
   async getProducts(req, res) {
-    const { min, max, subcategoryId, brandId, filterValueIds, offSet } = {
+    const { min, max, subcategoryId, brandId, filterValueIds, offSet, orderBy } = {
       ...JSON.parse(req.query.filters)
     };
-    const prodWhere = { min, max, subcategoryId, brandId, offSet };
-    const { status, products, noMore, priceRange, failedMessage } = await ShopServiceInstance.getProducts(
-      prodWhere,
-      filterValueIds
+    const prodWhere = { min, max, subcategoryId, brandId, offSet, orderBy };
+    const {
+      status,
+      products,
+      noMore,
+      priceRange,
+      failedMessage
+    } = await ShopServiceInstance.getProducts(prodWhere, filterValueIds);
+    return super.sendResponseWithMessage(
+      res,
+      status,
+      { products, noMore, priceRange },
+      failedMessage
     );
-    return super.sendResponseWithMessage(res, status, { products, noMore, priceRange }, failedMessage);
   }
 }
 
