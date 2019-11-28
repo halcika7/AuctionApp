@@ -2,27 +2,29 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Subcategories', {
-      id: {
-        type: Sequelize.BIGINT,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-      },
-      CategoriesId: {
-        type: Sequelize.BIGINT,
-        references: {
-          model: {
-            tableName: 'Categories'
-          },
-          key: 'id'
+    return queryInterface
+      .createTable('Subcategories', {
+        id: {
+          type: Sequelize.BIGINT,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        name: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
+        },
+        CategoriesId: {
+          type: Sequelize.BIGINT,
+          references: {
+            model: {
+              tableName: 'Categories'
+            },
+            key: 'id'
+          }
         }
-      }
-    });
+      })
+      .then(() => queryInterface.addIndex('Subcategories', ['id']));
   },
 
   down: (queryInterface, Sequelize) => {

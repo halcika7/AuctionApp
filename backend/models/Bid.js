@@ -39,7 +39,13 @@ const Bid = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'Bids'
+    modelName: 'Bids',
+    indexes: [
+      {
+        unique: false,
+        fields: ['productId']
+      }
+    ]
   }
 );
 

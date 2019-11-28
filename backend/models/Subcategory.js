@@ -26,7 +26,13 @@ const Subcategory = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'Subcategories'
+    modelName: 'Subcategories',
+    indexes: [
+      {
+        unique: true,
+        indexes: ['id']
+      }
+    ]
   }
 );
 

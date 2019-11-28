@@ -26,7 +26,7 @@ module.exports = {
           key: 'id'
         }
       }
-    });
+    }).then(() => queryInterface.addIndex('FilterValueProducts', ['filterValueId']));
   },
 
   down: (queryInterface, Sequelize) => {

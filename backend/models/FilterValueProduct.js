@@ -30,7 +30,13 @@ const FilterValueProduct = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'FilterValueProducts'
+    modelName: 'FilterValueProducts',
+    indexes: [
+      {
+        unique: false,
+        fields: ['filterValueId']
+      }
+    ]
   }
 );
 
