@@ -1,5 +1,5 @@
-const CategoryServiceInstance = require("../services/CategoryService");
-const BaseController = require("./BaseController");
+const CategoryServiceInstance = require('../services/CategoryService');
+const BaseController = require('./BaseController');
 
 class CategoryController extends BaseController {
   constructor() {
@@ -7,11 +7,9 @@ class CategoryController extends BaseController {
   }
 
   async getCategories(req, res) {
-    const {
-      categories,
-      failedMessage,
-      status
-    } = await CategoryServiceInstance.getCategoriesWithSubcategories();
+    const { categories, failedMessage, status } = !req.params.shop
+      ? await CategoryServiceInstance.getCategoriesWithSubcategories()
+      : await CategoryServiceInstance.getShopCategories();
     return super.sendResponseWithMessage(res, status, { categories }, failedMessage);
   }
 }

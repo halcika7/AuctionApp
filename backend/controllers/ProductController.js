@@ -1,5 +1,5 @@
-const BaseController = require("./BaseController");
-const ProductServiceInstance = require("../services/ProductService");
+const BaseController = require('./BaseController');
+const ProductServiceInstance = require('../services/ProductService');
 
 class ProductController extends BaseController {
   constructor() {
@@ -26,13 +26,13 @@ class ProductController extends BaseController {
   }
 
   async getProduct(req, res) {
-    const token = req.headers.authorization.split(" ")[1] || null;
+    const token = req.headers.authorization.split(' ')[1] || null;
     const { product, bids, status } = await ProductServiceInstance.findProductById(
       req.params.id,
       token
     );
     if (!product) {
-      return super.sendResponse(res, status, { error: "Product not found !" });
+      return super.sendResponse(res, status, { error: 'Product not found !' });
     }
     const { similarProducts } =
       (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) || [];

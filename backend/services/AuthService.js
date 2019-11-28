@@ -26,43 +26,37 @@ class AuthService extends BaseService {
       const { errors, isValid } = await registerValidation(data);
       if (!isValid) return { status: 403, response: { ...errors } };
       await createUser(data);
-      return {
-        status: 200,
-        response: { message: 'Account successfully created !' }
-      };
+      return super.returnResponse(200, {
+        response: { successMessage: 'Account successfully created !' }
+      });
     } catch (error) {
-      return {
-        status: 403,
-        response: {
-          message: 'Something happened. We were unable to create an account.'
-        }
-      };
+      return super.returnResponse(403, {
+        response: { err: 'Something happened. We were unable to create an account.' }
+      });
     }
   }
 
   async login(data) {
     try {
-      const { errors, message, isValid, user } = await loginValidation(data);
-      if (!isValid && errors) return { status: 403, response: { ...errors } };
-      if (!isValid && message) return { status: 403, response: { message } };
+      const { errors, errorMessage, isValid, user } = await loginValidation(data);
+      if (!isValid && errors) return super.returnResponse(403, { response: { ...errors } });
+      if (!isValid && errorMessage)
+        return super.returnResponse(403, { response: { err: errorMessage } });
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
       return {
         status: 200,
         response: {
-          message: "You're successfully logged in",
+          successMessage: "You're successfully logedin",
           accessToken,
           remember: data.remember
         },
         refreshToken
       };
     } catch (error) {
-      return {
-        status: 403,
-        response: {
-          message: 'Something happened. We were unable to perform login.'
-        }
-      };
+      return super.returnResponse(403, {
+        response: { err: 'Something happened. We were unable to perform login.' }
+      });
     }
   }
 
@@ -71,7 +65,7 @@ class AuthService extends BaseService {
       const payload = verifyRefreshToken(token),
         user = await findUserByEmail(payload.email, false);
       if (!user) {
-        return { status: 400, response: { accessToken: '' } };
+        return super.returnResponse(400, { response: { accessToken: '' } });
       }
       return {
         status: 200,
@@ -79,7 +73,9 @@ class AuthService extends BaseService {
         refreshToken: createRefreshToken(user)
       };
     } catch (error) {
-      return { status: 400, response: { accessToken: '' } };
+      return super.returnResponse(400, {
+        response: { accessToken: '' }
+      });
     }
   }
 
