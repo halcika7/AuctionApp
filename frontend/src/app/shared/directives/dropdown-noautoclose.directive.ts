@@ -1,4 +1,9 @@
-import { Directive, HostBinding, HostListener, ElementRef } from "@angular/core";
+import {
+  Directive,
+  HostBinding,
+  HostListener,
+  ElementRef
+} from "@angular/core";
 
 @Directive({
   selector: "[appDropdownNoautoclose]"

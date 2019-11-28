@@ -6,7 +6,11 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Subscription } from "rxjs";
-import { NAME_VALIDATOR, PASSWORD_VALIDATOR, EMAIL_VALIDATOR } from '../validators';
+import {
+  NAME_VALIDATOR,
+  PASSWORD_VALIDATOR,
+  EMAIL_VALIDATOR
+} from "../validators";
 
 @Component({
   selector: "app-register",
@@ -21,8 +25,8 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
     super(
       store,
       new FormGroup({
-        ...NAME_VALIDATOR('firstName'),
-        ...NAME_VALIDATOR('lastName'),
+        ...NAME_VALIDATOR("firstName"),
+        ...NAME_VALIDATOR("lastName"),
         ...PASSWORD_VALIDATOR(),
         ...EMAIL_VALIDATOR()
       }),

@@ -38,7 +38,10 @@ import { CategoriesPageEffects } from "./containers/all-categories/store/all-cat
 import { ProductPageEffects } from "./product-page/store/product-page.effects";
 
 // Font Awesome Icons
-import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import {
+  FontAwesomeModule,
+  FaIconLibrary
+} from "@fortawesome/angular-fontawesome";
 import {
   faFacebookF,
   faFacebookSquare,
@@ -47,7 +50,12 @@ import {
   faGooglePlusSquare,
   faGooglePlusG
 } from "@fortawesome/free-brands-svg-icons";
-import { faGreaterThan, faSearch, faCheck, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGreaterThan,
+  faSearch,
+  faCheck,
+  faHeart
+} from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
 import { DropdownDirective } from "./shared/directives/dropdown.directive";

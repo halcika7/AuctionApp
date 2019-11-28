@@ -20,7 +20,9 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new LandingPageActions.LandingPageStart("newArrivals/8"));
+    this.store.dispatch(
+      new LandingPageActions.LandingPageStart("newArrivals/8")
+    );
     this.subscription = this.store
       .select("landingPage")
       .subscribe(({ newArrivals, topRated, lastChance, noMore }) => {
@@ -49,11 +51,17 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
       this._offset = 0;
       this._active = tab;
       if (this.active === "newArrivals") {
-        this.store.dispatch(new LandingPageActions.LandingPageStart("newArrivals/8"));
+        this.store.dispatch(
+          new LandingPageActions.LandingPageStart("newArrivals/8")
+        );
       } else if (this.active === "topRated") {
-        this.store.dispatch(new LandingPageActions.LandingPageStart("topRated/8"));
+        this.store.dispatch(
+          new LandingPageActions.LandingPageStart("topRated/8")
+        );
       } else {
-        this.store.dispatch(new LandingPageActions.LandingPageStart("lastChance/8"));
+        this.store.dispatch(
+          new LandingPageActions.LandingPageStart("lastChance/8")
+        );
       }
     }
   }
@@ -61,7 +69,9 @@ export class ProductTabsComponent implements OnInit, OnDestroy {
   loadMore(e: Event) {
     e.preventDefault();
     this._offset += 8;
-    this.store.dispatch(new LandingPageActions.LoadMoreProductsStart(this.active, this.offset));
+    this.store.dispatch(
+      new LandingPageActions.LoadMoreProductsStart(this.active, this.offset)
+    );
   }
 
   get products(): Product[] {
