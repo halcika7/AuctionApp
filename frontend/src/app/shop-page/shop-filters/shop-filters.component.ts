@@ -14,7 +14,7 @@ export class ShopFiltersComponent implements OnInit {
   @Output() resetFilter = new EventEmitter<any>();
   @Output() dispatchActions = new EventEmitter<any>();
   @Output() setBrandId = new EventEmitter<any>();
-  filterIds: string[] = [];
+  private _filterIds: string[] = [];
 
   constructor() {}
 
@@ -27,9 +27,9 @@ export class ShopFiltersComponent implements OnInit {
       this.setBrandId.emit(id);
       this.dispatchActions.emit(true);
     } else {
-      const findFilterId = this.filterIds.findIndex(filter => filter === id);
+      const findFilterId = this._filterIds.findIndex(filter => filter === id);
       if (findFilterId === -1) {
-        this.filterIds.push(id);
+        this._filterIds.push(id);
         this.filterValueIds.push(filterValueId);
       } else {
         this.filterValueIds[findFilterId] = filterValueId;
