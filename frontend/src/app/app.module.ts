@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
+import { Ng5SliderModule } from "ng5-slider";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -54,7 +56,10 @@ import {
   faGreaterThan,
   faSearch,
   faCheck,
-  faHeart
+  faHeart,
+  faGavel,
+  faThList,
+  faTh
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -63,6 +68,8 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
+
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 
@@ -110,7 +117,10 @@ import { ResetPasswordComponent } from "./auth/reset-password/reset-password.com
       CategoriesPageEffects,
       ProductPageEffects
     ]),
-    FontAwesomeModule
+    FontAwesomeModule,
+    Ng5SliderModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -133,7 +143,10 @@ export class AppModule {
       faCheck,
       faFacebookSquare,
       faGooglePlusSquare,
-      faHeart
+      faHeart,
+      faGavel,
+      faTh,
+      faThList
     );
   }
 }
