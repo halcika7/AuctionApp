@@ -106,11 +106,11 @@
 }
 
 @media (max-width: 698px) {
-  .categories {
+  .wrapper .categories {
     display: none;
   }
 
-  .categories h3 {
+  .wrapper .categories h3 {
     display: none;
   }
 
@@ -128,4 +128,91 @@
       }
     }
   }
+}
+
+
+.shop.categories {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  padding: 15px 20px;
+  margin: 0;
+  margin-bottom: 20px;
+  max-height: 576px;
+  overflow-y: auto;
+}
+
+.shop.categories ul {
+  margin: 0;
+  padding: 0;
+  display: none;
+}
+
+.shop.categories h4 {
+  @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
+  margin: 0;
+  margin-bottom: 31px;
+}
+
+.shop.categories > li {
+  @include fontMixin(14px, regular, 0.49px, light_black);
+  margin: 0 0 23px;
+  position: relative;
+  cursor: pointer;
+}
+
+.shop.categories li > ul > li {
+  cursor: pointer;
+}
+
+.shop.categories > li:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 4px;
+  height: 16px;
+  background: #111;
+}
+
+.shop.categories > li:after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  width: 16px;
+  height: 4px;
+  background: #111;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.shop.categories > li.open:before {
+  content: "";
+  display: none;
+}
+
+.shop.categories > li.open:after {
+  top: 8px;
+}
+
+.shop.categories > li.open > ul {
+  display: block;
+}
+
+.shop.categories ul > li,
+.shop.categories ul > li > a {
+  @include fontMixin(14px, regular, 0.49px, gray, $decoration: none);
+  margin-bottom: 19px;
+}
+
+.shop.categories ul > li.active > a,
+.shop.categories ul > li.active {
+  @include fontMixin(14px, regular, 0.49px, purple, $decoration: none);
+  margin-bottom: 19px;
+}
+
+.shop.categories ul > li:first-child {
+  margin-top: 31px;
+}
+
+.shop.categories ul > li:last-child {
+  margin-bottom: 31px;
 }

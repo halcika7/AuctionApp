@@ -1,5 +1,20 @@
 <div class="price">
   <h4>Filter By Price</h4>
+  <ngx-charts-bar-vertical
+    [view]="view"
+    [results]="priceRange"
+    [xAxis]="false"
+    [yAxis]="false"
+    [legend]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [xAxisLabel]="false"
+    [yAxisLabel]="false"
+    [gradient]="false"
+    [barPadding]="1"
+    [roundEdges]="false"
+  >
+  </ngx-charts-bar-vertical>
   <ng5-slider
     [value]="minValue"
     [highValue]="maxValue"

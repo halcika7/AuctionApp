@@ -1,0 +1,44 @@
+@import "mixins";
+
+.colors {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  padding: 15px 20px;
+  margin: 0;
+  margin-bottom: 20px;
+  max-height: 576px;
+  overflow-y: auto;
+}
+
+.colors ul {
+  margin: 0;
+  padding: 0;
+  display: none;
+}
+
+.colors h4 {
+  @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
+  margin: 0;
+  margin-bottom: 31px;
+}
+
+.colors > li {
+  @include fontMixin(14px, regular, 0.49px, light_black);
+  margin: 0 0 23px;
+  position: relative;
+  cursor: pointer;
+}
+
+.colors > li {
+  @include fontMixin(
+    14px,
+    regular,
+    0.49px,
+    light_black,
+    $transform: capitalize
+  );
+}
+
+.colors > li.active {
+  color: getColor(purple);
+}

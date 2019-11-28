@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { Ng5SliderModule } from "ng5-slider";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -24,7 +25,7 @@ import { InputComponent } from "./components/input/input.component";
 import { CategoriesListComponent } from "./components/categories-list/categories-list.component";
 import { CarouselComponent } from "./components/carousel/carousel.component";
 import { LandingPageProductsComponent } from "./components/landing-page-products/landing-page-products.component";
-import { ProductTabsComponent } from "./product-page/product-tabs/product-tabs.component";
+import { ProductTabsComponent } from "./landing-page/product-tabs/product-tabs.component";
 import { CollectionItemComponent } from "./components/collection-item/collection-item.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
@@ -73,6 +74,9 @@ import { CollectionListItemComponent } from "./components/collection-list-item/c
 import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component";
 import { ShopFiltersComponent } from "./shop-page/shop-filters/shop-filters.component";
 import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-navigation.component";
+
+
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -123,7 +127,9 @@ import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-naviga
       ShopPageEffects
     ]),
     FontAwesomeModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

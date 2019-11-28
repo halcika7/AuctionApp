@@ -2,62 +2,47 @@
   title="shop"
   [other]="[
     { value: 'shop /', link: '/shop' },
-    { value: subcategory, link: '' }
+    { value: breadcrumbSubcategory, link: '' }
   ]"
 ></app-breadcrumb>
 
 <section class="shop-page container">
   <div class="filters">
-    <ul class="categories">
-      <h4>Product Categories</h4>
-      <li
-        [defaultOpen]="categoryId === category.id"
-        appDropdownNoautoclose
-        *ngFor="let category of categories"
-      >
-        {{ category.name }}
-        <ul>
-          <li
-            [ngClass]="{ active: subcategoryId === subcategory.id }"
-            *ngFor="let subcategory of category.Subcategories"
-          >
-            <a [routerLink]="['/shop', category.id, subcategory.id]"
-              >{{ subcategory.name }} ({{ subcategory.number_of_products }})</a
-            >
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <ul class="colors">
-      <h4>Brands</h4>
-      <li
-        *ngFor="let brand of brands"
-        [ngClass]="{ active: brandId === brand.id }"
-      >
-        <p (click)="filterClicked(true, brand.id)">
-          {{ brand.name }} ({{ brand.number_of_products }})
-        </p>
-      </li>
-    </ul>
+    <app-categories-list
+      [categories]="categories"
+      [categoryId]="categoryId"
+      [subcategoryId]="subcategoryId"
+      [shop]="true"
+    ></app-categories-list>
+    <app-shop-filters
+      [brand]="true"
+      [values]="brands"
+      [brandId]="filterProduct.brandId"
+      (resetFilter)="resetProductFilter($event)"
+      (dispatchActions)="dispatchActions($event)"
+      (setBrandId)="setBrandId($event)"
+    ></app-shop-filters>
     <ng-template [ngIf]="showIfKeysLength(prices)">
       <app-shop-price
         [prices]="prices"
-        (changeValues)="changeValues($event)"
+        [priceRange]="priceRange"
+        (changeValues)="changePriceValues($event)"
       ></app-shop-price>
     </ng-template>
-    <ul class="colors" *ngFor="let filter of filters">
-      <h4>{{ filter.name }}</h4>
-      <li
-        *ngFor="let vals of filter.FilterValues"
-        [ngClass]="{
-          active: checkActivity(vals.id)
-        }"
-      >
-        <p (click)="filterClicked(false, filter.id, vals.id)">
-          {{ vals.value }} ({{ vals.Products.length }})
-        </p>
-      </li>
-    </ul>
+    <app-shop-filters
+      [filterValueIds]="filterProduct.filterValueIds"
+      [brand]="false"
+      [values]="filters"
+      (resetFilter)="resetProductFilter($event)"
+      (dispatchActions)="dispatchActions($event)"
+    ></app-shop-filters>
+    <button
+      *ngIf="touched || filterProduct.filterValueIds.length > 0"
+      type="button"
+      (click)="resetFilterClick()"
+    >
+      Clear Filters
+    </button>
   </div>
-  <app-shop-navigation [products]="products"></app-shop-navigation>
+  <app-shop-navigation [products]="products" [noMore]="noMore" (loadMore)="loadMoreProducts()"></app-shop-navigation>
 </section>

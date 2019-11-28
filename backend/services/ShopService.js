@@ -3,11 +3,13 @@ const Subcategory = require('../models/Subcategory');
 const Product = require('../models/Product');
 const Brand = require('../models/Brand');
 const Filter = require('../models/Filter');
+const FilterSubcategory = require('../models/FilterSubcategory');
 const FilterValue = require('../models/FilterValue');
 const FilterValueProduct = require('../models/FilterValueProduct');
 const { db, Op } = require('../config/database');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
 const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
+const { noMoreProducts, getFilteredProducts } = require('../helpers/productFilter');
 
 class ShopService extends BaseService {
   constructor() {
@@ -16,10 +18,7 @@ class ShopService extends BaseService {
 
   returnWhereObject({ min, max, subcategoryId, brandId }, auctionEnd) {
     const obj = {
-      ...removeNullProperty({
-        subcategoryId,
-        brandId
-      })
+      ...removeNullProperty({ subcategoryId, brandId })
     };
     if (min && max) {
       obj['price'] = {
@@ -43,16 +42,8 @@ class ShopService extends BaseService {
       const subId = { ...removeNullProperty({ id: reqQueryData.subcategoryId }) };
       const Brands = await Brand.findAll({
         include: [
-          {
-            model: Subcategory,
-            attributes: [],
-            where: { ...subId }
-          },
-          {
-            model: Product,
-            where,
-            attributes: []
-          }
+          { model: Subcategory, attributes: [], where: { ...subId } },
+          { model: Product, where, attributes: [] }
         ],
         attributes: ['id', 'name', [db.fn('COUNT', db.col('Products.id')), 'number_of_products']],
         group: ['Brand.id', 'Subcategories->BrandSubcategories.id'],
@@ -66,7 +57,6 @@ class ShopService extends BaseService {
 
   async getPrices(reqQueryData) {
     try {
-      let counts = [];
       const where = this.returnWhereObject(reqQueryData, true);
       const prices = await Product.findOne({
         where,
@@ -77,41 +67,7 @@ class ShopService extends BaseService {
         ]
       });
 
-      for (let i = 0; i < 20; i++) {
-        let price =
-          i === 0
-            ? {
-                [Op.and]: {
-                  [Op.gte]: 0,
-                  [Op.lt]: 100
-                }
-              }
-            : i === 19
-            ? {
-                [Op.and]: {
-                  [Op.gte]: 100 * i
-                }
-              }
-            : {
-                [Op.and]: {
-                  [Op.gte]: 100 * i,
-                  [Op.lt]: 100 * (i + 1)
-                }
-              };
-        counts.push(
-          await Product.findOne({
-            raw: true,
-            where: {
-              ...where,
-              price
-            },
-            attributes: [[db.fn('COUNT', db.col('id')), 'count']]
-          })
-        );
-      }
-      counts = counts.map(cts => cts.count);
-
-      return { status: 200, prices, counts };
+      return { status: 200, prices };
     } catch (error) {
       return super.returnGenericFailed();
     }
@@ -128,19 +84,28 @@ class ShopService extends BaseService {
         where: {
           id: reqQueryData.subcategoryId
         },
+        attributes: [],
         include: {
           model: Filter,
+          attributes: ['id', 'name'],
+          through: {
+            model: FilterSubcategory,
+            attributes: []
+          },
           include: {
             model: FilterValue,
             attributes: ['value', 'id'],
             include: {
               model: Product,
               where,
-              attributes: ['id']
+              attributes: ['id'],
+              through: {
+                model: FilterValueProduct,
+                attributes: []
+              }
             }
           }
-        },
-        attributes: []
+        }
       });
       return { status: 200, Filters };
     } catch (error) {
@@ -148,44 +113,21 @@ class ShopService extends BaseService {
     }
   }
 
-  async getProducts(productWhere, { filterValueIds }) {
+  async getProducts(productWhere, filterValueIds) {
     try {
-      const { offSet: offset } = { ...removeNullProperty(productWhere) };
-      const subQuery = filterValueIds.length > 0 ? false : true;
-      const where = this.returnWhereObject(productWhere, true);
-      const attributes = ['id', 'name', 'price', 'picture', 'details', 'subcategoryId'];
-      let whereId = {};
-      let having = {};
-      if (filterValueIds.length > 0) {
-        whereId['id'] = {
-          [Op.in]: filterValueIds
-        };
-        having = {
-          having: db.where(db.fn('COUNT', db.col('FilterValues.FilterValueProducts.id')), {
-            [Op.eq]: filterValueIds.length
-          }),
-          group: ['Product.id', "FilterValues->FilterValueProducts.id"]
-        };
-      }
-
-      const products = await Product.findAll({
-        subQuery,
-        where,
-        attributes,
-        include: {
-          model: FilterValue,
-          attributes: [],
-          where: { ...whereId },
-          through: {
-            model: FilterValueProduct,
-            attributes: []
-          }
-        },
+      const { products, numberOfProducts, priceRange } = await getFilteredProducts({
+        ...productWhere,
+        offset: productWhere.offSet,
+        filterValueIds,
         limit: LIMIT_SHOP_PRODUCTS,
-        offset,
-        ...having
+        type: 'Shop'
       });
-      return { status: 200, products };
+      const noMore = noMoreProducts({
+        limit: LIMIT_SHOP_PRODUCTS,
+        offset: productWhere.offSet,
+        productsLength: numberOfProducts
+      });
+      return { status: 200, products, noMore, priceRange };
     } catch (error) {
       return super.returnGenericFailed();
     }

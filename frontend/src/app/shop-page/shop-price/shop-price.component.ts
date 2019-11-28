@@ -1,13 +1,22 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges
+} from "@angular/core";
 import { Options } from "ng5-slider";
+import { MappedPriceRange } from "./../store/shop-page.reducer";
 
 @Component({
   selector: "app-shop-price",
   templateUrl: "./shop-price.component.html",
   styleUrls: ["./shop-price.component.scss"]
 })
-export class ShopPriceComponent implements OnInit {
+export class ShopPriceComponent implements OnInit, OnChanges {
   @Input() prices;
+  @Input() priceRange: MappedPriceRange[];
   @Output() changeValues = new EventEmitter<any>();
   private _minValue: number;
   private _maxValue: number;
@@ -17,9 +26,21 @@ export class ShopPriceComponent implements OnInit {
     step: 0.1
   };
 
+  view: any[] = [220, 80];
+
   constructor() {}
 
   ngOnInit() {
+    // this._minValue = this.prices.min_price;
+    // this._maxValue = this.prices.max_price;
+    // this._options = {
+    //   floor: this.minValue,
+    //   ceil: this.maxValue,
+    //   step: 0.1
+    // };
+  }
+
+  ngOnChanges() {
     this._minValue = this.prices.min_price;
     this._maxValue = this.prices.max_price;
     this._options = {

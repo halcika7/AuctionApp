@@ -1,9 +1,8 @@
 <div class="products">
   <div class="navigation">
     <div class="dropdown">
-      <p appDropdownNoautoclose>Sort by Time Left Descending</p>
+      <p appDropdown>Sort by Time Left Descending</p>
       <ul>
-        <li class="active">Default Sorting</li>
         <li>Sort by Price Descending</li>
         <li>Sort by Price Ascending</li>
         <li>Sort by Time Left Descending</li>
@@ -30,5 +29,5 @@
     [containerClass]="false"
     [items]="products"
   ></app-landing-page-products>
-  <button>LOAD MORE</button>
+  <button *ngIf="!noMore" (click)="loadMoreProducts()">LOAD MORE</button>
 </div>

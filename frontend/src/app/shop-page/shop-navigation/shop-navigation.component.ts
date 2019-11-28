@@ -1,5 +1,5 @@
 import { Product } from "@app/landing-page/store/landing-page.reducers";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
   selector: "app-shop-navigation",
@@ -9,6 +9,8 @@ import { Component, OnInit, Input } from "@angular/core";
 export class ShopNavigationComponent implements OnInit {
   productsLayout = "three-cols auto";
   @Input() products: Product[] = [];
+  @Input() noMore: boolean;
+  @Output() loadMore = new EventEmitter<any>();
 
   constructor() {}
 
@@ -16,5 +18,9 @@ export class ShopNavigationComponent implements OnInit {
 
   changeProductsLayout(layout: string) {
     this.productsLayout = layout;
+  }
+
+  loadMoreProducts() {
+    this.loadMore.emit();
   }
 }

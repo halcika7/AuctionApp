@@ -25,12 +25,24 @@ export interface Filters {
   FilterValues: FilterValues[];
 }
 
+export interface PriceRange {
+  price_range: string;
+  count: string;
+}
+
+export interface MappedPriceRange {
+  name: string;
+  value: number;
+}
+
 export interface State {
   products: Product[];
   brands: Brand[];
   prices: Prices;
   filters: Filters[];
   failedMessage: string;
+  noMore: boolean;
+  priceRange: PriceRange[];
 }
 
 const initialState: State = {
@@ -38,7 +50,9 @@ const initialState: State = {
   brands: [],
   filters: [],
   prices: {},
-  failedMessage: ""
+  failedMessage: "",
+  noMore: false,
+  priceRange: []
 };
 
 export function shopPageReducer(
@@ -60,7 +74,23 @@ export function shopPageReducer(
           : state.filters,
         products: action.payload.products
           ? action.payload.products
-          : state.products
+          : state.products,
+        noMore:
+          action.payload.noMore != undefined
+            ? action.payload.noMore
+            : state.noMore,
+        priceRange: action.payload.priceRange ? action.payload.priceRange : state.priceRange
+      };
+    case ShopPageActions.SHOP_PAGE_LOAD_MORE_SUCCESS:
+      return {
+        ...state,
+        products: action.payload.products
+          ? [...state.products, ...action.payload.products]
+          : state.products,
+        noMore:
+          action.payload.noMore != undefined
+            ? action.payload.noMore
+            : state.noMore
       };
     case ShopPageActions.SHOP_PAGE_FAILED:
       return {

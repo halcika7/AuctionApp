@@ -18,11 +18,11 @@ class ShopController extends BaseController {
 
   async getPrices(req, res) {
     const { subcategoryId, brandId } = { ...JSON.parse(req.query.filters) };
-    const { status, prices, counts, failedMessage } = await ShopServiceInstance.getPrices({
+    const { status, prices, failedMessage } = await ShopServiceInstance.getPrices({
       subcategoryId,
       brandId
     });
-    return super.sendResponseWithMessage(res, status, { prices, counts }, failedMessage);
+    return super.sendResponseWithMessage(res, status, { prices }, failedMessage);
   }
 
   async getFilters(req, res) {
@@ -41,17 +41,12 @@ class ShopController extends BaseController {
       ...JSON.parse(req.query.filters)
     };
     const prodWhere = { min, max, subcategoryId, brandId, offSet };
-    const filterWhere = { filterValueIds };
-    const { status, products, failedMessage } = await ShopServiceInstance.getProducts(
+    const { status, products, noMore, priceRange, failedMessage } = await ShopServiceInstance.getProducts(
       prodWhere,
-      filterWhere
+      filterValueIds
     );
-    return super.sendResponseWithMessage(res, status, { products }, failedMessage);
+    return super.sendResponseWithMessage(res, status, { products, noMore, priceRange }, failedMessage);
   }
-
-  async sortProducts(req, res) {}
-
-  async loadMoreProducts(req, res) {}
 }
 
 const ShopControllerInstance = new ShopController();

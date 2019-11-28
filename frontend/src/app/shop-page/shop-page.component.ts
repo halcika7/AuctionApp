@@ -1,3 +1,4 @@
+import { map } from "rxjs/operators";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
@@ -5,7 +6,7 @@ import { Categories } from "@app/containers/all-categories/store/all-categories.
 import { CategoriesStart } from "@app/containers/all-categories/store/all-categories.actions";
 import * as ShopPageActions from "./store/shop-page.actions";
 import { ActivatedRoute, Params } from "@angular/router";
-import { Brand, Prices, Filters } from "./store/shop-page.reducer";
+import { Brand, Prices, Filters, MappedPriceRange } from "./store/shop-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 @Component({
@@ -19,11 +20,13 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   brands: Brand[] = [];
   filters: Filters[] = [];
+  noMore: boolean;
+  priceRange: MappedPriceRange[];
+
   categoryId: string;
   subcategoryId: string;
-  subcategory: string;
-  brandId: string;
-  filterIds: String[] = [];
+  breadcrumbSubcategory: string;
+
   filterProduct = {
     subcategoryId: null,
     min: null,
@@ -33,6 +36,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     offSet: 0
   };
 
+  touched: boolean = false;
+
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute
@@ -41,13 +46,11 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new CategoriesStart("/categories/true"));
     this.route.params.subscribe(({ categoryId, subcategoryId }: Params) => {
-      this.resetProductFilter(true);
-      if (categoryId && subcategoryId) {
-        this.categoryId = categoryId;
-        this.subcategoryId = subcategoryId;
-        this.filterProduct.subcategoryId = subcategoryId;
-        this.checkActiveSubcategory();
-      }
+      this.resetProductFilter({ resetSubcategory: true });
+      this.categoryId = categoryId;
+      this.subcategoryId = subcategoryId;
+      this.filterProduct.subcategoryId = subcategoryId;
+      this.checkActiveSubcategory();
       this.dispatchActions(true);
     });
     this.store.select("categoriesPage").subscribe(({ categories }) => {
@@ -56,18 +59,28 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     });
     this.store
       .select("shopPage")
-      .subscribe(({ brands, prices, filters, products }) => {
-        console.log("TCL: products", products);
-        this.products = products;
-        if (this.showIfKeysLength(prices)) {
+      .pipe(
+        map(data => {
+          const priceRange = data.priceRange.map(ranges => ({
+            name: ranges.price_range,
+            value: parseInt(ranges.count)
+          }));
+          return { ...data, priceRange };
+        })
+      )
+      .subscribe(
+        ({ brands, prices, filters, products, noMore, priceRange }) => {
+          this.products = products;
+          this.brands = brands;
+          this.filters = filters;
           this.prices = prices;
+          this.noMore = noMore;
+          this.priceRange = priceRange;
+          if (this.products.length === 0) {
+            this.resetProductFilter({});
+          }
         }
-        if (this.products.length === 0) {
-          this.resetProductFilter();
-        }
-        this.brands = brands;
-        this.filters = filters;
-      });
+      );
   }
 
   ngOnDestroy() {
@@ -76,14 +89,14 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   private checkActiveSubcategory() {
     if (this.categoryId && this.subcategoryId && this.categories.length > 0) {
-      this.subcategory = this.categories[
+      this.breadcrumbSubcategory = this.categories[
         parseInt(this.categoryId) - 1
       ].Subcategories.filter(
         subcategories =>
           this.subcategoryId === subcategories.id && subcategories.name
       )[0].name;
     } else {
-      this.subcategory = "all categories";
+      this.breadcrumbSubcategory = "all categories";
     }
   }
 
@@ -91,35 +104,27 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     return Object.keys(value).length > 0 ? true : false;
   }
 
-  changeValues({ value, highValue }) {
+  changePriceValues({ value, highValue }) {
     this.filterProduct.min = value;
     this.filterProduct.max = highValue;
+    this.touched = true;
+    this.filterProduct.offSet = 0;
     this.dispatchActions(true);
   }
 
-  filterClicked(brand: boolean, id: string, filterValueId: string) {
-    if (brand) {
-      this.filterProduct.min = null;
-      this.filterProduct.max = null;
-      this.brandId = id;
-      this.filterProduct.brandId = id;
-      this.dispatchActions(true);
-    } else {
-      const findFilterId = this.filterIds.findIndex(filter => filter === id);
-      if (findFilterId === -1) {
-        this.filterIds.push(id);
-        this.filterProduct.filterValueIds.push(filterValueId);
-      } else {
-        this.filterProduct.filterValueIds[findFilterId] = filterValueId;
-      }
-      this.dispatchActions();
-    }
+  setBrandId(val: string) {
+    this.filterProduct.brandId = val;
+    this.filterProduct.offSet = 0;
+    this.touched = true;
   }
 
-  checkActivity(id): boolean {
-    return this.filterProduct.filterValueIds.findIndex(Id => Id === id) !== -1
-      ? true
-      : false;
+  loadMoreProducts() {
+    this.filterProduct.offSet += 9;
+    this.store.dispatch(
+      new ShopPageActions.ShopPageLoadMoreStart(
+        `/shop/products?filters=${JSON.stringify(this.filterProduct)}`
+      )
+    );
   }
 
   private dispatchActions(refreshBrands = false) {
@@ -132,6 +137,11 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(
       new ShopPageActions.ShopStart(
+        `/shop/filters?filters=${JSON.stringify(this.filterProduct)}`
+      )
+    );
+    this.store.dispatch(
+      new ShopPageActions.ShopStart(
         `/shop/products?filters=${JSON.stringify(this.filterProduct)}`
       )
     );
@@ -140,25 +150,30 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         `/shop/prices?filters=${JSON.stringify(this.filterProduct)}`
       )
     );
-    this.store.dispatch(
-      new ShopPageActions.ShopStart(
-        `/shop/filters?filters=${JSON.stringify(this.filterProduct)}`
-      )
-    );
   }
 
-  private resetProductFilter(resetSubcategory = false) {
-    this.filterProduct = {
-      ...this.filterProduct,
-      min: null,
-      max: null,
-      brandId: null,
-      filterValueIds: [],
-      offSet: 0
-    };
+  private resetProductFilter({ resetSubcategory = false, onlyOffset = false }) {
+    if (!onlyOffset) {
+      this.filterProduct = {
+        ...this.filterProduct,
+        min: null,
+        max: null,
+        brandId: null,
+        filterValueIds: [],
+        offSet: 0
+      };
 
-    if (resetSubcategory) {
-      this.filterProduct.subcategoryId = null;
+      if (resetSubcategory) {
+        this.filterProduct.subcategoryId = null;
+      }
+    } else {
+      this.filterProduct.offSet = 0;
     }
+  }
+
+  resetFilterClick() {
+    this.resetProductFilter({});
+    this.dispatchActions(true);
+    this.touched = false;
   }
 }

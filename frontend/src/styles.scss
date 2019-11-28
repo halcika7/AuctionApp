@@ -3,7 +3,7 @@
 @import "mixins";
 
 .paddingL15 {
-  @include padding($left: 15px !important);
+  @include padding($left: 21px !important);
 }
 
 app-root {
@@ -428,6 +428,7 @@ app-footer {
           $decoration: none
         );
         @include margin($all: 5px);
+        @include boxShadowBackground(true);
         background: getColor(white);
         border: none;
         cursor: pointer;
@@ -454,6 +455,7 @@ app-footer {
 
   &:hover {
     .img {
+
       img {
         transform: translateY(-100%);
       }

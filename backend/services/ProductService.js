@@ -1,7 +1,8 @@
 const {
   getFilteredProducts,
   getProductById,
-  getSimilarProducts
+  getSimilarProducts,
+  noMoreProducts
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
 const BaseService = require('./BaseService');
@@ -15,15 +16,11 @@ class ProductService extends BaseService {
   async filterProducts(reqParams) {
     try {
       const { products, numberOfProducts } = await getFilteredProducts(reqParams);
-      const eq = isNaN(parseInt(reqParams.limit) + parseInt(reqParams.offset))
-        ? parseInt(reqParams.limit)
-        : parseInt(reqParams.limit) + parseInt(reqParams.offset);
-      const noMore =
-        products.length === 0 ||
-        products.length < parseInt(reqParams.limit) ||
-        numberOfProducts === eq
-          ? true
-          : false;
+      const noMore = noMoreProducts({
+        limit: reqParams.limit,
+        offset: reqParams.offset,
+        productsLength: numberOfProducts
+      });
       return { status: 200, products, noMore };
     } catch (error) {
       return super.returnGenericFailed();

@@ -54,6 +54,20 @@
   .price .ng5-slider .ng5-slider-limit {
     display: none;
   }
+
+  .bar {
+    fill: getColor(lighter_gray2);
+  }
+
+  .price .ng5-slider {
+    margin: 0;
+    top: -19px;
+  }
+
+  .price .ng5-slider .ng5-slider-bubble {
+    padding: 10px 3px;
+    top: 100%;
+}
 }
 
 .price p {

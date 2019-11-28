@@ -9,6 +9,7 @@
   display: block;
   cursor: pointer;
   box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  outline: none;
 }
 
 .products .navigation {
@@ -48,11 +49,13 @@
 .navigation .dropdown p:after {
   right: 26px;
   transform: rotate(-45deg);
+  transition: all 0.3s ease-in-out;
 }
 
 .navigation .dropdown p:before {
   right: 20px;
   transform: rotate(45deg);
+  transition: all 0.3s ease-in-out;
 }
 
 .navigation .dropdown p.open:after {

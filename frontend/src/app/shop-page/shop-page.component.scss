@@ -14,112 +14,16 @@
   flex-direction: column;
 }
 
+button {
+  @include fontMixin(15px, regular, 0.63px, light_black);
+  @include heightWidth(40px, 100%);
+  @include boxShadowBackground(true, white, 3px solid getColor(purple));
+  cursor: pointer;
+  outline: none;
+}
+
 app-shop-navigation {
   width: 100%;
-}
-
-.categories,
-.colors {
-  background: #ffffff;
-  border: 1px solid #d8d8d8;
-  padding: 15px 20px;
-  margin: 0;
-  margin-bottom: 20px;
-  max-height: 576px;
-  overflow-y: auto;
-}
-
-.categories ul,
-.colors ul {
-  margin: 0;
-  padding: 0;
-  display: none;
-}
-
-.categories h4,
-.colors h4 {
-  @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
-  margin: 0;
-  margin-bottom: 31px;
-}
-
-.categories > li,
-.colors > li {
-  @include fontMixin(14px, regular, 0.49px, light_black);
-  margin: 0 0 23px;
-  position: relative;
-  cursor: pointer;
-}
-
-.colors > li {
-  @include fontMixin(
-    14px,
-    regular,
-    0.49px,
-    light_black,
-    $transform: capitalize
-  );
-}
-
-.colors > li.active {
-  color: getColor(purple);
-}
-
-.categories li > ul > li {
-  cursor: pointer;
-}
-
-.categories > li:before {
-  content: "";
-  position: absolute;
-  right: 0;
-  width: 4px;
-  height: 16px;
-  background: #111;
-}
-
-.categories > li:after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  width: 16px;
-  height: 4px;
-  background: #111;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.categories > li.open:before {
-  content: "";
-  display: none;
-}
-
-.categories > li.open:after {
-  top: 8px;
-}
-
-.categories > li.open > ul {
-  display: block;
-}
-
-.categories ul > li,
-.categories ul > li > a {
-  @include fontMixin(14px, regular, 0.49px, gray, $decoration: none);
-  margin-bottom: 19px;
-}
-
-.categories ul > li.active > a,
-.categories ul > li.active {
-  @include fontMixin(14px, regular, 0.49px, purple, $decoration: none);
-  margin-bottom: 19px;
-}
-
-.categories ul > li:first-child {
-  margin-top: 31px;
-}
-
-.categories ul > li:last-child {
-  margin-bottom: 31px;
 }
 
 @media (max-width: 790px) {
