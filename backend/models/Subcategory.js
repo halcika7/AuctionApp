@@ -29,8 +29,7 @@ const Subcategory = db.define(
     modelName: 'Subcategories',
     indexes: [
       {
-        unique: true,
-        indexes: ['id']
+        fields: ['id']
       }
     ]
   }
