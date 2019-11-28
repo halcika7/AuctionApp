@@ -64,6 +64,11 @@ const User = db.define(
       allowNull: false,
       defaultValue: false
     },
+    resetPasswordToken: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null
+    },
     roleId: {
       type: Sequelize.BIGINT,
       references: {

@@ -77,6 +77,8 @@ import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-naviga
 
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +112,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     CollectionListItemComponent,
     ShopPriceComponent,
     ShopFiltersComponent,
-    ShopNavigationComponent
+    ShopNavigationComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

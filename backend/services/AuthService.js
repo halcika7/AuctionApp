@@ -1,12 +1,20 @@
-const { registerValidation, loginValidation } = require('../validations/authValidation');
+const {
+  registerValidation,
+  loginValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation
+} = require('../validations/authValidation');
 const {
   createAccessToken,
   createRefreshToken,
   createUser,
   findUserByEmail,
-  verifyRefreshToken
+  verifyRefreshToken,
+  hashPassword
 } = require('../helpers/authHelper');
+const { sendEmail } = require('../helpers/sendEmail');
 const BaseService = require('./BaseService');
+const User = require('../models/User');
 
 class AuthService extends BaseService {
   constructor() {
@@ -68,6 +76,63 @@ class AuthService extends BaseService {
       return super.returnResponse(400, {
         response: { accessToken: '' }
       });
+    }
+  }
+
+  async forgotPassword(email) {
+    try {
+      const { errors, isValid, user } = await forgotPasswordValidation(email);
+      if (!isValid && errors) return { status: 403, response: { ...errors } };
+      const resetPasswordToken = createAccessToken(user, '1d');
+      const { err } = await sendEmail(
+        email,
+        resetPasswordToken,
+        "Need to reset your password? Just click the link below and you'll be on your way. If you did not make this request, please ignore this email."
+      );
+      if (err) {
+        return { status: 403, response: { message: err } };
+      }
+      await User.update({ resetPasswordToken }, { where: { email } });
+
+      return {
+        status: 200,
+        response: {
+          message:
+            'You have successfully requested a password reset. Please check your email for further instructions.'
+        }
+      };
+    } catch (error) {
+      console.log('TCL: AuthService -> forgotPassword -> error', error);
+      return { status: 403, response: { message: 'Something happend' } };
+    }
+  }
+
+  async resetPassword({ resetPasswordToken, password }) {
+    try {
+      const { errors, message, isValid, email } = await resetPasswordValidation(
+        resetPasswordToken,
+        password
+      );
+      if (!isValid && errors) return { status: 403, response: { ...errors } };
+      if (!isValid && message) return { status: 403, response: { message } };
+      const hashedPassword = await hashPassword(password);
+      await User.update(
+        { resetPasswordToken: null, password: hashedPassword },
+        { where: { email } }
+      );
+      return {
+        status: 200,
+        response: {
+          message: 'Password updated!'
+        }
+      };
+    } catch (error) {
+      return {
+        status: 403,
+        response: {
+          message: 'Something happened. We were unable to perform request.'
+        }
+      };
     }
   }
 

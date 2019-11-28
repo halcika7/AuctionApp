@@ -11,6 +11,8 @@ import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
 import { ShopPageComponent } from "./shop-page/shop-page.component";
+import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
+import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 
 import { LoginGuard } from "./auth/login.guard";
 
@@ -28,6 +30,21 @@ const appRoutes: Routes = [
       {
         path: "auth/register",
         component: RegisterComponent,
+        canActivate: [LoginGuard]
+      },
+      {
+        path: "auth/forgot-password",
+        component: ForgotPasswordComponent,
+        canActivate: [LoginGuard]
+      },
+      {
+        path: "auth/forgot-password/:token",
+        component: ForgotPasswordComponent,
+        canActivate: [LoginGuard]
+      },
+      {
+        path: "auth/reset-password",
+        component: ResetPasswordComponent,
         canActivate: [LoginGuard]
       },
       {

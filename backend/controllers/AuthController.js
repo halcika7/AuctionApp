@@ -37,6 +37,16 @@ class AuthController extends BaseController {
       !token ? { accessToken: '' } : undefined
     );
   }
+
+  async forgotPassword(req, res) {
+    const { status, response } = await AuthServiceInstance.forgotPassword(req.body.email);
+    return super.sendResponse(res, status, response);
+  }
+
+  async resetPassword(req, res) {
+    const { status, response } = await AuthServiceInstance.resetPassword(req.body);
+    return super.sendResponse(res, status, response);
+  }
 }
 
 const AuthControllerInstance = new AuthController();

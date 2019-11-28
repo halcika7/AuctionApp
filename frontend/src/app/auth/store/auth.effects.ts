@@ -69,5 +69,34 @@ export class AuthEffects {
     })
   );
 
+  @Effect()
+  forgotPassword = this.actions$.pipe(
+    ofType(AuthActions.FORGOT_PASSWORD_START),
+    concatMap(({ email }) => {
+      return this.http
+        .patch<any>("/auth/forgotpassword", { email })
+        .pipe(
+          map(data => new AuthActions.ForgotPasswordSuccess(data)),
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+        );
+    })
+  );
+
+  @Effect()
+  resetPassword = this.actions$.pipe(
+    ofType(AuthActions.RESET_PASSWORD_START),
+    concatMap(({ resetPasswordToken, password }) => {
+      return this.http
+        .patch<any>("/auth/resetpassword", { resetPasswordToken, password })
+        .pipe(
+          map(data => {
+            sessionStorage.removeItem("resetPasswordToken");
+            return new AuthActions.ForgotPasswordSuccess(data);
+          }),
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+        );
+    })
+  );
+
   constructor(private actions$: Actions, private http: HttpClient) {}
 }
