@@ -20,7 +20,7 @@
       (click)="filterClicked(false, filter.id, vals.id)"
     >
       <ng-template [ngIf]="filter.name === 'color'">
-        <p><span [ngStyle]="{background: vals.value}"></span>{{ vals.value }} ({{ vals.Products.length }})</p>
+        <p><span [class]="vals.value"></span>{{ vals.value }} ({{ vals.Products.length }})</p>
       </ng-template>
       <p *ngIf="filter.name !== 'color'">{{ vals.value }} ({{ vals.Products.length }})</p>
     </li>

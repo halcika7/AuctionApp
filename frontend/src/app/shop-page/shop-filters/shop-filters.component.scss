@@ -72,3 +72,23 @@
     margin-right: 10px;
   }
 }
+
+.white {
+  background: getColor(white) !important;
+}
+
+.black {
+  background: getColor(light_black) !important;
+}
+
+.red {
+  background: getColor(red) !important;
+}
+
+.green {
+  background: getColor(green) !important;
+}
+
+.blue {
+  background: getColor(blue) !important;
+}
