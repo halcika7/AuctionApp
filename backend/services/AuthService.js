@@ -40,8 +40,7 @@ class AuthService extends BaseService {
     try {
       const { errors, message, isValid, user } = await loginValidation(data);
       if (!isValid && errors) return super.returnResponse(403, { response: { ...errors } });
-      if (!isValid && message)
-        return super.returnResponse(403, { response: { message } });
+      if (!isValid && message) return super.returnResponse(403, { response: { message } });
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
       return {
