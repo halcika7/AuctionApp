@@ -41,8 +41,8 @@ exports.findUserByEmail = async (email, withPassword = true) => {
 };
 
 exports.createUser = async ({ firstName, lastName, email, password }) => {
-  password = await hashPassword(password);
+  password = await this.hashPassword(password);
   return await User.create({ firstName, lastName, email, password });
 };
 
-const hashPassword = async password => await bcrypt.hash(password, 10);
+exports.hashPassword = async password => await bcrypt.hash(password, 10);
