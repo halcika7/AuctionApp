@@ -33,7 +33,10 @@ const initialState: State = {
   loading: false
 };
 
-export function authReducer(state = initialState, action: AuthActions.AuthActions) {
+export function authReducer(
+  state = initialState,
+  action: AuthActions.AuthActions
+) {
   let id;
   switch (action.type) {
     case AuthActions.REGISTER_START:
@@ -58,7 +61,9 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       id = jwtDecode(action.payload.accessToken).id || "";
       return {
         ...initialState,
-        accessToken: action.payload.accessToken ? action.payload.accessToken : "",
+        accessToken: action.payload.accessToken
+          ? action.payload.accessToken
+          : "",
         message: action.payload.message,
         remember: action.payload.remember,
         userId: id,
@@ -83,7 +88,9 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...initialState,
         errors: action.payload.errors ? action.payload.errors : state.errors,
-        message: action.payload.message ? action.payload.message : state.message,
+        message: action.payload.message
+          ? action.payload.message
+          : state.message,
         success: false
       };
     default:
