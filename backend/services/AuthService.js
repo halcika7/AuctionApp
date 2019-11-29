@@ -27,27 +27,26 @@ class AuthService extends BaseService {
       if (!isValid) return { status: 403, response: { ...errors } };
       await createUser(data);
       return super.returnResponse(200, {
-        response: { successMessage: 'Account successfully created !' }
+        response: { message: 'Account successfully created !' }
       });
     } catch (error) {
       return super.returnResponse(403, {
-        response: { err: 'Something happened. We were unable to create an account.' }
+        response: { message: 'Something happened. We were unable to create an account.' }
       });
     }
   }
 
   async login(data) {
     try {
-      const { errors, errorMessage, isValid, user } = await loginValidation(data);
+      const { errors, message, isValid, user } = await loginValidation(data);
       if (!isValid && errors) return super.returnResponse(403, { response: { ...errors } });
-      if (!isValid && errorMessage)
-        return super.returnResponse(403, { response: { err: errorMessage } });
+      if (!isValid && message) return super.returnResponse(403, { response: { message } });
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
       return {
         status: 200,
         response: {
-          successMessage: "You're successfully logedin",
+          message: "You're successfully logged in",
           accessToken,
           remember: data.remember
         },
@@ -55,7 +54,7 @@ class AuthService extends BaseService {
       };
     } catch (error) {
       return super.returnResponse(403, {
-        response: { err: 'Something happened. We were unable to perform login.' }
+        response: { message: 'Something happened. We were unable to perform login.' }
       });
     }
   }
@@ -102,7 +101,6 @@ class AuthService extends BaseService {
         }
       };
     } catch (error) {
-      console.log('TCL: AuthService -> forgotPassword -> error', error);
       return { status: 403, response: { message: 'Something happend' } };
     }
   }

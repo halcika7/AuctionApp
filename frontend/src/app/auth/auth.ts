@@ -16,76 +16,91 @@ export class Auth {
   private _expiredToken: string;
   subscription: Subscription;
 
-  constructor(private authStore: Store<any>, private Form: FormGroup, private Router: Router) {
+  constructor(
+    private authStore: Store<any>,
+    private Form: FormGroup,
+    private Router: Router
+  ) {
     this.clearMessages();
     this._form = this.Form;
     this.subscription = this.authStore
       .select("auth")
-      .subscribe(({ errors, accessToken, message, resetTokenExpired, success }) => {
-        if (
-          accessToken ||
-          localStorage.getItem("accessToken") ||
-          sessionStorage.getItem("accessToken")
-        ) {
-          this.subscription.unsubscribe();
-          setTimeout(() => this.Router.navigate(["/"]), 1200);
-        }
-
-        if (this.form.controls.email) {
-          if (errors.email && !message) {
-            this.form.controls.email.setErrors({ async: errors.email });
-            this.form.controls.email.markAsTouched();
-          } else {
-            this.form.controls.email.setErrors({});
-            this.form.controls.email.setValue(this.form.controls.email.value);
-          }
-        }
-
-        if (this.form.controls.password) {
-          if (errors.password && !message) {
-            this.form.controls.password.setErrors({ async: errors.password });
-            this.form.controls.password.markAsTouched();
-          } else {
-            this.form.controls.password.setErrors({});
-            this.form.controls.password.setValue(this.form.controls.password.value);
-          }
-        }
-
-        if (this._register) {
-          if (errors.firstName && !message) {
-            this.form.controls.firstName.setErrors({
-              async: errors.firstName
-            });
-            this.form.controls.firstName.markAsTouched();
-          } else {
-            this.form.controls.firstName.setErrors({});
-            this.form.controls.firstName.setValue(this.form.controls.firstName.value);
+      .subscribe(
+        ({ errors, accessToken, message, resetTokenExpired, success }) => {
+          if (
+            accessToken ||
+            localStorage.getItem("accessToken") ||
+            sessionStorage.getItem("accessToken")
+          ) {
+            this.subscription.unsubscribe();
+            setTimeout(() => this.Router.navigate(["/"]), 1200);
           }
 
-          if (errors.lastName && !message) {
-            this.form.controls.lastName.setErrors({ async: errors.lastName });
-            this.form.controls.lastName.markAsTouched();
+          if (this.form.controls.email) {
+            if (errors.email && !message) {
+              this.form.controls.email.setErrors({ async: errors.email });
+              this.form.controls.email.markAsTouched();
+            } else {
+              this.form.controls.email.setErrors({});
+              this.form.controls.email.setValue(this.form.controls.email.value);
+            }
+          }
+
+          if (this.form.controls.password) {
+            if (errors.password && !message) {
+              this.form.controls.password.setErrors({ async: errors.password });
+              this.form.controls.password.markAsTouched();
+            } else {
+              this.form.controls.password.setErrors({});
+              this.form.controls.password.setValue(
+                this.form.controls.password.value
+              );
+            }
+          }
+
+          if (this._register) {
+            if (errors.firstName && !message) {
+              this.form.controls.firstName.setErrors({
+                async: errors.firstName
+              });
+              this.form.controls.firstName.markAsTouched();
+            } else {
+              this.form.controls.firstName.setErrors({});
+              this.form.controls.firstName.setValue(
+                this.form.controls.firstName.value
+              );
+            }
+
+            if (errors.lastName && !message) {
+              this.form.controls.lastName.setErrors({ async: errors.lastName });
+              this.form.controls.lastName.markAsTouched();
+            } else {
+              this.form.controls.lastName.setErrors({});
+              this.form.controls.lastName.setValue(
+                this.form.controls.lastName.value
+              );
+            }
+          }
+
+          this._message = message;
+          this._success = success;
+
+          this._expiredToken = resetTokenExpired;
+
+          if (this._success) {
+            this._showErrors = false;
+            this.form.reset();
+            this._register || this._resetPassword
+              ? setTimeout(
+                  () => this.Router.navigate(["/home/auth/login"]),
+                  2000
+                )
+              : setTimeout(() => this.Router.navigate(["/home"]), 2000);
           } else {
-            this.form.controls.lastName.setErrors({});
-            this.form.controls.lastName.setValue(this.form.controls.lastName.value);
+            this.isClicked = false;
           }
         }
-
-        this._message = message;
-        this._success = success;
-
-        this._expiredToken = resetTokenExpired;
-
-        if (this._success) {
-          this._showErrors = false;
-          this.form.reset();
-          this._register || this._resetPassword
-            ? setTimeout(() => this.Router.navigate(["/home/auth/login"]), 2000)
-            : setTimeout(() => this.Router.navigate(["/home"]), 2000);
-        } else {
-          this.isClicked = false;
-        }
-      });
+      );
   }
 
   destroy() {

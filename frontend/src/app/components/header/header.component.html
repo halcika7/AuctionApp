@@ -1,7 +1,7 @@
 <header class="container-fluid">
   <div class="top container">
     <div class="links">
-      <a href="">
+      <!-- <a href="">
         <fa-icon [icon]="['fab', 'facebook-f']"></fa-icon>
       </a>
       <a href="">
@@ -12,7 +12,7 @@
       </a>
       <a href="">
         <fa-icon [icon]="['fab', 'google-plus-g']"></fa-icon>
-      </a>
+      </a> -->
     </div>
     <div class="login" *ngIf="isAuthenticated === false">
       <a [routerLink]="['/home/auth/login']">Login</a>
@@ -34,15 +34,15 @@
     <a [routerLink]="['/home']">Auction</a>
   </div>
   <div class="search">
-    <input type="search" placeholder="Search" />
-    <fa-icon [icon]="['fas', 'search']"></fa-icon>
+    <!-- <input type="search" placeholder="Search" />
+    <fa-icon [icon]="['fas', 'search']"></fa-icon> -->
   </div>
   <div class="nav-links">
     <a [routerLink]="['/home']" routerLinkActive="active">home</a>
     <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
     <span appDropdown *ngIf="isAuthenticated">
       <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
-      <ul class="dropdown">
+      <!-- <ul class="dropdown">
         <li>
           <a href=""><span>Profile</span></a>
         </li>
@@ -58,7 +58,7 @@
         <li>
           <a href=""><span>Settings</span></a>
         </li>
-      </ul>
+      </ul> -->
     </span>
   </div>
 </nav>
