@@ -129,7 +129,6 @@ class ShopService extends BaseService {
       });
       return { status: 200, products, noMore, priceRange };
     } catch (error) {
-      console.log('TCL: getProducts -> error', error);
       return super.returnGenericFailed();
     }
   }

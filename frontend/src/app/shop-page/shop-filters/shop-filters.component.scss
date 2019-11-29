@@ -23,13 +23,6 @@
 }
 
 .colors > li {
-  @include fontMixin(14px, regular, 0.49px, light_black);
-  margin: 0 0 23px;
-  position: relative;
-  cursor: pointer;
-}
-
-.colors > li {
   @include fontMixin(
     14px,
     regular,
@@ -37,8 +30,45 @@
     light_black,
     $transform: capitalize
   );
+  @include flex(center,space-between);
+  position: relative;
+  cursor: pointer;
+  position: relative;
+  height: auto;
 }
 
 .colors > li.active {
   color: getColor(purple);
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    width: 4px;
+    height: 15px;
+    background: getColor(light_black);
+    pointer-events: none;
+    cursor: pointer;
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+}
+
+.colors > li > p {
+  @include flex($align: center);
+
+  > span {
+    width: 15px;
+    height: 15px;
+    display: block;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
 }

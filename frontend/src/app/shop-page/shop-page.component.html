@@ -18,9 +18,7 @@
       [brand]="true"
       [values]="brands"
       [brandId]="filterProduct.brandId"
-      (resetFilter)="resetProductFilter($event)"
-      (dispatchActions)="dispatchActions($event)"
-      (setBrandId)="setBrandId($event)"
+      (clickFilter)="filterClicked($event)"
     ></app-shop-filters>
     <ng-template [ngIf]="showIfKeysLength(prices)">
       <app-shop-price
@@ -33,11 +31,10 @@
       [filterValueIds]="filterProduct.filterValueIds"
       [brand]="false"
       [values]="filters"
-      (resetFilter)="resetProductFilter($event)"
-      (dispatchActions)="dispatchActions($event)"
+      (clickFilter)="filterClicked($event)"
     ></app-shop-filters>
     <button
-      *ngIf="touched || filterProduct.filterValueIds.length > 0"
+      *ngIf="checkShowClearFilters()"
       type="button"
       (click)="resetFilterClick()"
     >

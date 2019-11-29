@@ -19,7 +19,6 @@ exports.sendEmail = async (email, token, text) => {
     });
     return { err: null };
   } catch (err) {
-    console.log('TCL: exports.sendEmail -> err', err);
     return { err: err.message || err };
   }
 };

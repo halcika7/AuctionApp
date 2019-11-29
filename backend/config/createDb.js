@@ -18,6 +18,6 @@ pg.connect()
       });
   })
   .catch(err => {
-    console.log('unable to connect to postgres db');
+    // console.log('unable to connect to postgres db');
     process.kill(process.pid);
   });

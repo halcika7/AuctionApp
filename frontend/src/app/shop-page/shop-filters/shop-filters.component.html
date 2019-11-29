@@ -1,9 +1,11 @@
 <ul class="colors" *ngIf="brand">
   <h4>Brands</h4>
-  <li *ngFor="let brand of values" [ngClass]="{ active: brandId === brand.id }">
-    <p (click)="filterClicked(true, brand.id)">
-      {{ brand.name }} ({{ brand.number_of_products }})
-    </p>
+  <li
+    *ngFor="let brand of values"
+    [ngClass]="{ active: brandId === brand.id }"
+    (click)="filterClicked(true, brand.id)"
+  >
+    <p>{{ brand.name }} ({{ brand.number_of_products }})</p>
   </li>
 </ul>
 
@@ -15,10 +17,12 @@
       [ngClass]="{
         active: checkActivity(vals.id)
       }"
+      (click)="filterClicked(false, filter.id, vals.id)"
     >
-      <p (click)="filterClicked(false, filter.id, vals.id)">
-        {{ vals.value }} ({{ vals.Products.length }})
-      </p>
+      <ng-template [ngIf]="filter.name === 'color'">
+        <p><span [ngStyle]="{background: vals.value}"></span>{{ vals.value }} ({{ vals.Products.length }})</p>
+      </ng-template>
+      <p *ngIf="filter.name !== 'color'">{{ vals.value }} ({{ vals.Products.length }})</p>
     </li>
   </ul>
 </ng-template>

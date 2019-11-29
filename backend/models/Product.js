@@ -72,17 +72,7 @@ const Product = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'Products',
-    indexes: [
-      {
-        unique: true,
-        fields: ['id']
-      },
-      {
-        unique: false,
-        fields: ['price', 'featured', 'auctionStart', 'auctionEnd', 'subcategoryId', 'brandId']
-      }
-    ]
+    modelName: 'Products'
   }
 );
 

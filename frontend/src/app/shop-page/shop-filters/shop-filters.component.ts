@@ -11,35 +11,21 @@ export class ShopFiltersComponent implements OnInit {
   @Input() filterValueIds: string[];
   @Input() brandId: string;
   @Input() brand: boolean = true;
-  @Output() resetFilter = new EventEmitter<any>();
-  @Output() dispatchActions = new EventEmitter<any>();
-  @Output() setBrandId = new EventEmitter<any>();
-  filterIds: string[] = [];
+  @Output() clickFilter = new EventEmitter<any>();
 
   constructor() {}
 
   ngOnInit() {}
 
-  filterClicked(brand: boolean, id: string, filterValueId: string) {
-    if (brand) {
-      this.resetFilter.emit({});
-      this.brandId = id;
-      this.setBrandId.emit(id);
-      this.dispatchActions.emit(true);
-    } else {
-      const findFilterId = this.filterIds.findIndex(filter => filter === id);
-      if (findFilterId === -1) {
-        this.filterIds.push(id);
-        this.filterValueIds.push(filterValueId);
-      } else {
-        this.filterValueIds[findFilterId] = filterValueId;
-      }
-      this.resetFilter.emit({ onlyOffset: true });
-      this.dispatchActions.emit();
-    }
-  }
-
   checkActivity(id): boolean {
     return this.filterValueIds.findIndex(Id => Id === id) !== -1 ? true : false;
+  }
+
+  filterClicked(brand, id, filterValueId) {
+    if (brand) {
+      this.clickFilter.emit({ brand, id });
+    } else {
+      this.clickFilter.emit({ id, filterValueId });
+    }
   }
 }

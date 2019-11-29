@@ -7,27 +7,26 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./shop-navigation.component.scss"]
 })
 export class ShopNavigationComponent implements OnInit {
-  productsLayout = "three-cols auto";
+  private _productsLayout = "three-cols auto";
   @Input() products: Product[] = [];
   @Input() noMore: boolean;
   @Output() loadMore = new EventEmitter<any>();
   @Output() changeOrderBy = new EventEmitter<any>();
-
-  orderBy = [
+  private _orderBy = [
     "Default Sorting",
     "Sort by Price Descending",
     "Sort by Price Ascending",
     "Sort by Time Left Descending",
     "Sort by Time Left Ascending"
   ];
-  orderByText = "Default Sorting";
+  private _orderByText = "Default Sorting";
 
   constructor() {}
 
   ngOnInit() {}
 
   changeProductsLayout(layout: string) {
-    this.productsLayout = layout;
+    this._productsLayout = layout;
   }
 
   loadMoreProducts() {
@@ -35,9 +34,21 @@ export class ShopNavigationComponent implements OnInit {
   }
 
   changeOrderByChanged(value: number) {
-    this.orderByText = this.orderBy[value];
+    this._orderByText = this.orderBy[value];
     this.changeOrderBy.emit(
       this.orderBy[value] === "Default Sorting" ? null : this.orderBy[value]
     );
+  }
+
+  get productsLayout(): string {
+    return this._productsLayout;
+  }
+
+  get orderByText(): string {
+    return this._orderByText;
+  }
+
+  get orderBy(): string[] {
+    return this._orderBy;
   }
 }

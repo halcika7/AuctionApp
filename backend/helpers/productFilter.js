@@ -29,100 +29,112 @@ function filterProducts({
   const endsMaxDays = addSubtractDaysToDate(ENDS_IN_MAX_DAYS);
   const daysAgo = addSubtractDaysToDate(STARTED_DAYS_AGO, false);
   let replacements = null;
-  let query = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
-  let query2 = '';
+  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
+  let numberOfProductsQuery = '';
+  let priceRangeQuery =
+    type === 'Shop'
+      ? `SELECT CASE
+  when p.price >= 0 and p.price < 50 then '0-50'
+  when p.price >= 50 and p.price < 100 then '50-100'
+  when p.price >= 100 and p.price < 150 then '100-150'
+  when p.price >= 150 and p.price < 200 then '150-200'
+  when p.price >= 200 and p.price < 250 then '200-250'
+  when p.price >= 250 and p.price < 300 then '250-300'
+  when p.price >= 300 and p.price < 350 then '300-350'
+  when p.price >= 350 and p.price < 400 then '350-400'
+  when p.price >= 400 and p.price < 450 then '400-450'
+  when p.price >= 450 and p.price < 500 then '450-500'
+  when p.price >= 500 and p.price < 550 then '500-550'
+  when p.price >= 550 and p.price < 600 then '550-600'
+  when p.price >= 600 and p.price < 650 then '600-650'
+  when p.price >= 650 and p.price < 700 then '650-700'
+  when p.price >= 700 and p.price < 750 then '700-750'
+  when p.price >= 750 and p.price < 800 then '750-800'
+  when p.price >= 800 and p.price < 850 then '800-850'
+  when p.price >= 850 and p.price < 900 then '850-900'
+  else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE 
+`
+      : null;
 
   if (type === 'topRated') {
     let q = `,ROUND(AVG(pr.rating), 2) AS avg_rating FROM public."Products" p JOIN public."ProductReviews" pr ON pr."productId"=p.id
     GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
-    query += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
-    query2 = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
-    return { query, query2 };
+    findProductsQuery += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
+    numberOfProductsQuery = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
+    return { query, numberOfProductsQuery };
   }
 
   if (type === 'heroProduct') {
-    query += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
+    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
   } else {
-    query += 'FROM public."Products" p WHERE ';
-    query2 += 'SELECT COUNT(p.id) as number_of_products FROM public."Products" p WHERE ';
+    findProductsQuery += 'FROM public."Products" p WHERE ';
+    numberOfProductsQuery +=
+      'SELECT COUNT(p.id) as number_of_products FROM public."Products" p WHERE ';
   }
 
   if (type === 'featured' || type === 'featuredCollections') {
-    query += 'p."auctionEnd" > NOW() AND p.featured=true ';
-    query2 = '';
+    findProductsQuery += 'p."auctionEnd" > NOW() AND p.featured=true ';
+    numberOfProductsQuery = '';
   }
 
   if (type === 'newArrivals') {
     let q = 'p."auctionStart" > :ago AND p."auctionStart" <= :maxDay AND p."auctionEnd" > NOW() ';
-    query += q + 'ORDER BY p."auctionStart" ASC ';
-    query2 += q + ';';
+    findProductsQuery += q + 'ORDER BY p."auctionStart" ASC ';
+    numberOfProductsQuery += q + ';';
     replacements = { ago: daysAgo, maxDay: startsMaxDays };
   }
 
   if (type === 'lastChance') {
     let q = 'p."auctionEnd" > NOW() AND p."auctionEnd" <= :endsMaxDays ';
-    query += q + 'ORDER BY p."auctionEnd" ASC ';
-    query2 += q + ';';
+    findProductsQuery += q + 'ORDER BY p."auctionEnd" ASC ';
+    numberOfProductsQuery += q + ';';
     replacements = { endsMaxDays };
   }
 
   if (type === 'Similar') {
-    query += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} ORDER BY random() `;
+    findProductsQuery += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} ORDER BY random() `;
   }
-  let price =
-    type === 'Shop'
-      ? `SELECT CASE
-    when p.price >= 0 and p.price < 100 then '0-100'
-    when p.price >= 100 and p.price < 200 then '100-200'
-    when p.price >= 200 and p.price < 300 then '200-300'
-    when p.price >= 300 and p.price < 400 then '300-400'
-    when p.price >= 400 and p.price < 500 then '400-500'
-    when p.price >= 500 and p.price < 600 then '500-600'
-    when p.price >= 600 and p.price < 700 then '600-700'
-    else '700+' end as price_range, count(1) as count FROM public."Products" p WHERE 
-  `
-      : null;
 
   if (type === 'Shop') {
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
     if (brandId) {
       let q = ` p."brandId"=${brandId} AND `;
-      query += q;
-      query2 += q;
-      price += q;
+      findProductsQuery += q;
+      numberOfProductsQuery += q;
+      priceRangeQuery += q;
     }
 
     if (subcategoryId) {
       let q = ` p."subcategoryId"=${subcategoryId} AND `;
-      query += q;
-      query2 += q;
-      price += q;
+      findProductsQuery += q;
+      numberOfProductsQuery += q;
+      priceRangeQuery += q;
     }
 
     if (min && max) {
       let q = ` p.price>=${min} AND p.price<=${max} AND `;
-      query += q;
-      query2 += q;
-      price += q;
+      findProductsQuery += q;
+      numberOfProductsQuery += q;
+      priceRangeQuery += q;
     }
 
-    query += q;
-    query2 += q;
-    price += q;
+    findProductsQuery += q;
+    numberOfProductsQuery += q;
+    priceRangeQuery += q;
     if (filterValueIds.length > 0) {
       let q = ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
-      query += q;
-      query2 += q;
-      price += q;
+      findProductsQuery += q;
+      numberOfProductsQuery += q;
+      priceRangeQuery += q;
     }
-    query += `) `;
-    query2 += `);`;
-    price += `) group by price_range order by price_range;`;
+    findProductsQuery += `) `;
+    numberOfProductsQuery += `);`;
+    priceRangeQuery += `) group by price_range order by price_range;`;
   }
 
   if (orderBy) {
-    query +=
+    findProductsQuery +=
       orderBy == 'Sort by Price Descending'
         ? ' ORDER BY p.price DESC '
         : orderBy == 'Sort by Price Ascending'
@@ -133,21 +145,24 @@ function filterProducts({
         ? ' ORDER BY p."auctionEnd" ASC '
         : '';
   }
-  query += `LIMIT ${limit} OFFSET ${offset};`;
+  findProductsQuery += `LIMIT ${limit} OFFSET ${offset};`;
 
-  return { query, query2, replacements, price };
+  return { findProductsQuery, numberOfProductsQuery, replacements, priceRangeQuery };
 }
 
 exports.getFilteredProducts = async obj => {
-  let { query, query2, replacements, price } = filterProducts(obj);
-  const products = await db.query(query, {
+  let { findProductsQuery, numberOfProductsQuery, replacements, priceRangeQuery } = filterProducts(
+    obj
+  );
+  const products = await db.query(findProductsQuery, {
     replacements,
     type: db.QueryTypes.SELECT
   });
-  const numberOfProducts = query2
-    ? await db.query(query2, { replacements, type: db.QueryTypes.SELECT })
+  const numberOfProducts = numberOfProductsQuery
+    ? await db.query(numberOfProductsQuery, { replacements, type: db.QueryTypes.SELECT })
     : [{ number_of_products: 10 }];
-  const priceRange = price && (await db.query(price, { type: db.QueryTypes.SELECT }));
+  const priceRange =
+    priceRangeQuery && (await db.query(priceRangeQuery, { type: db.QueryTypes.SELECT }));
   return {
     products,
     numberOfProducts: numberOfProducts[0].number_of_products,

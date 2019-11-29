@@ -20,18 +20,16 @@ import { Product } from "@app/landing-page/store/landing-page.reducers";
   styleUrls: ["./shop-page.component.scss"]
 })
 export class ShopPageComponent implements OnInit, OnDestroy {
-  prices: Prices = {};
-  categories: Categories[] = [];
-  products: Product[] = [];
-  brands: Brand[] = [];
-  filters: Filters[] = [];
-  noMore: boolean;
-  priceRange: MappedPriceRange[];
-
-  categoryId: string;
-  subcategoryId: string;
-  breadcrumbSubcategory: string;
-
+  private _prices: Prices = {};
+  private _categories: Categories[] = [];
+  private _products: Product[] = [];
+  private _brands: Brand[] = [];
+  private _filters: Filters[] = [];
+  private _noMore: boolean;
+  private _priceRange: MappedPriceRange[];
+  private _categoryId: string;
+  private _subcategoryId: string;
+  private _breadcrumbSubcategory: string;
   filterProduct = {
     subcategoryId: null,
     min: null,
@@ -41,8 +39,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     offSet: 0,
     orderBy: null
   };
-
-  touched: boolean = false;
+  private _filterIds: string[] = [];
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -53,14 +50,14 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(new CategoriesStart("/categories/true"));
     this.route.params.subscribe(({ categoryId, subcategoryId }: Params) => {
       this.resetProductFilter({ resetSubcategory: true });
-      this.categoryId = categoryId;
-      this.subcategoryId = subcategoryId;
+      this._categoryId = categoryId;
+      this._subcategoryId = subcategoryId;
       this.filterProduct.subcategoryId = subcategoryId;
       this.checkActiveSubcategory();
       this.dispatchActions(true);
     });
     this.store.select("categoriesPage").subscribe(({ categories }) => {
-      this.categories = categories;
+      this._categories = categories;
       this.checkActiveSubcategory();
     });
     this.store
@@ -76,15 +73,12 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         ({ brands, prices, filters, products, noMore, priceRange }) => {
-          this.products = products;
-          this.brands = brands;
-          this.filters = filters;
-          this.prices = prices;
-          this.noMore = noMore;
-          this.priceRange = priceRange;
-          if (this.products.length === 0) {
-            this.resetProductFilter({});
-          }
+          this._products = products;
+          this._brands = brands;
+          this._filters = filters;
+          this._prices = prices;
+          this._noMore = noMore;
+          this._priceRange = priceRange;
         }
       );
   }
@@ -95,14 +89,14 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   private checkActiveSubcategory() {
     if (this.categoryId && this.subcategoryId && this.categories.length > 0) {
-      this.breadcrumbSubcategory = this.categories[
+      this._breadcrumbSubcategory = this.categories[
         parseInt(this.categoryId) - 1
       ].Subcategories.filter(
         subcategories =>
           this.subcategoryId === subcategories.id && subcategories.name
       )[0].name;
     } else {
-      this.breadcrumbSubcategory = "all categories";
+      this._breadcrumbSubcategory = "all categories";
     }
   }
 
@@ -113,15 +107,34 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   changePriceValues({ value, highValue }) {
     this.filterProduct.min = value;
     this.filterProduct.max = highValue;
-    this.touched = true;
     this.filterProduct.offSet = 0;
     this.dispatchActions(true);
   }
 
-  setBrandId(val: string) {
-    this.filterProduct.brandId = val;
-    this.filterProduct.offSet = 0;
-    this.touched = true;
+  filterClicked({ brand, id, filterValueId }) {
+    if (brand) {
+      this.filterProduct.brandId =
+        this.filterProduct.brandId === id ? null : id;
+      this.filterProduct.offSet = 0;
+      this._filterIds = [];
+      this.filterProduct.filterValueIds = [];
+      this.dispatchActions(true);
+    } else {
+      const findFilterId = this._filterIds.findIndex(filter => filter === id);
+      if (findFilterId === -1) {
+        this._filterIds.push(id);
+        this.filterProduct.filterValueIds.push(filterValueId);
+      } else {
+        if (this.filterProduct.filterValueIds[findFilterId] === filterValueId) {
+          this._filterIds.splice(findFilterId);
+          this.filterProduct.filterValueIds.splice(findFilterId);
+        } else {
+          this.filterProduct.filterValueIds[findFilterId] = filterValueId;
+        }
+      }
+      this.resetProductFilter({ onlyOffset: true });
+      this.dispatchActions();
+    }
   }
 
   changeOrderBy(val: string | null) {
@@ -141,6 +154,20 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         `/shop/products?filters=${JSON.stringify(this.filterProduct)}`
       )
     );
+  }
+
+  resetFilterClick() {
+    this.resetProductFilter({});
+    this.dispatchActions(true);
+  }
+
+  checkShowClearFilters(): boolean {
+    return this.filterProduct.max !== null ||
+      this.filterProduct.min !== null ||
+      this.filterProduct.brandId !== null ||
+      this.filterProduct.filterValueIds.length > 0
+      ? true
+      : false;
   }
 
   private dispatchActions(refreshBrands = false) {
@@ -170,15 +197,12 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   private resetProductFilter({ resetSubcategory = false, onlyOffset = false }) {
     if (!onlyOffset) {
-      this.filterProduct = {
-        ...this.filterProduct,
-        min: null,
-        max: null,
-        brandId: null,
-        filterValueIds: [],
-        offSet: 0
-      };
-
+      this.filterProduct.min = null;
+      this.filterProduct.max = null;
+      this.filterProduct.brandId = null;
+      this.filterProduct.filterValueIds = [];
+      this.filterProduct.offSet = 0;
+      this._filterIds = [];
       if (resetSubcategory) {
         this.filterProduct.subcategoryId = null;
       }
@@ -187,9 +211,43 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetFilterClick() {
-    this.resetProductFilter({});
-    this.dispatchActions(true);
-    this.touched = false;
+  get prices(): Prices {
+    return this._prices;
+  }
+
+  get categories(): Categories[] {
+    return this._categories;
+  }
+
+  get products(): Product[] {
+    return this._products;
+  }
+
+  get brands(): Brand[] {
+    return this._brands;
+  }
+
+  get filters(): Filters[] {
+    return this._filters;
+  }
+
+  get noMore(): boolean {
+    return this._noMore;
+  }
+
+  get priceRange(): MappedPriceRange[] {
+    return this._priceRange;
+  }
+
+  get categoryId(): string {
+    return this._categoryId;
+  }
+
+  get subcategoryId(): string {
+    return this._subcategoryId;
+  }
+
+  get breadcrumbSubcategory(): string {
+    return this._breadcrumbSubcategory;
   }
 }
