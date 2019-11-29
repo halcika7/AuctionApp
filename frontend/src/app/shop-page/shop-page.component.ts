@@ -115,9 +115,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     if (brand) {
       this.filterProduct.brandId =
         this.filterProduct.brandId === id ? null : id;
-      this.filterProduct.offSet = 0;
       this._filterIds = [];
-      this.filterProduct.filterValueIds = [];
+      this.resetProductFilter({ resetSubcategory: false, resetBrand: false });
       this.dispatchActions(true);
     } else {
       const findFilterId = this._filterIds.findIndex(filter => filter === id);
@@ -195,11 +194,11 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private resetProductFilter({ resetSubcategory = false, onlyOffset = false }) {
+  private resetProductFilter({ resetSubcategory = false, onlyOffset = false, resetBrand = true }) {
     if (!onlyOffset) {
       this.filterProduct.min = null;
       this.filterProduct.max = null;
-      this.filterProduct.brandId = null;
+      this.filterProduct.brandId = resetBrand ? null : this.filterProduct.brandId;
       this.filterProduct.filterValueIds = [];
       this.filterProduct.offSet = 0;
       this._filterIds = [];
