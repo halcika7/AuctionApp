@@ -17,11 +17,9 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.subscription = this.store
-      .select("categoriesPage")
-      .subscribe(({ categories }) => {
-        this._categories = categories;
-      });
+    this.subscription = this.store.select("categoriesPage").subscribe(({ categories }) => {
+      this._categories = categories;
+    });
 
     this.store.dispatch(new CategoriesPageActions.CategoriesStart());
   }

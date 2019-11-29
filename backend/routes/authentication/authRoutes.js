@@ -10,4 +10,7 @@ router.post('/refresh_token', AuthController.refreshToken);
 router.patch("/forgotpassword", AuthController.forgotPassword);
 router.patch("/resetpassword", AuthController.resetPassword);
 
+router.patch("/forgotpassword", AuthController.forgotPassword);
+router.patch("/resetpassword", AuthController.resetPassword);
+
 module.exports = router;

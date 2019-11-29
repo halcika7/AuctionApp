@@ -13,10 +13,7 @@ import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from "../validators";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent extends Auth implements OnDestroy {
-  constructor(
-    private store: Store<fromApp.AppState>,
-    protected router: Router
-  ) {
+  constructor(private store: Store<fromApp.AppState>, protected router: Router) {
     super(
       store,
       new FormGroup({

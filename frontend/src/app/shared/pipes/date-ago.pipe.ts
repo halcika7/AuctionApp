@@ -21,12 +21,7 @@ export class DateAgoPipe extends AsyncPipe {
 
   transform(obj: any, args?: any[]): any {
     this.value = new Date(obj);
-    const {
-      agoOrLeft = "left",
-      response = "",
-      loop = false,
-      append = true
-    } = args[0];
+    const { agoOrLeft = "left", response = "", loop = false, append = true } = args[0];
     this.agoOrLeft = agoOrLeft;
     this.response = response;
     this.loop = loop;
@@ -80,9 +75,7 @@ export class DateAgoPipe extends AsyncPipe {
         // agoOrLeft => pipe argument which can be left or ago and based on that we concat that on the end of the string
         // third option is when we calculatr time left until auction begins then append is true
         // and do not add left or ago to the end of string
-        return this.append
-          ? vals.join(", ").concat(` ${this.agoOrLeft}`)
-          : vals.join(", ");
+        return this.append ? vals.join(", ").concat(` ${this.agoOrLeft}`) : vals.join(", ");
       })
     );
   }

@@ -20,7 +20,4 @@ export class CategoriesFailed implements Action {
   constructor(public payload: { failedMessage: string }) {}
 }
 
-export type CategoriesPageActions =
-  | CategoriesStart
-  | CategoriesSuccess
-  | CategoriesFailed;
+export type CategoriesPageActions = CategoriesStart | CategoriesSuccess | CategoriesFailed;
