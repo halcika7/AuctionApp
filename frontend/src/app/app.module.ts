@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { Ng5SliderModule } from "ng5-slider";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -75,10 +75,9 @@ import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component"
 import { ShopFiltersComponent } from "./shop-page/shop-filters/shop-filters.component";
 import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-navigation.component";
 
-
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
+import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 
 @NgModule({
   declarations: [

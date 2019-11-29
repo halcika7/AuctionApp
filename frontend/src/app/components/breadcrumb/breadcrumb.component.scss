@@ -21,14 +21,7 @@
     display: inline-block;
 
     > a {
-      @include fontMixin(
-        16px,
-        light,
-        0.56px,
-        light_black,
-        uppercase,
-        $decoration: none
-      );
+      @include fontMixin(16px, light, 0.56px, light_black, uppercase, $decoration: none);
     }
 
     &:last-child {

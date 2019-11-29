@@ -56,16 +56,14 @@ export class AuthEffects {
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
     concatMap(() => {
-      return this.http
-        .post<{ accessToken: string }>("/auth/refresh_token", {})
-        .pipe(
-          map(data => new AuthActions.RefreshToken(data)),
-          catchError(data => {
-            localStorage.removeItem("accessToken");
-            sessionStorage.removeItem("accessToken");
-            return of(new AuthActions.RefreshToken(data));
-          })
-        );
+      return this.http.post<{ accessToken: string }>("/auth/refresh_token", {}).pipe(
+        map(data => new AuthActions.RefreshToken(data)),
+        catchError(data => {
+          localStorage.removeItem("accessToken");
+          sessionStorage.removeItem("accessToken");
+          return of(new AuthActions.RefreshToken(data));
+        })
+      );
     })
   );
 

@@ -16,9 +16,7 @@ export class ProductPageEffects {
     ofType(ProductPageActions.PRODUCT_START),
     switchMap(({ id }) => {
       return this.http
-        .get<{ product: FullProduct; bids?: Bid[]; error?: string }>(
-          `/products/${id}`
-        )
+        .get<{ product: FullProduct; bids?: Bid[]; error?: string }>(`/products/${id}`)
         .pipe(
           map(data => new ProductPageActions.ProductSuccess(data)),
           catchError(data => of(new ProductPageActions.ProductFailed(data)))
@@ -35,17 +33,13 @@ export class ProductPageEffects {
         .pipe(
           map(data => {
             if (data.accessToken) {
-              this.store.dispatch(
-                new RefreshToken({ accessToken: data.accessToken })
-              );
+              this.store.dispatch(new RefreshToken({ accessToken: data.accessToken }));
             }
             return new ProductPageActions.ProductBidSuccess(data);
           }),
           catchError(data => {
             if (data.accessToken) {
-              this.store.dispatch(
-                new RefreshToken({ accessToken: data.accessToken })
-              );
+              this.store.dispatch(new RefreshToken({ accessToken: data.accessToken }));
             }
             if (data.error.authorizationError) {
               this.store.dispatch(new LogoutStart());
@@ -61,16 +55,10 @@ export class ProductPageEffects {
     ofType(ProductPageActions.SIMILAR_PRODUCT_START),
     switchMap(({ productId, subcategoryId }) => {
       return this.http
-        .get<{ similarProducts: Product[] }>(
-          `/products/${productId}/${subcategoryId}`
-        )
+        .get<{ similarProducts: Product[] }>(`/products/${productId}/${subcategoryId}`)
         .pipe(map(data => new ProductPageActions.SimilarProductSuccess(data)));
     })
   );
 
-  constructor(
-    private actions$: Actions,
-    private http: HttpClient,
-    private store: Store<any>
-  ) {}
+  constructor(private actions$: Actions, private http: HttpClient, private store: Store<any>) {}
 }

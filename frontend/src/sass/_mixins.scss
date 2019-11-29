@@ -54,13 +54,7 @@
   }
 }
 
-@mixin margin(
-  $top: false,
-  $bottom: false,
-  $right: false,
-  $left: false,
-  $all: false
-) {
+@mixin margin($top: false, $bottom: false, $right: false, $left: false, $all: false) {
   @if $all {
     margin: $all;
   }
@@ -82,13 +76,7 @@
   }
 }
 
-@mixin padding(
-  $top: false,
-  $bottom: false,
-  $right: false,
-  $left: false,
-  $all: false
-) {
+@mixin padding($top: false, $bottom: false, $right: false, $left: false, $all: false) {
   @if $all {
     padding: $all;
   }

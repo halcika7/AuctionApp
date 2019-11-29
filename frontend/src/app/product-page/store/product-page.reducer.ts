@@ -22,7 +22,7 @@ export interface State {
   error: string;
   bids: Bid[];
   message: string;
-  code: number;
+  success: boolean;
 }
 
 const initialState: State = {
@@ -44,7 +44,7 @@ const initialState: State = {
   error: "",
   bids: [],
   message: "",
-  code: null
+  success: false
 };
 
 export function productPageReducer(
@@ -52,17 +52,10 @@ export function productPageReducer(
   action: ProductPageActions.ProductPageActions
 ) {
   switch (action.type) {
-    case ProductPageActions.CLEAR_PRODUCT_STATE:
-      return { ...initialState };
     case ProductPageActions.PRODUCT_START:
       return {
         ...initialState,
-        message:
-          state.message === "Please login in order to place bid!"
-            ? state.message
-            : "",
-        code:
-          state.message === "Please login in order to place bid!" ? 500 : null
+        message: state.message === "Please login in order to place bid!" ? state.message : ""
       };
     case ProductPageActions.PRODUCT_SUCCESS:
       return {
@@ -84,13 +77,13 @@ export function productPageReducer(
       return {
         ...state,
         message: "",
-        code: null
+        success: false
       };
     case ProductPageActions.PRODUCT_BID_SUCCESS:
       return {
         ...initialState,
         message: action.payload.message,
-        code: 200,
+        success: true,
         product: {
           ...state.product,
           highest_bid: action.payload.highest_bid,
@@ -107,7 +100,7 @@ export function productPageReducer(
         message: action.payload.error.message
           ? action.payload.error.message
           : "Please login in order to place bid!",
-        code: 500
+        success: false
       };
     default:
       return state;

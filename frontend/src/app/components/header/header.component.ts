@@ -20,16 +20,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .select("auth")
       .subscribe(({ accessToken, loading, remember }) => {
         if (!loading) {
-          if (
-            accessToken &&
-            (localStorage.getItem("accessToken") || remember)
-          ) {
+          if (accessToken && (localStorage.getItem("accessToken") || remember)) {
             this._isAuthenticated = true;
             localStorage.setItem("accessToken", accessToken);
-          } else if (
-            accessToken &&
-            (sessionStorage.getItem("accessToken") || !remember)
-          ) {
+          } else if (accessToken && (sessionStorage.getItem("accessToken") || !remember)) {
             this._isAuthenticated = true;
             sessionStorage.setItem("accessToken", accessToken);
           } else {

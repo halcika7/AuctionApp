@@ -35,12 +35,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       })
     );
     this.store.dispatch(new LandingPageActions.LandingPageStart("featured/4"));
-    this.store.dispatch(
-      new LandingPageActions.LandingPageStart("featuredCollections/3")
-    );
-    this.store.dispatch(
-      new LandingPageActions.LandingPageStart("heroProduct/1")
-    );
+    this.store.dispatch(new LandingPageActions.LandingPageStart("featuredCollections/3"));
+    this.store.dispatch(new LandingPageActions.LandingPageStart("heroProduct/1"));
     this.store.dispatch(new CategoriesStart());
   }
 
