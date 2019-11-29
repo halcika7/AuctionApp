@@ -8,10 +8,7 @@ const app = express();
 const { URL } = require('./backend/config/configs');
 
 app.use(
-    cors({
-        origin: URL,
-        credentials: true
-    })
+    cors()
 );
 app.use(cookieParser());
 app.use(compression());
