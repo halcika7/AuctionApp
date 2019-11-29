@@ -13,6 +13,7 @@ import {
   MappedPriceRange
 } from "./store/shop-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: "app-shop-page",
@@ -105,8 +106,13 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   }
 
   changePriceValues({ value, highValue }) {
-    this.filterProduct.min = value;
-    this.filterProduct.max = highValue;
+    if(this.prices.min_price != value || this.prices.max_price != highValue) {
+      this.filterProduct.min = value;
+      this.filterProduct.max = highValue;
+    } else {
+      this.filterProduct.min = null;
+      this.filterProduct.max = null;
+    }
     this.filterProduct.offSet = 0;
     this.dispatchActions(true);
   }
@@ -194,11 +200,17 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private resetProductFilter({ resetSubcategory = false, onlyOffset = false, resetBrand = true }) {
+  private resetProductFilter({
+    resetSubcategory = false,
+    onlyOffset = false,
+    resetBrand = true
+  }) {
     if (!onlyOffset) {
       this.filterProduct.min = null;
       this.filterProduct.max = null;
-      this.filterProduct.brandId = resetBrand ? null : this.filterProduct.brandId;
+      this.filterProduct.brandId = resetBrand
+        ? null
+        : this.filterProduct.brandId;
       this.filterProduct.filterValueIds = [];
       this.filterProduct.offSet = 0;
       this._filterIds = [];
