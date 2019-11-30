@@ -92,7 +92,7 @@ function filterProducts({
   }
 
   if (type === 'Similar') {
-    findProductsQuery += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} ORDER BY random() `;
+    findProductsQuery += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} AND p."auctionEnd" > NOW() ORDER BY random() `;
   }
 
   if (type === 'Shop') {
