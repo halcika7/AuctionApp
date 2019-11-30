@@ -192,13 +192,13 @@ exports.getProductById = async id => {
 };
 
 exports.getSimilarProducts = async (subcategoryId, productId) => {
-  let { query } = filterProducts({
+  let { findProductsQuery } = filterProducts({
     limit: LIMIT_SIMILAR_PRODUCTS,
     type: 'Similar',
     subcategoryId,
     productId
   });
-  return await db.query(query, { type: db.QueryTypes.SELECT });
+  return await db.query(findProductsQuery, { type: db.QueryTypes.SELECT });
 };
 
 exports.getAuctionEndProduct = async id => {
