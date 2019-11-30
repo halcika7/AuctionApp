@@ -73,7 +73,7 @@ function filterProducts({
   }
 
   if (type === 'featured' || type === 'featuredCollections') {
-    findProductsQuery += 'p."auctionEnd" > NOW() AND p.featured=true ';
+    findProductsQuery += 'p."auctionEnd" > NOW() AND p.featured=true ORDER BY random() ';
     numberOfProductsQuery = '';
   }
 
