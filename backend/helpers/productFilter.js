@@ -131,22 +131,23 @@ function filterProducts({
     findProductsQuery += `) `;
     numberOfProductsQuery += `);`;
     priceRangeQuery += `) group by price_range order by price_range;`;
+
+    if (orderBy) {
+      findProductsQuery +=
+        orderBy == 'Sort by Price Descending'
+          ? ' ORDER BY p.price DESC '
+          : orderBy == 'Sort by Price Ascending'
+          ? ' ORDER BY p.price ASC '
+          : orderBy == 'Sort by Time Left Descending'
+          ? ' ORDER BY p."auctionEnd" DESC '
+          : orderBy == 'Sort by Time Left Ascending'
+          ? ' ORDER BY p."auctionEnd" ASC '
+          : '';
+    } else {
+      findProductsQuery += ' ORDER BY random() ';
+    }
   }
 
-  if (orderBy) {
-    findProductsQuery +=
-      orderBy == 'Sort by Price Descending'
-        ? ' ORDER BY p.price DESC '
-        : orderBy == 'Sort by Price Ascending'
-        ? ' ORDER BY p.price ASC '
-        : orderBy == 'Sort by Time Left Descending'
-        ? ' ORDER BY p."auctionEnd" DESC '
-        : orderBy == 'Sort by Time Left Ascending'
-        ? ' ORDER BY p."auctionEnd" ASC '
-        : '';
-  } else {
-    findProductsQuery += ' ORDER BY random() ';
-  }
   findProductsQuery += `LIMIT ${limit} OFFSET ${offset};`;
 
   return { findProductsQuery, numberOfProductsQuery, replacements, priceRangeQuery };
