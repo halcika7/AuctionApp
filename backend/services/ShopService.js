@@ -8,8 +8,6 @@ const FilterValue = require('../models/FilterValue');
 const FilterValueProduct = require('../models/FilterValueProduct');
 const { db, Op } = require('../config/database');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
-const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
-const { noMoreProducts, getFilteredProducts } = require('../helpers/productFilter');
 
 class ShopService extends BaseService {
   constructor() {
@@ -108,26 +106,6 @@ class ShopService extends BaseService {
         }
       });
       return { status: 200, Filters };
-    } catch (error) {
-      return super.returnGenericFailed();
-    }
-  }
-
-  async getProducts(productWhere, filterValueIds) {
-    try {
-      const { products, numberOfProducts, priceRange } = await getFilteredProducts({
-        ...productWhere,
-        offset: productWhere.offSet,
-        filterValueIds,
-        limit: LIMIT_SHOP_PRODUCTS,
-        type: 'Shop'
-      });
-      const noMore = noMoreProducts({
-        limit: LIMIT_SHOP_PRODUCTS,
-        offset: productWhere.offSet,
-        productsLength: numberOfProducts
-      });
-      return { status: 200, products, noMore, priceRange };
     } catch (error) {
       return super.returnGenericFailed();
     }

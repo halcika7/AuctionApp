@@ -183,11 +183,13 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         )
       );
     }
-    this.store.dispatch(
-      new ShopPageActions.ShopStart(
-        `/shop/filters?filters=${JSON.stringify(this.filterProduct)}`
-      )
-    );
+    if(this.filterProduct.subcategoryId) {
+      this.store.dispatch(
+        new ShopPageActions.ShopStart(
+          `/shop/filters?filters=${JSON.stringify(this.filterProduct)}`
+        )
+      );
+    }
     this.store.dispatch(
       new ShopPageActions.ShopStart(
         `/shop/products?filters=${JSON.stringify(this.filterProduct)}`

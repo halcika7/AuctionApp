@@ -1,4 +1,5 @@
 const ShopServiceInstance = require('../services/ShopService');
+const ProductServiceInstance = require('../services/ProductService');
 const BaseController = require('./BaseController');
 
 class ShopController extends BaseController {
@@ -47,7 +48,7 @@ class ShopController extends BaseController {
       noMore,
       priceRange,
       failedMessage
-    } = await ShopServiceInstance.getProducts(prodWhere, filterValueIds);
+    } = await ProductServiceInstance.getShopProducts(prodWhere, filterValueIds);
     return super.sendResponseWithMessage(
       res,
       status,
