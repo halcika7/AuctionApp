@@ -58,7 +58,7 @@ function filterProducts({
 
   if (type === 'topRated') {
     let q = `,ROUND(AVG(pr.rating), 2) AS avg_rating FROM public."Products" p JOIN public."ProductReviews" pr ON pr."productId"=p.id
-    GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
+    WHERE p."auctionEnd" > NOW() GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
     findProductsQuery += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
     numberOfProductsQuery = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
     return { findProductsQuery, numberOfProductsQuery };
@@ -141,9 +141,11 @@ function filterProducts({
         ? ' ORDER BY p.price ASC '
         : orderBy == 'Sort by Time Left Descending'
         ? ' ORDER BY p."auctionEnd" DESC '
-        : orderBy == 'Sort by Time Ascending'
+        : orderBy == 'Sort by Time Left Ascending'
         ? ' ORDER BY p."auctionEnd" ASC '
         : '';
+  } else {
+    findProductsQuery += ' ORDER BY random() ';
   }
   findProductsQuery += `LIMIT ${limit} OFFSET ${offset};`;
 
