@@ -61,7 +61,7 @@ function filterProducts({
     GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
     findProductsQuery += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
     numberOfProductsQuery = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
-    return { query, numberOfProductsQuery };
+    return { findProductsQuery, numberOfProductsQuery };
   }
 
   if (type === 'heroProduct') {
