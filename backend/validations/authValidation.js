@@ -20,7 +20,7 @@ exports.registerValidation = async data => {
   emailValidation(data.email, errors);
 
   if (!errors.email && user) {
-    errors.email = "Email already in use!";
+    errors.email = "Email already in use";
   }
 
   return { errors: { errors }, isValid: isEmpty(errors) };
@@ -98,7 +98,7 @@ function emailValidation(email, errors) {
   if (isEmpty(email)) {
     errors.email = "Email is required";
   } else if (!Validator.isEmail(email)) {
-    errors.email = "Please enter valid email address !!";
+    errors.email = "Please enter valid email address";
   }
 }
 

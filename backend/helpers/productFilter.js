@@ -173,9 +173,9 @@ exports.getFilteredProducts = async obj => {
   };
 };
 
-exports.getProductById = async id => {
+exports.getProductById = async (id, subcategoryId) => {
   return await Product.findOne({
-    where: { id, auctionEnd: { [Op.gt]: new Date() } },
+    where: { id, subcategoryId, auctionEnd: { [Op.gt]: new Date() } },
     attributes: {
       include: [
         [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],

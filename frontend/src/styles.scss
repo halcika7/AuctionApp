@@ -302,14 +302,12 @@ app-footer {
       > span {
         @include margin($top: 5px);
         display: block;
-        text-transform: capitalize;
       }
     }
 
     > span {
       @include margin($top: 5px);
       display: block;
-      text-transform: capitalize;
     }
   }
 }

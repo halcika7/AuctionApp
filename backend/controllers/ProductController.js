@@ -29,6 +29,7 @@ class ProductController extends BaseController {
     const token = req.headers.authorization.split(' ')[1] || null;
     const { product, bids, status } = await ProductServiceInstance.findProductById(
       req.params.id,
+      req.params.subcategoryId,
       token
     );
     if (!product) {

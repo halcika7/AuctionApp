@@ -39,7 +39,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         if (!id || !subcategoryId) {
           this.router.navigate(["/404"]);
         }
-        this.store.dispatch(new ProductPageActions.ProductStart(id));
+        this.store.dispatch(new ProductPageActions.ProductStart(id, subcategoryId));
         this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
       })
     );
