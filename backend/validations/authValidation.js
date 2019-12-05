@@ -13,7 +13,7 @@ exports.registerValidation = async data => {
 
   nameValidation("firstName", data.firstName, errors, "First name");
 
-  nameValidation("lastName", data.lastName, errors, "Last Name");
+  nameValidation("lastName", data.lastName, errors, "Last name");
 
   passwordValidation(data.password, errors);
 
