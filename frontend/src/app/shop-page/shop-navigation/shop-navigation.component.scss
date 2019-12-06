@@ -1,130 +1,124 @@
 @import "mixins";
+@import "variables";
 
-.products > button {
-  @include fontMixin(18px, bold, 0.63px, white);
-  background: #8367d8;
-  height: 56px;
-  min-width: 250px;
-  margin: 0 auto;
-  display: block;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
-  outline: none;
+.products {
+  > button {
+    @include fontMixin(18px, bold, 0.63px, white);
+    @include margin($all: 0 auto);
+    background: getColor(purple);
+    height: 56px;
+    min-width: 250px;
+    display: block;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+    outline: none;
+  }
+
+  .navigation {
+    @include flex($justofy: space-between);
+    padding-left: 21px;
+
+    .dropdown {
+      position: relative;
+
+      p {
+        @include fontMixin(16px, regular, 0.56px, light_black);
+        @include flex(center);
+        @include margin($all: 0);
+        @include heightWidth(46px, 265px);
+        background: getColor(white);
+        border: 3px solid getColor(lighter_gray);
+        padding-left: 18px;
+        cursor: pointer;
+        position: relative;
+
+        &:after,
+        &:before {
+          content: "";
+          position: absolute;
+          @include heightWidth(5px, 12px);
+          background: getColor(light_black);
+          border-radius: 5px;
+          top: 50%;
+        }
+
+        &:after {
+          right: 18px;
+          transform: rotate(-45deg) translateY(-50%);
+          transition: all 0.3s ease-in-out;
+        }
+
+        &:before {
+          right: 20px;
+          transform: rotate(45deg) translateY(-50%);
+          transition: all 0.3s ease-in-out;
+        }
+
+        &.open:after {
+          right: 18px;
+          transform: rotate(-135deg);
+        }
+
+        &.open:before {
+          right: 20px;
+          transform: rotate(135deg);
+        }
+
+        &.open ~ ul {
+          display: block;
+        }
+      }
+
+      ul {
+        @include padding($all: 10px 0);
+        @include margin($all: 0);
+        display: none;
+        background: getColor(white);
+        border: 3px solid getColor(lighter_gray);
+        border-top: none;
+        position: absolute;
+        z-index: 10;
+        left: 0;
+        right: 0;
+        max-width: 283px;
+
+        li {
+          @include flex(center);
+          @include heightWidth(36px, 100%);
+          @include fontMixin(16px, regular, 0.56px, light_black);
+          @include padding($all: 0 18px);
+          box-sizing: border-box;
+          cursor: pointer;
+
+          &.active,
+          &:hover {
+            background: getColor(purple);
+            color: getColor(white);
+          }
+        }
+      }
+    }
+  }
 }
 
-.products .navigation {
-  display: flex;
-  justify-content: space-between;
-  padding-left: 21px;
-}
+.navigation .dropdown p .gridlist {
+  @include flex();
 
-.navigation .dropdown {
-  position: relative;
-}
+  span {
+    @include heightWidth(46px, 100px);
+    @include flex(center, center);
+    @include fontMixin(16px, bold, 0.56px, light_black);
+    cursor: pointer;
 
-.navigation .dropdown p {
-  background: #ffffff;
-  border: 3px solid #ececec;
-  margin: 0;
-  @include fontMixin(16px, regular, 0.56px, light_black);
-  height: 46px;
-  width: 265px;
-  padding-left: 18px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-}
+    &.active {
+      background: getColor(purple);
+      color: getColor(white);
+    }
 
-.navigation .dropdown p:after,
-.navigation .dropdown p:before {
-  content: "";
-  position: absolute;
-  width: 5px;
-  height: 12px;
-  background: getColor(light_black);
-  border-radius: 5px;
-  top: 50%
-}
-
-.navigation .dropdown p:after {
-  right: 18px;
-  transform: rotate(-45deg) translateY(-50%);
-  transition: all 0.3s ease-in-out;
-}
-
-.navigation .dropdown p:before {
-  right: 20px;
-  transform: rotate(45deg) translateY(-50%);
-  transition: all 0.3s ease-in-out;
-}
-
-.navigation .dropdown p.open:after {
-  right: 18px;
-  transform: rotate(-135deg);
-}
-
-.navigation .dropdown p.open:before {
-  right: 20px;
-  transform: rotate(135deg);
-}
-
-.navigation .dropdown ul {
-  display: none;
-  padding: 10px 0;
-  margin: 0;
-  background: #ffffff;
-  border: 3px solid #ececec;
-  border-top: none;
-  position: absolute;
-  z-index: 10;
-  left: 0;
-  right: 0;
-  max-width: 283px;
-}
-
-.navigation .dropdown ul li {
-  height: 36px;
-  width: 100%;
-  @include fontMixin(16px, regular, 0.56px, light_black);
-  padding: 0 18px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.navigation .dropdown ul li.active,
-.navigation .dropdown ul li:hover {
-  background: getColor(purple);
-  color: getColor(white);
-}
-
-.navigation .dropdown p.open ~ ul {
-  display: block;
-}
-
-.gridlist {
-  display: flex;
-}
-
-.gridlist span {
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  @include fontMixin(16px, bold, 0.56px, light_black);
-  width: 100px;
-  cursor: pointer;
-}
-
-.gridlist span.active {
-  background: getColor(purple);
-  color: getColor(white);
-}
-
-.gridlist span > fa-icon {
-  margin-right: 10px;
+    > fa-icon {
+      margin-right: 10px;
+    }
+  }
 }
 
 @media (max-width: 790px) {

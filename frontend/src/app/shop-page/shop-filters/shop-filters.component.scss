@@ -1,25 +1,24 @@
 @import "mixins";
+@import "variables";
 
 .colors {
-  background: #ffffff;
-  border: 1px solid #d8d8d8;
-  padding: 15px 20px;
-  margin: 0;
-  margin-bottom: 20px;
+  @include padding($all: 15px 20px);
+  @include margin($all: 0 0 20px);
+  background: getColor(white);
+  border: 1px solid getColor(light_gray);
   max-height: 576px;
   overflow-y: auto;
 }
 
 .colors ul {
-  margin: 0;
-  padding: 0;
+  @include padding($all: 0);
+  @include margin($all: 0);
   display: none;
 }
 
 .colors h4 {
   @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
-  margin: 0;
-  margin-bottom: 31px;
+  @include margin($all: 0 0 31px);
 }
 
 .colors > li {
@@ -43,10 +42,9 @@
   &:before,
   &:after {
     content: "";
+    @include heightWidth(15px, 4px);
     position: absolute;
     right: 0;
-    width: 4px;
-    height: 15px;
     background: getColor(light_black);
     pointer-events: none;
     cursor: pointer;
@@ -65,8 +63,7 @@
   @include flex($align: center);
 
   > span {
-    width: 15px;
-    height: 15px;
+    @include heightWidth(15px, 15px);
     display: block;
     border-radius: 50%;
     margin-right: 10px;
