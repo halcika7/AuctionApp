@@ -44,22 +44,23 @@
   height: 12px;
   background: getColor(light_black);
   border-radius: 5px;
+  top: 50%
 }
 
 .navigation .dropdown p:after {
-  right: 26px;
-  transform: rotate(-45deg);
+  right: 18px;
+  transform: rotate(-45deg) translateY(-50%);
   transition: all 0.3s ease-in-out;
 }
 
 .navigation .dropdown p:before {
   right: 20px;
-  transform: rotate(45deg);
+  transform: rotate(45deg) translateY(-50%);
   transition: all 0.3s ease-in-out;
 }
 
 .navigation .dropdown p.open:after {
-  right: 26px;
+  right: 18px;
   transform: rotate(-135deg);
 }
 
