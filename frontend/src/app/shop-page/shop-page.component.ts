@@ -57,7 +57,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         this._subcategoryId = subcategoryId;
         this._filterProduct.subcategoryId = subcategoryId;
         this.checkActiveSubcategory();
-        this.dispatchActions(true);
+        this.dispatchActions(true, true);
       })
     );
     this.subscription.add(
@@ -96,19 +96,6 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ShopPageActions.ClearShopPageState());
   }
 
-  private checkActiveSubcategory() {
-    if (this.categoryId && this.subcategoryId && this.categories.length > 0) {
-      this._breadcrumbSubcategory = this.categories[
-        parseInt(this.categoryId) - 1
-      ].Subcategories.filter(
-        subcategories =>
-          this.subcategoryId === subcategories.id && subcategories.name
-      )[0].name;
-    } else {
-      this._breadcrumbSubcategory = "all categories";
-    }
-  }
-
   showIfKeysLength(value): boolean {
     return Object.keys(value).length > 0 ? true : false;
   }
@@ -121,8 +108,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       this._filterProduct.min = null;
       this._filterProduct.max = null;
     }
-    this._filterProduct.offSet = 0;
-    this.dispatchActions(true);
+    this.resetProductFilter({ onlyOffset: true });
+    this.dispatchActions(true, true);
   }
 
   filterClicked({ brand, id, filterValueId }) {
@@ -131,7 +118,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         this._filterProduct.brandId === id ? null : id;
       this._filterIds = [];
       this.resetProductFilter({ resetSubcategory: false, resetBrand: false });
-      this.dispatchActions(true);
+      this.dispatchActions(true, true);
     } else {
       const findFilterId = this._filterIds.findIndex(filter => filter === id);
       if (findFilterId === -1) {
@@ -148,32 +135,24 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         }
       }
       this.resetProductFilter({ onlyOffset: true });
-      this.dispatchActions();
+      this.dispatchActions(false, true);
     }
   }
 
   changeOrderBy(val: string | null) {
     this._filterProduct.orderBy = val;
     this._filterProduct.offSet = 0;
-    this.store.dispatch(
-      new ShopPageActions.ShopStart(
-        `/shop/products?filters=${JSON.stringify(this._filterProduct)}`
-      )
-    );
+    this.dispatchActions(false, true);
   }
 
   loadMoreProducts() {
     this._filterProduct.offSet += 9;
-    this.store.dispatch(
-      new ShopPageActions.ShopPageLoadMoreStart(
-        `/shop/products?filters=${JSON.stringify(this._filterProduct)}`
-      )
-    );
+    this.dispatchActions(false, true);
   }
 
   resetFilterClick() {
     this.resetProductFilter({});
-    this.dispatchActions(true);
+    this.dispatchActions(true, true);
   }
 
   checkShowClearFilters(): boolean {
@@ -185,30 +164,38 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       : false;
   }
 
-  private dispatchActions(refreshBrands = false) {
+  private checkActiveSubcategory() {
+    if (this.categoryId && this.subcategoryId && this.categories.length > 0) {
+      this._breadcrumbSubcategory = this.categories[
+        parseInt(this.categoryId) - 1
+      ].Subcategories.filter(
+        subcategories =>
+          this.subcategoryId === subcategories.id && subcategories.name
+      )[0].name;
+    } else {
+      this._breadcrumbSubcategory = "all categories";
+    }
+  }
+
+  private dispatchActions(refreshBrands = false, refreshProducts = false) {
+    const queryObj = `?filters=${JSON.stringify(this._filterProduct)}`;
     if (refreshBrands) {
       this.store.dispatch(
-        new ShopPageActions.ShopStart(
-          `/shop/brands?filters=${JSON.stringify(this._filterProduct)}`
-        )
+        new ShopPageActions.ShopStart(`/shop/brands${queryObj}`)
       );
     }
     if (this._filterProduct.subcategoryId) {
       this.store.dispatch(
-        new ShopPageActions.ShopStart(
-          `/shop/filters?filters=${JSON.stringify(this._filterProduct)}`
-        )
+        new ShopPageActions.ShopStart(`/shop/filters${queryObj}`)
+      );
+    }
+    if(refreshProducts) {
+      this.store.dispatch(
+        new ShopPageActions.ShopStart(`/shop/products${queryObj}`)
       );
     }
     this.store.dispatch(
-      new ShopPageActions.ShopStart(
-        `/shop/products?filters=${JSON.stringify(this._filterProduct)}`
-      )
-    );
-    this.store.dispatch(
-      new ShopPageActions.ShopStart(
-        `/shop/prices?filters=${JSON.stringify(this._filterProduct)}`
-      )
+      new ShopPageActions.ShopStart(`/shop/prices${queryObj}`)
     );
   }
 
