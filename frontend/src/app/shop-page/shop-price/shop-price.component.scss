@@ -69,13 +69,12 @@
       display: none;
     }
 
-    .bar {
-      fill: getColor(lighter_gray2);
-    }
-
     .ng5-slider-bubble {
       @include padding($all: 10px 3px);
       top: 100%;
     }
+  }
+  .bar {
+    fill: getColor(lighter_gray2);
   }
 }

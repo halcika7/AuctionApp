@@ -15,7 +15,7 @@
   }
 
   .navigation {
-    @include flex($justofy: space-between);
+    @include flex($justify: space-between);
     padding-left: 21px;
 
     .dropdown {
@@ -49,19 +49,19 @@
         }
 
         &:before {
-          right: 20px;
+          right: 27px;
           transform: rotate(45deg) translateY(-50%);
           transition: all 0.3s ease-in-out;
         }
 
         &.open:after {
-          right: 18px;
-          transform: rotate(-135deg);
+          right: 17px;
+          transform: rotate(45deg) translate(-50%);
         }
 
         &.open:before {
-          right: 20px;
-          transform: rotate(135deg);
+          right: 30px;
+          transform: rotate(-45deg) translate(50%);
         }
 
         &.open ~ ul {
@@ -101,7 +101,7 @@
   }
 }
 
-.navigation .dropdown p .gridlist {
+.navigation .gridlist {
   @include flex();
 
   span {
