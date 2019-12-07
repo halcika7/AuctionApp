@@ -2,9 +2,9 @@
   <div class="img">
     <img [src]="item.picture" [alt]="item.name" />
     <div class="buttons">
-      <button type="button">
+      <!-- <button type="button">
         Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
-      </button>
+      </button> -->
       <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
         >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
       ></a>
