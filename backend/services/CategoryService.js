@@ -2,7 +2,7 @@ const Category = require('../models/Category');
 const Subcategory = require('../models/Subcategory');
 const Product = require('../models/Product');
 const BaseService = require('./BaseService');
-const { db } = require('../config/database');
+const { db, Op } = require('../config/database');
 
 class CategoryService extends BaseService {
   constructor() {
@@ -43,6 +43,11 @@ class CategoryService extends BaseService {
             include: [
               {
                 model: Product,
+                where: {
+                  auctionEnd: {
+                    [Op.gt]: new Date()
+                  }
+                },
                 attributes: []
               }
             ]
