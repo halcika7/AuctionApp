@@ -136,8 +136,8 @@ module.exports = {
     helperFunction(30, 40, 4, { min: 4, max: 4 });
     helperFunction(40, 50, 5, { min: 1, max: 2 });
     helperFunction(50, 60, 6, { min: 1, max: 2 });
-    helperFunction(60, 70, 7, { min: 10, max: 10 });
-    helperFunction(70, 80, 8, { min: 11, max: 11 });
+    helperFunction(60, 70, 8, { min: 11, max: 11 });
+    helperFunction(70, 80, 7, { min: 10, max: 10 });
     helperFunction(80, 90, 9, { min: 7, max: 8 });
     helperFunction(90, 100, 10, { min: 6, max: 8 });
     return queryInterface.bulkInsert('Products', products, {});
