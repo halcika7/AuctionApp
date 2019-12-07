@@ -65,15 +65,13 @@
 }
 
 @media (max-width: 1200px) {
-  .carousel {
-    .tem {
-      @include padding(15px 15px);
-      @include flex($justify: center, $wrap: wrap-reverse);
+  .carousel .item {
+    @include padding(15px 15px);
+    @include flex($justify: center, $wrap: wrap-reverse);
 
-      img {
-        @include heightWidth(224px, auto);
-        object-fit: contain;
-      }
+    img {
+      @include heightWidth(224px, auto);
+      object-fit: contain;
     }
   }
 }
