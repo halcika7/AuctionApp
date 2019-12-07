@@ -51,14 +51,16 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new CategoriesStart("/categories/true"));
     this.subscription.add(
-      this.route.params.subscribe(({ categoryId, subcategoryId }: Params) => {
-        this.resetProductFilter({ resetSubcategory: true });
-        this._categoryId = categoryId;
-        this._subcategoryId = subcategoryId;
-        this._filterProduct.subcategoryId = subcategoryId;
-        this.checkActiveSubcategory();
-        this.dispatchActions(true, true);
-      })
+      this.route.params.subscribe(
+        ({ categoryId = null, subcategoryId = null }: Params) => {
+          this.resetProductFilter({ resetSubcategory: true });
+          this._categoryId = categoryId;
+          this._subcategoryId = subcategoryId;
+          this._filterProduct.subcategoryId = subcategoryId;
+          this.checkActiveSubcategory();
+          this.dispatchActions(true, true);
+        }
+      )
     );
     this.subscription.add(
       this.store.select("categoriesPage").subscribe(({ categories }) => {
@@ -147,7 +149,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   loadMoreProducts() {
     this._filterProduct.offSet += 9;
-    this.dispatchActions(false, true);
+    this.dispatchAction("/shop/products", true);
   }
 
   resetFilterClick() {
@@ -178,25 +180,17 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   }
 
   private dispatchActions(refreshBrands = false, refreshProducts = false) {
-    const queryObj = `?filters=${JSON.stringify(this._filterProduct)}`;
-    if (refreshBrands) {
-      this.store.dispatch(
-        new ShopPageActions.ShopStart(`/shop/brands${queryObj}`)
-      );
-    }
-    if (this._filterProduct.subcategoryId) {
-      this.store.dispatch(
-        new ShopPageActions.ShopStart(`/shop/filters${queryObj}`)
-      );
-    }
-    if(refreshProducts) {
-      this.store.dispatch(
-        new ShopPageActions.ShopStart(`/shop/products${queryObj}`)
-      );
-    }
-    this.store.dispatch(
-      new ShopPageActions.ShopStart(`/shop/prices${queryObj}`)
-    );
+    refreshBrands && this.dispatchAction("/shop/brands");
+    this._filterProduct.subcategoryId && this.dispatchAction("/shop/filters");
+    refreshProducts && this.dispatchAction("/shop/products");
+    this.dispatchAction("/shop/prices");
+  }
+
+  private dispatchAction(url: string, loadMore: boolean = false) {
+    const queryObj = `${url}?filters=${JSON.stringify(this._filterProduct)}`;
+    !loadMore && this.store.dispatch(new ShopPageActions.ShopStart(queryObj));
+    loadMore &&
+      this.store.dispatch(new ShopPageActions.ShopPageLoadMoreStart(queryObj));
   }
 
   private resetProductFilter({
@@ -205,17 +199,18 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     resetBrand = true
   }) {
     if (!onlyOffset) {
-      this._filterProduct.min = null;
-      this._filterProduct.max = null;
-      this._filterProduct.brandId = resetBrand
-        ? null
-        : this._filterProduct.brandId;
-      this._filterProduct.filterValueIds = [];
-      this._filterProduct.offSet = 0;
+      this._filterProduct = {
+        subcategoryId: resetSubcategory
+          ? null
+          : this._filterProduct.subcategoryId,
+        min: null,
+        max: null,
+        brandId: resetBrand ? null : this._filterProduct.brandId,
+        filterValueIds: [],
+        offSet: 0,
+        orderBy: null
+      };
       this._filterIds = [];
-      if (resetSubcategory) {
-        this._filterProduct.subcategoryId = null;
-      }
     } else {
       this._filterProduct.offSet = 0;
     }

@@ -1,15 +1,16 @@
 import { Product } from "@app/landing-page/store/landing-page.reducers";
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
 
 @Component({
   selector: "app-shop-navigation",
   templateUrl: "./shop-navigation.component.html",
   styleUrls: ["./shop-navigation.component.scss"]
 })
-export class ShopNavigationComponent implements OnInit {
+export class ShopNavigationComponent implements OnInit, OnChanges {
   private _productsLayout = "three-cols auto";
   @Input() products: Product[] = [];
   @Input() noMore: boolean;
+  @Input() orderby: string;
   @Output() loadMore = new EventEmitter<any>();
   @Output() changeOrderBy = new EventEmitter<any>();
   private _orderBy = [
@@ -23,7 +24,13 @@ export class ShopNavigationComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._orderByText = this.orderby == null ? "Default Sorting" : this.orderby;
+  }
+
+  ngOnChanges() {
+    this._orderByText = this.orderby == null ? "Default Sorting" : this.orderby;
+  }
 
   changeProductsLayout(layout: string) {
     this._productsLayout = layout;
