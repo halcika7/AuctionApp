@@ -47,6 +47,26 @@ class ProductController extends BaseController {
     );
     return super.sendResponse(res, status, { similarProducts });
   }
+
+  async getShopProducts(req, res) {
+    const { min, max, subcategoryId, brandId, filterValueIds, offSet, orderBy } = {
+      ...JSON.parse(req.query.filters)
+    };
+    const prodWhere = { min, max, subcategoryId, brandId, offSet, orderBy };
+    const {
+      status,
+      products,
+      noMore,
+      priceRange,
+      failedMessage
+    } = await ProductServiceInstance.getShopProducts(prodWhere, filterValueIds);
+    return super.sendResponseWithMessage(
+      res,
+      status,
+      { products, noMore, priceRange },
+      failedMessage
+    );
+  }
 }
 
 const ProductControllerInstance = new ProductController();

@@ -1,61 +1,16 @@
 const BaseService = require('./BaseService');
-const Subcategory = require('../models/Subcategory');
 const Product = require('../models/Product');
-const Brand = require('../models/Brand');
-const Filter = require('../models/Filter');
-const FilterSubcategory = require('../models/FilterSubcategory');
-const FilterValue = require('../models/FilterValue');
-const FilterValueProduct = require('../models/FilterValueProduct');
-const { db, Op } = require('../config/database');
-const { removeNullProperty } = require('../helpers/removeNullProperty');
+const { db } = require('../config/database');
+const { returnWhereObject } = require('../helpers/returnWhereObject');
 
 class ShopService extends BaseService {
   constructor() {
     super(ShopService);
   }
 
-  returnWhereObject({ min, max, subcategoryId, brandId }, auctionEnd) {
-    const obj = {
-      ...removeNullProperty({ subcategoryId, brandId })
-    };
-    if (min && max) {
-      obj['price'] = {
-        [Op.and]: {
-          [Op.gte]: min,
-          [Op.lte]: max
-        }
-      };
-    }
-    if (auctionEnd) {
-      obj['auctionEnd'] = {
-        [Op.gt]: new Date()
-      };
-    }
-    return obj;
-  }
-
-  async getSubcategoryBrands(reqQueryData) {
-    try {
-      const where = this.returnWhereObject(reqQueryData, true);
-      const subId = { ...removeNullProperty({ id: reqQueryData.subcategoryId }) };
-      const Brands = await Brand.findAll({
-        include: [
-          { model: Subcategory, attributes: [], where: { ...subId } },
-          { model: Product, where, attributes: [] }
-        ],
-        attributes: ['id', 'name', [db.fn('COUNT', db.col('Products.id')), 'number_of_products']],
-        group: ['Brand.id', 'Subcategories->BrandSubcategories.id'],
-        order: [['name', 'ASC']]
-      });
-      return { status: 200, Brands };
-    } catch (error) {
-      return super.returnGenericFailed();
-    }
-  }
-
   async getPrices(reqQueryData) {
     try {
-      const where = this.returnWhereObject(reqQueryData, true);
+      const where = returnWhereObject(reqQueryData, true);
       const prices = await Product.findOne({
         where,
         attributes: [
@@ -66,46 +21,6 @@ class ShopService extends BaseService {
       });
 
       return { status: 200, prices };
-    } catch (error) {
-      return super.returnGenericFailed();
-    }
-  }
-
-  async getFilters(reqQueryData) {
-    try {
-      if (!reqQueryData.subcategoryId) {
-        let Filters = [];
-        return { status: 200, Filters };
-      }
-      const where = this.returnWhereObject(reqQueryData, true);
-      const { Filters } = await Subcategory.findOne({
-        where: {
-          id: reqQueryData.subcategoryId
-        },
-        attributes: [],
-        include: {
-          model: Filter,
-          attributes: ['id', 'name'],
-          through: {
-            model: FilterSubcategory,
-            attributes: []
-          },
-          include: {
-            model: FilterValue,
-            attributes: ['value', 'id'],
-            include: {
-              model: Product,
-              where,
-              attributes: ['id'],
-              through: {
-                model: FilterValueProduct,
-                attributes: []
-              }
-            }
-          }
-        }
-      });
-      return { status: 200, Filters };
     } catch (error) {
       return super.returnGenericFailed();
     }
