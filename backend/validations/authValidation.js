@@ -92,7 +92,7 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
     message = 'Invalid token';
   }
 
-  passwordValidation(password, errors);
+  passwordValidation(password, errors, {});
 
   if (!errors.password && samePasswords) {
     errors.password = 'Password already in use';
