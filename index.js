@@ -8,10 +8,10 @@ const app = express();
 const { URL } = require('./backend/config/configs');
 
 app.use(
-    cors({
-        origin: URL,
-        credentials: true
-    })
+  cors({
+    origin: URL,
+    credentials: true
+  })
 );
 app.use(cookieParser());
 app.use(compression());
@@ -29,13 +29,13 @@ app.use('/api/bids', require('./backend/routes/bid/bid'));
 app.use('/api/shop', require('./backend/routes/shop/shop'));
 
 // static assets for production
-if(process.env.NODE_ENV === 'production') {
-    //Set static folder
-    app.use(express.static('./backend/frontend'));
+if (process.env.NODE_ENV === 'production') {
+  //Set static folder
+  app.use(express.static('./backend/frontend'));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
-    });
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
+  });
 }
 
 const port = process.env.PORT || 5000;
