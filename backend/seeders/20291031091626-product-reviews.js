@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -11,10 +11,10 @@ module.exports = {
         userId: Math.floor(Math.random() * 100 + 1)
       });
     }
-    return queryInterface.bulkInsert("ProductReviews", reviews, {});
+    return queryInterface.bulkInsert('ProductReviews', reviews, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("ProductReviews", null, {});
+    return queryInterface.bulkDelete('ProductReviews', null, {});
   }
 };

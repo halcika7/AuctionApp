@@ -1,0 +1,91 @@
+@import "mixins";
+@import "variables";
+
+.colors {
+  @include padding($all: 15px 20px);
+  @include margin($all: 0 0 20px);
+  background: getColor(white);
+  border: 1px solid getColor(light_gray);
+  max-height: 576px;
+  overflow-y: auto;
+}
+
+.colors ul {
+  @include padding($all: 0);
+  @include margin($all: 0);
+  display: none;
+}
+
+.colors h4 {
+  @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
+  @include margin($all: 0 0 31px);
+}
+
+.colors > li {
+  @include fontMixin(
+    14px,
+    regular,
+    0.49px,
+    light_black,
+    $transform: capitalize
+  );
+  @include flex(center,space-between);
+  position: relative;
+  cursor: pointer;
+  position: relative;
+  height: auto;
+}
+
+.colors > li.active {
+  color: getColor(purple);
+
+  &:before,
+  &:after {
+    content: "";
+    @include heightWidth(15px, 4px);
+    position: absolute;
+    right: 0;
+    background: getColor(light_black);
+    pointer-events: none;
+    cursor: pointer;
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+}
+
+.colors > li > p {
+  @include flex($align: center);
+
+  > span {
+    @include heightWidth(15px, 15px);
+    display: block;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
+.white {
+  background: getColor(white) !important;
+}
+
+.black {
+  background: getColor(light_black) !important;
+}
+
+.red {
+  background: getColor(red) !important;
+}
+
+.green {
+  background: getColor(green) !important;
+}
+
+.blue {
+  background: getColor(blue) !important;
+}

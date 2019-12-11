@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const ProductImage = db.define(
-  "ProductImage",
+  'ProductImage',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -18,15 +18,15 @@ const ProductImage = db.define(
       allowNull: false,
       references: {
         model: {
-          tableName: "Products"
+          tableName: 'Products'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "ProductImages"
+    modelName: 'ProductImages'
   }
 );
 

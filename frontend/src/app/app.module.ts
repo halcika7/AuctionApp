@@ -25,12 +25,12 @@ import { InputComponent } from "./components/input/input.component";
 import { CategoriesListComponent } from "./components/categories-list/categories-list.component";
 import { CarouselComponent } from "./components/carousel/carousel.component";
 import { LandingPageProductsComponent } from "./components/landing-page-products/landing-page-products.component";
-import { ProductTabsComponent } from "./components/product-tabs/product-tabs.component";
+import { ProductTabsComponent } from "./landing-page/product-tabs/product-tabs.component";
 import { CollectionItemComponent } from "./components/collection-item/collection-item.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
-import { ProductImagesComponent } from "./components/product-images/product-images.component";
-import { ProductBidsComponent } from "./components/product-bids/product-bids.component";
+import { ProductImagesComponent } from "./product-page/product-images/product-images.component";
+import { ProductBidsComponent } from "./product-page/product-bids/product-bids.component";
 
 // ngRx
 import * as fromApp from "./store/app.reducer";
@@ -38,6 +38,7 @@ import { AuthEffects } from "./auth/store/auth.effects";
 import { LandingPageEffects } from "./landing-page/store/landing-page.effects";
 import { CategoriesPageEffects } from "./containers/all-categories/store/all-categories.effects";
 import { ProductPageEffects } from "./product-page/store/product-page.effects";
+import { ShopPageEffects } from "./shop-page/store/shop-page.effects";
 
 // Font Awesome Icons
 import {
@@ -68,6 +69,11 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
+import { ShopPageComponent } from "./shop-page/shop-page.component";
+import { CollectionListItemComponent } from "./components/collection-list-item/collection-list-item.component";
+import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component";
+import { ShopFiltersComponent } from "./shop-page/shop-filters/shop-filters.component";
+import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-navigation.component";
 
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
@@ -101,6 +107,11 @@ import { ResetPasswordComponent } from "./auth/reset-password/reset-password.com
     ProductImagesComponent,
     DateAgoPipe,
     ProductBidsComponent,
+    ShopPageComponent,
+    CollectionListItemComponent,
+    ShopPriceComponent,
+    ShopFiltersComponent,
+    ShopNavigationComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent
   ],
@@ -115,7 +126,8 @@ import { ResetPasswordComponent } from "./auth/reset-password/reset-password.com
       AuthEffects,
       LandingPageEffects,
       CategoriesPageEffects,
-      ProductPageEffects
+      ProductPageEffects,
+      ShopPageEffects
     ]),
     FontAwesomeModule,
     Ng5SliderModule,

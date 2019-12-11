@@ -1,0 +1,36 @@
+<div class="products">
+  <div class="navigation">
+    <div class="dropdown">
+      <p appDropdown>{{ orderByText }}</p>
+      <ul>
+        <li
+          (click)="changeOrderByChanged(i)"
+          *ngFor="let order of orderBy; let i = index"
+          [ngClass]="{ active: order === orderByText }"
+        >
+          {{ order }}
+        </li>
+      </ul>
+    </div>
+    <div class="gridlist">
+      <span
+        [ngClass]="{ active: productsLayout !== 'list' }"
+        (click)="changeProductsLayout('three-cols auto')"
+        ><fa-icon [icon]="['fas', 'th']"></fa-icon>Grid</span
+      >
+      <span
+        [ngClass]="{ active: productsLayout === 'list' }"
+        (click)="changeProductsLayout('list')"
+        ><fa-icon [icon]="['fas', 'th-list']"></fa-icon>List</span
+      >
+    </div>
+  </div>
+  <app-landing-page-products
+    [list]="productsLayout === 'list' ? true : false"
+    [className]="productsLayout"
+    padding="paddingL15"
+    [containerClass]="false"
+    [items]="products"
+  ></app-landing-page-products>
+  <button *ngIf="!noMore" (click)="loadMoreProducts()">LOAD MORE</button>
+</div>

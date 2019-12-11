@@ -10,6 +10,7 @@ import { LoginComponent } from "./auth/login/login.component";
 import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { AllCategoriesComponent } from "./containers/all-categories/all-categories.component";
 import { ProductPageComponent } from "./product-page/product-page.component";
+import { ShopPageComponent } from "./shop-page/shop-page.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 
@@ -55,6 +56,8 @@ const appRoutes: Routes = [
   {
     path: "shop",
     children: [
+      { path: "", component: ShopPageComponent },
+      { path: ":categoryId/:subcategoryId", component: ShopPageComponent },
       { path: "about", component: AboutComponent },
       { path: "privacy", component: PrivacyComponent },
       { path: "terms", component: ConditionsComponent },

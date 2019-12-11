@@ -1,5 +1,5 @@
-const BaseController = require("./BaseController");
-const BidService = require("../services/BidService");
+const BaseController = require('./BaseController');
+const BidService = require('../services/BidService');
 
 class BidController extends BaseController {
   constructor() {

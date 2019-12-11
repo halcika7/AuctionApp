@@ -33,15 +33,19 @@ footer {
   }
 }
 
-.links a {
-  @include margin($bottom: 15px);
-  @include fontMixin(16px, regular, 0.56px, light_gray, $decoration: none);
-  display: block;
+.links {
+  a {
+    @include margin($bottom: 15px);
+    @include fontMixin(16px, regular, 0.56px, light_gray, $decoration: none);
+    display: block;
+  }
 }
 
-.contact p {
-  @include margin(0, 15px);
-  @include fontMixin(16px, regular, 0.56px, light_gray);
+.contact {
+  p {
+    @include margin(0, 15px);
+    @include fontMixin(16px, regular, 0.56px, light_gray);
+  }
 }
 
 .icons {

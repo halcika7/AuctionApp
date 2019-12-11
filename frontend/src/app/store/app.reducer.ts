@@ -4,17 +4,20 @@ import * as fromAuth from "@app/auth/store/auth.reducer";
 import * as fromLandingPage from "@app/landing-page/store/landing-page.reducers";
 import * as fromCategoriesPage from "@app/containers/all-categories/store/all-categories.reducer";
 import * as fromProductPage from "@app/product-page/store/product-page.reducer";
+import * as fromShopPage from "@app/shop-page/store/shop-page.reducer";
 
 export interface AppState {
   auth: fromAuth.State;
   landingPage: fromLandingPage.State;
   categoriesPage: fromCategoriesPage.State;
   productPage: fromProductPage.State;
+  shopPage: fromShopPage.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
   auth: fromAuth.authReducer,
   landingPage: fromLandingPage.landingPageReducer,
   categoriesPage: fromCategoriesPage.categoriesPageReducer,
-  productPage: fromProductPage.productPageReducer
+  productPage: fromProductPage.productPageReducer,
+  shopPage: fromShopPage.shopPageReducer
 };

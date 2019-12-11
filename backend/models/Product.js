@@ -1,12 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
-const ProductImage = require("./ProductImage");
-const ProductReview = require("./ProductReview");
-const Subcategory = require("./Subcategory");
-const Bid = require("./Bid");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Product = db.define(
-  "Product",
+  'Product',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -50,34 +46,34 @@ const Product = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Users"
+          tableName: 'Users'
         },
-        key: "id"
+        key: 'id'
       }
     },
     subcategoryId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Subcategories"
+          tableName: 'Subcategories'
         },
-        key: "id"
+        key: 'id'
+      }
+    },
+    brandId: {
+      type: Sequelize.BIGINT,
+      references: {
+        model: {
+          tableName: 'Brands'
+        },
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "Products"
+    modelName: 'Products'
   }
 );
-
-Product.hasMany(ProductImage, { foreignKey: "productId", sourceKey: "id" });
-Product.hasMany(ProductReview, { foreignKey: "productId", sourceKey: "id" });
-Product.belongsTo(Subcategory, {
-  foreignKey: "subcategoryId",
-  sourceKey: "id"
-});
-ProductReview.belongsTo(Product, { foreignKey: "productId", sourceKey: "id" });
-Product.hasMany(Bid, { foreignKey: "productId", sourceKey: "id" });
 
 module.exports = Product;

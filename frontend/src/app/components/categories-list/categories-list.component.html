@@ -1,17 +1,40 @@
-<div class="wrapper">
+<div class="wrapper" *ngIf="!shop">
   <button [ngClass]="{ show: isOpen ? true : false }" (click)="toggle()">
     Categories
   </button>
   <ul class="categories">
     <h3>Categories</h3>
     <li *ngFor="let category of categories">
-      <p appDropdownNoautoclose>{{ category.name }}</p>
+      <p appDropdown>{{ category.name }}</p>
       <ul class="subcategories">
         <li *ngFor="let subCat of category.Subcategories">
-          <a href="">{{ subCat.name }}</a>
+          <a [routerLink]="['/shop', category.id, subCat.id]">{{
+            subCat.name
+          }}</a>
         </li>
       </ul>
     </li>
-    <li><a [routerLink]="['/home/categories']">All Categories</a></li>
+    <li><a [routerLink]="['/shop']">All Categories</a></li>
   </ul>
 </div>
+
+<ul class="shop categories" *ngIf="shop">
+  <h4>Product Categories</h4>
+  <li
+    [defaultOpen]="categoryId === category.id"
+    appDropdownNoautoclose
+    *ngFor="let category of categories"
+  >
+    {{ category.name }}
+    <ul>
+      <li
+        [ngClass]="{ active: subcategoryId === subcategory.id }"
+        *ngFor="let subcategory of category.Subcategories"
+      >
+        <a [routerLink]="['/shop', category.id, subcategory.id]"
+          >{{ subcategory.name }} ({{ subcategory.number_of_products }})</a
+        >
+      </li>
+    </ul>
+  </li>
+</ul>

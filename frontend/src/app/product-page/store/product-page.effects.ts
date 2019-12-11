@@ -14,9 +14,9 @@ export class ProductPageEffects {
   @Effect()
   ProductStart = this.actions$.pipe(
     ofType(ProductPageActions.PRODUCT_START),
-    switchMap(({ id }) => {
+    switchMap(({ id, subcategoryId }) => {
       return this.http
-        .get<{ product: FullProduct; bids?: Bid[]; error?: string }>(`/products/${id}`)
+        .get<{ product: FullProduct; bids?: Bid[]; error?: string }>(`/products/${id}/${subcategoryId}`)
         .pipe(
           map(data => new ProductPageActions.ProductSuccess(data)),
           catchError(data => of(new ProductPageActions.ProductFailed(data)))
@@ -55,7 +55,7 @@ export class ProductPageEffects {
     ofType(ProductPageActions.SIMILAR_PRODUCT_START),
     switchMap(({ productId, subcategoryId }) => {
       return this.http
-        .get<{ similarProducts: Product[] }>(`/products/${productId}/${subcategoryId}`)
+        .get<{ similarProducts: Product[] }>(`/products/similar/${productId}/${subcategoryId}`)
         .pipe(map(data => new ProductPageActions.SimilarProductSuccess(data)));
     })
   );
