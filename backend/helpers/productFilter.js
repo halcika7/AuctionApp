@@ -15,6 +15,7 @@ function filterProducts({
   type,
   limit,
   offset = 0,
+  name,
   subcategoryId,
   productId,
   filterValueIds,
@@ -75,6 +76,10 @@ function filterProducts({
   if (type === 'Shop') {
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
+
+    if (name) {
+      q += ` AND LOWER(p."name") LIKE LOWER('%${name}%') `;
+    }
 
     if (subcategoryId) {
       q += ` AND p."subcategoryId"=${subcategoryId} `;

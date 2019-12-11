@@ -6,6 +6,7 @@ const FilterSubcategory = require('../models/FilterSubcategory');
 const FilterValue = require('../models/FilterValue');
 const FilterValueProduct = require('../models/FilterValueProduct');
 const { returnWhereObject } = require('../helpers/returnWhereObject');
+const { db, Op } = require('../config/database');
 
 class FilterService extends BaseService {
   constructor() {
@@ -19,6 +20,11 @@ class FilterService extends BaseService {
         return { status: 200, Filters };
       }
       const where = returnWhereObject(reqQueryData, true);
+      if (reqQueryData.name) {
+        where[Op.and] = db.where(db.fn('lower', db.col('Filters.FilterValues.Products.name')), {
+          [Op.like]: `%${reqQueryData.name}%`
+        });
+      }
       const { Filters } = await Subcategory.findOne({
         where: {
           id: reqQueryData.subcategoryId

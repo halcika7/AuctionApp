@@ -49,10 +49,10 @@ class ProductController extends BaseController {
   }
 
   async getShopProducts(req, res) {
-    const { min, max, subcategoryId, brandId, filterValueIds, offSet, orderBy } = {
+    const { min, max, subcategoryId, brandId, filterValueIds, offSet, orderBy, name } = {
       ...JSON.parse(req.query.filters)
     };
-    const prodWhere = { min, max, subcategoryId, brandId, offSet, orderBy };
+    const prodWhere = { min, max, subcategoryId, brandId, offSet, orderBy, name };
     const {
       status,
       products,

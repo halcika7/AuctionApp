@@ -6,7 +6,7 @@ import * as fromApp from "@app/store/app.reducer";
 import { Categories } from "@app/containers/all-categories/store/all-categories.reducer";
 import { CategoriesStart } from "@app/containers/all-categories/store/all-categories.actions";
 import * as ShopPageActions from "./store/shop-page.actions";
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import {
   Brand,
   Prices,
@@ -32,6 +32,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   private _subcategoryId: string;
   private _breadcrumbSubcategory: string;
   private _filterProduct = {
+    name: null,
     subcategoryId: null,
     min: null,
     max: null,
@@ -45,15 +46,26 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<fromApp.AppState>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.store.dispatch(new CategoriesStart("/categories/true"));
     this.subscription.add(
+      this.route.queryParams.subscribe(({ name }) => {
+        if (name) {
+          this._filterProduct.name = name;
+        } else {
+          this._filterProduct.name = null;
+        }
+        this.dispatchActions(true, true);
+      })
+    );
+    this.subscription.add(
       this.route.params.subscribe(
         ({ categoryId = null, subcategoryId = null }: Params) => {
-          this.resetProductFilter({ resetSubcategory: true });
+          this.resetProductFilter({ resetSubcategory: true, resetName: false });
           this._categoryId = categoryId;
           this._subcategoryId = subcategoryId;
           this._filterProduct.subcategoryId = subcategoryId;
@@ -119,7 +131,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       this._filterProduct.brandId =
         this._filterProduct.brandId === id ? null : id;
       this._filterIds = [];
-      this.resetProductFilter({ resetSubcategory: false, resetBrand: false });
+      this.resetProductFilter({ resetBrand: false, resetName: false });
       this.dispatchActions(true, true);
     } else {
       const findFilterId = this._filterIds.findIndex(filter => filter === id);
@@ -161,9 +173,16 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     return this._filterProduct.max !== null ||
       this._filterProduct.min !== null ||
       this._filterProduct.brandId !== null ||
-      this._filterProduct.filterValueIds.length > 0
+      this._filterProduct.filterValueIds.length > 0 ||
+      this._filterProduct.name != null
       ? true
       : false;
+  }
+
+  productNameChanged(value: string | null) {
+    this.filterProduct.name = value;
+    this.changeQueryParam(value);
+    this.dispatchActions(true, true);
   }
 
   private checkActiveSubcategory() {
@@ -188,18 +207,22 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   private dispatchAction(url: string, loadMore: boolean = false) {
     const queryObj = `${url}?filters=${JSON.stringify(this._filterProduct)}`;
-    !loadMore && this.store.dispatch(new ShopPageActions.ShopStart(queryObj));
-    loadMore &&
-      this.store.dispatch(new ShopPageActions.ShopPageLoadMoreStart(queryObj));
+    !loadMore
+      ? this.store.dispatch(new ShopPageActions.ShopStart(queryObj))
+      : this.store.dispatch(
+          new ShopPageActions.ShopPageLoadMoreStart(queryObj)
+        );
   }
 
   private resetProductFilter({
     resetSubcategory = false,
     onlyOffset = false,
-    resetBrand = true
+    resetBrand = true,
+    resetName = true
   }) {
     if (!onlyOffset) {
       this._filterProduct = {
+        name: resetName ? null : this._filterProduct.name,
         subcategoryId: resetSubcategory
           ? null
           : this._filterProduct.subcategoryId,
@@ -210,10 +233,20 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         offSet: 0,
         orderBy: null
       };
+      if (resetName) {
+        this.changeQueryParam(null);
+      }
       this._filterIds = [];
     } else {
       this._filterProduct.offSet = 0;
     }
+  }
+
+  private changeQueryParam(value: string | null) {
+    this.router.navigate([], {
+      queryParams: { name: value },
+      queryParamsHandling: "merge"
+    });
   }
 
   get filterProduct() {

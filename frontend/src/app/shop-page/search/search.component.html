@@ -1,0 +1,14 @@
+<ul class="colors">
+  <h4>Search products by name</h4>
+  <div class="search-wrapper">
+    <input
+      #shopSearchInput
+      type="text"
+      placeholder="Try enter: Shoes"
+      [value]="inputValue"
+      (keyup.enter)="onValueChange($event, shopSearchInput)"
+    />
+    <fa-icon [icon]="['fas', 'search']" (click)="onValueChange($event, shopSearchInput)"></fa-icon>
+  </div>
+  <button *ngIf="inputValue" (click)="clearSearch()">Clear search</button>
+</ul>

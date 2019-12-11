@@ -7,12 +7,13 @@ class FilterController extends BaseController {
   }
 
   async getFilters(req, res) {
-    const { min, max, subcategoryId, brandId } = { ...JSON.parse(req.query.filters) };
+    const { min, max, subcategoryId, brandId, name } = { ...JSON.parse(req.query.filters) };
     const { status, Filters, failedMessage } = await FilterServiceInstance.getFilters({
       min,
       max,
       subcategoryId,
-      brandId
+      brandId,
+      name
     });
     return super.sendResponseWithMessage(res, status, { Filters }, failedMessage);
   }

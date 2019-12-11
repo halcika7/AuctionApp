@@ -33,8 +33,7 @@ header {
 
 .links,
 .login,
-.navigation,
-.search {
+.navigation {
   @include flex(center);
 }
 
@@ -131,24 +130,33 @@ header {
   }
 
   .search {
+    @include flex(center);
     @include padding($all: 0 10px);
     height: 68px;
     position: relative;
 
-    fa-icon {
-      position: absolute;
-      right: 25px;
-      cursor: pointer;
-      height: 20px;
-      color: getColor(light_black);
-    }
-
-    input {
-      @include padding($all: 15px 35px 15px 15px);
-      @include fontMixin(18px, regular, 0.63px, light_black);
-      @include boxShadowBackground(true, white, 1px solid getColor(inputBorder));
+    .search-wrapper {
       width: 100%;
-      outline: none;
+      @include flex(center, center);
+      fa-icon {
+        position: absolute;
+        right: 25px;
+        cursor: pointer;
+        height: 20px;
+        color: getColor(light_black);
+      }
+
+      input {
+        @include padding($all: 15px 35px 15px 15px);
+        @include fontMixin(18px, regular, 0.63px, light_black);
+        @include boxShadowBackground(
+          true,
+          white,
+          1px solid getColor(inputBorder)
+        );
+        width: 100%;
+        outline: none;
+      }
     }
   }
 
