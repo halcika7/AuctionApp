@@ -99,38 +99,22 @@ function filterProducts({
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
     if (brandId) {
-      let q = ` p."brandId"=${brandId} AND `;
-      findProductsQuery += q;
-      numberOfProductsQuery += q;
-      priceRangeQuery += q;
+      q += ` p."brandId"=${brandId} AND `;
     }
 
     if (subcategoryId) {
-      let q = ` p."subcategoryId"=${subcategoryId} AND `;
-      findProductsQuery += q;
-      numberOfProductsQuery += q;
-      priceRangeQuery += q;
+      q += ` p."subcategoryId"=${subcategoryId} AND `;
     }
 
     if (min && max) {
-      let q = ` p.price>=${min} AND p.price<=${max} AND `;
-      findProductsQuery += q;
-      numberOfProductsQuery += q;
-      priceRangeQuery += q;
+      q += ` p.price>=${min} AND p.price<=${max} AND `;
     }
-
-    findProductsQuery += q;
-    numberOfProductsQuery += q;
-    priceRangeQuery += q;
     if (filterValueIds.length > 0) {
-      let q = ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
-      findProductsQuery += q;
-      numberOfProductsQuery += q;
-      priceRangeQuery += q;
+      q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
     }
-    findProductsQuery += `) `;
-    numberOfProductsQuery += `);`;
-    priceRangeQuery += `) group by price_range order by price_range;`;
+    findProductsQuery += `${q}) `;
+    numberOfProductsQuery += `${q});`;
+    priceRangeQuery += `${q}) group by price_range order by price_range;`;
 
     if (orderBy) {
       findProductsQuery +=
