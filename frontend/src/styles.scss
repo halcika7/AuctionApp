@@ -6,6 +6,10 @@
   @include padding($left: 21px !important);
 }
 
+.no-overflow {
+  overflow: hidden;
+}
+
 app-root {
   @include flex($direction: column);
   @include margin(0);

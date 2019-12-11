@@ -1,6 +1,34 @@
+<app-modal-image-gallery
+  *ngIf="showModal"
+  (closeModal)="openModal($event)"
+  [images]="images"
+  [activeImage]="activeImage"
+  [currentIndex]="currentIndex"
+></app-modal-image-gallery>
+
 <div class="pictures">
   <div class="big-picture">
-    <img [src]="activeImage" alt="" />
+    <span
+      class="left"
+      [ngClass]="{ hidden: currentIndex == 0 }"
+      (click)="arrowClicked('left')"
+      ><fa-icon [icon]="['fas', 'chevron-left']"></fa-icon
+    ></span>
+    <ngx-image-zoom
+      [thumbImage]="activeImage"
+      [fullImage]="activeImage"
+      [enableLens]="true"
+      [circularLens]="true"
+      [lensWidth]="200"
+      [lensHeight]="200"
+      (click)="openModal()"
+    ></ngx-image-zoom>
+    <span
+      class="right"
+      [ngClass]="{ hidden: currentIndex == images.length - 1 }"
+      (click)="arrowClicked('right')"
+      ><fa-icon [icon]="['fas', 'chevron-right']"></fa-icon
+    ></span>
   </div>
   <div class="pagination">
     <ng-template ngFor let-imgs let-index="index" [ngForOf]="images">

@@ -7,6 +7,7 @@ import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { Ng5SliderModule } from "ng5-slider";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgxImageZoomModule } from 'ngx-image-zoom';
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -60,7 +61,14 @@ import {
   faHeart,
   faGavel,
   faThList,
-  faTh
+  faTh,
+  faUserAlt,
+  faCog,
+  faTimes,
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faChevronLeft,
+  faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -79,6 +87,7 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 import { SearchComponent } from './shop-page/search/search.component';
+import { ModalImageGalleryComponent } from './components/modal-image-gallery/modal-image-gallery.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +124,8 @@ import { SearchComponent } from './shop-page/search/search.component';
     ShopNavigationComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SearchComponent
+    SearchComponent,
+    ModalImageGalleryComponent
   ],
   imports: [
     BrowserModule,
@@ -134,7 +144,8 @@ import { SearchComponent } from './shop-page/search/search.component';
     FontAwesomeModule,
     Ng5SliderModule,
     NgxChartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxImageZoomModule.forRoot()
   ],
   providers: [
     {
@@ -160,7 +171,14 @@ export class AppModule {
       faHeart,
       faGavel,
       faTh,
-      faThList
+      faThList,
+      faUserAlt,
+      faCog,
+      faTimes,
+      faChevronCircleLeft,
+      faChevronCircleRight,
+      faChevronLeft,
+      faChevronRight
     );
   }
 }

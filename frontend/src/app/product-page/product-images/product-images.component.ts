@@ -13,6 +13,7 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
   private _images = [];
   private _activeImage: string;
   private _currentIndex: number;
+  private _showModal: boolean = false;
   private subscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
@@ -44,6 +45,21 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
     this._currentIndex = index;
   }
 
+  arrowClicked(name) {
+    if (name == "left" && this._currentIndex != 0) {
+      this._currentIndex--;
+    }
+
+    if (name == "right" && this._currentIndex != this._images.length - 1) {
+      this._currentIndex++;
+    }
+    this._activeImage = this._images[this._currentIndex].image;
+  }
+
+  openModal(open = true) {
+    this._showModal = open;
+  }
+
   get images() {
     return this._images;
   }
@@ -54,5 +70,9 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
 
   get currentIndex(): number {
     return this._currentIndex;
+  }
+
+  get showModal(): boolean {
+    return this._showModal;
   }
 }

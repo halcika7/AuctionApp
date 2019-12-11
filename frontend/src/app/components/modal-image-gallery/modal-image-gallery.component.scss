@@ -1,0 +1,163 @@
+@import "mixins";
+@import "variables";
+
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+
+  @media (max-width: 992px) {
+    @include flex(center, center);
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 850px;
+
+    @media (max-width: 850px) {
+      width: 100%;
+    }
+
+    button {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: getColor(red);
+      font-size: 34px;
+      padding: 0;
+      z-index: 5;
+
+      fa-icon {
+        height: 35px;
+        width: 35px;
+        fill: #111;
+      }
+    }
+
+    .big-picture {
+      position: relative;
+      width: 100%;
+
+      img {
+        width: 100%;
+        height: 500px;
+        object-fit: scale-down;
+      }
+
+      span {
+        position: absolute;
+        height: 50px;
+        width: 80px;
+        z-index: 1;
+        cursor: pointer;
+        font-size: 40px;
+        color: getColor(white);
+        top: 50%;
+        transform: translate(-50%, 0);
+        display: block;
+        mix-blend-mode: difference;
+
+        fa-icon {
+          @include flex(center, center);
+          height: 100%;
+        }
+
+        &.left {
+          left: 45px;
+        }
+
+        &.right {
+          right: -35px;
+        }
+
+        &:hover {
+          background: getColor(light_purple);
+          color: getColor(light_black);
+          transition: all 0.125s ease-in-out;
+          mix-blend-mode: normal;
+        }
+      }
+    }
+
+    .image-pagination {
+      @include flex(center, $wrap: nowrap);
+      background: getColor(white);
+      margin-top: 30px;
+      width: 100%;
+
+      .images {
+        width: 100%;
+        overflow-x: hidden;
+        @include flex(center, $wrap: nowrap);
+        height: 100px;
+
+        .img {
+          @include flex(center, center);
+          height: 80px;
+          min-width: 100px;
+          padding: 5px;
+          cursor: pointer;
+          border: 2px solid transparent;
+          filter: contrast(30%);
+          transition: filter 0.3s ease-in-out, transform 0.8s ease-in-out,
+            -webkit-filter 0.3s ease-in-out, -webkit-transform 0.8s ease-in-out;
+          margin: 0 4px;
+
+          @media (max-width: 1200px) {
+            margin: 0 8px;
+          }
+
+          &.active,
+          &:hover {
+            border: 2px solid getColor(purple);
+            filter: contrast(100%);
+          }
+
+          img {
+            width: 80px;
+            height: 80px;
+            object-fit: scale-down;
+          }
+        }
+      }
+
+      span {
+        font-size: 30px;
+        cursor: pointer;
+        mix-blend-mode: difference;
+        color: getColor(white);
+      }
+
+      @media (max-width: 850px) {
+        margin-top: 30px;
+      }
+    }
+  }
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1;
+}

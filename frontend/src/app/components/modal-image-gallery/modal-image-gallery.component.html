@@ -1,0 +1,49 @@
+<section class="modal">
+  <div class="container">
+    <button (click)="closeModalClicked()">
+      <fa-icon [icon]="['fas', 'times']"></fa-icon>
+    </button>
+    <div class="big-picture">
+      <span
+        class="left"
+        (click)="arrowClicked($event, 'left')"
+        *ngIf="CurrentIndex != 0"
+        ><fa-icon [icon]="['fas', 'chevron-circle-left']"></fa-icon
+      ></span>
+      <img [src]="ActiveImage" alt="" />
+      <span
+        class="right"
+        (click)="arrowClicked($event, 'right')"
+        *ngIf="CurrentIndex != Images.length - 1"
+        ><fa-icon [icon]="['fas', 'chevron-circle-right']"></fa-icon
+      ></span>
+    </div>
+    <div class="image-pagination">
+      <span
+        class="left"
+        (click)="thumbnailsClicked('left')"
+        *ngIf="showTumbArrows"
+        ><fa-icon [icon]="['fas', 'chevron-circle-left']"></fa-icon
+      ></span>
+      <div class="images">
+        <ng-template ngFor let-imgs let-index="index" [ngForOf]="Images">
+          <div
+            class="img"
+            [ngClass]="{ active: CurrentIndex === index }"
+            [ngStyle]="translate"
+            (click)="thumbnailsClicked('picture', index)"
+          >
+            <img [src]="imgs.image" alt="" />
+          </div>
+        </ng-template>
+      </div>
+      <span
+        class="right"
+        (click)="thumbnailsClicked('right')"
+        *ngIf="showTumbArrows"
+        ><fa-icon [icon]="['fas', 'chevron-circle-right']"></fa-icon
+      ></span>
+    </div>
+  </div>
+  <div class="backdrop" (click)="closeModalClicked()"></div>
+</section>
