@@ -31,30 +31,7 @@ function filterProducts({
   let replacements = null;
   let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
   let numberOfProductsQuery = '';
-  let priceRangeQuery =
-    type === 'Shop'
-      ? `SELECT CASE
-  when p.price >= 0 and p.price < 50 then '0-50'
-  when p.price >= 50 and p.price < 100 then '50-100'
-  when p.price >= 100 and p.price < 150 then '100-150'
-  when p.price >= 150 and p.price < 200 then '150-200'
-  when p.price >= 200 and p.price < 250 then '200-250'
-  when p.price >= 250 and p.price < 300 then '250-300'
-  when p.price >= 300 and p.price < 350 then '300-350'
-  when p.price >= 350 and p.price < 400 then '350-400'
-  when p.price >= 400 and p.price < 450 then '400-450'
-  when p.price >= 450 and p.price < 500 then '450-500'
-  when p.price >= 500 and p.price < 550 then '500-550'
-  when p.price >= 550 and p.price < 600 then '550-600'
-  when p.price >= 600 and p.price < 650 then '600-650'
-  when p.price >= 650 and p.price < 700 then '650-700'
-  when p.price >= 700 and p.price < 750 then '700-750'
-  when p.price >= 750 and p.price < 800 then '750-800'
-  when p.price >= 800 and p.price < 850 then '800-850'
-  when p.price >= 850 and p.price < 900 then '850-900'
-  else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE 
-`
-      : null;
+  let priceRangeQuery = type === 'Shop' ? buildPriceRangeQuery() : null;
 
   if (type === 'topRated') {
     let q = `,ROUND(AVG(pr.rating), 2) AS avg_rating FROM public."Products" p JOIN public."ProductReviews" pr ON pr."productId"=p.id
@@ -98,16 +75,17 @@ function filterProducts({
   if (type === 'Shop') {
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
-    if (brandId) {
-      q += ` p."brandId"=${brandId} AND `;
-    }
 
     if (subcategoryId) {
-      q += ` p."subcategoryId"=${subcategoryId} AND `;
+      q += ` AND p."subcategoryId"=${subcategoryId} `;
+    }
+
+    if (brandId) {
+      q += ` AND p."brandId"=${brandId} `;
     }
 
     if (min && max) {
-      q += ` p.price>=${min} AND p.price<=${max} AND `;
+      q += ` AND p.price>=${min} AND p.price<=${max} `;
     }
     if (filterValueIds.length > 0) {
       q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
@@ -200,3 +178,13 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
   const eq = isNaN(Limit + Offset) ? Limit : Limit + Offset;
   return length === 0 || length < Limit || length <= eq ? true : false;
 };
+
+function buildPriceRangeQuery() {
+  let query = 'SELECT CASE';
+  for (let i = 0; i < 900; i += 50) {
+    query += ` when p.price>=${i} and p.price < ${i + 50} then '${i}-${i + 50}'`;
+  }
+  return (
+    query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
+  );
+}
