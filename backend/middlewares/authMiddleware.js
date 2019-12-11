@@ -28,6 +28,7 @@ module.exports = async (req, res, next) => {
 
     if (decoded.id) {
       req.userId = decoded.id;
+      req.email = decoded.email;
     }
   } catch (error) {
     return res.status(401).json({ authorizationError: 'Unauthorized request. Please login' });

@@ -10,7 +10,9 @@ const {
   createUser,
   findUserByEmail,
   verifyRefreshToken,
-  hashPassword
+  hashPassword,
+  createOptionalInfo,
+  createCardInfo
 } = require('../helpers/authHelper');
 const { sendEmail } = require('../helpers/sendEmail');
 const BaseService = require('./BaseService');
@@ -25,7 +27,9 @@ class AuthService extends BaseService {
     try {
       const { errors, isValid } = await registerValidation(data);
       if (!isValid) return { status: 403, response: { ...errors } };
-      await createUser(data);
+      const { id } = await createOptionalInfo();
+      const { id:cardInfoId } = await createCardInfo();
+      await createUser(data, id, cardInfoId);
       return super.returnResponse(200, {
         response: { message: 'Account successfully created !' }
       });

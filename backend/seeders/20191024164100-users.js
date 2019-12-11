@@ -10,7 +10,9 @@ module.exports = {
       email: 'halcika_7@hotmail.com',
       photo: 'https://static.thenounproject.com/png/363633-200.png',
       password: '$2a$10$EvaQJZf.TU7POOzXv.n69.xbrtamfBQU5GAx/rfm86JftI6jlFk9m',
-      roleId: Math.floor(Math.random() * 2 + 1)
+      roleId: Math.floor(Math.random() * 2 + 1),
+      optionalInfoId: 1,
+      cardInfoId: 1
     });
     usrs.push({
       firstName: 'Haris',
@@ -18,7 +20,9 @@ module.exports = {
       email: 'harisbeslic32@gmail.com',
       photo: 'https://static.thenounproject.com/png/363633-200.png',
       password: '$2a$10$EvaQJZf.TU7POOzXv.n69.xbrtamfBQU5GAx/rfm86JftI6jlFk9m',
-      roleId: Math.floor(Math.random() * 2 + 1)
+      roleId: Math.floor(Math.random() * 2 + 1),
+      optionalInfoId: 2,
+      cardInfoId: 2
     });
 
     for (let i = 0; i < 100; i++) {
@@ -28,7 +32,9 @@ module.exports = {
         email: faker.internet.email(),
         photo: 'https://static.thenounproject.com/png/363633-200.png',
         password: '$2a$10$EvaQJZf.TU7POOzXv.n69.xbrtamfBQU5GAx/rfm86JftI6jlFk9m',
-        roleId: Math.floor(Math.random() * 2 + 1)
+        roleId: Math.floor(Math.random() * 2 + 1),
+        optionalInfoId: i + 3,
+        cardInfoId: i + 3
       });
     }
     return queryInterface.bulkInsert('Users', usrs, {});
