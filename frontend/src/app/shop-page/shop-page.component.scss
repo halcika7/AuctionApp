@@ -1,0 +1,45 @@
+@import "mixins";
+
+.shop-page {
+  @include flex($direction: row);
+  @include margin(31px, 200px);
+}
+
+.filters {
+  @include flex($direction: column);
+  width: 265px;
+  min-width: 265px;
+}
+
+button {
+  @include fontMixin(15px, regular, 0.63px, light_black);
+  @include heightWidth(40px, 100%);
+  @include boxShadowBackground(true, white, 3px solid getColor(purple));
+  cursor: pointer;
+  outline: none;
+}
+
+app-shop-navigation {
+  width: 100%;
+}
+
+@media (max-width: 790px) {
+  .shop-page {
+    flex-direction: column;
+  }
+
+  .filters {
+    display: block;
+    column-count: 2;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 500px) {
+  .filters {
+    @include grid($templateCols: 100%);
+  }
+}

@@ -29,6 +29,7 @@ class ProductController extends BaseController {
     const token = req.headers.authorization.split(' ')[1] || null;
     const { product, bids, status } = await ProductServiceInstance.findProductById(
       req.params.id,
+      req.params.subcategoryId,
       token
     );
     if (!product) {
@@ -45,6 +46,26 @@ class ProductController extends BaseController {
       req.params.id
     );
     return super.sendResponse(res, status, { similarProducts });
+  }
+
+  async getShopProducts(req, res) {
+    const { min, max, subcategoryId, brandId, filterValueIds, offSet, orderBy } = {
+      ...JSON.parse(req.query.filters)
+    };
+    const prodWhere = { min, max, subcategoryId, brandId, offSet, orderBy };
+    const {
+      status,
+      products,
+      noMore,
+      priceRange,
+      failedMessage
+    } = await ProductServiceInstance.getShopProducts(prodWhere, filterValueIds);
+    return super.sendResponseWithMessage(
+      res,
+      status,
+      { products, noMore, priceRange },
+      failedMessage
+    );
   }
 }
 

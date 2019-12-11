@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Wishlists", {
+    return queryInterface.createTable('Wishlists', {
       id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -13,24 +13,24 @@ module.exports = {
         allowNull: false,
         references: {
           model: {
-            tableName: "Users"
+            tableName: 'Users'
           },
-          key: "id"
+          key: 'id'
         }
       },
       productId: {
         type: Sequelize.BIGINT,
         references: {
           model: {
-            tableName: "Products"
+            tableName: 'Products'
           },
-          key: "id"
+          key: 'id'
         }
       }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Wishlists");
+    return queryInterface.dropTable('Wishlists');
   }
 };

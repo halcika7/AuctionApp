@@ -10,18 +10,16 @@ export class CategoriesPageEffects {
   @Effect()
   allCategoriesStart = this.actions$.pipe(
     ofType(CategoriesPageActions.ALL_CATEGORIES_START),
-    concatMap(() => {
-      return this.http
-        .get<{ categories?; failedMessage? }>("/categories/")
-        .pipe(
-          map(
-            ({ categories }) =>
-              new CategoriesPageActions.CategoriesSuccess(categories)
-          ),
-          catchError(({ error }) =>
-            of(new CategoriesPageActions.CategoriesFailed(error.failedMessage))
-          )
-        );
+    concatMap(({ url }) => {
+      return this.http.get<{ categories?; failedMessage? }>(url).pipe(
+        map(
+          ({ categories }) =>
+            new CategoriesPageActions.CategoriesSuccess(categories)
+        ),
+        catchError(({ error }) =>
+          of(new CategoriesPageActions.CategoriesFailed(error.failedMessage))
+        )
+      );
     })
   );
 

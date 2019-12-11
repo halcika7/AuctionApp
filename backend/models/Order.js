@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Order = db.define(
-  "Order",
+  'Order',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -33,33 +33,33 @@ const Order = db.define(
       allowNull: false,
       references: {
         model: {
-          tableName: "Products"
+          tableName: 'Products'
         },
-        key: "id"
+        key: 'id'
       }
     },
     ownerId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Users"
+          tableName: 'Users'
         },
-        key: "id"
+        key: 'id'
       }
     },
     userId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Users"
+          tableName: 'Users'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "Orders"
+    modelName: 'Orders'
   }
 );
 

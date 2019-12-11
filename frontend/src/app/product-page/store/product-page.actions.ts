@@ -23,7 +23,7 @@ export class ClearProductMessages implements Action {
 
 export class ProductStart implements Action {
   readonly type = PRODUCT_START;
-  constructor(public id: string) {}
+  constructor(public id: string, public subcategoryId: string) {}
 }
 
 export class ProductSuccess implements Action {

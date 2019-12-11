@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const User = db.define(
-  "User",
+  'User',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -73,24 +73,24 @@ const User = db.define(
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Roles"
+          tableName: 'Roles'
         },
-        key: "id"
+        key: 'id'
       }
     },
     optionalInfoId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "OptionalInfos"
+          tableName: 'OptionalInfos'
         },
-        key: "id"
+        key: 'id'
       }
     }
   },
   {
     sequelize: Sequelize,
-    modelName: "Users"
+    modelName: 'Users'
   }
 );
 

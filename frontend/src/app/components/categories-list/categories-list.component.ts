@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Categories } from "@app/containers/all-categories/store/all-categories.reducer";
 
 @Component({
@@ -8,6 +8,9 @@ import { Categories } from "@app/containers/all-categories/store/all-categories.
 })
 export class CategoriesListComponent implements OnInit {
   @Input() categories: Categories[];
+  @Input() shop: boolean = false;
+  @Input() categoryId: string;
+  @Input() subcategoryId: string;
   private _isOpen = false;
 
   constructor() {}
@@ -21,4 +24,5 @@ export class CategoriesListComponent implements OnInit {
   get isOpen(): boolean {
     return this._isOpen;
   }
+
 }

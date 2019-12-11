@@ -1,0 +1,26 @@
+<div class="price">
+  <h4>Filter By Price</h4>
+  <ngx-charts-bar-vertical
+    [view]="[220, 80]"
+    [results]="priceRange"
+    [xAxis]="false"
+    [yAxis]="false"
+    [legend]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [xAxisLabel]="false"
+    [yAxisLabel]="false"
+    [gradient]="false"
+    [barPadding]="1"
+    [roundEdges]="false"
+  >
+  </ngx-charts-bar-vertical>
+  <ng5-slider
+    [value]="minValue"
+    [highValue]="maxValue"
+    [options]="options"
+    (userChangeEnd)="changePrice($event)"
+  ></ng5-slider>
+  <p>{{ prices.min_price | currency }} - {{ prices.max_price | currency }}</p>
+  <p>The average price is {{ prices.avg_price | currency }}.</p>
+</div>

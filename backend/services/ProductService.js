@@ -5,6 +5,7 @@ const {
   noMoreProducts
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
+const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
 const BaseService = require('./BaseService');
 const BidService = require('./BidService');
 
@@ -27,9 +28,9 @@ class ProductService extends BaseService {
     }
   }
 
-  async findProductById(productId, token) {
+  async findProductById(productId, subcategoryId, token) {
     try {
-      const product = await getProductById(productId);
+      const product = await getProductById(productId, subcategoryId);
       const { id } = decodeToken(token) || { id: undefined };
       const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
       return { status: 200, product, bids };
@@ -44,6 +45,26 @@ class ProductService extends BaseService {
       return { status: 200, similarProducts };
     } catch (error) {
       return super.returnResponse(403, { similarProducts: [] });
+    }
+  }
+
+  async getShopProducts(productWhere, filterValueIds) {
+    try {
+      const { products, numberOfProducts, priceRange } = await getFilteredProducts({
+        ...productWhere,
+        offset: productWhere.offSet,
+        filterValueIds,
+        limit: LIMIT_SHOP_PRODUCTS,
+        type: 'Shop'
+      });
+      const noMore = noMoreProducts({
+        limit: LIMIT_SHOP_PRODUCTS,
+        offset: productWhere.offSet,
+        productsLength: numberOfProducts
+      });
+      return { status: 200, products, noMore, priceRange };
+    } catch (error) {
+      return super.returnGenericFailed();
     }
   }
 }

@@ -1,17 +1,17 @@
-"use strict";
-const faker = require("faker");
+'use strict';
+const faker = require('faker');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    const fashionSubcategories = ["Jeans", "Vintage"];
+    const fashionSubcategories = ['Jeans', 'Vintage'];
     const accessoriesSub = ["Women's Accessories"];
-    const jewelrySub = ["Wristwatches"];
-    const shoesSubcategories = ["Sneakers"];
-    const sportwareSubcategories = ["Sweatshirts"];
-    const homeSubcategories = ["Lamps"];
-    const electronicsSubcategories = ["Camera"];
-    const mobileSUbcategories = ["Phones"];
-    const computerSubcategories = ["Laptops"];
+    const jewelrySub = ['Wristwatches'];
+    const shoesSubcategories = ['Sneakers'];
+    const sportwareSubcategories = ['Sweatshirts'];
+    const homeSubcategories = ['Lamps'];
+    const electronicsSubcategories = ['Camera'];
+    const mobileSUbcategories = ['Phones'];
+    const computerSubcategories = ['Laptops'];
     let subcategories = [];
 
     const helperFunction = (arr, CategoriesId) => {
@@ -32,10 +32,10 @@ module.exports = {
     helperFunction(mobileSUbcategories, 8);
     helperFunction(computerSubcategories, 9);
 
-    return queryInterface.bulkInsert("Subcategories", subcategories, {});
+    return queryInterface.bulkInsert('Subcategories', subcategories, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("Subcategories", null, {});
+    return queryInterface.bulkDelete('Subcategories', null, {});
   }
 };

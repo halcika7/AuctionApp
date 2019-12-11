@@ -1,13 +1,21 @@
-<div class="feature-products">
-  <div class="container">
-    <h3>{{ title }}</h3>
+<div class="{{ 'feature-products ' + padding }}">
+  <div [ngClass]="{ container: containerClass }">
+    <h3 *ngIf="title">{{ title }}</h3>
     <p *ngIf="items.length === 0; else prods">No Products...</p>
     <ng-template #prods>
-      <div class="collections">
-        <app-collection-item
-          *ngFor="let item of items"
-          [item]="item"
-        ></app-collection-item>
+      <div class="{{ className + ' collections' }}">
+        <ng-template [ngIf]="!list">
+          <app-collection-item
+            *ngFor="let item of items"
+            [item]="item"
+          ></app-collection-item>
+        </ng-template>
+        <ng-template [ngIf]="list">
+          <app-collection-list-item
+            *ngFor="let item of items"
+            [item]="item"
+          ></app-collection-list-item>
+        </ng-template>
       </div>
     </ng-template>
   </div>

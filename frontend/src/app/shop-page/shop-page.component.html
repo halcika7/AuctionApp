@@ -1,0 +1,51 @@
+<app-breadcrumb
+  title="shop"
+  [other]="[
+    { value: 'shop /', link: '/shop' },
+    { value: breadcrumbSubcategory, link: '' }
+  ]"
+></app-breadcrumb>
+
+<section class="shop-page container">
+  <div class="filters">
+    <app-categories-list
+      [categories]="categories"
+      [categoryId]="categoryId"
+      [subcategoryId]="subcategoryId"
+      [shop]="true"
+    ></app-categories-list>
+    <app-shop-filters
+      [brand]="true"
+      [values]="brands"
+      [brandId]="filterProduct.brandId"
+      (clickFilter)="filterClicked($event)"
+    ></app-shop-filters>
+    <ng-template [ngIf]="showIfKeysLength(prices)">
+      <app-shop-price
+        [prices]="prices"
+        [priceRange]="priceRange"
+        (changeValues)="changePriceValues($event)"
+      ></app-shop-price>
+    </ng-template>
+    <app-shop-filters
+      [filterValueIds]="filterProduct.filterValueIds"
+      [brand]="false"
+      [values]="filters"
+      (clickFilter)="filterClicked($event)"
+    ></app-shop-filters>
+    <button
+      *ngIf="checkShowClearFilters()"
+      type="button"
+      (click)="resetFilterClick()"
+    >
+      Clear Filters
+    </button>
+  </div>
+  <app-shop-navigation
+    [products]="products"
+    [noMore]="noMore"
+    (loadMore)="loadMoreProducts()"
+    (changeOrderBy)="changeOrderBy($event)"
+    [orderby]="filterProduct.orderBy"
+  ></app-shop-navigation>
+</section>

@@ -1,0 +1,80 @@
+@import "mixins";
+@import "variables";
+
+.price {
+  @include padding($all: 15px 20px);
+  @include margin($all: 0 0 20px);
+  background: getColor(white);
+  border: 1px solid getColor(light_gray);
+  max-height: 250px;
+  overflow-y: auto;
+
+  h4 {
+    @include fontMixin(14px, bold, 0.49px, purple, $transform: uppercase);
+    @include margin($all: 0 0 31px);
+  }
+
+  p {
+    @include fontMixin(14px, regular, 0.49px, gray);
+  }
+}
+
+::ng-deep {
+  .price .ng5-slider {
+    @include margin($all: 0);
+    top: -19px;
+
+    .ng5-slider-bar {
+      background: getColor(light_gray);
+      border-radius: 1px;
+      height: 2px;
+    }
+
+    .ng5-slider-selection {
+      background: getColor(purple);
+      border-radius: 1px;
+    }
+
+    .ng5-slider-pointer {
+      @include heightWidth(20px, 20px);
+      background: getColor(white);
+      border: 1px solid getColor(lighter_gray2);
+      box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.03);
+      top: 50%;
+      transform: translateY(-50%);
+      outline: none;
+
+      &:after,
+      &:hover:after {
+        @include heightWidth(12px, 12px);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        background-color: getColor(purple) !important;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .price .ng5-slider .ng5-slider-active:after,
+    .price .ng5-slider .ng5-slider-active:hover:after {
+      @include heightWidth(12px, 12px);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      background-color: getColor(purple) !important;
+      transform: translate(-50%, -50%);
+    }
+
+    .ng5-slider-limit {
+      display: none;
+    }
+
+    .ng5-slider-bubble {
+      @include padding($all: 10px 3px);
+      top: 100%;
+    }
+  }
+  .bar {
+    fill: getColor(lighter_gray2);
+  }
+}

@@ -29,125 +29,105 @@ function filterProducts({
   const endsMaxDays = addSubtractDaysToDate(ENDS_IN_MAX_DAYS);
   const daysAgo = addSubtractDaysToDate(STARTED_DAYS_AGO, false);
   let replacements = null;
-  let query = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
-  let query2 = '';
+  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
+  let numberOfProductsQuery = '';
+  let priceRangeQuery = type === 'Shop' ? buildPriceRangeQuery() : null;
 
   if (type === 'topRated') {
     let q = `,ROUND(AVG(pr.rating), 2) AS avg_rating FROM public."Products" p JOIN public."ProductReviews" pr ON pr."productId"=p.id
-    GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
-    query += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
-    query2 = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
-    return { query, query2 };
+    WHERE p."auctionEnd" > NOW() GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
+    findProductsQuery += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
+    numberOfProductsQuery = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
+    return { findProductsQuery, numberOfProductsQuery };
   }
 
   if (type === 'heroProduct') {
-    query += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
+    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
   } else {
-    query += 'FROM public."Products" p WHERE ';
-    query2 += 'SELECT COUNT(p.id) as number_of_products FROM public."Products" p WHERE ';
+    findProductsQuery += 'FROM public."Products" p WHERE ';
+    numberOfProductsQuery +=
+      'SELECT COUNT(p.id) as number_of_products FROM public."Products" p WHERE ';
   }
 
   if (type === 'featured' || type === 'featuredCollections') {
-    query += 'p."auctionEnd" > NOW() AND p.featured=true ';
-    query2 = '';
+    findProductsQuery += 'p."auctionEnd" > NOW() AND p.featured=true ORDER BY random() ';
+    numberOfProductsQuery = '';
   }
 
   if (type === 'newArrivals') {
     let q = 'p."auctionStart" > :ago AND p."auctionStart" <= :maxDay AND p."auctionEnd" > NOW() ';
-    query += q + 'ORDER BY p."auctionStart" ASC ';
-    query2 += q + ';';
+    findProductsQuery += q + 'ORDER BY p."auctionStart" ASC ';
+    numberOfProductsQuery += q + ';';
     replacements = { ago: daysAgo, maxDay: startsMaxDays };
   }
 
   if (type === 'lastChance') {
     let q = 'p."auctionEnd" > NOW() AND p."auctionEnd" <= :endsMaxDays ';
-    query += q + 'ORDER BY p."auctionEnd" ASC ';
-    query2 += q + ';';
+    findProductsQuery += q + 'ORDER BY p."auctionEnd" ASC ';
+    numberOfProductsQuery += q + ';';
     replacements = { endsMaxDays };
   }
 
   if (type === 'Similar') {
-    query += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} ORDER BY random() `;
+    findProductsQuery += `p."subcategoryId"=${subcategoryId} AND p.id!=${productId} AND p."auctionEnd" > NOW() ORDER BY random() `;
   }
-  let price =
-    type === 'Shop'
-      ? `SELECT CASE
-    when p.price >= 0 and p.price < 100 then '0-100'
-    when p.price >= 100 and p.price < 200 then '100-200'
-    when p.price >= 200 and p.price < 300 then '200-300'
-    when p.price >= 300 and p.price < 400 then '300-400'
-    when p.price >= 400 and p.price < 500 then '400-500'
-    when p.price >= 500 and p.price < 600 then '500-600'
-    when p.price >= 600 and p.price < 700 then '600-700'
-    else '700+' end as price_range, count(1) as count FROM public."Products" p WHERE 
-  `
-      : null;
 
   if (type === 'Shop') {
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
-    if (brandId) {
-      let q = ` p."brandId"=${brandId} AND `;
-      query += q;
-      query2 += q;
-      price += q;
-    }
 
     if (subcategoryId) {
-      let q = ` p."subcategoryId"=${subcategoryId} AND `;
-      query += q;
-      query2 += q;
-      price += q;
+      q += ` AND p."subcategoryId"=${subcategoryId} `;
+    }
+
+    if (brandId) {
+      q += ` AND p."brandId"=${brandId} `;
     }
 
     if (min && max) {
-      let q = ` p.price>=${min} AND p.price<=${max} AND `;
-      query += q;
-      query2 += q;
-      price += q;
+      q += ` AND p.price>=${min} AND p.price<=${max} `;
     }
-
-    query += q;
-    query2 += q;
-    price += q;
     if (filterValueIds.length > 0) {
-      let q = ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
-      query += q;
-      query2 += q;
-      price += q;
+      q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
     }
-    query += `) `;
-    query2 += `);`;
-    price += `) group by price_range order by price_range;`;
+    findProductsQuery += `${q}) `;
+    numberOfProductsQuery += `${q});`;
+    priceRangeQuery += `${q}) group by price_range order by price_range;`;
+
+    if (orderBy) {
+      findProductsQuery +=
+        orderBy == 'Sort by Price Descending'
+          ? ' ORDER BY p.price DESC '
+          : orderBy == 'Sort by Price Ascending'
+          ? ' ORDER BY p.price ASC '
+          : orderBy == 'Sort by Time Left Descending'
+          ? ' ORDER BY p."auctionEnd" DESC '
+          : orderBy == 'Sort by Time Left Ascending'
+          ? ' ORDER BY p."auctionEnd" ASC '
+          : '';
+    } else {
+      findProductsQuery += ' ORDER BY random() ';
+    }
   }
 
-  if (orderBy) {
-    query +=
-      orderBy == 'Sort by Price Descending'
-        ? ' ORDER BY p.price DESC '
-        : orderBy == 'Sort by Price Ascending'
-        ? ' ORDER BY p.price ASC '
-        : orderBy == 'Sort by Time Left Descending'
-        ? ' ORDER BY p."auctionEnd" DESC '
-        : orderBy == 'Sort by Time Ascending'
-        ? ' ORDER BY p."auctionEnd" ASC '
-        : '';
-  }
-  query += `LIMIT ${limit} OFFSET ${offset};`;
+  findProductsQuery += `LIMIT ${limit} OFFSET ${offset};`;
 
-  return { query, query2, replacements, price };
+  return { findProductsQuery, numberOfProductsQuery, replacements, priceRangeQuery };
 }
 
 exports.getFilteredProducts = async obj => {
-  let { query, query2, replacements, price } = filterProducts(obj);
-  const products = await db.query(query, {
+  let { findProductsQuery, numberOfProductsQuery, replacements, priceRangeQuery } = filterProducts(
+    obj
+  );
+  const products = await db.query(findProductsQuery, {
     replacements,
     type: db.QueryTypes.SELECT
   });
-  const numberOfProducts = query2
-    ? await db.query(query2, { replacements, type: db.QueryTypes.SELECT })
+  const numberOfProducts = numberOfProductsQuery
+    ? await db.query(numberOfProductsQuery, { replacements, type: db.QueryTypes.SELECT })
     : [{ number_of_products: 10 }];
-  const priceRange = price && (await db.query(price, { type: db.QueryTypes.SELECT }));
+  const priceRange =
+    priceRangeQuery && (await db.query(priceRangeQuery, { type: db.QueryTypes.SELECT }));
   return {
     products,
     numberOfProducts: numberOfProducts[0].number_of_products,
@@ -155,9 +135,9 @@ exports.getFilteredProducts = async obj => {
   };
 };
 
-exports.getProductById = async id => {
+exports.getProductById = async (id, subcategoryId) => {
   return await Product.findOne({
-    where: { id, auctionEnd: { [Op.gt]: new Date() } },
+    where: { id, subcategoryId, auctionEnd: { [Op.gt]: new Date() } },
     attributes: {
       include: [
         [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
@@ -174,13 +154,13 @@ exports.getProductById = async id => {
 };
 
 exports.getSimilarProducts = async (subcategoryId, productId) => {
-  let { query } = filterProducts({
+  let { findProductsQuery } = filterProducts({
     limit: LIMIT_SIMILAR_PRODUCTS,
     type: 'Similar',
     subcategoryId,
     productId
   });
-  return await db.query(query, { type: db.QueryTypes.SELECT });
+  return await db.query(findProductsQuery, { type: db.QueryTypes.SELECT });
 };
 
 exports.getAuctionEndProduct = async id => {
@@ -198,3 +178,13 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
   const eq = isNaN(Limit + Offset) ? Limit : Limit + Offset;
   return length === 0 || length < Limit || length <= eq ? true : false;
 };
+
+function buildPriceRangeQuery() {
+  let query = 'SELECT CASE';
+  for (let i = 0; i < 900; i += 50) {
+    query += ` when p.price>=${i} and p.price < ${i + 50} then '${i}-${i + 50}'`;
+  }
+  return (
+    query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
+  );
+}

@@ -1,9 +1,8 @@
-const Sequelize = require("sequelize");
-const { db } = require("../config/database");
-const User = require("./User");
+const Sequelize = require('sequelize');
+const { db } = require('../config/database');
 
 const Bid = db.define(
-  "Bid",
+  'Bid',
   {
     id: {
       type: Sequelize.BIGINT,
@@ -19,18 +18,18 @@ const Bid = db.define(
       allowNull: false,
       references: {
         model: {
-          tableName: "Products"
+          tableName: 'Products'
         },
-        key: "id"
+        key: 'id'
       }
     },
     userId: {
       type: Sequelize.BIGINT,
       references: {
         model: {
-          tableName: "Users"
+          tableName: 'Users'
         },
-        key: "id"
+        key: 'id'
       }
     },
     dateBid: {
@@ -40,10 +39,14 @@ const Bid = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: "Bids"
+    modelName: 'Bids',
+    indexes: [
+      {
+        unique: false,
+        fields: ['productId']
+      }
+    ]
   }
 );
-
-Bid.belongsTo(User, { foreignKey: "userId", sourceKey: "id" });
 
 module.exports = Bid;

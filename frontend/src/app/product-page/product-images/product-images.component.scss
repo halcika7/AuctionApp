@@ -1,0 +1,52 @@
+@import "mixins";
+@import "variables";
+
+.pictures {
+  @include grid(4, $areas: "a a a a" "b b b b");
+  width: 470px;
+}
+
+.big-picture {
+  @include flex(center, center);
+  grid-area: a;
+  min-height: 470px;
+  max-height: 470px;
+
+  > img {
+    @include heightWidth(100%, 100%);
+    object-fit: scale-down;
+    max-height: 470px;
+  }
+}
+
+.pictures {
+  > .pagination {
+    @include grid(4, 10px);
+    grid-area: b;
+    margin-top: 10px;
+
+    > .img {
+      @include heightWidth(110px, 100%);
+      @include padding($all: 5px);
+      box-sizing: border-box;
+      border: 2px solid transparent;
+
+      &.active {
+        border: 2px solid getColor(purple);
+      }
+
+      img {
+        @include heightWidth(100%, 100%);
+        object-fit: scale-down;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media (max-width: 999px) {
+  .pictures,
+  .big-picture > img {
+    width: 100%;
+  }
+}

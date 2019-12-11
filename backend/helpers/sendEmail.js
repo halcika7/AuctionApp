@@ -1,4 +1,4 @@
-const { SEND_GRID } = require('../config/configs');
+const { SEND_GRID, URL } = require('../config/configs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
@@ -14,7 +14,8 @@ exports.sendEmail = async (email, token, text) => {
       subject: 'Reset password',
       html: pug.renderFile(reqPath + 'emails/forgotPassword.pug', {
         text,
-        token
+        token,
+        URL
       })
     });
     return { err: null };

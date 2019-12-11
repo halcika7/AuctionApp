@@ -3,6 +3,7 @@ import * as CategoriesPageActions from "@app/containers/all-categories/store/all
 export interface Category {
   id: string;
   name: string;
+  number_of_products?: string;
 }
 
 export interface Categories extends Category {

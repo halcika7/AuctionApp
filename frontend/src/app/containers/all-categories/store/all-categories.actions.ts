@@ -7,6 +7,7 @@ export const ALL_CATEGORIES_FAILED = "ALL_CATEGORIES_FAILED";
 
 export class CategoriesStart implements Action {
   readonly type = ALL_CATEGORIES_START;
+  constructor(public url: string = "/categories/") {}
 }
 
 export class CategoriesSuccess implements Action {
