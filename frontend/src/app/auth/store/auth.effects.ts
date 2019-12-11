@@ -15,6 +15,7 @@ export class AuthEffects {
         .post<any>("/auth/register", {
           email: registerData.payload.email,
           password: registerData.payload.password,
+          confirmPassword: registerData.payload.confirmPassword,
           firstName: registerData.payload.firstName,
           lastName: registerData.payload.lastName
         })

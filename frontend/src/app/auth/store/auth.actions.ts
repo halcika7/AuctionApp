@@ -30,6 +30,7 @@ export class RegisterStart implements Action {
       lastName: string;
       email: string;
       password: string;
+      confirmPassword: string;
     }
   ) {}
 }
