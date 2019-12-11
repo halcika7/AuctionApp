@@ -21,7 +21,7 @@ export class ShopFiltersComponent implements OnInit {
     return this.filterValueIds.findIndex(Id => Id === id) !== -1 ? true : false;
   }
 
-  filterClicked(brand, id, filterValueId) {
+  filterClicked(brand, id, filterValueId = null) {
     if (brand) {
       this.clickFilter.emit({ brand, id });
     } else {
