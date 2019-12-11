@@ -2,11 +2,23 @@
   <label for="{{ id }}">{{ title }}</label>
   <div class="input">
     <input
-      type="{{ type }}"
-      id="{{ id }}"
-      placeholder="{{ placeholder }}"
-      formControlName="{{ controlName }}"
-    />
+        *ngIf="minLength && maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        [maxlength]="maxLength"
+        [minlength]="minLength"
+        autocomplete="{something}"
+      />
+      <input
+        *ngIf="!minLength && !maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        autocomplete="{something}"
+      />
     <span *ngIf="input.invalid && input.touched && showErrors">
       <span *ngIf="input.errors['required']">{{ title }} is required</span>
       <span *ngIf="input.errors['minlength']"
