@@ -34,31 +34,49 @@
     <a [routerLink]="['/home']">Auction</a>
   </div>
   <div class="search">
-    <!-- <input type="search" placeholder="Search" />
-    <fa-icon [icon]="['fas', 'search']"></fa-icon> -->
+    <div class="search-wrapper">
+      <input
+        #searchInput
+        type="search"
+        placeholder="Try enter: Shoes"
+        (search)="onSearch($event, searchInput)"
+      />
+      <fa-icon
+        [icon]="['fas', 'search']"
+        (click)="onSearch($event, searchInput)"
+      ></fa-icon>
+    </div>
   </div>
   <div class="nav-links">
     <a [routerLink]="['/home']" routerLinkActive="active">home</a>
     <a [routerLink]="['/shop']" routerLinkActive="active">shop</a>
     <span appDropdown *ngIf="isAuthenticated">
       <a [routerLink]="['/account']" routerLinkActive="active">my account</a>
-      <!-- <ul class="dropdown">
+      <ul class="dropdown">
         <li>
-          <a href=""><span>Profile</span></a>
+          <a [routerLink]="['/account/profile']" routerLinkActive="active"
+            ><span>Profile</span></a
+          >
         </li>
-        <li>
+        <!-- <li>
           <a href="" class="active"><span>Become Seller</span></a>
+        </li> -->
+        <li>
+          <a [routerLink]="['/account/bids']" routerLinkActive="active"
+            ><span>Your Bids</span></a
+          >
         </li>
         <li>
-          <a href=""><span>Your Bids</span></a>
+          <a [routerLink]="['/account/wishlist']" routerLinkActive="active"
+            ><span>Wishlist</span></a
+          >
         </li>
         <li>
-          <a href=""><span>Wishlist</span></a>
+          <a [routerLink]="['/account/settings']" routerLinkActive="active"
+            ><span>Settings</span></a
+          >
         </li>
-        <li>
-          <a href=""><span>Settings</span></a>
-        </li>
-      </ul> -->
+      </ul>
     </span>
   </div>
 </nav>

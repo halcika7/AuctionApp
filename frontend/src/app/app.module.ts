@@ -78,6 +78,7 @@ import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-naviga
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
+import { SearchComponent } from './shop-page/search/search.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import { ResetPasswordComponent } from "./auth/reset-password/reset-password.com
     ShopFiltersComponent,
     ShopNavigationComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

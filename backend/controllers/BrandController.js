@@ -7,11 +7,12 @@ class BrandController extends BaseController {
   }
 
   async getShopBrands(req, res) {
-    const { min, max, subcategoryId } = { ...JSON.parse(req.query.filters) };
+    const { min, max, subcategoryId, name } = { ...JSON.parse(req.query.filters) };
     const { status, Brands, failedMessage } = await BrandServiceInstance.getSubcategoryBrands({
       min,
       max,
-      subcategoryId
+      subcategoryId,
+      name
     });
     return super.sendResponseWithMessage(res, status, { Brands }, failedMessage);
   }

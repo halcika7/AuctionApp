@@ -31,7 +31,9 @@
         [ngClass]="{ active: subcategoryId === subcategory.id }"
         *ngFor="let subcategory of category.Subcategories"
       >
-        <a [routerLink]="['/shop', category.id, subcategory.id]"
+        <a
+          [routerLink]="['/shop', category.id, subcategory.id]"
+          queryParamsHandling="merge"
           >{{ subcategory.name }} ({{ subcategory.number_of_products }})</a
         >
       </li>

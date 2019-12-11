@@ -2,7 +2,7 @@ const BaseService = require('./BaseService');
 const Subcategory = require('../models/Subcategory');
 const Product = require('../models/Product');
 const Brand = require('../models/Brand');
-const { db } = require('../config/database');
+const { db, Op } = require('../config/database');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
 const { returnWhereObject } = require('../helpers/returnWhereObject');
 
@@ -14,6 +14,11 @@ class BrandService extends BaseService {
   async getSubcategoryBrands(reqQueryData) {
     try {
       const where = returnWhereObject(reqQueryData, true);
+      if (reqQueryData.name) {
+        where[Op.and] = db.where(db.fn('lower', db.col('Products.name')), {
+          [Op.like]: `%${reqQueryData.name}%`
+        });
+      }
       const subId = { ...removeNullProperty({ id: reqQueryData.subcategoryId }) };
       const Brands = await Brand.findAll({
         include: [

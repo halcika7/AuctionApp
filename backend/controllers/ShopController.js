@@ -7,10 +7,11 @@ class ShopController extends BaseController {
   }
 
   async getPrices(req, res) {
-    const { subcategoryId, brandId } = { ...JSON.parse(req.query.filters) };
+    const { subcategoryId, brandId, name } = { ...JSON.parse(req.query.filters) };
     const { status, prices, failedMessage } = await ShopServiceInstance.getPrices({
       subcategoryId,
-      brandId
+      brandId,
+      name
     });
     return super.sendResponseWithMessage(res, status, { prices }, failedMessage);
   }
