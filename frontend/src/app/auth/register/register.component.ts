@@ -10,7 +10,7 @@ import {
   NAME_VALIDATOR,
   PASSWORD_VALIDATOR,
   EMAIL_VALIDATOR
-} from "../validators";
+} from "../../shared/validators";
 
 @Component({
   selector: "app-register",

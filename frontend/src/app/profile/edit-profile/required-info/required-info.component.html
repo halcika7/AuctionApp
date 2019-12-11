@@ -1,0 +1,78 @@
+<div class="required">
+  <div class="heading">
+    <h3>Required</h3>
+  </div>
+  <div class="two-cols">
+    <div class="picture" *ngIf="photo">
+      <app-upload-photo
+        [imgUrl]="photo"
+        [parentForm]="form"
+        controlName="image"
+      ></app-upload-photo>
+    </div>
+    <div class="inputs">
+      <app-input
+        id="firstName"
+        title="First name"
+        placeholder="Enter first name"
+        type="text"
+        controlName="firstName"
+        [parentForm]="form"
+        [input]="form.get('firstName')"
+        profile="true"
+        [showErrors]="true"
+      ></app-input>
+      <app-input
+        id="lastName"
+        title="Last name"
+        placeholder="Enter last name"
+        type="text"
+        controlName="lastName"
+        [parentForm]="form"
+        [input]="form.get('lastName')"
+        profile="true"
+        [showErrors]="true"
+      ></app-input>
+      <app-select-input
+        *ngIf="gender"
+        [default]="gender || 'Select Gender'"
+        [values]="['Male', 'Female', 'Other']"
+        label="I am"
+        (valueChange)="genderChange($event)"
+        [error]="genderError"
+        [invalid]="genderError"
+      ></app-select-input>
+      <ng-template [ngIf]="showDateOfBirth()">
+        <app-date-input
+          withDays="true"
+          label="Date of birth"
+          [defaultDate]="date"
+          [error]="dateError"
+        ></app-date-input>
+      </ng-template>
+      <app-input
+        id="phoneNumber"
+        title="Phone number"
+        placeholder="Enter phone number"
+        type="tel"
+        controlName="phoneNumber"
+        [parentForm]="form"
+        [input]="form.get('phoneNumber')"
+        profile="true"
+        [showErrors]="true"
+      ></app-input>
+      <app-input
+        id="email"
+        title="Email"
+        placeholder="Enter email"
+        type="email"
+        controlName="email"
+        [parentForm]="form"
+        [input]="form.get('email')"
+        pattern="Please enter valid email address !!"
+        profile="true"
+        [showErrors]="true"
+      ></app-input>
+    </div>
+  </div>
+</div>

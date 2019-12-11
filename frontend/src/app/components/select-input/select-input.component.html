@@ -1,0 +1,21 @@
+<div class="select-wrapper" [ngClass]="{invalid: invalid}">
+  <label *ngIf="label">{{ label }}</label>
+  <div class="select">
+    <p appDropdown >{{ selectedValue || default }}</p>
+    <ul *ngIf="values.length > 0" type="select">
+      <li
+        *ngFor="let value of values"
+        (click)="changeSelectedValue(value)"
+        [ngClass]="{ active: value === selectedValue }"
+      >
+        {{ value }}
+      </li>
+    </ul>
+    <ul *ngIf="values.length === 0">
+      <li>
+        {{ liWhenValuesLength0 }}
+      </li>
+    </ul>
+  </div>
+  <p *ngIf="error">{{ error }}</p>
+</div>

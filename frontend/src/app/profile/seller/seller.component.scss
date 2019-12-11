@@ -1,0 +1,29 @@
+@import "mixins";
+@import "variables";
+
+.seller {
+  @include margin(46px, 200px);
+  .nav {
+    @include flex(center);
+    @include margin($all: 0);
+    @include padding($all: 0);
+
+    li {
+      p {
+        @include fontMixin(18px, bold, 0.63px, light_black);
+        @include flex(center, center);
+        @include heightWidth(48px, 111px);
+        margin: 0;
+        background: getColor(darker_white2);
+        border: 1px solid getColor(light_gray);
+        cursor: pointer;
+
+        &.active {
+          @include fontMixin(18px, bold, 0.63px, white);
+          background: getColor(purple);
+          border: 1px solid getColor(purple);
+        }
+      }
+    }
+  }
+}

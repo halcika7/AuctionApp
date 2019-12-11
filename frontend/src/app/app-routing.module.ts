@@ -13,8 +13,15 @@ import { ProductPageComponent } from "./product-page/product-page.component";
 import { ShopPageComponent } from "./shop-page/shop-page.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
+import { ProfileComponent } from "./profile/profile.component";
+import { ProfileSettingsComponent } from "./profile/profile-settings/profile-settings.component";
+import { EditProfileComponent } from "./profile/edit-profile/edit-profile.component";
+import { SellerComponent } from "./profile/seller/seller.component";
+import { WishlistComponent } from "./profile/wishlist/wishlist.component";
+import { BidsComponent } from "./profile/bids/bids.component";
 
 import { LoginGuard } from "./auth/login.guard";
+import { AuthGuard } from "./auth/auth.guard";
 
 const appRoutes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -62,6 +69,30 @@ const appRoutes: Routes = [
       { path: "privacy", component: PrivacyComponent },
       { path: "terms", component: ConditionsComponent },
       { path: "products/:subcategoryId/:id", component: ProductPageComponent }
+    ]
+  },
+  {
+    path: "account",
+    component: ProfileComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: "profile",
+        component: EditProfileComponent,
+        canActivate: [AuthGuard]
+      },
+      { path: "seller", component: SellerComponent, canActivate: [AuthGuard] },
+      { path: "bids", component: BidsComponent, canActivate: [AuthGuard] },
+      {
+        path: "wishlist",
+        component: WishlistComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: "settings",
+        component: ProfileSettingsComponent,
+        canActivate: [AuthGuard]
+      }
     ]
   },
   { path: "404", component: NotFoundComponent },

@@ -1,0 +1,90 @@
+@import "mixins";
+@import "variables";
+
+::ng-deep {
+  .profile-form {
+    @include flex($direction: column);
+    margin-bottom: 200px;
+    box-sizing: border-box;
+
+    > div,
+    app-required-info,
+    app-optional-info,
+    app-card-info {
+      background: getColor(white);
+      border: 1px solid getColor(light_gray);
+      @include margin($all: 0 0 39px 0);
+
+      .two-cols {
+        @include padding($all: 36px 41px 63px 41px);
+      }
+
+      .one-col {
+        max-width: 600px;
+        margin: 0 auto;
+
+        @media (max-width: 820px) {
+          @include padding($all: 36px 41px 63px 41px);
+          margin: 0;
+          max-width: 100%;
+        }
+      }
+
+      .heading {
+        @include flex(center);
+        @include padding($left: 32.5px);
+        background: getColor(darker_white2);
+        height: 50px;
+        box-sizing: border-box;
+        margin: 0.3px;
+
+        > h3 {
+          @include margin($all: 0);
+          @include fontMixin(
+            20px,
+            bold,
+            0.7px,
+            light_black,
+            $transform: uppercase
+          );
+        }
+      }
+    }
+  }
+  .two-cols,
+  .one-col {
+    .inputs {
+      width: 100%;
+    }
+  }
+
+  .optional,
+  .card {
+    .one-col {
+      @include padding($all: 36px, 0 63px);
+      h4 {
+        @include fontMixin(28px, regular, 0.98px, light_black);
+        @include margin($all: 0px 0 19px);
+      }
+
+      .inputs {
+        .two-cols {
+          @include flex(center, space-between);
+          padding: 0;
+
+          app-input {
+            width: 49%;
+          }
+
+          @media (max-width: 550px) {
+            flex-wrap: wrap;
+
+            app-input {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

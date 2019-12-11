@@ -1,0 +1,47 @@
+@import "mixins";
+@import "variables";
+
+label {
+  @include margin($all: 0 0 8px 0);
+  @include fontMixin(18px, light, 0.63px, light_black);
+  display: block;
+}
+.date-wrapper {
+  margin-top: 19px;
+
+  > p {
+    @include fontMixin(14px, light, $color: red);
+    @include margin($all: 5px 0 0);
+    display: block;
+  }
+
+  .inputs {
+    @include flex();
+
+    @media (max-width: 580px) {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+app-select-input{
+  margin-right: 20px;
+}
+
+app-select-input:last-child {
+  margin-right: 0px;
+}
+
+::ng-deep {
+  .date-wrapper .select-wrapper {
+    @include margin($all: 0 !important);
+  }
+
+  .date-wrapper .select-wrapper > .select {
+    width: 137px !important;
+
+    @media (max-width: 580px) {
+      margin-bottom: 8px;
+    }
+  }
+}

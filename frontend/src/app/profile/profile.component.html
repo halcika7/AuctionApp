@@ -1,0 +1,45 @@
+<app-breadcrumb
+  [title]="'profile'"
+  [other]="[
+    { value: 'my account /', link: '/account/profile' },
+    { value: lastBreadcrumbLink, link: '' }
+  ]"
+></app-breadcrumb>
+
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  [type]="success"
+  [closable]="true"
+  (closeAlert)="clearMessages()"
+></app-alert>
+
+<ul class="profile-nav container">
+  <li>
+    <a [routerLink]="['/account/profile']" routerLinkActive="active"
+      ><fa-icon [icon]="['fas', 'user-alt']"></fa-icon>profile</a
+    >
+  </li>
+  <li>
+    <a [routerLink]="['/account/seller']" routerLinkActive="active"
+      ><fa-icon [icon]="['fas', 'th-list']"></fa-icon>seller</a
+    >
+  </li>
+  <li>
+    <a [routerLink]="['/account/bids']" routerLinkActive="active"
+      ><fa-icon [icon]="['fas', 'gavel']"></fa-icon>bids</a
+    >
+  </li>
+  <li>
+    <a [routerLink]="['/account/wishlist']" routerLinkActive="active"
+      ><fa-icon [icon]="['fas', 'heart']"></fa-icon>wishlist</a
+    >
+  </li>
+  <li>
+    <a [routerLink]="['/account/settings']" routerLinkActive="active"
+      ><fa-icon [icon]="['fas', 'cog']"></fa-icon>settings</a
+    >
+  </li>
+</ul>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,46 @@
+<section class="container settings">
+  <div class="setting-item">
+    <h3>Policy and Community</h3>
+    <div class="info">
+      <p>
+        Receive updates on bids and seller's offers. Stay informed through:
+      </p>
+      <div class="checkboxes">
+        <label>
+          <span>Email</span>
+          <input type="checkbox" name="" id="" />
+          <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        </label>
+        <label>
+          <span>Push Notifications</span>
+          <input type="checkbox" name="" id="" />
+          <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        </label>
+        <label>
+          <span>Text Messages</span>
+          <input type="checkbox" name="" id="" />
+          <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="setting-item">
+    <h3>Contact Information</h3>
+    <div class="info">
+      <p>This information can be edited on your profile.</p>
+      <p class="email-phone">
+        Email <span>{{ email }}</span>
+      </p>
+      <p class="email-phone">
+        Phone <span>{{ phone || 'Phone number not provided' }}</span>
+      </p>
+    </div>
+  </div>
+  <div class="setting-item">
+    <h3>Account</h3>
+    <div class="info">
+      <p>Do you want to deactivate account?</p>
+      <button type="button" (click)="deactivateAccount()">deactivate</button>
+    </div>
+  </div>
+</section>

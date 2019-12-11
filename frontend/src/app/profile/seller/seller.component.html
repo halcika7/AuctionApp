@@ -1,0 +1,29 @@
+<section class="container seller">
+  <ul class="nav">
+    <li>
+      <p
+        [ngClass]="{ active: activeNav === 'active' }"
+        (click)="onChangeNav('active')"
+      >
+        Active
+      </p>
+    </li>
+    <li>
+      <p
+        [ngClass]="{ active: activeNav === 'sold' }"
+        (click)="onChangeNav('sold')"
+      >
+        Sold
+      </p>
+    </li>
+  </ul>
+  <app-table [values]="products" type='products'></app-table>
+  <button
+    type="button"
+    class="primary-button left-right-margin-auto mt-40"
+    *ngIf="!noMore && products.length > 0"
+    (click)="loadMore($event)"
+  >
+    Load More
+  </button>
+</section>

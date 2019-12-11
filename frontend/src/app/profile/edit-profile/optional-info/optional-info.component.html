@@ -1,0 +1,62 @@
+<div class="optional">
+  <div class="heading">
+    <h3>Optional</h3>
+  </div>
+  <div class="one-col">
+    <h4>Address</h4>
+    <div class="inputs">
+      <app-input
+        id="street"
+        title="Street"
+        placeholder="Enter street"
+        type="text"
+        controlName="street"
+        [parentForm]="form"
+        [input]="form.get('street')"
+        profile="true"
+      ></app-input>
+      <div class="two-cols">
+        <app-input
+          id="city"
+          title="City"
+          placeholder="Enter city"
+          type="text"
+          controlName="city"
+          [parentForm]="form"
+          [input]="form.get('city')"
+          profile="true"
+        ></app-input>
+        <app-input
+          id="zip"
+          title="Zip code"
+          placeholder="Enter zip code"
+          type="text"
+          controlName="zip"
+          [parentForm]="form"
+          [input]="form.get('zip')"
+          profile="true"
+        ></app-input>
+      </div>
+      <app-input
+        id="state"
+        title="State"
+        placeholder="Enter state"
+        type="text"
+        controlName="state"
+        [parentForm]="form"
+        [input]="form.get('state')"
+        profile="true"
+      ></app-input>
+      <app-input
+        id="country"
+        title="Country"
+        placeholder="Enter country"
+        type="text"
+        controlName="country"
+        [parentForm]="form"
+        [input]="form.get('country')"
+        profile="true"
+      ></app-input>
+    </div>
+  </div>
+</div>

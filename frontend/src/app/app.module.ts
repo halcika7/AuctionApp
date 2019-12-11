@@ -39,6 +39,7 @@ import { LandingPageEffects } from "./landing-page/store/landing-page.effects";
 import { CategoriesPageEffects } from "./containers/all-categories/store/all-categories.effects";
 import { ProductPageEffects } from "./product-page/store/product-page.effects";
 import { ShopPageEffects } from "./shop-page/store/shop-page.effects";
+import { ProfileEffects } from "./profile/store/profile.effects";
 
 // Font Awesome Icons
 import {
@@ -60,7 +61,9 @@ import {
   faHeart,
   faGavel,
   faThList,
-  faTh
+  faTh,
+  faUserAlt,
+  faCog
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -78,7 +81,19 @@ import { ShopNavigationComponent } from "./shop-page/shop-navigation/shop-naviga
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
-import { SearchComponent } from './shop-page/search/search.component';
+import { ProfileComponent } from './profile/profile.component';
+import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
+import { ProfileSettingsComponent } from './profile/profile-settings/profile-settings.component';
+import { DateInputComponent } from './profile/edit-profile/date-input/date-input.component';
+import { SelectInputComponent } from './components/select-input/select-input.component';
+import { UploadPhotoComponent } from './profile/edit-profile/upload-photo/upload-photo.component';
+import { SellerComponent } from './profile/seller/seller.component';
+import { BidsComponent } from './profile/bids/bids.component';
+import { WishlistComponent } from './profile/wishlist/wishlist.component';
+import { TableComponent } from './components/table/table.component';
+import { RequiredInfoComponent } from './profile/edit-profile/required-info/required-info.component';
+import { OptionalInfoComponent } from './profile/edit-profile/optional-info/optional-info.component';
+import { CardInfoComponent } from './profile/edit-profile/card-info/card-info.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +130,19 @@ import { SearchComponent } from './shop-page/search/search.component';
     ShopNavigationComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SearchComponent
+    ProfileComponent,
+    EditProfileComponent,
+    ProfileSettingsComponent,
+    DateInputComponent,
+    SelectInputComponent,
+    UploadPhotoComponent,
+    SellerComponent,
+    BidsComponent,
+    WishlistComponent,
+    TableComponent,
+    RequiredInfoComponent,
+    OptionalInfoComponent,
+    CardInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -129,7 +156,8 @@ import { SearchComponent } from './shop-page/search/search.component';
       LandingPageEffects,
       CategoriesPageEffects,
       ProductPageEffects,
-      ShopPageEffects
+      ShopPageEffects,
+      ProfileEffects
     ]),
     FontAwesomeModule,
     Ng5SliderModule,
@@ -160,7 +188,9 @@ export class AppModule {
       faHeart,
       faGavel,
       faTh,
-      faThList
+      faThList,
+      faUserAlt,
+      faCog
     );
   }
 }
