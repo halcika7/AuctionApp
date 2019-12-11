@@ -61,7 +61,7 @@
   .optional,
   .card {
     .one-col {
-      @include padding($all: 36px, 0 63px);
+      @include padding($all: 36px 0 63px);
       h4 {
         @include fontMixin(28px, regular, 0.98px, light_black);
         @include margin($all: 0px 0 19px);

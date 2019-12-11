@@ -23,5 +23,7 @@ module.exports = {
   CLOUDINARY_KEY: process.env.CLOUDINARY_KEY,
   CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
   TWILIO_SID: process.env.TWILIO_SID,
-  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN
+  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+  STRIPE_KEY: process.env.STRIPE_KEY,
+  GOOGLE_MAPS_KEY: process.env.GOOGLE_MAPS_KEY
 };

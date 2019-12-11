@@ -6,7 +6,8 @@ const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
 const { userInfoValidation, optionalInfoValidation } = require('../validations/updateUsersProfile');
 const { getUserInfo } = require('../helpers/authHelper');
-const stripe = require('stripe')('sk_test_B4Tn8un5MCv2LSkhlJ2ls4Qk');
+const { STRIPE_KEY } = require('../config/configs');
+const stripe = require('stripe')(STRIPE_KEY);
 
 class ProfileService extends BaseService {
   constructor() {

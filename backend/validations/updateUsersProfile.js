@@ -6,6 +6,7 @@ const addressValidator = require('address-validator');
 const OptionalInfo = require('../models/OptionalInfo');
 const Address = addressValidator.Address;
 const { removeNullProperty } = require('../helpers/removeNullProperty');
+const {GOOGLE_MAPS_KEY} = require('../config/configs');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -73,7 +74,7 @@ exports.optionalInfoValidation = async (optionalInfo, userOptionalInfo, optional
       });
   console.log('TCL: exports.optionalInfoValidation -> optionalInfo', optionalInfo);
 
-  addressValidator.setOptions({ key: 'AIzaSyC_QxC3TKyIztA007dIVlW--13LoJZTjRM' });
+  addressValidator.setOptions({ key: GOOGLE_MAPS_KEY });
 
   const address = new Address({
     ...optionalInfo

@@ -27,6 +27,7 @@ app.use('/api/categories', require('./backend/routes/categories/categories'));
 app.use('/api/products', require('./backend/routes/product/product'));
 app.use('/api/bids', require('./backend/routes/bid/bid'));
 app.use('/api/shop', require('./backend/routes/shop/shop'));
+app.use('/api/profile', require('./backend/routes/profile/profile'));
 
 // static assets for production
 if (process.env.NODE_ENV === 'production') {
