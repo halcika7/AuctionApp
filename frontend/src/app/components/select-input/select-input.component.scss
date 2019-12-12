@@ -42,30 +42,33 @@
       &:after,
       &:before {
         content: "";
-        @include heightWidth(4px, 12px);
+        @include heightWidth(5px, 12px);
         position: absolute;
         background: getColor(light_black);
+        top: 50%;
       }
 
       &:after {
-        right: 26px;
-        transform: rotate(45deg);
+        right: 27px;
+        transform: rotate(45deg) translateY(-50%);
         transition: all 0.3s ease-in-out;
       }
 
       &:before {
-        right: 20px;
-        transform: rotate(-45deg);
+        right: 18px;
+        transform: rotate(-45deg) translateY(-50%);
         transition: all 0.3s ease-in-out;
       }
 
       &.open {
         &:after {
-          transform: rotate(-45deg);
+          right: 30px;
+          transform: rotate(-45deg) translate(50%);
         }
 
         &:before {
-          transform: rotate(45deg);
+          right: 16px;
+          transform: rotate(45deg) translate(-50%);
         }
 
         ~ ul {
@@ -79,7 +82,7 @@
       @include padding($all: 10px 0);
       display: none;
       background: getColor(darker_white);
-      border: 1px solid getColor(lighr_gray);
+      border: 1px solid getColor(light_gray);
       border-top: 0px;
       max-height: 150px;
       overflow-y: auto;

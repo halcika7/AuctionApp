@@ -39,7 +39,7 @@ import { EditProfileComponent } from './profile/edit-profile/edit-profile.compon
 import { ProfileSettingsComponent } from './profile/profile-settings/profile-settings.component';
 import { DateInputComponent } from './profile/edit-profile/date-input/date-input.component';
 import { SelectInputComponent } from './components/select-input/select-input.component';
-import { UploadPhotoComponent } from './profile/edit-profile/upload-photo/upload-photo.component';
+import { UploadPhotoComponent } from './profile/edit-profile/required-info/upload-photo/upload-photo.component';
 import { SellerComponent } from './profile/seller/seller.component';
 import { BidsComponent } from './profile/bids/bids.component';
 import { WishlistComponent } from './profile/wishlist/wishlist.component';

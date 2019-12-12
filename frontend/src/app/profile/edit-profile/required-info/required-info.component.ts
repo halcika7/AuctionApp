@@ -22,8 +22,8 @@ export class RequiredInfoComponent implements OnInit {
 
   ngOnInit() {
     this.store.select("profile").subscribe(({ userInfo, errors }) => {
+      this._photo = userInfo.photo;
       if (!emptyObject(userInfo)) {
-        this._photo = userInfo.photo;
         this.form.patchValue({
           firstName: !errors.firstName
             ? userInfo.firstName
@@ -35,7 +35,7 @@ export class RequiredInfoComponent implements OnInit {
             ? userInfo.phoneNumber
             : this.form.value.phoneNumber,
           email: !errors.email ? userInfo.email : this.form.value.email,
-          image: null
+          image: !errors.image ? this.form.value.image : null
         });
       }
       if (!emptyObject(errors)) {
