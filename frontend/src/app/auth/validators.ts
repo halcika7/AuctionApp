@@ -1,19 +1,24 @@
-import { FormControl, Validators } from "@angular/forms";
+import { FormControl, Validators, FormGroup } from "@angular/forms";
 
-export const PASSWORD_VALIDATOR = (basic = false) => {
+export const PASSWORD_VALIDATOR = (
+  basic = false,
+  name: string = "password"
+) => {
   return !basic
     ? {
-        password: new FormControl("", [
+        [name]: new FormControl("", [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(30),
           Validators.pattern(
-            new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})")
+            new RegExp(
+              "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})"
+            )
           )
         ])
       }
     : {
-        password: new FormControl("", [Validators.required])
+        [name]: new FormControl("", [Validators.required])
       };
 };
 
@@ -44,4 +49,19 @@ export const NAME_VALIDATOR = (name: string) => {
       Validators.maxLength(100)
     ])
   };
+};
+
+export const setErrors = (
+  errors: any,
+  objectProperty: string,
+  form: FormGroup,
+  message = false
+) => {
+  if (errors[objectProperty] && !message) {
+    form.controls[objectProperty].setErrors({ async: errors[objectProperty] });
+    form.controls[objectProperty].markAsTouched();
+  } else {
+    form.controls[objectProperty].setErrors({});
+    form.controls[objectProperty].setValue(form.controls[objectProperty].value);
+  }
 };

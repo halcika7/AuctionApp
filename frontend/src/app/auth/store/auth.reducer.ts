@@ -7,6 +7,7 @@ export interface State {
     lastName: string;
     email: string;
     password: string;
+    confirmPassword: string;
   };
   message: string;
   success: boolean;
@@ -21,6 +22,7 @@ const initialState: State = {
   errors: {
     email: "",
     password: "",
+    confirmPassword: "",
     firstName: "",
     lastName: ""
   },

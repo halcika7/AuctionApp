@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
+import { setErrors } from './validators';
 
 export class Auth {
   private _message: string;
@@ -36,49 +37,17 @@ export class Auth {
           }
 
           if (this.form.controls.email) {
-            if (errors.email && !message) {
-              this.form.controls.email.setErrors({ async: errors.email });
-              this.form.controls.email.markAsTouched();
-            } else {
-              this.form.controls.email.setErrors({});
-              this.form.controls.email.setValue(this.form.controls.email.value);
-            }
+            setErrors(errors, 'email', this.form, message);
           }
 
           if (this.form.controls.password) {
-            if (errors.password && !message) {
-              this.form.controls.password.setErrors({ async: errors.password });
-              this.form.controls.password.markAsTouched();
-            } else {
-              this.form.controls.password.setErrors({});
-              this.form.controls.password.setValue(
-                this.form.controls.password.value
-              );
-            }
+            setErrors(errors, 'password', this.form, message);
           }
 
           if (this._register) {
-            if (errors.firstName && !message) {
-              this.form.controls.firstName.setErrors({
-                async: errors.firstName
-              });
-              this.form.controls.firstName.markAsTouched();
-            } else {
-              this.form.controls.firstName.setErrors({});
-              this.form.controls.firstName.setValue(
-                this.form.controls.firstName.value
-              );
-            }
-
-            if (errors.lastName && !message) {
-              this.form.controls.lastName.setErrors({ async: errors.lastName });
-              this.form.controls.lastName.markAsTouched();
-            } else {
-              this.form.controls.lastName.setErrors({});
-              this.form.controls.lastName.setValue(
-                this.form.controls.lastName.value
-              );
-            }
+            setErrors(errors, 'firstName', this.form, message);
+            setErrors(errors, 'lastName', this.form, message);
+            setErrors(errors, 'confirmPassword', this.form, message);
           }
 
           this._message = message;

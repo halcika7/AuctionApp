@@ -27,7 +27,8 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
       new FormGroup({
         ...NAME_VALIDATOR("firstName"),
         ...NAME_VALIDATOR("lastName"),
-        ...PASSWORD_VALIDATOR(),
+        ...PASSWORD_VALIDATOR(false, "password"),
+        ...PASSWORD_VALIDATOR(false, "confirmPassword"),
         ...EMAIL_VALIDATOR()
       }),
       router
