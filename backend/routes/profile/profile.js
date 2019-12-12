@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const ProfileController = require('../../controllers/ProfileController');
+const BidController = require('../../controllers/BidController');
+const ProductController = require('../../controllers/ProductController');
 const authMiddleware = require('../../middlewares/authMiddleware');
 const fs = require('fs');
 const multer = require('multer');
@@ -38,8 +40,8 @@ const multerProfilePicture = multer({
 // Profile Routes
 router.post('/card', ProfileController.createCardToken);
 router.get('/userInfo', authMiddleware, ProfileController.getUserInfo);
-router.get('/products', authMiddleware, ProfileController.getUserProducts);
-router.get('/bids', authMiddleware, ProfileController.getUserBids);
+router.get('/products', authMiddleware, ProductController.getUserProducts);
+router.get('/bids', authMiddleware, BidController.getUserBids);
 router.put(
   '/updateprofile',
   authMiddleware,

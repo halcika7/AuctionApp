@@ -6,7 +6,7 @@ const addressValidator = require('address-validator');
 const OptionalInfo = require('../models/OptionalInfo');
 const Address = addressValidator.Address;
 const { removeNullProperty } = require('../helpers/removeNullProperty');
-const {GOOGLE_MAPS_KEY} = require('../config/configs');
+const { GOOGLE_MAPS_KEY } = require('../config/configs');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -57,21 +57,21 @@ exports.userInfoValidation = async (userInfo, email) => {
 };
 
 exports.optionalInfoValidation = async (optionalInfo, userOptionalInfo, optionalInfoId) => {
-    // const userOptionalInfo = await OptionalInfo.findOne({ where: { id: optionalInfoId } });
-    // optionalInfo = removeNullProperty({
-    //   street: optionalInfo.street !== userOptionalInfo.street ? optionalInfo.street : null,
-    //   city: optionalInfo.city !== userOptionalInfo.city ? optionalInfo.city : null,
-    //   postalCode: optionalInfo.zip !== userOptionalInfo.zip ? optionalInfo.zip : null,
-    //   country: optionalInfo.country !== userOptionalInfo.country ? optionalInfo.country : null,
-    //   state: optionalInfo.state !== userOptionalInfo.state ? optionalInfo.state : null
-    // });
-    optionalInfo = removeNullProperty({
-        // street: optionalInfo.street,
-        city: optionalInfo.city,
-        zip: optionalInfo.zip,
-        country: optionalInfo.country,
-        state: optionalInfo.state
-      });
+  // const userOptionalInfo = await OptionalInfo.findOne({ where: { id: optionalInfoId } });
+  // optionalInfo = removeNullProperty({
+  //   street: optionalInfo.street !== userOptionalInfo.street ? optionalInfo.street : null,
+  //   city: optionalInfo.city !== userOptionalInfo.city ? optionalInfo.city : null,
+  //   postalCode: optionalInfo.zip !== userOptionalInfo.zip ? optionalInfo.zip : null,
+  //   country: optionalInfo.country !== userOptionalInfo.country ? optionalInfo.country : null,
+  //   state: optionalInfo.state !== userOptionalInfo.state ? optionalInfo.state : null
+  // });
+  optionalInfo = removeNullProperty({
+    // street: optionalInfo.street,
+    city: optionalInfo.city,
+    zip: optionalInfo.zip,
+    country: optionalInfo.country,
+    state: optionalInfo.state
+  });
   console.log('TCL: exports.optionalInfoValidation -> optionalInfo', optionalInfo);
 
   addressValidator.setOptions({ key: GOOGLE_MAPS_KEY });

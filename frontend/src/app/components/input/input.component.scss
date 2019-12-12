@@ -1,0 +1,14 @@
+@import "mixins";
+
+.profile {
+  @include margin($all: 19px 0 0 !important);
+
+  label {
+    margin-bottom: 8px;
+  }
+
+  input {
+    height: 46px;
+    @include padding($all: 0 16px);
+  }
+}

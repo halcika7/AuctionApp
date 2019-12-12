@@ -39,7 +39,6 @@ class ProfileService extends BaseService {
   async updateUserInfo(file, { userInfo, optionalInfo, cardInfo }, userId, email) {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
-    console.log('TCL: ProfileService -> updateUserInfo -> optionalInfo', optionalInfo)
     cardInfo = JSON.parse(cardInfo);
     try {
       // const cardToken = await stripe.tokens.create({

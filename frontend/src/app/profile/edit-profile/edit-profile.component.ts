@@ -50,10 +50,6 @@ export class EditProfileComponent implements OnInit {
       ...BASIC_INPUT("image", null)
     });
     this.store.select("profile").subscribe(({ userInfo }) => {
-      console.log(
-        "TCL: EditProfileComponent -> ngOnInit -> userInfo",
-        userInfo
-      );
       this._clicked = false;
       if (!emptyObject(userInfo)) {
         this._date = { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };

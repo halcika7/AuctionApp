@@ -49,23 +49,23 @@
 
       &:after {
         right: 26px;
-        transform: rotate(-45deg);
+        transform: rotate(45deg);
         transition: all 0.3s ease-in-out;
       }
 
       &:before {
         right: 20px;
-        transform: rotate(45deg);
+        transform: rotate(-45deg);
         transition: all 0.3s ease-in-out;
       }
 
       &.open {
         &:after {
-          transform: rotate(-135deg);
+          transform: rotate(-45deg);
         }
 
         &:before {
-          transform: rotate(135deg);
+          transform: rotate(45deg);
         }
 
         ~ ul {

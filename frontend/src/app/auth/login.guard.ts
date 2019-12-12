@@ -19,7 +19,11 @@ export class LoginGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
     return this.store.select("auth").pipe(
       map(auth => {
         if (
@@ -28,6 +32,7 @@ export class LoginGuard implements CanActivate {
           sessionStorage.getItem("accessToken")
         ) {
           this.router.navigate(["/home"]);
+          return false;
         }
         return true;
       })

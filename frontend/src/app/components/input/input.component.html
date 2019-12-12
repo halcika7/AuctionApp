@@ -1,4 +1,8 @@
-<div class="form-group mt-43" [formGroup]="parentForm">
+<div
+  class="form-group mt-43"
+  [formGroup]="parentForm"
+  [ngClass]="{ 'mt-43': !profile, profile: profile }"
+>
   <label for="{{ id }}">{{ title }}</label>
   <div class="input">
     <input

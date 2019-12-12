@@ -67,6 +67,15 @@ class ProductController extends BaseController {
       failedMessage
     );
   }
+
+  async getUserProducts(req, res) {
+    const { userId, accessToken } = req;
+    const { products, noMore, status, message } = await ProductServiceInstance.fetchUserProducts(
+      req.query.data,
+      userId
+    );
+    return super.sendResponseWithMessage(res, status, { products, noMore, accessToken }, message);
+  }
 }
 
 const ProductControllerInstance = new ProductController();

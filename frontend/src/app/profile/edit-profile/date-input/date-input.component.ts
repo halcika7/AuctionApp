@@ -27,7 +27,6 @@ export class DateInputComponent implements OnInit {
   ngOnInit() {
     if (!emptyObject(this.defaultDate)) {
       this._years = this.monthNumbers ? getYears(4, 4) : getYears();
-      console.log('TCL: ngOnInit ->  this._years',  this._years)
       this._months = this.monthNumbers ? getMonthNumber() : getMonths();
       if (this.withDays) {
         this.pushDays();

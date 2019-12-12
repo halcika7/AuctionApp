@@ -16,6 +16,7 @@ export class InputComponent implements OnInit {
   @Input() title: string;
   @Input() pattern: string;
   @Input() showErrors: boolean;
+  @Input() profile: boolean = false;
 
   constructor() {}
 

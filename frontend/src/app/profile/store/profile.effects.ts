@@ -101,7 +101,6 @@ export class ProfileEffects {
             return new ProfileActions.UpdateProfileSuccess(data);
           }),
           catchError(data => {
-            console.log("TCL: data", data);
             if (data.error.accessToken) {
               this.store.dispatch(
                 new RefreshToken({ accessToken: data.accessToken })

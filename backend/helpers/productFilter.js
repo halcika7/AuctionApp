@@ -7,7 +7,8 @@ const {
   ENDS_IN_MAX_DAYS,
   STARTED_DAYS_AGO,
   AVG_RATING,
-  LIMIT_SIMILAR_PRODUCTS
+  LIMIT_SIMILAR_PRODUCTS,
+  DEFAULT_LIMIT_PRODUCTS
 } = require('../config/configs');
 const { addSubtractDaysToDate } = require('./addSubtractDaysToDate');
 
@@ -182,6 +183,52 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
   const Offset = offset != null ? (parseInt(offset) ? parseInt(offset) : offset) : null;
   const eq = isNaN(Limit + Offset) ? Limit : Limit + Offset;
   return length === 0 || length < Limit || length <= eq ? true : false;
+};
+
+exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
+  const auctionEnd = active
+    ? {
+        [Op.gt]: new Date()
+      }
+    : { [Op.lt]: new Date() };
+  const products = await Product.findAll({
+    subQuery: false,
+    where: {
+      userId,
+      auctionEnd
+    },
+    attributes: [
+      'id',
+      'picture',
+      'name',
+      'subcategoryId',
+      'price',
+      'auctionEnd',
+      [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
+      [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids'],
+      [
+        db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
+        'status'
+      ]
+    ],
+    include: [
+      {
+        model: Bid,
+        attributes: []
+      }
+    ],
+    limit,
+    offset,
+    group: ['Product.id']
+  });
+  const productsLength = await Product.count({
+    where: {
+      userId,
+      auctionEnd
+    }
+  });
+  const noMore = this.noMoreProducts({ limit, offset, productsLength });
+  return { products, noMore };
 };
 
 function buildPriceRangeQuery() {

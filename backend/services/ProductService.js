@@ -2,6 +2,7 @@ const {
   getFilteredProducts,
   getProductById,
   getSimilarProducts,
+  getProfileProducts,
   noMoreProducts
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
@@ -65,6 +66,18 @@ class ProductService extends BaseService {
       return { status: 200, products, noMore, priceRange };
     } catch (error) {
       return super.returnGenericFailed();
+    }
+  }
+
+  async fetchUserProducts(reqQuery, userId) {
+    reqQuery = JSON.parse(reqQuery);
+    try {
+      const { products, noMore } = await getProfileProducts(reqQuery, userId);
+      return super.returnResponse(200, { products, noMore });
+    } catch (error) {
+      return super.returnResponse(403, {
+        message: 'Something happened. We were unable to perform request.'
+      });
     }
   }
 }

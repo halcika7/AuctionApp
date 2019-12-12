@@ -1,8 +1,10 @@
 const BaseService = require('./BaseService');
 const Bid = require('../models/Bid');
 const User = require('../models/User');
-const { getAuctionEndProduct } = require('../helpers/productFilter');
-const { LIMIT_BIDS, MAX_BID } = require('../config/configs');
+const Product = require('../models/Product');
+const { getAuctionEndProduct, noMoreProducts } = require('../helpers/productFilter');
+const { LIMIT_BIDS, MAX_BID, DEFAULT_LIMIT_PRODUCTS } = require('../config/configs');
+const { db } = require('../config/database');
 
 class BidService extends BaseService {
   constructor() {
@@ -89,6 +91,56 @@ class BidService extends BaseService {
       return { bids };
     } catch (error) {
       return { bids: [] };
+    }
+  }
+
+  async getUserBids(userId, offset, limit = DEFAULT_LIMIT_PRODUCTS) {
+    try {
+      const bids = await Bid.findAll({
+        subQuery: false,
+        where: { userId },
+        attributes: ['dateBid', 'price'],
+        include: {
+          model: Product,
+          attributes: [
+            'id',
+            'picture',
+            'name',
+            'subcategoryId',
+            'price',
+            'auctionEnd',
+            [db.fn('coalesce', db.fn('MAX', db.col('Product.Bids.price')), 0), 'highest_bid'],
+            [db.fn('coalesce', db.fn('COUNT', db.col('Product.Bids.price')), 0), 'number_of_bids'],
+            [
+              db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
+              'status'
+            ]
+          ],
+          include: {
+            model: Bid,
+            attributes: []
+          }
+        },
+        limit,
+        offset,
+        order: [['dateBid', 'DESC']],
+        group: ['Bid.id', 'Product.id']
+      });
+      const length = await Bid.count({
+        where: {
+          userId
+        }
+      });
+      const noMore = noMoreProducts({
+        limit,
+        offset,
+        productsLength: length
+      });
+      return { status: 200, bids, noMore };
+    } catch (error) {
+      return super.returnResponse(403, {
+        message: 'Something happend..try again later !!'
+      });
     }
   }
 }
