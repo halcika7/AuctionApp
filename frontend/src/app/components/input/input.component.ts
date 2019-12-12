@@ -17,8 +17,6 @@ export class InputComponent implements OnInit {
   @Input() pattern: string;
   @Input() showErrors: boolean;
   @Input() autocomplete: string = '';
-  @Input() minLength: number;
-  @Input() maxLength: number;
 
   constructor() {}
 
