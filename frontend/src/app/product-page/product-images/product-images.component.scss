@@ -6,40 +6,68 @@
   width: 470px;
 }
 
-.big-picture {
+.big-picture,
+ngx-image-zoom {
   @include flex(center, center);
   grid-area: a;
   min-height: 470px;
   max-height: 470px;
+  position: relative;
 
-  > img {
-    @include heightWidth(100%, 100%);
-    object-fit: scale-down;
-    max-height: 470px;
+  span {
+    @include flex(center, center);
+    position: absolute;
+    background: getColor(light_purple);
+    height: 40px;
+    align-items: center;
+    width: 40px;
+    z-index: 1;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+    color: getColor(light_black);
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
+    }
+
+    &.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.3s ease-in-out;
+    }
   }
 }
 
-.pictures {
-  > .pagination {
-    @include grid(4, 10px);
-    grid-area: b;
-    margin-top: 10px;
+.pictures > .pagination {
+  @include grid(4, 10px);
+  grid-area: b;
+  margin-top: 10px;
 
-    > .img {
-      @include heightWidth(110px, 100%);
-      @include padding($all: 5px);
-      box-sizing: border-box;
-      border: 2px solid transparent;
+  > .img {
+    @include heightWidth(110px, 100%);
+    @include padding($all: 5px);
+    box-sizing: border-box;
+    border: 2px solid transparent;
 
-      &.active {
-        border: 2px solid getColor(purple);
-      }
+    &.active {
+      border: 2px solid getColor(purple);
+    }
 
-      img {
-        @include heightWidth(100%, 100%);
-        object-fit: scale-down;
-        cursor: pointer;
-      }
+    img {
+      @include heightWidth(100%, 100%);
+      object-fit: scale-down;
+      cursor: pointer;
     }
   }
 }
@@ -48,5 +76,21 @@
   .pictures,
   .big-picture > img {
     width: 100%;
+  }
+}
+
+::ng-deep {
+  .ngxImageZoomContainer {
+    @include heightWidth(100% !important, 100% !important);
+
+    > img {
+      @include heightWidth(100% !important, 100% !important);
+      object-fit: scale-down;
+      max-height: 470px !important;
+    }
+
+    .ngxImageZoomFullContainer.ngxImageZoomLensEnabled {
+      border: 2px solid getColor(purple) !important;
+    }
   }
 }
