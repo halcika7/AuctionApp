@@ -15,7 +15,10 @@ export class InputComponent implements OnInit {
   @Input() input: FormControl;
   @Input() title: string;
   @Input() pattern: string;
+  @Input() autocomplete: string = '';
   @Input() showErrors: boolean;
+  @Input() minLength: number;
+  @Input() maxLength: number;
   @Input() profile: boolean = false;
 
   constructor() {}

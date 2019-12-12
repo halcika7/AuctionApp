@@ -1,7 +1,6 @@
-const OptionalInfo = require('../models/OptionalInfo');
+const CardInfo = require('../models/CardInfo');
 const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
-const { Address, addressValidator } = require('../config/addressValidatorConfig');
 const stripe = require('../config/stripeConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
@@ -56,46 +55,42 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async cardInfo => {
-  
-};
+exports.userCardValidation = async (cardInfo, userCardInfoId, errors) => {
+  if (
+    Object.keys(removeNullProperty(cardInfo)).length == 0 ||
+    (cardInfo.cvc == '****' && cardInfo.number.includes('************'))
+  ) {
+    return { isValid: true, errors, cardInfoData: {} };
+  }
+  try {
+    const {
+      id,
+      card: { fingerprint, last4 }
+    } = await stripe.tokens.create({
+      card: {
+        ...cardInfo
+      }
+    });
+    const findCardIfExists = await CardInfo.findOne({
+      where: { cardFingerprint: fingerprint },
+      attributes: ['id', 'cardFingerprint']
+    });
 
-optionalInfoValidation = async (optionalInfo, userOptionalInfo, optionalInfoId) => {
-  // const cardToken = await stripe.tokens.create({
-  //   card: {
-  //     name: 'Haris Beslic',
-  //     number: '4242424242424242',
-  //     exp_month: '02',
-  //     exp_year: '2020',
-  //     cvc: 111
-  //   }
-  // });
-  // const userOptionalInfo = await OptionalInfo.findOne({ where: { id: optionalInfoId } });
-  // optionalInfo = removeNullProperty({
-  //   street: optionalInfo.street !== userOptionalInfo.street ? optionalInfo.street : null,
-  //   city: optionalInfo.city !== userOptionalInfo.city ? optionalInfo.city : null,
-  //   postalCode: optionalInfo.zip !== userOptionalInfo.zip ? optionalInfo.zip : null,
-  //   country: optionalInfo.country !== userOptionalInfo.country ? optionalInfo.country : null,
-  //   state: optionalInfo.state !== userOptionalInfo.state ? optionalInfo.state : null
-  // });
-  optionalInfo = removeNullProperty({
-    // street: optionalInfo.street,
-    city: optionalInfo.city,
-    zip: optionalInfo.zip,
-    country: optionalInfo.country,
-    state: optionalInfo.state
-  });
-  console.log('TCL: exports.optionalInfoValidation -> optionalInfo', optionalInfo);
+    if (findCardIfExists && findCardIfExists.id !== userCardInfoId) {
+      errors.errors.card = 'Card already in use';
+      return { isValid: false, errors };
+    }
+    cardInfo = {
+      ...cardInfo,
+      cardFingerprint: fingerprint,
+      cardToken: id,
+      number: '************' + last4,
+      cvc: '****'
+    };
 
-  // const address = new Address({
-  //   ...optionalInfo
-  // });
-  // addressValidator.validate(address, addressValidator.match.streetAddress, function(
-  //   err,
-  //   exact,
-  //   inexact
-  // ) {
-  //   vals = { err, exact, inexact };
-  //   return { err, exact, inexact };
-  // });
+    return { isValid: true, errors, cardInfoData: cardInfo };
+  } catch (error) {
+    errors.errors.card = 'Ivalid credit card information';
+    return { isValid: false, errors };
+  }
 };

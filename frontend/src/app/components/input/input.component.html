@@ -1,15 +1,27 @@
 <div
-  class="form-group mt-43"
+  class="form-group"
   [formGroup]="parentForm"
   [ngClass]="{ 'mt-43': !profile, profile: profile }"
 >
   <label for="{{ id }}">{{ title }}</label>
   <div class="input">
     <input
+      *ngIf="minLength && maxLength"
       type="{{ type }}"
       id="{{ id }}"
       placeholder="{{ placeholder }}"
       formControlName="{{ controlName }}"
+      [maxlength]="maxLength"
+      [minlength]="minLength"
+      [autocomplete]="autocomplete"
+    />
+    <input
+      *ngIf="!minLength && !maxLength"
+      type="{{ type }}"
+      id="{{ id }}"
+      placeholder="{{ placeholder }}"
+      formControlName="{{ controlName }}"
+      [autocomplete]="autocomplete"
     />
     <span *ngIf="input.invalid && input.touched && showErrors">
       <span *ngIf="input.errors['required']">{{ title }} is required</span>

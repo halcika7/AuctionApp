@@ -60,6 +60,24 @@ export const BASIC_INPUT = (name: string, dValue: any = "") => {
   };
 };
 
+export const CARD_NUMBER = (name: string, value: string = "") => {
+  return {
+    [name]: new FormControl(value, [
+      Validators.minLength(13),
+      Validators.maxLength(16)
+    ])
+  };
+};
+
+export const CARD_CVC = (name: string, value: string = "") => {
+  return {
+    [name]: new FormControl(value, [
+      Validators.minLength(3),
+      Validators.maxLength(4)
+    ])
+  };
+};
+
 export const setErrors = (
   errors: any,
   objectProperty: string,

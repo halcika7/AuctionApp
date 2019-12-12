@@ -5,11 +5,11 @@ module.exports = {
     const option = [];
     for(let i = 0; i < 102; i++) {
         option.push({
-            cardName: null,
-            cardNumber: null,
-            cardCVC: null,
-            cardYear: null,
-            cardMonth: null,
+            name: null,
+            number: null,
+            cvc: null,
+            exp_year: null,
+            exp_month: null,
             cardToken: null,
             cardFingerprint: null
         });

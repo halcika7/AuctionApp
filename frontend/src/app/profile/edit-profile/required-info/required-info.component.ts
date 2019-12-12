@@ -1,14 +1,14 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Output, Input } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
-import { emptyObject } from '@app/shared/checkEmptyObject';
-import { setErrors } from '@app/shared/validators';
+import { emptyObject } from "@app/shared/checkEmptyObject";
+import { setErrors } from "@app/shared/validators";
 
 @Component({
-  selector: 'app-required-info',
-  templateUrl: './required-info.component.html',
-  styleUrls: ['./required-info.component.scss']
+  selector: "app-required-info",
+  templateUrl: "./required-info.component.html",
+  styleUrls: ["./required-info.component.scss"]
 })
 export class RequiredInfoComponent implements OnInit {
   @Input() form: FormGroup;
@@ -18,24 +18,26 @@ export class RequiredInfoComponent implements OnInit {
   private _genderError: string;
   private _dateError: string;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.store.select("profile").subscribe(({ userInfo, errors }) => {
       this._photo = userInfo.photo;
       if (!emptyObject(userInfo)) {
         this.form.patchValue({
-          firstName: !errors.firstName
-            ? userInfo.firstName
-            : this.form.value.firstName,
-          lastName: !errors.lastName
-            ? userInfo.lastName
-            : this.form.value.lastName,
-          phoneNumber: !errors.phoneNumber
-            ? userInfo.phoneNumber
-            : this.form.value.phoneNumber,
-          email: !errors.email ? userInfo.email : this.form.value.email,
-          image: !errors.image ? this.form.value.image : null
+          firstName: !emptyObject(errors)
+            ? this.form.value.firstName
+            : userInfo.firstName,
+          lastName: !emptyObject(errors)
+            ? this.form.value.lastName
+            : userInfo.lastName,
+          phoneNumber: !emptyObject(errors)
+            ? this.form.value.phoneNumber
+            : userInfo.phoneNumber,
+          email: !emptyObject(errors)
+            ? this.form.value.email
+            : userInfo.email,
+          image: !emptyObject(errors) ? this.form.value.image : null
         });
       }
       if (!emptyObject(errors)) {
@@ -68,5 +70,4 @@ export class RequiredInfoComponent implements OnInit {
   get dateError(): string {
     return this._dateError;
   }
-
 }

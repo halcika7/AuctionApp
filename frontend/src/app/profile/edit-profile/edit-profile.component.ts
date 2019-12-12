@@ -9,7 +9,9 @@ import {
   EMAIL_VALIDATOR,
   NAME_VALIDATOR,
   BASIC_INPUT,
-  REQUIRED_INPUT
+  REQUIRED_INPUT,
+  CARD_NUMBER,
+  CARD_CVC
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
 
@@ -22,7 +24,7 @@ export class EditProfileComponent implements OnInit {
   private _form: FormGroup;
   private _gender: string;
   private _date: { day: number; year: number; month: string };
-  private _cardEXP: { year: number; month: string };
+  private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
   private _isValidForm: boolean = false;
   private _clicked = false;
 
@@ -40,8 +42,8 @@ export class EditProfileComponent implements OnInit {
       ...EMAIL_VALIDATOR(true),
       ...REQUIRED_INPUT("phoneNumber"),
       ...BASIC_INPUT("cName"),
-      ...BASIC_INPUT("cNumber"),
-      ...BASIC_INPUT("CVC"),
+      ...CARD_NUMBER("cNumber"),
+      ...CARD_CVC("CVC"),
       ...BASIC_INPUT("street"),
       ...BASIC_INPUT("city"),
       ...BASIC_INPUT("zip"),
@@ -49,11 +51,16 @@ export class EditProfileComponent implements OnInit {
       ...BASIC_INPUT("state"),
       ...BASIC_INPUT("image", null)
     });
-    this.store.select("profile").subscribe(({ userInfo }) => {
+    this.store.select("profile").subscribe(({ userInfo, errors }) => {
       this._clicked = false;
       if (!emptyObject(userInfo)) {
         this._date = { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
-        this._cardEXP = { year: 0, month: "" };
+        this._cardEXP = !emptyObject(errors)
+          ? { ...this._cardEXP }
+          : {
+              year: userInfo.CardInfo.exp_year,
+              month: userInfo.CardInfo.exp_month
+            };
         this._gender = userInfo.gender;
       }
     });
@@ -110,11 +117,11 @@ export class EditProfileComponent implements OnInit {
       state: this.form.value.state
     };
     const cardInfo = {
-      cardNumber: this.form.value.cNumber,
-      cardName: this.form.value.cName,
+      number: this.form.value.cNumber,
+      name: this.form.value.cName,
       cvc: this.form.value.CVC,
-      month: this._cardEXP.month,
-      year: this._cardEXP.year
+      exp_month: this._cardEXP.month,
+      exp_year: this._cardEXP.year
     };
     formData.append("userInfo", JSON.stringify(userInfo));
     formData.append("optionalInfo", JSON.stringify(optionalInfo));

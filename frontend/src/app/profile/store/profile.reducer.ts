@@ -24,12 +24,12 @@ export interface UserInfo {
     state: string | null;
     country: string | null;
   };
-  cardInfo?: {
-    cardName: string | null;
-    cardNumber: string | null;
-    cardCVC: string | null;
-    cardYear: string | null;
-    cardMonth: string | null;
+  CardInfo?: {
+    name: string | null;
+    number: string | null;
+    cvc: string | null;
+    exp_year: number | null;
+    exp_month: string | null;
     cardToken: string | null;
     cardFingerprint: string | null;
   };

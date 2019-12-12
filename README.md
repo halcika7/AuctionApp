@@ -22,7 +22,6 @@
     TWILIO_SID=
     TWILIO_AUTH_TOKEN=
     STRIPE_KEY=
-    GOOGLE_MAPS_KEY=
     NODE_ENV=
 ```
 

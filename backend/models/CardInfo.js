@@ -9,27 +9,27 @@ const CardInfo = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    cardName: {
+    name: {
       type: Sequelize.STRING(30),
       allowNull: true,
       defaultValue: null
     },
-    cardNumber: {
+    number: {
       type: Sequelize.STRING(30),
       allowNull: true,
       defaultValue: null
     },
-    cardCVC: {
+    cvc: {
       type: Sequelize.STRING(30),
       allowNull: true,
       defaultValue: null
     },
-    cardYear: {
+    exp_year: {
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null
     },
-    cardMonth: {
+    exp_month: {
       type: Sequelize.STRING(30),
       allowNull: true,
       defaultValue: null

@@ -31,21 +31,24 @@ export const getMonths = (): string[] => [
 ];
 
 export const getMonthNumber = (): string[] => [
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-]
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12"
+];
 
-export const getYears = (addSubtractYears: number = 0, lastyears: number = 130): number[] => {
+export const getYears = (
+  addSubtractYears: number = 0,
+  lastyears: number = 130
+): number[] => {
   let years: number[] = [];
   const d = new Date();
   for (
@@ -53,6 +56,15 @@ export const getYears = (addSubtractYears: number = 0, lastyears: number = 130):
     i > d.getFullYear() - lastyears;
     i--
   ) {
+    years.push(i);
+  }
+  return years;
+};
+
+export const getNextFourYears = () => {
+  let years: number[] = [];
+  const d = new Date();
+  for (let i = d.getFullYear(); i < d.getFullYear() + 4; i++) {
     years.push(i);
   }
   return years;
@@ -68,5 +80,5 @@ export const getMonthDays = (choosenMonth: string, year: number): number[] => {
     days.push(i);
     date.setDate(date.getDate() + 1);
   }
-  return  days;
+  return days;
 };

@@ -1,11 +1,12 @@
 const BaseService = require('./BaseService');
 const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
+const CardInfo = require('../models/CardInfo');
 const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
-const { removeNullProperty } = require('../helpers/removeNullProperty');
 const { removeNullFromUserInfo } = require('../helpers/profileHelper');
-const { userInfoValidation, userAddressValidation } = require('../validations/updateUsersProfile');
+const { removeNullProperty } = require('../helpers/removeNullProperty');
+const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const { getUserInfo } = require('../helpers/authHelper');
 
 class ProfileService extends BaseService {
@@ -40,15 +41,19 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
     try {
-      const { errors, isValid, optionalInfoId, cardInfoId, currentUser } = await userInfoValidation(
-        userInfo,
-        email
+      const {
+        errors: requiredInfoErrors,
+        isValid,
+        optionalInfoId,
+        cardInfoId,
+        currentUser
+      } = await userInfoValidation(userInfo, email);
+      const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
+        cardInfo,
+        cardInfoId,
+        requiredInfoErrors
       );
-      const data = await userAddressValidation(
-        optionalInfo
-      );
-      console.log('TCL: ProfileService -> updateUserInfo -> data', data)
-      if (!isValid) {
+      if (!isValid || !validCard) {
         file && file.path && fs.unlinkSync(file.path);
         return super.returnResponse(403, errors);
       }
@@ -62,17 +67,26 @@ class ProfileService extends BaseService {
         userInfo.photo = currentUser.photo;
       }
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
-      const [updateOptionalData] = await OptionalInfo.update(optionalInfo, {
+
+      const [updateOptionalData] = await OptionalInfo.update(removeNullProperty(optionalInfo), {
         where: { id: optionalInfoId }
       });
+
+      const [updatedCardInfoData] = await CardInfo.update(cardInfoData, {
+        where: { id: cardInfoId }
+      });
+
       const [updateUserInfo] = await User.update({ ...userInfo }, { where: { id: userId } });
+
       const userInfoData = await getUserInfo(userId);
+
       const success =
-        updateOptionalData == 0 && updateUserInfo == 0 ? 'Nothing updated' : 'Profile info updated';
+        updateOptionalData == 0 && updateUserInfo == 0 && updatedCardInfoData == 0
+          ? 'Nothing updated'
+          : 'Profile info updated';
 
       return super.returnResponse(200, { success, userInfoData });
     } catch (error) {
-      console.log('TCL: ProfileService -> updateUserInfo -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });

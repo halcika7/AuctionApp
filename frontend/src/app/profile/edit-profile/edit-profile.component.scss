@@ -69,7 +69,7 @@
 
       .inputs {
         .two-cols {
-          @include flex(center, space-between);
+          @include flex($justify: space-between);
           padding: 0;
 
           app-input {
