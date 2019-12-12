@@ -10,7 +10,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./product-images.component.scss"]
 })
 export class ProductImagesComponent implements OnInit, OnDestroy {
-  private _images = [];
+  private _images: { image: string }[] = [];
   private _activeImage: string;
   private _currentIndex: number;
   private _showModal: boolean = false;

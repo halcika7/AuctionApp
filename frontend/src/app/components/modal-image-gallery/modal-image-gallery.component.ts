@@ -15,17 +15,16 @@ import {
   styleUrls: ["./modal-image-gallery.component.scss"]
 })
 export class ModalImageGalleryComponent implements OnInit, OnDestroy {
-  @Input() images = [];
+  @Input() images: { image: string }[] = [];
   @Input() activeImage: string;
   @Input() currentIndex: number;
   @Output() closeModal = new EventEmitter<any>();
-
-  private _Images;
+  private _Images: { image: string }[];
   private _ActiveImage: string;
   private _CurrentIndex: number;
   private numberOfImages: number = 9;
-  private translateOffset: number = 128;
-  private _translate = { transform: 'translateX(0px)' };
+  private thumbImageWidth: number = 128;
+  private _translate = { transform: "translateX(0px)" };
   private _currentTranslate: number = 0;
   private _showTumbArrows = true;
 
@@ -34,16 +33,7 @@ export class ModalImageGalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._Images = [
-      ...this.images
-      // ...this.images,
-      // ...this.images,
-      // ...this.images,
-      // ...this.images,
-      // ...this.images,
-      // ...this.images,
-      // ...this.images
-    ];
+    this._Images = this.images;
     this._ActiveImage = this.activeImage;
     this._CurrentIndex = this.currentIndex;
     this.windowWidthHelper(window.innerWidth);
@@ -54,21 +44,18 @@ export class ModalImageGalleryComponent implements OnInit, OnDestroy {
     this.windowWidthHelper(event.target.innerWidth);
   }
 
-  closeModalClicked() {
-    this.closeModal.emit(false);
-  }
-
   @HostListener("window:keyup", ["$event"])
   arrowClicked(e, name: string) {
-    if ((e.keyCode === 37 || name === "left") && this._CurrentIndex != 0) {
-      this._CurrentIndex--;
-    }
-
     if (
       (e.keyCode === 39 || name === "right") &&
       this._CurrentIndex != this._Images.length - 1
     ) {
       this._CurrentIndex++;
+    } else if (
+      (e.keyCode === 37 || name === "left") &&
+      this._CurrentIndex != 0
+    ) {
+      this._CurrentIndex--;
     }
 
     if (this._CurrentIndex > this.numberOfImages - 1) {
@@ -85,8 +72,42 @@ export class ModalImageGalleryComponent implements OnInit, OnDestroy {
     this._ActiveImage = this._Images[this._CurrentIndex].image;
   }
 
+  closeModalClicked() {
+    this.closeModal.emit(false);
+  }
+
+  thumbnailsClicked(name, i = null) {
+    const diff = this.calculateTranslate(this._Images.length);
+
+    if (name === "picture") {
+      this._CurrentIndex = i;
+      this._ActiveImage = this._Images[this._CurrentIndex].image;
+      if (this._showTumbArrows) {
+        this._currentTranslate = this.calculateTranslate(this._CurrentIndex);
+        this._translate.transform = `translateX(-${this._currentTranslate}px)`;
+      }
+    }
+    if (!this._showTumbArrows) return;
+
+    if (
+      name === "right" &&
+      this._currentTranslate <= diff - this.thumbImageWidth &&
+      this._CurrentIndex != this.Images.length - 1
+    ) {
+      this._currentTranslate += this.thumbImageWidth;
+      this._translate.transform = `translateX(-${this._currentTranslate}px)`;
+    } else if (name === "left" && this._currentTranslate > 0) {
+      this._currentTranslate -= this.thumbImageWidth;
+      this._translate.transform = `translateX(-${this._currentTranslate}px)`;
+    }
+  }
+
+  ngOnDestroy() {
+    this.renderer.removeClass(document.body, "no-overflow");
+  }
+
   private windowWidthHelper(width: number) {
-    this.translateOffset = width > 1200 ? 120 : 128;
+    this.thumbImageWidth = width > 1200 ? 120 : 128;
     if (width > 1200 && this.numberOfImages != 9) {
       this.numberOfImages = 9;
     } else if (width >= 992 && width <= 1200 && this.numberOfImages != 7) {
@@ -107,10 +128,10 @@ export class ModalImageGalleryComponent implements OnInit, OnDestroy {
     this._showTumbArrows =
       this.numberOfImages >= this._Images.length ? false : true;
     if (
-      this._showTumbArrows == false &&
-      this._translate.transform != 'translateX(0px)'
+      !this._showTumbArrows &&
+      this._translate.transform != "translateX(0px)"
     ) {
-      this._translate.transform = 'translateX(0px)';
+      this._translate.transform = "translateX(0px)";
     }
   }
 
@@ -118,39 +139,8 @@ export class ModalImageGalleryComponent implements OnInit, OnDestroy {
     return (
       Math.floor(value / this.numberOfImages) *
       this.numberOfImages *
-      this.translateOffset
+      this.thumbImageWidth
     );
-  }
-
-  thumbnailsClicked(name, i = null) {
-    const diff = this.calculateTranslate(this._Images.length);
-
-    if (name === "picture") {
-      this._CurrentIndex = i;
-      this._ActiveImage = this._Images[this._CurrentIndex].image;
-      if(!this._showTumbArrows) {
-        this._currentTranslate = this.calculateTranslate(this._CurrentIndex);
-        this._translate.transform = `translateX(-${this._currentTranslate}px)`;
-      }
-    }
-    if (!this._showTumbArrows) return;
-
-    if (
-      name === "right" &&
-      this._currentTranslate <= diff - this.translateOffset
-    ) {
-      this._currentTranslate += this.translateOffset;
-      this._translate.transform = `translateX(-${this._currentTranslate}px)`;
-    }
-
-    if (name === "left" && this._currentTranslate > 0) {
-      this._currentTranslate -= this.translateOffset;
-      this._translate.transform = `translateX(-${this._currentTranslate}px)`;
-    }
-  }
-
-  ngOnDestroy() {
-    this.renderer.removeClass(document.body, "no-overflow");
   }
 
   get Images(): any[] {
