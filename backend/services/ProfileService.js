@@ -4,8 +4,7 @@ const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
 const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
-const { removeNullFromUserInfo } = require('../helpers/profileHelper');
-const { removeNullProperty } = require('../helpers/removeNullProperty');
+const { removeNullProperty, removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const { getUserInfo } = require('../helpers/authHelper');
 
