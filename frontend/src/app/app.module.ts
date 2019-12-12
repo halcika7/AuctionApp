@@ -87,7 +87,6 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ForgotPasswordComponent } from "./auth/forgot-password/forgot-password.component";
 import { ResetPasswordComponent } from "./auth/reset-password/reset-password.component";
 import { SearchComponent } from "./shop-page/search/search.component";
-import { ModalImageGalleryComponent } from "./components/modal-image-gallery/modal-image-gallery.component";
 
 @NgModule({
   declarations: [
@@ -124,8 +123,7 @@ import { ModalImageGalleryComponent } from "./components/modal-image-gallery/mod
     ShopNavigationComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SearchComponent,
-    ModalImageGalleryComponent
+    SearchComponent
   ],
   imports: [
     BrowserModule,

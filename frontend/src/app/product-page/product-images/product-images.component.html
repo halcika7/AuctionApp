@@ -1,11 +1,3 @@
-<app-modal-image-gallery
-  *ngIf="showModal"
-  (closeModal)="openModal($event)"
-  [images]="images"
-  [activeImage]="activeImage"
-  [currentIndex]="currentIndex"
-></app-modal-image-gallery>
-
 <div class="pictures">
   <div class="big-picture">
     <span
@@ -21,7 +13,6 @@
       [circularLens]="true"
       [lensWidth]="200"
       [lensHeight]="200"
-      (click)="openModal()"
     ></ngx-image-zoom>
     <span
       class="right"
