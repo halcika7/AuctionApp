@@ -38,7 +38,6 @@ const multerProfilePicture = multer({
 });
 
 // Profile Routes
-router.post('/card', ProfileController.createCardToken);
 router.get('/userInfo', authMiddleware, ProfileController.getUserInfo);
 router.get('/products', authMiddleware, ProductController.getUserProducts);
 router.get('/bids', authMiddleware, BidController.getUserBids);

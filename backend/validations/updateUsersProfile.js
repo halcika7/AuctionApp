@@ -1,12 +1,11 @@
-const { nameValidation, emailValidation } = require('./authValidation');
-const isEmpty = require('./is-empty');
+const OptionalInfo = require('../models/OptionalInfo');
 const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
-const addressValidator = require('address-validator');
-const OptionalInfo = require('../models/OptionalInfo');
-const Address = addressValidator.Address;
+const { Address, addressValidator } = require('../config/addressValidatorConfig');
+const stripe = require('../config/stripeConfig');
+const isEmpty = require('./is-empty');
+const { nameValidation, emailValidation } = require('./authValidation');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
-const { GOOGLE_MAPS_KEY } = require('../config/configs');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -52,11 +51,25 @@ exports.userInfoValidation = async (userInfo, email) => {
     errors: { errors },
     isValid: isEmpty(errors),
     optionalInfoId: currentUser.optionalInfoId,
+    cardInfoId: currentUser.cardInfoId,
     currentUser
   };
 };
 
-exports.optionalInfoValidation = async (optionalInfo, userOptionalInfo, optionalInfoId) => {
+exports.userCardValidation = async cardInfo => {
+  
+};
+
+optionalInfoValidation = async (optionalInfo, userOptionalInfo, optionalInfoId) => {
+  // const cardToken = await stripe.tokens.create({
+  //   card: {
+  //     name: 'Haris Beslic',
+  //     number: '4242424242424242',
+  //     exp_month: '02',
+  //     exp_year: '2020',
+  //     cvc: 111
+  //   }
+  // });
   // const userOptionalInfo = await OptionalInfo.findOne({ where: { id: optionalInfoId } });
   // optionalInfo = removeNullProperty({
   //   street: optionalInfo.street !== userOptionalInfo.street ? optionalInfo.street : null,
@@ -74,29 +87,15 @@ exports.optionalInfoValidation = async (optionalInfo, userOptionalInfo, optional
   });
   console.log('TCL: exports.optionalInfoValidation -> optionalInfo', optionalInfo);
 
-  addressValidator.setOptions({ key: GOOGLE_MAPS_KEY });
-
-  const address = new Address({
-    ...optionalInfo
-  });
-  let vals;
-
-  try {
-    const util = require('util');
-    const request = require('request');
-    const re = addressValidator.validate(address, addressValidator.match.streetAddress, function(
-      err,
-      exact,
-      inexact
-    ) {
-      vals = { err, exact, inexact };
-      return { err, exact, inexact };
-    });
-    // console.log('TCL: exports.optionalInfoValidation -> re', re)
-    const requestPromise = util.promisify(request);
-    const response = await requestPromise(re.uri.href);
-    console.log('TCL: exports.optionalInfoValidation -> response', response.body);
-  } catch (error) {
-    console.log('TCL: exports.optionalInfoValidation -> error', error);
-  }
+  // const address = new Address({
+  //   ...optionalInfo
+  // });
+  // addressValidator.validate(address, addressValidator.match.streetAddress, function(
+  //   err,
+  //   exact,
+  //   inexact
+  // ) {
+  //   vals = { err, exact, inexact };
+  //   return { err, exact, inexact };
+  // });
 };

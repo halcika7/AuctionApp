@@ -4,10 +4,9 @@ const OptionalInfo = require('../models/OptionalInfo');
 const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
-const { userInfoValidation, optionalInfoValidation } = require('../validations/updateUsersProfile');
+const { removeNullFromUserInfo } = require('../helpers/profileHelper');
+const { userInfoValidation, userAddressValidation } = require('../validations/updateUsersProfile');
 const { getUserInfo } = require('../helpers/authHelper');
-const { STRIPE_KEY } = require('../config/configs');
-const stripe = require('stripe')(STRIPE_KEY);
 
 class ProfileService extends BaseService {
   constructor() {
@@ -41,19 +40,14 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
     try {
-      // const cardToken = await stripe.tokens.create({
-      //   card: {
-      //     name: cardInfo.cardName,
-      //     number: cardInfo.cardNumber,
-      //     exp_month: cardInfo.month,
-      //     exp_year: cardInfo.year,
-      //     cvc: cardInfo.cvc
-      //   }
-      // });
-      const { errors, isValid, optionalInfoId, currentUser } = await userInfoValidation(
+      const { errors, isValid, optionalInfoId, cardInfoId, currentUser } = await userInfoValidation(
         userInfo,
         email
       );
+      const data = await userAddressValidation(
+        optionalInfo
+      );
+      console.log('TCL: ProfileService -> updateUserInfo -> data', data)
       if (!isValid) {
         file && file.path && fs.unlinkSync(file.path);
         return super.returnResponse(403, errors);
@@ -67,23 +61,7 @@ class ProfileService extends BaseService {
       } else {
         userInfo.photo = currentUser.photo;
       }
-      const userOptionalInfo = await OptionalInfo.findOne({ where: { id: optionalInfoId } });
-      optionalInfoValidation(optionalInfo, userOptionalInfo);
-
-      userInfo.dateOfBirth = new Date(userInfo.dateOfBirth);
-      userInfo.dateOfBirth.setTime(userInfo.dateOfBirth.getTime() + 60 * 60 * 1000);
-      userInfo = removeNullProperty({
-        photo: userInfo.photo != currentUser.photo ? userInfo.photo : null,
-        gender: userInfo.gender != currentUser.gender ? userInfo.gender : null,
-        firstName: userInfo.firstName != currentUser.firstName ? userInfo.firstName : null,
-        lastName: userInfo.lastName != currentUser.lastName ? userInfo.lastName : null,
-        email: userInfo.email != currentUser.email ? userInfo.email : null,
-        dateOfBirth:
-          userInfo.dateOfBirth.getTime() != currentUser.dateOfBirth.getTime()
-            ? userInfo.dateOfBirth
-            : null,
-        phoneNumber: userInfo.phoneNumber != currentUser.phoneNumber ? userInfo.phoneNumber : null
-      });
+      userInfo = removeNullFromUserInfo(userInfo, currentUser);
       const [updateOptionalData] = await OptionalInfo.update(optionalInfo, {
         where: { id: optionalInfoId }
       });
@@ -94,6 +72,7 @@ class ProfileService extends BaseService {
 
       return super.returnResponse(200, { success, userInfoData });
     } catch (error) {
+      console.log('TCL: ProfileService -> updateUserInfo -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });

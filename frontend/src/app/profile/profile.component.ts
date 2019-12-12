@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('fire');
     if (this.router.url === "/account") {
       this.router.navigateByUrl("/account/profile");
     }
