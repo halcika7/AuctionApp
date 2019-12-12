@@ -90,7 +90,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, errors) => {
 
     return { isValid: true, errors, cardInfoData: cardInfo };
   } catch (error) {
-    errors.errors.card = 'Ivalid credit card information';
+    errors.errors.card = error.raw.message;
     return { isValid: false, errors };
   }
 };
