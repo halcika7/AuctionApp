@@ -3,6 +3,7 @@ import { Brand, Prices, Filters, PriceRange } from "./shop-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export const SHOP_PAGE_START = "SHOP_PAGE_START";
+export const SHOP_PAGE_PRODUCTS_START = "SHOP_PAGE_PRODUCTS_START";
 export const SHOP_PAGE_SUCCESS = "SHOP_PAGE_SUCCESS";
 export const SHOP_PAGE_FAILED = "SHOP_PAGE_FAILED";
 export const SHOP_PAGE_CLEAR = "SHOP_PAGE_CLEAR";
@@ -13,6 +14,11 @@ export const SHOP_PAGE_LOAD_MORE_SUCCESS = "SHOP_PAGE_LOAD_MORE_SUCCESS";
 export class ShopStart implements Action {
   readonly type = SHOP_PAGE_START;
   constructor(public url: string) {}
+}
+
+export class ShopProductsStart implements Action {
+  readonly type = SHOP_PAGE_PRODUCTS_START;
+  constructor(public queryObject: any) {}
 }
 
 export class ShopSuccess implements Action {
@@ -55,6 +61,7 @@ export class ShopPageLoadMoreSuccess implements Action {
 
 export type ShopPageActions =
   | ShopStart
+  | ShopProductsStart
   | ShopSuccess
   | ShopFailed
   | ClearShopPageState
