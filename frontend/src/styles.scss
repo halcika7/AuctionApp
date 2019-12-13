@@ -6,6 +6,10 @@
   @include padding($left: 21px !important);
 }
 
+.no-overflow {
+  overflow: hidden;
+}
+
 app-root {
   @include flex($direction: column);
   @include margin(0);
@@ -52,7 +56,7 @@ app-footer {
   h1 {
     @include flex(center, center);
     @include margin(0);
-    @include fontMixin(24px, bold, 0.84px, light_black);
+    @include fontMixin(24px, bold, 0.84px, light_black, $transform: uppercase);
     @include heightWidth(58px, 100%);
     background: getColor(darker_white2);
   }
@@ -148,7 +152,7 @@ app-footer {
   height: auto;
 
   button {
-    @include fontMixin(18px, bold, 0.63px, light_black);
+    @include fontMixin(18px, bold, 0.63px, light_black, $transform: uppercase);
     @include heightWidth(57px, 100%);
     @include boxShadowBackground(true, white, 3px solid getColor(purple));
     cursor: pointer;

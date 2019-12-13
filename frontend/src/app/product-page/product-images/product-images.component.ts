@@ -10,7 +10,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./product-images.component.scss"]
 })
 export class ProductImagesComponent implements OnInit, OnDestroy {
-  private _images = [];
+  private _images: { image: string }[] = [];
   private _activeImage: string;
   private _currentIndex: number;
   private subscription: Subscription;
@@ -42,6 +42,17 @@ export class ProductImagesComponent implements OnInit, OnDestroy {
   imgClicked(imageUrl: string, index: number) {
     this._activeImage = imageUrl;
     this._currentIndex = index;
+  }
+
+  arrowClicked(name) {
+    if (name == "left" && this._currentIndex != 0) {
+      this._currentIndex--;
+    }
+
+    if (name == "right" && this._currentIndex != this._images.length - 1) {
+      this._currentIndex++;
+    }
+    this._activeImage = this._images[this._currentIndex].image;
   }
 
   get images() {

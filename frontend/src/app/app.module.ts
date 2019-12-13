@@ -8,6 +8,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { Ng5SliderModule } from "ng5-slider";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { NgxImageZoomModule } from "ngx-image-zoom";
 
 // Components
 import { AppComponent } from "@app/app.component";
@@ -85,7 +86,12 @@ import {
   faThList,
   faTh,
   faUserAlt,
-  faCog
+  faCog,
+  faTimes,
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faChevronLeft,
+  faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -163,7 +169,8 @@ import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
     FontAwesomeModule,
     Ng5SliderModule,
     NgxChartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxImageZoomModule.forRoot()
   ],
   providers: [
     {
@@ -191,7 +198,12 @@ export class AppModule {
       faTh,
       faThList,
       faUserAlt,
-      faCog
+      faCog,
+      faTimes,
+      faChevronCircleLeft,
+      faChevronCircleRight,
+      faChevronLeft,
+      faChevronRight
     );
   }
 }

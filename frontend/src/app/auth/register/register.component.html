@@ -12,50 +12,65 @@
       <app-input
         id="fName"
         title="First name"
-        placeholder="Enter first name"
         type="text"
         controlName="firstName"
         [parentForm]="form"
         [input]="form.get('firstName')"
         [showErrors]="showErrors"
+        [minLength]="2"
+        [maxLength]="102"
       ></app-input>
       <app-input
-        id="LName"
+        id="lName"
         title="Last name"
-        placeholder="Enter last name"
         type="text"
         controlName="lastName"
         [parentForm]="form"
         [input]="form.get('lastName')"
         [showErrors]="showErrors"
+        [minLength]="2"
+        [maxLength]="102"
       ></app-input>
       <app-input
         id="email"
         title="Email"
-        placeholder="Enter email"
         type="email"
         controlName="email"
         [parentForm]="form"
         [input]="form.get('email')"
-        pattern="Please enter valid email address !!"
+        pattern="Please enter valid email address"
         [showErrors]="showErrors"
+        autocomplete="new-password"
       ></app-input>
       <app-input
         id="password"
         title="Password"
-        placeholder="Enter password"
         type="password"
         controlName="password"
         [parentForm]="form"
         [input]="form.get('password')"
-        pattern="Password must include at least one of each type: lowercase, uppercase, number and
-        special symbol such as (!@#$%)!!"
+        pattern="Your password needs to contain both lower and upper case characters, number and a special character."
         [showErrors]="showErrors"
+        autocomplete="new-password"
+      ></app-input>
+      <app-input
+        id="confirmPassword"
+        title="Confirm password"
+        type="password"
+        controlName="confirmPassword"
+        [parentForm]="form"
+        [input]="form.get('confirmPassword')"
+        pattern="Your password needs to contain both lower and upper case characters, number and a special character."
+        [showErrors]="showErrors"
+        autocomplete="{something}"
       ></app-input>
       <button type="submit" [disabled]="!isValidForm || isClicked">
         Register
       </button>
-      <span>Already have an account? <a [routerLink]="['/home/auth/login']">Login</a></span>
+      <span
+        >Already have an account?
+        <a [routerLink]="['/home/auth/login']">Login</a></span
+      >
     </div>
   </form>
 </section>

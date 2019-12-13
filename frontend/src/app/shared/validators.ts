@@ -1,9 +1,12 @@
 import { FormControl, Validators, FormGroup } from "@angular/forms";
 
-export const PASSWORD_VALIDATOR = (basic = false) => {
+export const PASSWORD_VALIDATOR = (
+  basic = false,
+  name: string = "password"
+) => {
   return !basic
     ? {
-        password: new FormControl("", [
+        [name]: new FormControl("", [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(30),
@@ -15,7 +18,7 @@ export const PASSWORD_VALIDATOR = (basic = false) => {
         ])
       }
     : {
-        password: new FormControl("", [Validators.required])
+        [name]: new FormControl("", [Validators.required])
       };
 };
 

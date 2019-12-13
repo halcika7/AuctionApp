@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "@app/auth/auth";
-import { PASSWORD_VALIDATOR } from '../../shared/validators';
+import { PASSWORD_VALIDATOR } from "@app/shared/validators";
 
 @Component({
   selector: "app-reset-password",
