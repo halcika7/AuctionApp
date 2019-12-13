@@ -81,7 +81,7 @@ class ProfileService extends BaseService {
 
       const success =
         updateOptionalData == 0 && updateUserInfo == 0 && updatedCardInfoData == 0
-          ? 'Nothing updated'
+          ? 'No changes to user profile are made'
           : 'Profile info updated';
 
       return super.returnResponse(200, { success, userInfoData });
