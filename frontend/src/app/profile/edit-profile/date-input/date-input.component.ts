@@ -1,6 +1,11 @@
-import { getMonthNumber } from './../../../shared/dateHelper';
 import { Component, OnInit, Input } from "@angular/core";
-import { getYears, getNextFourYears, getMonths, getMonthDays } from "@app/shared/dateHelper";
+import {
+  getYears,
+  getNextFourYears,
+  getMonths,
+  getMonthDays,
+  getMonthNumber
+} from "@app/shared/dateHelper";
 import { emptyObject } from "@app/shared/checkEmptyObject";
 
 @Component({
@@ -36,6 +41,8 @@ export class DateInputComponent implements OnInit {
 
   yearOnChange(value: number) {
     this.defaultDate.year = value;
+    this.defaultDate.month = null;
+    this.defaultDate.day = null;
     if (this.withDays) {
       this.pushDays();
     }
@@ -43,6 +50,7 @@ export class DateInputComponent implements OnInit {
 
   monthOnChange(value: string) {
     this.defaultDate.month = value;
+    this.defaultDate.day = null;
     if (this.withDays) {
       this.pushDays();
     }

@@ -3,7 +3,6 @@ import { FormGroup } from "@angular/forms";
 import { emptyObject } from "@app/shared/checkEmptyObject";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
-import { faThinkPeaks } from "@fortawesome/free-brands-svg-icons";
 
 @Component({
   selector: "app-card-info",

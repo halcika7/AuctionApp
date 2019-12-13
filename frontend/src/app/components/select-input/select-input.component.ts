@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
 
 @Component({
   selector: "app-select-input",
   templateUrl: "./select-input.component.html",
   styleUrls: ["./select-input.component.scss"]
 })
-export class SelectInputComponent implements OnInit {
+export class SelectInputComponent implements OnInit, OnChanges {
   @Input() values: any[];
   @Input() label: string;
   @Input() error: string;
@@ -18,6 +18,10 @@ export class SelectInputComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this._selectedValue = this.default;
+  }
+
+  ngOnChanges() {
     this._selectedValue = this.default;
   }
 

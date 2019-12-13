@@ -34,9 +34,7 @@ export class RequiredInfoComponent implements OnInit {
           phoneNumber: !emptyObject(errors)
             ? this.form.value.phoneNumber
             : userInfo.phoneNumber,
-          email: !emptyObject(errors)
-            ? this.form.value.email
-            : userInfo.email,
+          email: !emptyObject(errors) ? this.form.value.email : userInfo.email,
           image: !emptyObject(errors) ? this.form.value.image : null
         });
       }

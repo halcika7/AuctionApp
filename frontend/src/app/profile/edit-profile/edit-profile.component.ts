@@ -53,7 +53,9 @@ export class EditProfileComponent implements OnInit {
     this.store.select("profile").subscribe(({ userInfo, errors }) => {
       this._clicked = false;
       if (!emptyObject(userInfo)) {
-        this._date = { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
+        this._date = errors.dateOfBirth
+          ? this._date
+          : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
         this._cardEXP = !emptyObject(errors)
           ? { ...this._cardEXP }
           : {

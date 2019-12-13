@@ -89,7 +89,6 @@ class ProfileService extends BaseService {
 
       return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
     } catch (error) {
-      console.log('TCL: ProfileService -> updateUserInfo -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });
