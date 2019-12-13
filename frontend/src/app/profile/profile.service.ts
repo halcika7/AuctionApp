@@ -6,10 +6,15 @@ import { Subject } from "rxjs";
 })
 export class ProfileService {
   breadcrumbChanged = new Subject<string>();
+  birthDateChanged = new Subject<{ day: number; year: number; month: string }>();
 
   constructor() {}
 
   changeBreadcrumb(value: string) {
     this.breadcrumbChanged.next(value);
+  }
+
+  changeBirthDate(value: { day: number; year: number; month: string }) {
+    this.birthDateChanged.next(value);
   }
 }

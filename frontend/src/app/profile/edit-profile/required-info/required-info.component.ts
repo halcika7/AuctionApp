@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import { emptyObject } from "@app/shared/checkEmptyObject";
 import { setErrors } from "@app/shared/validators";
+import { ProfileService } from "@app/profile/profile.service";
 
 @Component({
   selector: "app-required-info",
@@ -18,7 +19,10 @@ export class RequiredInfoComponent implements OnInit {
   private _genderError: string;
   private _dateError: string;
 
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private profileService: ProfileService
+  ) {}
 
   ngOnInit() {
     this.store.select("profile").subscribe(({ userInfo, errors }) => {
@@ -45,6 +49,11 @@ export class RequiredInfoComponent implements OnInit {
         setErrors(errors, "phoneNumber", this.form);
         this._genderError = errors.gender ? errors.gender : "";
         this._dateError = errors.dateOfBirth ? errors.dateOfBirth : "";
+      }
+    });
+    this.profileService.birthDateChanged.subscribe(value => {
+      if (value.year && value.month && value.day) {
+        this._dateError = "";
       }
     });
   }

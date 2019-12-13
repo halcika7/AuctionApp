@@ -7,6 +7,7 @@ import {
   getMonthNumber
 } from "@app/shared/dateHelper";
 import { emptyObject } from "@app/shared/checkEmptyObject";
+import { ProfileService } from '@app/profile/profile.service';
 
 @Component({
   selector: "app-date-input",
@@ -27,7 +28,7 @@ export class DateInputComponent implements OnInit {
   private _days: number[] = [];
   private _years: number[] = [];
 
-  constructor() {}
+  constructor(private profileService: ProfileService) {}
 
   ngOnInit() {
     if (!emptyObject(this.defaultDate)) {
@@ -43,6 +44,7 @@ export class DateInputComponent implements OnInit {
     this.defaultDate.year = value;
     this.defaultDate.month = null;
     this.defaultDate.day = null;
+    this.withDays && this.profileService.changeBirthDate(this.defaultDate);
     if (this.withDays) {
       this.pushDays();
     }
@@ -51,19 +53,21 @@ export class DateInputComponent implements OnInit {
   monthOnChange(value: string) {
     this.defaultDate.month = value;
     this.defaultDate.day = null;
+    this.withDays && this.profileService.changeBirthDate(this.defaultDate);
     if (this.withDays) {
       this.pushDays();
     }
+  }
+
+  dayOnChange(value: number) {
+    this.defaultDate.day = value;
+    this.profileService.changeBirthDate(this.defaultDate);
   }
 
   pushDays(monthStr = this.defaultDate.month, year = this.defaultDate.year) {
     if (monthStr && year) {
       this._days = getMonthDays(monthStr, year);
     }
-  }
-
-  dayOnChange(value: number) {
-    this.defaultDate.day = value;
   }
 
   get years(): number[] {

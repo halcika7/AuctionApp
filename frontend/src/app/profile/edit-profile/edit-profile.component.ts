@@ -53,7 +53,7 @@ export class EditProfileComponent implements OnInit {
     this.store.select("profile").subscribe(({ userInfo, errors }) => {
       this._clicked = false;
       if (!emptyObject(userInfo)) {
-        this._date = errors.dateOfBirth
+        this._date = !emptyObject(errors)
           ? this._date
           : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
         this._cardEXP = !emptyObject(errors)
@@ -62,7 +62,7 @@ export class EditProfileComponent implements OnInit {
               year: userInfo.CardInfo.exp_year,
               month: userInfo.CardInfo.exp_month
             };
-        this._gender = userInfo.gender;
+        this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
       }
     });
     this.form.statusChanges.subscribe(validity => {
