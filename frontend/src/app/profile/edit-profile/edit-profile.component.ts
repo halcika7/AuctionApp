@@ -10,8 +10,7 @@ import {
   NAME_VALIDATOR,
   BASIC_INPUT,
   REQUIRED_INPUT,
-  CARD_NUMBER,
-  CARD_CVC
+  CARD_FIELD
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
 
@@ -42,8 +41,8 @@ export class EditProfileComponent implements OnInit {
       ...EMAIL_VALIDATOR(true),
       ...REQUIRED_INPUT("phoneNumber"),
       ...BASIC_INPUT("cName"),
-      ...CARD_NUMBER("cNumber"),
-      ...CARD_CVC("CVC"),
+      ...CARD_FIELD("cNumber", {}),
+      ...CARD_FIELD("CVC", { min: 3, max: 4 }),
       ...BASIC_INPUT("street"),
       ...BASIC_INPUT("city"),
       ...BASIC_INPUT("zip"),
