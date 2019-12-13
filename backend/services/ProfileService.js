@@ -6,7 +6,7 @@ const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty, removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
-const { getUserInfo } = require('../helpers/authHelper');
+const { getUserInfo, createAccessToken, createRefreshToken } = require('../helpers/authHelper');
 
 class ProfileService extends BaseService {
   constructor() {
@@ -79,13 +79,17 @@ class ProfileService extends BaseService {
 
       const userInfoData = await getUserInfo(userId);
 
+      const accessToken = createAccessToken(userInfoData),
+        refreshToken = createRefreshToken(userInfoData);
+
       const success =
         updateOptionalData == 0 && updateUserInfo == 0 && updatedCardInfoData == 0
           ? 'No changes to user profile are made'
           : 'Profile info updated';
 
-      return super.returnResponse(200, { success, userInfoData });
+      return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
     } catch (error) {
+      console.log('TCL: ProfileService -> updateUserInfo -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });

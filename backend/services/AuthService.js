@@ -57,6 +57,7 @@ class AuthService extends BaseService {
         refreshToken
       };
     } catch (error) {
+      console.log('TCL: AuthService -> login -> error', error)
       return super.returnResponse(403, {
         response: { message: 'Something happened. We were unable to perform login.' }
       });

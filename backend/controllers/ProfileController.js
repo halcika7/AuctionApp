@@ -1,5 +1,6 @@
 const BaseController = require('./BaseController');
 const ProfileService = require('../services/ProfileService');
+const AuthService = require('../services/AuthService');
 
 class ProfileController extends BaseController {
   constructor() {
@@ -13,13 +14,19 @@ class ProfileController extends BaseController {
   }
 
   async updateProfileInfo(req, res) {
-    const { userId, email, accessToken } = req;
-    const { status, success, errors, message, userInfoData } = await ProfileService.updateUserInfo(
-      req.file,
-      req.body,
-      userId,
-      email
-    );
+    const { userId, email } = req;
+    const {
+      status,
+      success,
+      errors,
+      message,
+      userInfoData,
+      accessToken,
+      refreshToken
+    } = await ProfileService.updateUserInfo(req.file, req.body, userId, email);
+    if(refreshToken) {
+      AuthService.setRefreshTokenCookie(res, refreshToken);
+    }
     return super.sendResponseWithMessage(
       res,
       status,

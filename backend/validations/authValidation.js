@@ -38,6 +38,11 @@ exports.loginValidation = async data => {
   let message = '';
   const user = await findUserByEmail(data.email);
 
+  if(!user) {
+    message = 'Incorrect email or password';
+    return this.returnData(errors, message, {});
+  }
+
   if (user.deactivated) {
     message = 'Your account is deactivated';
     return this.returnData(errors, message, { user });
