@@ -74,8 +74,8 @@ exports.createOptionalInfo = async () => {
   return await OptionalInfo.create({});
 };
 
-exports.createCardnfo = async () => {
-  return await Cardnfo.create({});
+exports.createCardInfo = async () => {
+  return await CardInfo.create({});
 };
 
 exports.createUser = async (

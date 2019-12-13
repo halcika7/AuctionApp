@@ -29,14 +29,14 @@ exports.userInfoValidation = async (userInfo, email) => {
     errors.dateOfBirth = 'Invalid date of birth';
   }
 
-  try {
-    const phone = await client.lookups.phoneNumbers(data.phoneNumber).fetch({ type: ['carrier'] });
-    if (!phone.phoneNumber) {
-      errors.phoneNumber = 'Phone number is required';
+  if(data.phoneNumber) {
+    try {
+      await client.lookups.phoneNumbers(data.phoneNumber).fetch({ type: ['carrier'] });
+    } catch (error) {
+      errors.phoneNumber = error.message + '. Please use valid country code.';
     }
-  } catch (error) {
-    errors.phoneNumber = 'Invalid phone number';
   }
+
 
   nameValidation('firstName', data.firstName, errors, 'First name');
   nameValidation('lastName', data.lastName, errors, 'Last name');
