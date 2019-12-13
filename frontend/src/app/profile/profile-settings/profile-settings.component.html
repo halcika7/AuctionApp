@@ -1,3 +1,9 @@
+<app-confirm-deactivation-modal
+  *ngIf="showModal"
+  (closeModal)="openModal($event)"
+  (confirmDeactivation)="deactivateAccount()"
+></app-confirm-deactivation-modal>
+
 <section class="container settings">
   <!-- <div class="setting-item">
     <h3>Policy and Community</h3>
@@ -32,7 +38,7 @@
         Email <span>{{ email }}</span>
       </p>
       <p class="email-phone">
-        Phone <span>{{ phone || 'Phone number not provided' }}</span>
+        Phone <span>{{ phone || "Phone number not provided" }}</span>
       </p>
     </div>
   </div>
@@ -40,7 +46,7 @@
     <h3>Account</h3>
     <div class="info">
       <p>Do you want to deactivate account?</p>
-      <button type="button" (click)="deactivateAccount()">deactivate</button>
+      <button type="button" (click)="openModal()">deactivate</button>
     </div>
   </div>
 </section>

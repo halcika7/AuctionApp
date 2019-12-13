@@ -100,6 +100,7 @@ import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
 import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
+import { ConfirmDeactivationModalComponent } from './profile/profile-settings/confirm-deactivation-modal/confirm-deactivation-modal.component';
 
 @NgModule({
   declarations: [
@@ -149,7 +150,8 @@ import { DateAgoPipe } from "./shared/pipes/date-ago.pipe";
     RequiredInfoComponent,
     OptionalInfoComponent,
     CardInfoComponent,
-    SearchComponent
+    SearchComponent,
+    ConfirmDeactivationModalComponent
   ],
   imports: [
     BrowserModule,

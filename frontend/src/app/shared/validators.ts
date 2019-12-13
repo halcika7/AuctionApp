@@ -51,11 +51,14 @@ export const NAME_VALIDATOR = (name: string) => {
   };
 };
 
-export const REQUIRED_INPUT = (name: string) => {
+export const PHONE_VALIDATOR = (name: string) => {
   return {
-    [name]: new FormControl("", [Validators.required])
+    [name]: new FormControl("", [
+      Validators.minLength(7),
+      Validators.maxLength(15)
+    ])
   };
-};
+}
 
 export const BASIC_INPUT = (name: string, dValue: any = "") => {
   return {

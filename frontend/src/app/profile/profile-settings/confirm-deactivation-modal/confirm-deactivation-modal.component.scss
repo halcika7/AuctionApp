@@ -1,0 +1,57 @@
+@import "mixins";
+@import "variables";
+
+.confirm-deactivation {
+  @include flex(center, center);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+
+  .backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background: #11111162;
+  }
+
+  .content {
+    height: 100px;
+    background: getColor(white);
+    z-index: 1;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.297);
+
+    h3 {
+      @include fontMixin(18px, regular, 0.63px, light_black);
+    }
+
+    .buttons {
+      @include fontMixin(16px, regular, 0.63px, light_black);
+      @include flex(center, space-between);
+
+      button {
+        box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+        color: getColor(white);
+        width: 48%;
+        cursor: pointer;
+        outline: none;
+      }
+
+      .confirm {
+        background: getColor(light_green);
+        border: 3px solid getColor(light_green);
+      }
+
+      .close {
+        background: getColor(red);
+        border: 3px solid getColor(red);
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@ import * as ProfileActions from "../store/profile.actions";
 export class ProfileSettingsComponent implements OnInit {
   private _email: string;
   private _phone: string;
+  private _showModal: boolean = false;
   constructor(
     private profileService: ProfileService,
     private store: Store<fromApp.AppState>
@@ -32,6 +33,10 @@ export class ProfileSettingsComponent implements OnInit {
       });
   }
 
+  openModal(value: boolean = true) {
+    this._showModal = value;
+  }
+
   deactivateAccount() {
     this.store.dispatch(new ProfileActions.DeactivateAccount());
     localStorage.removeItem("accessToken");
@@ -44,5 +49,9 @@ export class ProfileSettingsComponent implements OnInit {
 
   get phone(): string {
     return this._phone;
+  }
+
+  get showModal(): boolean {
+    return this._showModal;
   }
 }
