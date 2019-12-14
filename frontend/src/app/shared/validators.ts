@@ -45,6 +45,33 @@ export const NAME_VALIDATOR = (name: string) => {
   };
 };
 
+export const PHONE_VALIDATOR = (name: string) => {
+  return {
+    [name]: new FormControl("", [
+      Validators.minLength(7),
+      Validators.maxLength(15)
+    ])
+  };
+}
+
+export const BASIC_INPUT = (name: string, dValue: any = "") => {
+  return {
+    [name]: new FormControl(dValue, {})
+  };
+};
+
+export const CARD_FIELD = (
+  name: string,
+  { value = "", min = 13, max = 16 }
+) => {
+  return {
+    [name]: new FormControl(value, [
+      Validators.minLength(min),
+      Validators.maxLength(max)
+    ])
+  };
+};
+
 export const setErrors = (
   errors: any,
   objectProperty: string,

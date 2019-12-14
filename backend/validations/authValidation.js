@@ -102,9 +102,10 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
 };
 
 function emailValidation(email, errors) {
+  const regex = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9][a-z0-9-]*[a-z0-9]\.)+[a-z0-9][a-z0-9-]*[a-z0-9]")
   if (isEmpty(email)) {
     errors.email = 'Email is required';
-  } else if (!Validator.isEmail(email)) {
+  } else if (!Validator.isEmail(email) || !regex.test(email)) {
     errors.email = 'Please enter valid email address';
   }
 }
