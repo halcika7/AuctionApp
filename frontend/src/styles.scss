@@ -125,7 +125,7 @@ app-footer {
   }
 
   .input {
-    background: getColor(darker_white);
+    // background: getColor(darker_white);
 
     input {
       @include padding($all: 0 30px);
@@ -134,7 +134,7 @@ app-footer {
       box-sizing: border-box;
       outline: none;
       border: 1px solid getColor(light_gray);
-      background: transparent;
+      background: getColor(darker_white);
     }
   }
 }

@@ -88,7 +88,11 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, errors) => {
 
     return { isValid: true, errors, cardInfoData: cardInfo };
   } catch (error) {
-    errors.errors.card = error.raw.message;
+    if(errors.errors) {
+      errors.errors.card = error.raw.message;
+    } else {
+      errors.card = error.raw.message;
+    }
     return { isValid: false, errors };
   }
 };

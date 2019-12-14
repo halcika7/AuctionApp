@@ -10,8 +10,11 @@ const fileStorage = multer.diskStorage({
     cb(null, directory);
   },
   filename: (req, file, cb) => {
-    let fileName = `user-${req.userId}.${file.mimetype.slice(6)}`;
-    cb(null, fileName);
+    if (file.fieldname === 'images') {
+      cb(null, `${new Date().getTime() * Math.random()}.${file.originalname.split('.').pop()}`);
+    } else {
+      cb(null, `user-${req.userId}.${file.mimetype.slice(6)}`);
+    }
   }
 });
 

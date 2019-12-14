@@ -8,7 +8,7 @@
   [input]="form.get('name')"
   [showErrors]="true"
   [minLength]="5"
-  [maxLength]="60"
+  [maxLength]="61"
 ></app-input>
 <p>2-5 words (60 characters)</p>
 <div class="category">
@@ -61,7 +61,7 @@
     [showErrors]="true"
     [isInput]="false"
     profile="true"
-    [maxLength]="700"
+    [maxLength]="701"
   ></app-input>
   <p>100 words (700 characters)</p>
 </div>
@@ -74,7 +74,7 @@
   >
     <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
   </button>
-  <button class="next" [disabled]="!isValid" (click)="buttonClicked(false)">
+  <button class="next" (click)="buttonClicked(false)">
     next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
   </button>
 </div>

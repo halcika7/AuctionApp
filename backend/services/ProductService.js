@@ -10,6 +10,7 @@ const { decodeToken } = require('../helpers/authHelper');
 const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
 const BaseService = require('./BaseService');
 const BidService = require('./BidService');
+const { addProductValidation } = require('../validations/addProductValidation');
 
 class ProductService extends BaseService {
   constructor() {
@@ -102,18 +103,23 @@ class ProductService extends BaseService {
         subcategoryData = JSON.parse(reqBody.subcategoryData),
         brandData = JSON.parse(reqBody.brandData),
         filtersData = JSON.parse(reqBody.filtersData);
-      const { errors, isValid } = await addProductValidation({
-        productData,
-        addressInformation,
-        cardInformation,
-        categoryData,
-        subcategoryData,
-        brandData,
-        filtersData
-      }, userId, images);
+      const { errors, isValid } = await addProductValidation(
+        {
+          productData,
+          addressInformation,
+          cardInformation,
+          categoryData,
+          subcategoryData,
+          brandData,
+          filtersData
+        },
+        userId,
+        images
+      );
 
       return { status: 200, message: 'Product added' };
     } catch (error) {
+      console.log('TCL: addProduct -> error', error);
       return { status: 200, message: 'Something happend. We were unable to proccess request.' };
     }
   }

@@ -1,5 +1,6 @@
 const BaseController = require('./BaseController');
 const ProductServiceInstance = require('../services/ProductService');
+const fs = require('fs');
 
 class ProductController extends BaseController {
   constructor() {
@@ -94,7 +95,8 @@ class ProductController extends BaseController {
 
   async addProduct(req, res) {
     const { userId } = req;
-    req.files.forEach(file => fs.unlinkSync(file.path));
+
+    if (req.files.length > 0) req.files.forEach(file => fs.unlinkSync(file.path));
 
     const { status, message, errors } = await ProductServiceInstance.addProduct(
       userId,

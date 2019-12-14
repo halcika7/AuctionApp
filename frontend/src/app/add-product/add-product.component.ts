@@ -130,6 +130,7 @@ export class AddProductComponent implements OnInit {
   }
 
   submitForm(data) {
+    console.log('TCL: submitForm -> data', data)
     const formData = new FormData();
     const productData = {
       name: this.form.value.name,
@@ -148,11 +149,12 @@ export class AddProductComponent implements OnInit {
       zip: this.form.value.zip
     };
     const cardInformation = {
+      useCard: this.form.value.useCard,
       cvc: this.form.value.CVC,
       name: this.form.value.cName,
       number: this.form.value.cNumber,
-      exp_year: data.exp_year,
-      exp_month: data.exp_month
+      exp_year: data.exp_year || null,
+      exp_month: data.exp_month || null
     };
     formData.append("productData", JSON.stringify(productData));
     formData.append("addressInformation", JSON.stringify(addressInformation));
@@ -164,9 +166,11 @@ export class AddProductComponent implements OnInit {
     );
     formData.append("brandData", JSON.stringify(this._selectedBrandData));
     formData.append("filtersData", JSON.stringify(this._selectedFilterData));
-    this.form.value.images.forEach(
-      async image => await formData.append("images", image)
-    );
+    if(this.form.value.images.length > 0) {
+      this.form.value.images.forEach(
+        async image => await formData.append("images", image)
+      );
+    }
     this.store.dispatch(new AddProductActions.AddUserProductStart(formData));
   }
 
