@@ -1,0 +1,51 @@
+<app-no-active
+  *ngIf="
+    numberOfActiveProducts < 1 &&
+    stepNumber == 0 &&
+    numberOfActiveProducts != null
+  "
+></app-no-active>
+
+<div
+  class="steps"
+  [ngClass]="{
+    first: stepNumber == 1,
+    second: stepNumber == 2,
+    third: stepNumber == 3
+  }"
+>
+  <span class="circle">
+    <span></span>
+  </span>
+  <span class="line"><span></span></span>
+  <span class="circle"><span></span></span>
+  <span class="line"><span></span></span>
+  <span class="circle"><span></span></span>
+</div>
+
+<section class="container" *ngIf="numberOfActiveProducts > 0 || stepNumber > 0">
+  <div class="product-information">
+    <h3 *ngIf="stepNumber == 1">detail information about product</h3>
+    <h3 *ngIf="stepNumber == 2">Set prices</h3>
+    <h3 *ngIf="stepNumber == 3">location & shipping</h3>
+    <div class="form">
+      <app-first-step
+        *ngIf="stepNumber == 1"
+        [form]="form"
+        (emitChanges)="firstStepValueChange($event)"
+        [brandData]="brandData"
+        [categoryData]="categoryData"
+        [subcategoryData]="subcategoryData"
+        [filterData]="filterData"
+        (checkValidity)="firstStepCheckValidity()"
+        [isValid]="isValid"
+      ></app-first-step>
+      <app-second-step [form]="form" *ngIf="stepNumber == 2"></app-second-step>
+      <app-last-step
+        [form]="form"
+        *ngIf="stepNumber == 3"
+        (submitForm)="submitForm($event)"
+      ></app-last-step>
+    </div>
+  </div>
+</section>

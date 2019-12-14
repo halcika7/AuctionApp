@@ -34,6 +34,11 @@ module.exports = {
           allowNull: false,
           defaultValue: false
         },
+        freeShipping: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
         auctionStart: {
           type: Sequelize.DATE,
           allowNull: false

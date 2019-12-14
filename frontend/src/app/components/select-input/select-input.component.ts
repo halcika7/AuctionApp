@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges
+} from "@angular/core";
 
 @Component({
   selector: "app-select-input",
@@ -6,12 +13,14 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angu
   styleUrls: ["./select-input.component.scss"]
 })
 export class SelectInputComponent implements OnInit, OnChanges {
+  @Input() object: boolean = false;
   @Input() values: any[];
   @Input() label: string;
   @Input() error: string;
   @Input() invalid: boolean;
   @Input() default: string;
   @Input() liWhenValuesLength0: string;
+  @Input() parentId: string;
   @Output() valueChange = new EventEmitter<any>();
   private _selectedValue: any;
 
@@ -25,9 +34,17 @@ export class SelectInputComponent implements OnInit, OnChanges {
     this._selectedValue = this.default;
   }
 
-  changeSelectedValue(value: any) {
+  changeSelectedValue(value: any, id: string = null) {
     this._selectedValue = value;
-    this.valueChange.emit(value);
+    if (id) {
+      if (this.parentId) {
+        this.valueChange.emit({ id, value, parentId: this.parentId });
+      } else {
+        this.valueChange.emit({ id, value });
+      }
+    } else {
+      this.valueChange.emit(value);
+    }
   }
 
   get selectedValue(): any {

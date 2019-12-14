@@ -1,0 +1,29 @@
+<div class="form-group" [formGroup]="form">
+  <label>{{ title }}</label>
+  <div class="input">
+    <input
+      [owlDateTimeTrigger]="dt1"
+      [owlDateTime]="dt1"
+      placeholder="{{ placeholder }}"
+      formControlName="{{ controlName }}"
+      autocomplete="{something}"
+    />
+    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+    <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+  </div>
+  <span *ngIf="input.invalid">
+    <span *ngIf="input.errors['required']">{{ title }} is required</span>
+    <span *ngIf="input.errors['today']"
+      >{{ title }} should be equal or greather than today's date</span
+    >
+    <span *ngIf="input.errors['tomorrow']"
+      >{{ title }} should be equal or greather than tomorrow date</span
+    >
+    <span *ngIf="input.errors['gthenStart']"
+      >{{ title }} should be greather than start date</span
+    >
+  </span>
+  <span *ngIf="input.invalid" class="async">
+    <span *ngIf="input.errors['async']">{{ input.errors["async"] }}</span>
+  </span>
+</div>

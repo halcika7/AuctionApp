@@ -1,4 +1,4 @@
-import { FormControl, Validators, FormGroup } from "@angular/forms";
+import { FormControl, Validators, FormGroup, AbstractControl } from "@angular/forms";
 
 export const PASSWORD_VALIDATOR = (
   basic = false,
@@ -27,13 +27,7 @@ export const EMAIL_VALIDATOR = (basic = false) => {
     ? {
         email: new FormControl("", [
           Validators.required,
-          Validators.email,
-          Validators.pattern(
-            new RegExp(
-              // tslint:disable-next-line: max-line-length
-              "..[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-            )
-          )
+          Validators.email
         ])
       }
     : {
@@ -41,12 +35,18 @@ export const EMAIL_VALIDATOR = (basic = false) => {
       };
 };
 
-export const NAME_VALIDATOR = (name: string) => {
+export const NAME_VALIDATOR = (
+  name: string,
+  min: number = 1,
+  max: number = 100,
+  extraValidators: any[] = []
+) => {
   return {
     [name]: new FormControl("", [
       Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(100)
+      Validators.minLength(min),
+      Validators.maxLength(max),
+      ...extraValidators
     ])
   };
 };
@@ -92,3 +92,40 @@ export const setErrors = (
     form.controls[objectProperty].setValue(form.controls[objectProperty].value);
   }
 };
+
+
+export const numberOfWordsValidator = (min = 2, max = 5) => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const length = control.value.split(" ").filter(n => n != "").length;
+    if (length < min && !max) {
+      return {
+        numberOfWordsValidator: { min }
+      };
+    } else if (length < min || (max && length > max)) {
+      return {
+        numberOfWordsValidator: { min, max }
+      };
+    }
+    return null;
+  };
+};
+
+export const setValidators = (controls: any[], validator) => {
+  controls.forEach((control: FormControl) => {
+    control.setValidators(Validators[validator]);
+  });
+};
+
+export const clearValidators = (controls: any[]) => {
+  controls.forEach((control: FormControl) => {
+    control.clearValidators();
+    control.markAsUntouched();
+    control.patchValue("", { onlySelf: true });
+  });
+};
+
+export const updateValueAndValidity = (controls: any[]) => {
+  controls.forEach((control: FormControl) => {
+    control.updateValueAndValidity({ onlySelf: true });
+  });
+}

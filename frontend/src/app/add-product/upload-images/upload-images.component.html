@@ -1,0 +1,44 @@
+<div
+  class="upload-images"
+  (click)="multiFileInput.click()"
+  appDragDrop
+  (onFileDropped)="uploadFile($event)"
+  [formGroup]="form"
+  [ngClass]="{
+    'no-files': urls.length == 0,
+    files: urls.length > 0,
+    invalid: input.invalid && input.touched
+  }"
+>
+  <input
+    type="file"
+    (change)="uploadFile($event.target.files)"
+    #multiFileInput
+    multiple
+    accept="image/*"
+  />
+  <div class="img" *ngFor="let url of urls; let index = index">
+    <img [src]="url" alt="" />
+    <fa-icon
+      [icon]="['fas', 'times']"
+      (click)="deleteAttachment($event, index)"
+    ></fa-icon>
+  </div>
+  <p *ngIf="urls.length > 0"><span>Upload photos</span></p>
+  <p *ngIf="urls.length == 0">
+    <span>Upload photos</span> or just drag and drop
+  </p>
+  <p *ngIf="urls.length == 0">+ Add at least 3 photos</p>
+</div>
+<span *ngIf="input.invalid && input.touched">
+  <span *ngIf="input.errors['required']">Product images are required</span>
+  <span *ngIf="input.errors['minlength']"
+    >Upload at least {{ input.errors["minlength"].requiredLength }} photos</span
+  >
+  <span *ngIf="input.errors['maxlength']"
+    >Upload at most {{ input.errors["maxlength"].requiredLength }} photos</span
+  >
+</span>
+<span *ngIf="input.invalid" class="async">
+  <span *ngIf="input.errors['async']">{{ input.errors["async"] }}</span>
+</span>

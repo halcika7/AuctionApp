@@ -4,6 +4,7 @@ const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require('../config/configs');
+const { db } = require('../config/database');
 
 exports.createAccessToken = ({ id, email }) =>
   jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
@@ -96,3 +97,31 @@ exports.createUser = async (
 };
 
 exports.hashPassword = async password => await bcrypt.hash(password, 10);
+
+exports.getOptionalInfoCard = async id => {
+  return await User.findOne({
+    subQuery: false,
+    where: { id },
+    attributes: [
+      'phoneNumber',
+      [
+        db.literal(
+          `CASE WHEN "CardInfo"."cardFingerprint" is null THEN false ELSE true END`
+        ),
+        'hasCard'
+      ]
+    ],
+    include: [
+      {
+        model: OptionalInfo,
+        attributes: {
+          exclude: ['id']
+        }
+      },
+      {
+        model: CardInfo,
+        attributes: []
+      }
+    ]
+  });
+}

@@ -61,6 +61,31 @@ class CategoryService extends BaseService {
       return super.returnGenericFailed();
     }
   }
+
+  async getCategories() {
+    try {
+      const categories = await Category.findAll({
+        attributes: ['id', 'name'],
+        order: [['id', 'ASC']]
+      });
+      return super.returnResponse(200, { categories });
+    } catch (error) {
+      return super.returnGenericFailed();
+    }
+  }
+
+  async getCategorySubcategories(CategoriesId) {
+    try {
+      const subcategories = await Subcategory.findAll({
+        where: { CategoriesId },
+        attributes: ['id', 'name'],
+        order: [['id', 'ASC']]
+      });
+      return super.returnResponse(200, { subcategories });
+    } catch (error) {
+      return super.returnGenericFailed();
+    }
+  }
 }
 
 const CategoryServiceInstance = new CategoryService();

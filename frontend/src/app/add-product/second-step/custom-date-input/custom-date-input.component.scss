@@ -1,0 +1,34 @@
+@import "mixins";
+@import "variables";
+
+label {
+  @include fontMixin(18px, light, 0.63px, light_black);
+  margin-bottom: 16px;
+  display: block;
+}
+
+input {
+  @include heightWidth(54px, 290px);
+  @include fontMixin(16px, regular, 0.56px, gray);
+  padding-left: 16px;
+  outline: none;
+  box-sizing: border-box;
+
+  @media (max-width: 740px) {
+    width: 100%;
+  }
+}
+
+.input {
+  position: relative;
+
+  fa-icon {
+    position: absolute;
+    right: 21px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 19px;
+    cursor: pointer;
+    pointer-events: none;
+  }
+}

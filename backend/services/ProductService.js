@@ -3,7 +3,8 @@ const {
   getProductById,
   getSimilarProducts,
   getProfileProducts,
-  noMoreProducts
+  noMoreProducts,
+  userActiveProductsCount
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
 const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
@@ -78,6 +79,42 @@ class ProductService extends BaseService {
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });
+    }
+  }
+
+  async getActiveUserProductsCount(userId) {
+    try {
+      const { count } = await userActiveProductsCount(userId);
+      return super.returnResponse(200, { numberOfActiveProducts: count });
+    } catch (error) {
+      return super.returnResponse(403, {
+        message: 'Something happened. We were unable to perform request.'
+      });
+    }
+  }
+
+  async addProduct(userId, images, reqBody) {
+    try {
+      const productData = JSON.parse(reqBody.productData),
+        addressInformation = JSON.parse(reqBody.addressInformation),
+        cardInformation = JSON.parse(reqBody.cardInformation),
+        categoryData = JSON.parse(reqBody.categoryData),
+        subcategoryData = JSON.parse(reqBody.subcategoryData),
+        brandData = JSON.parse(reqBody.brandData),
+        filtersData = JSON.parse(reqBody.filtersData);
+      const { errors, isValid } = await addProductValidation({
+        productData,
+        addressInformation,
+        cardInformation,
+        categoryData,
+        subcategoryData,
+        brandData,
+        filtersData
+      }, userId, images);
+
+      return { status: 200, message: 'Product added' };
+    } catch (error) {
+      return { status: 200, message: 'Something happend. We were unable to proccess request.' };
     }
   }
 }

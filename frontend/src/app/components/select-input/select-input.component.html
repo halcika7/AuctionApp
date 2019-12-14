@@ -1,20 +1,36 @@
-<div class="select-wrapper" [ngClass]="{invalid: invalid}">
+<div class="select-wrapper" [ngClass]="{ invalid: invalid }">
   <label *ngIf="label">{{ label }}</label>
   <div class="select">
-    <p appDropdown >{{ selectedValue || default }}</p>
-    <ul *ngIf="values.length > 0" type="select">
-      <li
-        *ngFor="let value of values"
-        (click)="changeSelectedValue(value)"
-        [ngClass]="{ active: value === selectedValue }"
-      >
-        {{ value }}
-      </li>
-    </ul>
+    <p appDropdown>
+      <span>{{ selectedValue || default }}</span>
+    </p>
+    <ng-template [ngIf]="!object">
+      <ul *ngIf="values.length > 0" type="select">
+        <li
+          *ngFor="let value of values"
+          (click)="changeSelectedValue(value)"
+          [ngClass]="{ active: value === selectedValue }"
+        >
+          {{ value }}
+        </li>
+      </ul>
+    </ng-template>
+    <ng-template [ngIf]="object">
+      <ul *ngIf="values.length > 0" type="select">
+        <li
+          *ngFor="let value of values"
+          (click)="changeSelectedValue(value.name || value.value, value.id)"
+          [ngClass]="{
+            active:
+              value.value === selectedValue || value.name === selectedValue
+          }"
+        >
+          {{ value.name || value.value }}
+        </li>
+      </ul>
+    </ng-template>
     <ul *ngIf="values.length === 0">
-      <li>
-        {{ liWhenValuesLength0 }}
-      </li>
+      <p>{{ liWhenValuesLength0 }}</p>
     </ul>
   </div>
   <p *ngIf="error">{{ error }}</p>

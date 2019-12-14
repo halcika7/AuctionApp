@@ -27,7 +27,7 @@
     width: 200px;
     position: relative;
 
-    p {
+    > p {
       @include fontMixin(18px, light, 0.63px, light_black);
       @include margin($all: 0);
       @include flex(center);
@@ -38,37 +38,42 @@
       position: relative;
       cursor: pointer;
       box-sizing: border-box;
+      max-width: 100%;
+
+      span {
+        display: block;
+        &::first-letter {
+          text-transform: capitalize;
+        }
+      }
 
       &:after,
       &:before {
         content: "";
-        @include heightWidth(5px, 12px);
+        @include heightWidth(12px, 4px);
         position: absolute;
         background: getColor(light_black);
-        top: 50%;
       }
 
       &:after {
-        right: 27px;
-        transform: rotate(45deg) translateY(-50%);
+        right: 26px;
+        transform: rotate(-45deg);
         transition: all 0.3s ease-in-out;
       }
 
       &:before {
-        right: 18px;
-        transform: rotate(-45deg) translateY(-50%);
+        right: 20px;
+        transform: rotate(45deg);
         transition: all 0.3s ease-in-out;
       }
 
       &.open {
         &:after {
-          right: 30px;
-          transform: rotate(-45deg) translate(50%);
+          transform: rotate(-135deg);
         }
 
         &:before {
-          right: 16px;
-          transform: rotate(45deg) translate(-50%);
+          transform: rotate(135deg);
         }
 
         ~ ul {
@@ -91,19 +96,27 @@
       right: 0;
       z-index: 2;
 
+      > p {
+        @include fontMixin(14px, regular, $color: light_black);
+        @include margin($all: 0);
+        @include padding($all: 0px 5px);
+        &:only-child {
+          background: transparent;
+          cursor: default;
+        }
+      }
+
       li {
         @include padding($all: 10px 5px);
         cursor: pointer;
+        &::first-letter {
+          text-transform: capitalize;
+        }
 
         &.active,
         &:hover {
           background: getColor(purple);
           color: getColor(white);
-        }
-
-        &:only-child {
-          background: transparent;
-          cursor: default;
         }
       }
     }
@@ -111,7 +124,7 @@
 
   > p {
     @include fontMixin(14px, light, $color: red);
-    @include margin($all: 5px 0 0);
     display: block;
+    @include margin($all: 5px 0 0);
   }
 }

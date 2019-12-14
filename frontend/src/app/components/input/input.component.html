@@ -5,24 +5,36 @@
 >
   <label for="{{ id }}">{{ title }}</label>
   <div class="input">
-    <input
-      *ngIf="minLength && maxLength"
-      type="{{ type }}"
+    <ng-template [ngIf]="isInput">
+      <input
+        *ngIf="minLength && maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        [maxlength]="maxLength"
+        [minlength]="minLength"
+        [autocomplete]="autocomplete"
+      />
+      <input
+        *ngIf="!minLength && !maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        [autocomplete]="autocomplete"
+      />
+    </ng-template>
+    <textarea
+      *ngIf="!isInput"
       id="{{ id }}"
       placeholder="{{ placeholder }}"
       formControlName="{{ controlName }}"
+      cols="30"
+      rows="10"
       [maxlength]="maxLength"
       [minlength]="minLength"
-      [autocomplete]="autocomplete"
-    />
-    <input
-      *ngIf="!minLength && !maxLength"
-      type="{{ type }}"
-      id="{{ id }}"
-      placeholder="{{ placeholder }}"
-      formControlName="{{ controlName }}"
-      [autocomplete]="autocomplete"
-    />
+    ></textarea>
     <span *ngIf="input.invalid && input.touched && showErrors">
       <span *ngIf="input.errors['required']">{{ title }} is required</span>
       <span *ngIf="input.errors['minlength']"

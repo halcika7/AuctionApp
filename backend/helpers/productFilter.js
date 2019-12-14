@@ -240,3 +240,9 @@ function buildPriceRangeQuery() {
     query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
   );
 }
+
+exports.userActiveProductsCount = async userId => {
+  return await Product.findAndCountAll({
+    where: { userId, auctionEnd: { [Op.gt]: new Date() } }
+  });
+};

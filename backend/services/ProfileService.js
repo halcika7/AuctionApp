@@ -6,7 +6,12 @@ const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty, removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
-const { getUserInfo, createAccessToken, createRefreshToken } = require('../helpers/authHelper');
+const {
+  getUserInfo,
+  createAccessToken,
+  createRefreshToken,
+  getOptionalInfoCard
+} = require('../helpers/authHelper');
 
 class ProfileService extends BaseService {
   constructor() {
@@ -40,16 +45,14 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
     try {
-      const {
-        errors: requiredInfoErrors,
-        isValid,
-        optionalInfoId,
-        cardInfoId,
-        currentUser
-      } = await userInfoValidation(userInfo, email);
+      //userId, optionalInfoId and cardInfoId are same
+      const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
+        userInfo,
+        email
+      );
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
         cardInfo,
-        cardInfoId,
+        userId,
         requiredInfoErrors
       );
       if (!isValid || !validCard) {
@@ -68,11 +71,11 @@ class ProfileService extends BaseService {
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
 
       const [updateOptionalData] = await OptionalInfo.update(removeNullProperty(optionalInfo), {
-        where: { id: optionalInfoId }
+        where: { id: userId }
       });
 
       const [updatedCardInfoData] = await CardInfo.update(cardInfoData, {
-        where: { id: cardInfoId }
+        where: { id: userId }
       });
 
       const [updateUserInfo] = await User.update({ ...userInfo }, { where: { id: userId } });
@@ -88,6 +91,17 @@ class ProfileService extends BaseService {
           : 'Profile info updated';
 
       return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
+    } catch (error) {
+      return super.returnResponse(403, {
+        message: 'Something happened. We were unable to perform request.'
+      });
+    }
+  }
+
+  async userOptionalInfoWithCard(id) {
+    try {
+      const userInfo = await getOptionalInfoCard(id);
+      return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
