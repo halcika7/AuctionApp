@@ -53,7 +53,7 @@ exports.getUserInfo = async id => {
       {
         model: CardInfo,
         attributes: {
-          exclude: ['id']
+          exclude: ['id', 'cardToken', 'cardFingerprint']
         }
       }
     ],
