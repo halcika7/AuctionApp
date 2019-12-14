@@ -49,8 +49,6 @@ exports.userInfoValidation = async (userInfo, email) => {
   return {
     errors: { errors },
     isValid: isEmpty(errors),
-    optionalInfoId: currentUser.optionalInfoId,
-    cardInfoId: currentUser.cardInfoId,
     currentUser
   };
 };

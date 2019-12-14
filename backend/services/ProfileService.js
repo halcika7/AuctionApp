@@ -40,16 +40,14 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
     try {
-      const {
-        errors: requiredInfoErrors,
-        isValid,
-        optionalInfoId,
-        cardInfoId,
-        currentUser
-      } = await userInfoValidation(userInfo, email);
+      //userId, optionalInfoId, cardInfoId are same..
+      const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
+        userInfo,
+        email
+      );
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
         cardInfo,
-        cardInfoId,
+        userId,
         requiredInfoErrors
       );
       if (!isValid || !validCard) {
@@ -68,11 +66,11 @@ class ProfileService extends BaseService {
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
 
       const [updateOptionalData] = await OptionalInfo.update(removeNullProperty(optionalInfo), {
-        where: { id: optionalInfoId }
+        where: { id: userId }
       });
 
       const [updatedCardInfoData] = await CardInfo.update(cardInfoData, {
-        where: { id: cardInfoId }
+        where: { id: userId }
       });
 
       const [updateUserInfo] = await User.update({ ...userInfo }, { where: { id: userId } });
