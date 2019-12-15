@@ -58,16 +58,12 @@ class BidService extends BaseService {
       }
 
       await Bid.create({ price: bid, userId: userID, productId });
-
-      return {
-        status: 200,
+      return super.returnResponse(200, {
         message: 'Congrats! You are the highest bider',
         highest_bid: bid
-      };
-    } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happend..try again later !!'
       });
+    } catch (error) {
+      return super.returnGenericFailed();
     }
   }
 
@@ -136,11 +132,9 @@ class BidService extends BaseService {
         offset,
         productsLength: length
       });
-      return { status: 200, bids, noMore };
+      return super.returnResponse(200, { bids, noMore });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happend..try again later !!'
-      });
+      return super.returnGenericFailed();
     }
   }
 }

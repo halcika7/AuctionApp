@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { AddProductService } from "../add-product.service";
 
 @Component({
   selector: "app-no-active",
@@ -6,13 +7,12 @@ import { Component, OnInit, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./no-active.component.scss"]
 })
 export class NoActiveComponent implements OnInit {
-  @Output() buttonClicked = new EventEmitter<any>();
 
-  constructor() {}
+  constructor(private addProductService: AddProductService) {}
 
   ngOnInit() {}
 
   onButtonClicked() {
-    this.buttonClicked.emit();
+    this.addProductService.changeStepValue(1);
   }
 }

@@ -34,6 +34,16 @@ const CardInfo = db.define(
       allowNull: true,
       defaultValue: null
     },
+    customerId: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      defaultValue: null
+    },
+    cardId: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      defaultValue: null
+    },
     cardToken: {
       type: Sequelize.STRING(255),
       allowNull: true,

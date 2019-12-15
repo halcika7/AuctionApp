@@ -4,10 +4,12 @@ export const compareStartEndDates = (startDate: Date, endDate: Date): boolean =>
 
 export const validateStartDate = (date: Date): boolean => {
   const startDate = new Date();
-  startDate.setDate(startDate.getDate() - 1);
+  startDate.setDate(startDate.getDate());
   return new Date(date) >= startDate;
 }
 
 export const validateEndDate = (date: Date): boolean => {
-  return new Date(date) >= new Date();
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + 1);
+  return new Date(date) >= endDate;
 }

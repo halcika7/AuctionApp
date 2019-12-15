@@ -1,4 +1,8 @@
-<div class="last-step" [formGroup]="form">
+<div
+  class="last-step"
+  [formGroup]="form"
+  [ngClass]="{ show: currentStep == 3, hide: currentStep != 3 }"
+>
   <div class="checkbox second" *ngIf="sowUseSavedInfo()">
     <label
       >Use saved info
@@ -16,6 +20,8 @@
     [parentForm]="form"
     [input]="form.get('address')"
     showErrors="true"
+    [minLength]="1"
+    [maxLength]="101"
   ></app-input>
   <div class="group mt-39">
     <app-input
@@ -27,6 +33,8 @@
       [parentForm]="form"
       [input]="form.get('country')"
       showErrors="true"
+      [minLength]="1"
+      [maxLength]="101"
     ></app-input>
     <app-input
       id="city"
@@ -37,6 +45,8 @@
       [parentForm]="form"
       [input]="form.get('city')"
       showErrors="true"
+      [minLength]="1"
+      [maxLength]="101"
     ></app-input>
   </div>
   <app-input
@@ -48,16 +58,20 @@
     [parentForm]="form"
     [input]="form.get('zip')"
     showErrors="true"
+    [minLength]="5"
+    [maxLength]="6"
   ></app-input>
   <app-input
     id="phone"
     title="Phone"
-    placeholder="e.g.678 Berge Tunnel Apt. 287"
+    placeholder="e.g. +38761222333"
     type="tel"
     controlName="phone"
     [parentForm]="form"
     [input]="form.get('phone')"
     showErrors="true"
+    [minLength]="7"
+    [maxLength]="16"
   ></app-input>
   <div class="checkbox">
     <label
@@ -80,14 +94,14 @@
   </div>
   <div class="checkbox second" *ngIf="hasCard">
     <label
-      >Use saved card
-      <input type="checkbox" formControlName="useCard"/><fa-icon
+      >Use saved card <input type="checkbox" formControlName="useCard"/><fa-icon
         [icon]="['fas', 'check']"
       ></fa-icon
     ></label>
   </div>
   <div class="card-information" *ngIf="showCard">
     <h3>Card Information</h3>
+    <span *ngIf="cardError" class="invalid-card">{{ cardError }}</span>
     <div class="group">
       <app-input
         id="cName"
@@ -99,6 +113,8 @@
         [input]="form.get('cName')"
         showErrors="true"
         [profile]="true"
+        [minLength]="1"
+        [maxLength]="101"
       ></app-input>
       <app-input
         id="cNumber"
@@ -110,6 +126,8 @@
         [input]="form.get('cNumber')"
         showErrors="true"
         [profile]="true"
+        [minLength]="13"
+        [maxLength]="16"
       ></app-input>
     </div>
     <div class="group">
@@ -118,10 +136,16 @@
           label="Expiration year"
           [default]="selectedYear || 'Year'"
           [values]="years"
+          (valueChange)="changeSelectedYear($event)"
+          [error]="expYearError"
+          [invalid]="expYearError"
         ></app-select-input>
         <app-select-input
           [default]="selectedMonth || 'Month'"
           [values]="months"
+          (valueChange)="changeSelectedMonth($event)"
+          [error]="expMonthError"
+          [invalid]="expMonthError"
         ></app-select-input>
       </div>
       <app-input
@@ -134,6 +158,8 @@
         [input]="form.get('CVC')"
         showErrors="true"
         [profile]="true"
+        [minLength]="3"
+        [maxLength]="4"
       ></app-input>
     </div>
   </div>
@@ -145,6 +171,7 @@
       class="done"
       type="submit"
       (click)="process()"
+      [disabled]="!isValidStep"
     >
       done
     </button>

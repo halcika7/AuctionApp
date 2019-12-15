@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as ProfileActions from "../store/profile.actions";
@@ -14,6 +15,7 @@ export class BidsComponent implements OnInit, OnDestroy {
   private _bids: ProfileBid[] = [];
   private _noMore: boolean = false;
   private _offset: number = 0;
+  private subscription = new Subscription();
 
   constructor(
     private profileService: ProfileService,
@@ -23,13 +25,16 @@ export class BidsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.profileService.changeBreadcrumb("bids");
     this.getBids();
-    this.store.select("profile").subscribe(({ bids, noMore }) => {
-      this._bids = bids;
-      this._noMore = noMore;
-    });
+    this.subscription.add(
+      this.store.select("profile").subscribe(({ bids, noMore }) => {
+        this._bids = bids;
+        this._noMore = noMore;
+      })
+    );
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.store.dispatch(new ProfileActions.ClearProfile());
   }
 

@@ -75,8 +75,8 @@ exports.createOptionalInfo = async () => {
   return await OptionalInfo.create({});
 };
 
-exports.createCardInfo = async () => {
-  return await CardInfo.create({});
+exports.createCardInfo = async customerId => {
+  return await CardInfo.create({ customerId });
 };
 
 exports.createUser = async (
@@ -105,9 +105,7 @@ exports.getOptionalInfoCard = async id => {
     attributes: [
       'phoneNumber',
       [
-        db.literal(
-          `CASE WHEN "CardInfo"."cardFingerprint" is null THEN false ELSE true END`
-        ),
+        db.literal(`CASE WHEN "CardInfo"."cardFingerprint" is null THEN false ELSE true END`),
         'hasCard'
       ]
     ],
@@ -124,4 +122,4 @@ exports.getOptionalInfoCard = async id => {
       }
     ]
   });
-}
+};

@@ -19,7 +19,7 @@ export interface State {
   subcategories: Category[];
   brands: Brand[];
   filters: Filters[];
-  numberOfActiveProducts: number;
+  hasActiveProduct: boolean;
   errors: {
     name?: "";
     price?: "";
@@ -30,7 +30,7 @@ export interface State {
     category?: "";
     subcategory?: "";
     brand?: "";
-    filters?: [];
+    filterErrors?: [];
     address?: "";
     city?: "";
     country?: "";
@@ -41,8 +41,11 @@ export interface State {
     cNumber?: "";
     exp_year?: "";
     exp_month?: "";
+    card?: "";
   };
   userInfo: AddProductUserInfo;
+  success: boolean;
+  message: string;
 }
 
 const initialState: State = {
@@ -50,11 +53,11 @@ const initialState: State = {
   subcategories: [],
   brands: [],
   filters: [],
-  numberOfActiveProducts: null,
+  hasActiveProduct: null,
   errors: {},
   userInfo: {
     hasCard: false,
-    phoneNumber: '',
+    phoneNumber: "",
     OptionalInfo: {
       street: "",
       city: "",
@@ -62,7 +65,9 @@ const initialState: State = {
       state: "",
       country: ""
     }
-  }
+  },
+  success: false,
+  message: ''
 };
 
 export function addProductReducer(
@@ -82,16 +87,32 @@ export function addProductReducer(
         filters: action.payload.Filters
           ? action.payload.Filters
           : state.filters,
-        numberOfActiveProducts:
-          action.payload.numberOfActiveProducts ||
-          action.payload.numberOfActiveProducts == 0
-            ? action.payload.numberOfActiveProducts
-            : state.numberOfActiveProducts,
+        hasActiveProduct:
+          action.payload.hasActiveProduct != null
+            ? action.payload.hasActiveProduct
+            : state.hasActiveProduct,
         errors: {},
         userInfo: action.payload.userInfo
           ? action.payload.userInfo
-          : state.userInfo
+          : state.userInfo,
+        message: action.payload.message ? action.payload.message : '',
+        success: action.payload.message ? true : false
       };
+    }
+    case AddProductActions.ADD_PRODUCT_FAILED: {
+      return {
+        ...state,
+        errors: action.payload.errors ? action.payload.errors : {},
+        message: action.payload.message ? action.payload.message : '',
+        success: false
+      };
+    }
+    case AddProductActions.CLEAR_ADD_PRODUCT_MESSAGES: {
+      return {
+        ...state,
+        message: '',
+        success: false
+      }
     }
     case AddProductActions.CLEAR_BRANDS: {
       return {

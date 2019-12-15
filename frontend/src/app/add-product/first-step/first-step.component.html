@@ -1,80 +1,93 @@
-<app-input
-  id="name"
-  title="Product name"
-  placeholder="Enter product name"
-  type="text"
-  controlName="name"
-  [parentForm]="form"
-  [input]="form.get('name')"
-  [showErrors]="true"
-  [minLength]="5"
-  [maxLength]="61"
-></app-input>
-<p>2-5 words (60 characters)</p>
-<div class="category">
-  <app-select-input
-    label="Select category"
-    [default]="categoryData.name || 'Select category'"
-    [values]="categories"
-    [object]="true"
-    (valueChange)="changeCategory($event)"
-  ></app-select-input>
-  <app-select-input
-    label="Select subcategory"
-    [default]="subcategoryData.name || 'Select subcategory'"
-    [values]="subcategories"
-    liWhenValuesLength0="Please select category"
-    [object]="true"
-    (valueChange)="changeSubcategory($event)"
-  ></app-select-input>
-</div>
-<div class="brand">
-  <app-select-input
-    label="Select brand"
-    [default]="brandData.name || 'Select brand'"
-    [values]="brands"
-    liWhenValuesLength0="Please select subcategory"
-    [object]="true"
-    (valueChange)="changeBrand($event)"
-  ></app-select-input>
-</div>
-<div class="filters" *ngIf="filters.length > 0">
-  <app-select-input
-    *ngFor="let filter of filters"
-    [label]="'Select ' + filter.name"
-    [default]="getselectedFilterValue(filter.id) || 'Select ' + filter.name"
-    [values]="filter.FilterValues"
-    liWhenValuesLength0="Please select filter.name"
-    [object]="true"
-    [parentId]="filter.id"
-    (valueChange)="changeFilter($event)"
-  ></app-select-input>
-</div>
-<div class="description">
+<div
+  class="first-step"
+  [ngClass]="{ show: currentStep == 1, hide: currentStep != 1 }"
+>
   <app-input
-    id="description"
-    title="Description"
-    placeholder="Enter description"
-    controlName="description"
+    id="name"
+    title="Product name"
+    placeholder="Enter product name"
+    type="text"
+    controlName="name"
     [parentForm]="form"
-    [input]="form.get('description')"
+    [input]="form.get('name')"
     [showErrors]="true"
-    [isInput]="false"
-    profile="true"
-    [maxLength]="701"
+    [minLength]="5"
+    [maxLength]="61"
   ></app-input>
-  <p>100 words (700 characters)</p>
-</div>
-<app-upload-images [form]="form"></app-upload-images>
-<div class="buttons">
-  <button
-    class="prev"
-    *ngIf="numberOfActiveProducts == 0 || stepNumber > 1"
-    (click)="buttonClicked()"
-  >
-    <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
-  </button>
-  <button class="next" (click)="buttonClicked(false)">
-    next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
-  </button>
+  <p>2-5 words (60 characters)</p>
+  <div class="category">
+    <app-select-input
+      label="Select category"
+      [default]="categoryData.name || 'Select category'"
+      [values]="categories"
+      [object]="true"
+      (valueChange)="changeCategory($event)"
+      [error]="categoryError"
+      [invalid]="categoryError"
+    ></app-select-input>
+    <app-select-input
+      label="Select subcategory"
+      [default]="subcategoryData.name || 'Select subcategory'"
+      [values]="subcategories"
+      liWhenValuesLength0="Please select category"
+      [object]="true"
+      (valueChange)="changeSubcategory($event)"
+      [error]="subcategoryError"
+      [invalid]="subcategoryError"
+    ></app-select-input>
+  </div>
+  <div class="brand">
+    <app-select-input
+      label="Select brand"
+      [default]="brandData.name || 'Select brand'"
+      [values]="brands"
+      liWhenValuesLength0="Please select subcategory"
+      [object]="true"
+      (valueChange)="changeBrand($event)"
+      [error]="brandError"
+      [invalid]="brandError"
+    ></app-select-input>
+  </div>
+  <div class="filters" *ngIf="filters.length > 0">
+    <app-select-input
+      *ngFor="let filter of filters; let index = index"
+      [label]="'Select ' + filter.name"
+      [default]="getselectedFilterValue(filter.id) || 'Select ' + filter.name"
+      [values]="filter.FilterValues"
+      liWhenValuesLength0="Please select filter.name"
+      [object]="true"
+      [parentId]="filter.id"
+      (valueChange)="changeFilter($event)"
+      [error]="filterErrors[index] || ''"
+      [invalid]="filterErrors[index] || false"
+    ></app-select-input>
+  </div>
+  <div class="description">
+    <app-input
+      id="description"
+      title="Description"
+      placeholder="Enter description"
+      controlName="description"
+      [parentForm]="form"
+      [input]="form.get('description')"
+      [showErrors]="true"
+      [isInput]="false"
+      profile="true"
+      [maxLength]="701"
+    ></app-input>
+    <p>100 words (700 characters)</p>
+  </div>
+  <app-upload-images [form]="form"></app-upload-images>
+  <div class="buttons">
+    <button
+      class="prev"
+      *ngIf="!hasActiveProduct || stepNumber > 1"
+      (click)="buttonClicked()"
+    >
+      <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
+    </button>
+    <button class="next" (click)="buttonClicked(false)" >
+      next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
+    </button>
+  </div>
 </div>

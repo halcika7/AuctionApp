@@ -1,6 +1,5 @@
 const BaseController = require('./BaseController');
 const ProductServiceInstance = require('../services/ProductService');
-const fs = require('fs');
 
 class ProductController extends BaseController {
   constructor() {
@@ -81,14 +80,14 @@ class ProductController extends BaseController {
   async userNumberOfActiveProducts(req, res) {
     const { userId, accessToken } = req;
     const {
-      numberOfActiveProducts,
+      hasActiveProduct,
       status,
       message
     } = await ProductServiceInstance.getActiveUserProductsCount(userId);
     return super.sendResponseWithMessage(
       res,
       status,
-      { numberOfActiveProducts, accessToken },
+      { hasActiveProduct, accessToken },
       message
     );
   }
@@ -96,15 +95,18 @@ class ProductController extends BaseController {
   async addProduct(req, res) {
     const { userId } = req;
 
-    if (req.files.length > 0) req.files.forEach(file => fs.unlinkSync(file.path));
-
-    const { status, message, errors } = await ProductServiceInstance.addProduct(
+    const { status, message, success, errors } = await ProductServiceInstance.addProduct(
       userId,
       req.files,
       req.body
     );
 
-    return res.json({ success: true });
+    return super.sendResponseWithMessage(
+      res,
+      status,
+      { errors, message: success },
+      message
+    );
   }
 }
 

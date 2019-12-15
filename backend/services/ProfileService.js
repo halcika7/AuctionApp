@@ -23,9 +23,7 @@ class ProfileService extends BaseService {
       const userInfo = await getUserInfo(id);
       return super.returnResponse(200, { userInfo });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 
@@ -34,9 +32,7 @@ class ProfileService extends BaseService {
       await User.update({ deactivated: true }, { where: { id } });
       return super.returnResponse(200, {});
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 
@@ -53,6 +49,7 @@ class ProfileService extends BaseService {
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
         cardInfo,
         userId,
+        email,
         requiredInfoErrors
       );
       if (!isValid || !validCard) {
@@ -92,9 +89,7 @@ class ProfileService extends BaseService {
 
       return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 
@@ -103,9 +98,7 @@ class ProfileService extends BaseService {
       const userInfo = await getOptionalInfoCard(id);
       return super.returnResponse(200, { userInfo });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 }

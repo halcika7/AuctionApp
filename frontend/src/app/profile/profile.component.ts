@@ -34,16 +34,18 @@ export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.url.subscribe(data => {
-      if (this.router.url === "/account") {
-        this.router.navigateByUrl("/account/profile");
-      }
-      if (this.router.url === "/account/become-seller") {
-        this._showNav = false;
-      } else {
-        this._showNav = true;
-      }
-    });
+    this.subscription.add(
+      this.route.url.subscribe(data => {
+        if (this.router.url === "/account") {
+          this.router.navigateByUrl("/account/profile");
+        }
+        if (this.router.url === "/account/become-seller") {
+          this._showNav = false;
+        } else {
+          this._showNav = true;
+        }
+      })
+    );
     this.subscription.add(
       this.profileService.breadcrumbChanged.subscribe(value => {
         this._lastBreadcrumbLink = value;

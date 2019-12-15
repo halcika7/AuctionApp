@@ -18,4 +18,8 @@ export class AddProductService {
   get stepNumber(): number {
     return this._stepNumber;
   }
+
+  set setStepNumber(value: number) {
+    this._stepNumber = value;
+  }
 }

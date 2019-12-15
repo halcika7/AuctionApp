@@ -52,7 +52,7 @@ class FilterService extends BaseService {
           }
         }
       });
-      return { status: 200, Filters };
+      return super.returnResponse(200, { Filters });
     } catch (error) {
       return super.returnGenericFailed();
     }

@@ -6,7 +6,6 @@
       [owlDateTime]="dt1"
       placeholder="{{ placeholder }}"
       formControlName="{{ controlName }}"
-      autocomplete="{something}"
     />
     <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
     <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
@@ -14,16 +13,16 @@
   <span *ngIf="input.invalid && input.touched">
     <span *ngIf="input.errors['required']">{{ title }} is required</span>
     <span *ngIf="input.errors['today']"
-      >{{ title }} should be equal or greather than today's date</span
+      >Auction cannot start in the past. Please choose tomorrow or some other date in the future</span
     >
     <span *ngIf="input.errors['tomorrow']"
-      >{{ title }} should be equal or greather than tomorrow date</span
+      >Auction cannot end in the past. Please choose day after tomorrow or some other date in the future</span
     >
     <span *ngIf="input.errors['gthenStart']"
-      >{{ title }} should be greather than start date</span
+      >Auction should end at least a day after auction start date</span
     >
   </span>
   <span *ngIf="input.invalid" class="async">
-    <span *ngIf="input.errors['async']">{{ input.errors["async"] }}</span>
+    <span *ngIf="input.errors && input.errors['async']">{{ input.errors["async"] }}</span>
   </span>
 </div>

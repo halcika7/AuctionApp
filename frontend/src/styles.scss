@@ -582,6 +582,14 @@ app-footer {
   min-width: 1800px !important;
 }
 
+.show {
+  display: block !important;
+}
+
+.hide {
+  display: none !important;
+}
+
 @media (max-width: 1199px) {
   .feature-products .collections {
     @include grid($templateCols: 33.3333% 33.3333% 33.3333%);

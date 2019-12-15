@@ -1,17 +1,25 @@
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import { partialFormValidity } from "@app/shared/partialFormValidity";
 import { isEmptyObject } from "@app/shared/isEmptyObject";
 import { Category } from "../containers/all-categories/store/all-categories.reducer";
-import { FormGroup } from "@angular/forms";
-import { Component, OnInit } from "@angular/core";
 import { ProfileService } from "../profile/profile.service";
 import {
   NAME_VALIDATOR,
   numberOfWordsValidator,
-  BASIC_INPUT
+  BASIC_INPUT,
+  PHONE_VALIDATOR,
+  setErrors
 } from "../shared/validators";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
-import * as AddProductActions from "./store/add-product.actions";
+import {
+  AddProductStart,
+  AddUserProductStart,
+  ClearAddProductMessages
+} from "./store/add-product.actions";
 import { AddProductService } from "./add-product.service";
 
 @Component({
@@ -19,9 +27,9 @@ import { AddProductService } from "./add-product.service";
   templateUrl: "./add-product.component.html",
   styleUrls: ["./add-product.component.scss"]
 })
-export class AddProductComponent implements OnInit {
+export class AddProductComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
-  private _numberOfActiveProducts: number;
+  private _hasActiveProduct: boolean;
   private _stepNumber: number;
   private numberOfFilters = 0;
   private _selectedCategoryData: Category = { id: null, name: null };
@@ -33,16 +41,25 @@ export class AddProductComponent implements OnInit {
     name: string;
   }[] = [];
   private _isValid: boolean = false;
+  private _errors: any;
+  private _message: string;
+  private _success: boolean;
+  private subscription = new Subscription();
 
   constructor(
     private addProductService: AddProductService,
     private profileService: ProfileService,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this._stepNumber = this.addProductService.stepNumber;
     this.profileService.changeBreadcrumb("become seller");
+    this.store.dispatch(new AddProductStart("/add-product/optionalinfo"));
+    this.store.dispatch(new AddProductStart("/add-product/categories"));
+    this.store.dispatch(new AddProductStart("/add-product/activeproducts"));
+
     this._form = new FormGroup({
       ...NAME_VALIDATOR("name", 5, 60, [numberOfWordsValidator()]),
       ...NAME_VALIDATOR("description", 0, 700, [
@@ -55,8 +72,8 @@ export class AddProductComponent implements OnInit {
       ...NAME_VALIDATOR("address"),
       ...NAME_VALIDATOR("country"),
       ...NAME_VALIDATOR("city"),
-      ...NAME_VALIDATOR("zip"),
-      ...NAME_VALIDATOR("phone"),
+      ...NAME_VALIDATOR("zip", 5, 5),
+      ...PHONE_VALIDATOR("phone"),
       ...BASIC_INPUT("freeShipping", false),
       ...BASIC_INPUT("featureProduct", false),
       ...BASIC_INPUT("useCard", false),
@@ -66,31 +83,68 @@ export class AddProductComponent implements OnInit {
       ...BASIC_INPUT("CVC")
     });
 
-    this.store.dispatch(
-      new AddProductActions.AddProductStart("/add-product/optionalinfo")
+    this.subscription.add(
+      this.store
+        .select("addProduct")
+        .subscribe(
+          ({ hasActiveProduct, filters, errors, message, success }) => {
+            this._message = message;
+            this._success = success;
+            this._errors = errors;
+            this.setFormErrors();
+            this.numberOfFilters = filters.length;
+            this._hasActiveProduct = hasActiveProduct;
+            if (this._hasActiveProduct && this.stepNumber == 0) {
+              this.addProductService.changeStepValue(1);
+            }
+            if (this._message && this._success) {
+              setTimeout(() => {
+                this.router.navigate(["/account/profile"]);
+              }, 3000);
+            }
+          }
+        )
     );
 
-    this.store.dispatch(
-      new AddProductActions.AddProductStart("/add-product/categories")
+    this.subscription.add(
+      this.addProductService.buttonClicked.subscribe(value => {
+        this._stepNumber = value;
+      })
     );
+  }
 
-    this.store.dispatch(
-      new AddProductActions.AddProductStart("/add-product/activeproducts")
-    );
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.clearMessages();
+    this.addProductService.changeStepValue(0);
+  }
 
-    this.store
-      .select("addProduct")
-      .subscribe(({ numberOfActiveProducts, filters }) => {
-        this.numberOfFilters = filters.length;
-        this._numberOfActiveProducts = numberOfActiveProducts;
-        if (this._numberOfActiveProducts && this.stepNumber == 0) {
-          this.addProductService.changeStepValue(1);
-        }
-      });
+  private switchStep(errors) {
+    if (
+      errors.name ||
+      errors.category ||
+      errors.subcategory ||
+      errors.brand ||
+      errors.filterErrors ||
+      errors.description ||
+      errors.images
+    ) {
+      this.addProductService.setStepNumber = 1;
+      this._stepNumber = 1;
+    } else if (errors.price || errors.startDate || errors.endDate) {
+      this.addProductService.setStepNumber = 2;
+      this._stepNumber = 2;
+    } else if (Object.keys(errors).length > 0) {
+      this.addProductService.setStepNumber = 3;
+      this._stepNumber = 3;
+    }
+  }
 
-    this.addProductService.buttonClicked.subscribe(value => {
-      this._stepNumber = value;
+  private setFormErrors() {
+    Object.keys(this._form.controls).forEach(key => {
+      setErrors(this._errors, key, this._form);
     });
+    this.switchStep(this._errors);
   }
 
   firstStepValueChange({
@@ -129,8 +183,11 @@ export class AddProductComponent implements OnInit {
         : true;
   }
 
+  clearMessages() {
+    this.store.dispatch(new ClearAddProductMessages());
+  }
+
   submitForm(data) {
-    console.log('TCL: submitForm -> data', data)
     const formData = new FormData();
     const productData = {
       name: this.form.value.name,
@@ -166,16 +223,17 @@ export class AddProductComponent implements OnInit {
     );
     formData.append("brandData", JSON.stringify(this._selectedBrandData));
     formData.append("filtersData", JSON.stringify(this._selectedFilterData));
-    if(this.form.value.images.length > 0) {
+    if (this.form.value.images.length > 0) {
       this.form.value.images.forEach(
         async image => await formData.append("images", image)
       );
     }
-    this.store.dispatch(new AddProductActions.AddUserProductStart(formData));
+    this.store.dispatch(new AddUserProductStart(formData));
+    window.scrollTo(0, 0);
   }
 
-  get numberOfActiveProducts(): number {
-    return this._numberOfActiveProducts;
+  get hasActiveProduct(): boolean {
+    return this._hasActiveProduct;
   }
 
   get form(): FormGroup {
@@ -204,5 +262,13 @@ export class AddProductComponent implements OnInit {
 
   get isValid(): boolean {
     return this._isValid;
+  }
+
+  get message(): string {
+    return this._message;
+  }
+
+  get success(): boolean {
+    return this._success;
   }
 }

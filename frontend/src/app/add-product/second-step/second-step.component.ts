@@ -1,7 +1,8 @@
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { Subscription } from 'rxjs';
 import { partialFormValidity } from "@app/shared/partialFormValidity";
 import { AddProductService } from "./../add-product.service";
-import { Component, OnInit, Input } from "@angular/core";
-import { FormGroup } from "@angular/forms";
 import {
   validateStartDate,
   validateEndDate,
@@ -13,15 +14,19 @@ import {
   templateUrl: "./second-step.component.html",
   styleUrls: ["./second-step.component.scss"]
 })
-export class SecondStepComponent implements OnInit {
+export class SecondStepComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
+  @Input() currentStep: number;
   private _isValidStep = false;
   private step: number = 2;
+  private subscription = new Subscription();
 
-  constructor(private addProductService: AddProductService) {}
+  constructor(
+    private addProductService: AddProductService
+  ) {}
 
   ngOnInit() {
-    this.form.valueChanges.subscribe(({ startDate, endDate, price }) => {
+    this.subscription.add(this.form.valueChanges.subscribe(({ startDate, endDate, price }) => {
       if (startDate) {
         !validateStartDate(startDate) &&
           this.form.controls.startDate.setErrors({ today: true });
@@ -36,8 +41,12 @@ export class SecondStepComponent implements OnInit {
       }
 
       this.checkValidity();
-    });
+    }));
     this.checkValidity();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   buttonClicked(prev = true) {

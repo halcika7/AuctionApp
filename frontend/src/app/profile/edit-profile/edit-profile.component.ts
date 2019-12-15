@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ProfileService } from "./../profile.service";
 import { Store } from "@ngrx/store";
@@ -19,7 +19,7 @@ import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
   templateUrl: "./edit-profile.component.html",
   styleUrls: ["./edit-profile.component.scss"]
 })
-export class EditProfileComponent implements OnInit {
+export class EditProfileComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
   private _gender: string;
   private _date: { day: number; year: number; month: string };
@@ -72,6 +72,10 @@ export class EditProfileComponent implements OnInit {
         this._isValidForm = false;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new ProfileActions.ClearProfileMessages());
   }
 
   get form(): FormGroup {

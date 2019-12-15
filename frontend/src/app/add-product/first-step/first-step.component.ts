@@ -1,8 +1,9 @@
-import { AddProductService } from "./../add-product.service";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { Subscription } from "rxjs";
 import { Category } from "@app/containers/all-categories/store/all-categories.reducer";
 import { Filters, Brand } from "@app/shop-page/store/shop-page.reducer";
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { AddProductService } from "./../add-product.service";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AddProductActions from "../store/add-product.actions";
@@ -12,7 +13,7 @@ import * as AddProductActions from "../store/add-product.actions";
   templateUrl: "./first-step.component.html",
   styleUrls: ["./first-step.component.scss"]
 })
-export class FirstStepComponent implements OnInit {
+export class FirstStepComponent implements OnInit, OnDestroy {
   @Output() emitChanges = new EventEmitter<any>();
   @Output() checkValidity = new EventEmitter<any>();
   @Input() form: FormGroup;
@@ -25,12 +26,18 @@ export class FirstStepComponent implements OnInit {
     name: string;
   }[] = [];
   @Input() isValid: boolean;
+  @Input() hasActiveProduct: boolean;
+  @Input() currentStep: number;
   private _stepNumber: number = 1;
-  private _numberOfActiveProducts: number;
   private _categories: Category[] = [];
   private _subcategories: Category[] = [];
   private _brands: Brand[] = [];
   private _filters: Filters[] = [];
+  private _categoryError: string;
+  private _subcategoryError: string;
+  private _brandError: string;
+  private _filterErrors: string[] = [];
+  private subscription = new Subscription();
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -39,26 +46,27 @@ export class FirstStepComponent implements OnInit {
 
   ngOnInit() {
     this.checkValidity.emit();
-    this.store
-      .select("addProduct")
-      .subscribe(
-        ({
-          categories,
-          subcategories,
-          brands,
-          filters,
-          numberOfActiveProducts
-        }) => {
+    this.subscription.add(
+      this.store
+        .select("addProduct")
+        .subscribe(({ categories, subcategories, brands, filters, errors }) => {
           this._categories = categories;
           this._subcategories = subcategories;
           this._brands = brands;
           this._filters = filters;
-          this._numberOfActiveProducts = numberOfActiveProducts;
-        }
-      );
-    this.form.valueChanges.subscribe(() => {
+          this._categoryError = errors.category;
+          this._subcategoryError = errors.subcategory;
+          this._brandError = errors.brand;
+          this._filterErrors = errors.filterErrors ? errors.filterErrors : [];
+        })
+    );
+    this.subscription.add(this.form.valueChanges.subscribe(() => {
       this.checkValidity.emit();
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   getselectedFilterValue(id: string): string | null {
@@ -161,11 +169,23 @@ export class FirstStepComponent implements OnInit {
     return this._filters;
   }
 
-  get numberOfActiveProducts(): number {
-    return this._numberOfActiveProducts;
-  }
-
   get stepNumber(): number {
     return this._stepNumber;
+  }
+
+  get categoryError(): string {
+    return this._categoryError;
+  }
+
+  get subcategoryError(): string {
+    return this._subcategoryError;
+  }
+
+  get brandError(): string {
+    return this._brandError;
+  }
+
+  get filterErrors(): string[] {
+    return this._filterErrors;
   }
 }

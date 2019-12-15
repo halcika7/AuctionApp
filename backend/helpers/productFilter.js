@@ -241,8 +241,9 @@ function buildPriceRangeQuery() {
   );
 }
 
-exports.userActiveProductsCount = async userId => {
-  return await Product.findAndCountAll({
+exports.hasActiveProduct = async userId => {
+  const findProduct = await Product.findOne({
     where: { userId, auctionEnd: { [Op.gt]: new Date() } }
   });
+  return findProduct ? true : false
 };

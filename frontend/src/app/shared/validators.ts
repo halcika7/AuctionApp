@@ -1,4 +1,9 @@
-import { FormControl, Validators, FormGroup, AbstractControl } from "@angular/forms";
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  AbstractControl
+} from "@angular/forms";
 
 export const PASSWORD_VALIDATOR = (
   basic = false,
@@ -25,10 +30,7 @@ export const PASSWORD_VALIDATOR = (
 export const EMAIL_VALIDATOR = (basic = false) => {
   return !basic
     ? {
-        email: new FormControl("", [
-          Validators.required,
-          Validators.email
-        ])
+        email: new FormControl("", [Validators.required, Validators.email])
       }
     : {
         email: new FormControl("", [Validators.required, Validators.email])
@@ -58,7 +60,7 @@ export const PHONE_VALIDATOR = (name: string) => {
       Validators.maxLength(15)
     ])
   };
-}
+};
 
 export const BASIC_INPUT = (name: string, dValue: any = "") => {
   return {
@@ -86,13 +88,12 @@ export const setErrors = (
 ) => {
   if (errors[objectProperty] && !message) {
     form.controls[objectProperty].setErrors({ async: errors[objectProperty] });
-    form.controls[objectProperty].markAsTouched();
+    form.controls[objectProperty].markAsTouched({ onlySelf: true });
   } else {
     form.controls[objectProperty].setErrors({});
-    form.controls[objectProperty].setValue(form.controls[objectProperty].value);
+    form.controls[objectProperty].setValue(form.controls[objectProperty].value, { onlySelf: true });
   }
 };
-
 
 export const numberOfWordsValidator = (min = 2, max = 5) => {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -119,7 +120,7 @@ export const setValidators = (controls: any[], validator) => {
 export const clearValidators = (controls: any[]) => {
   controls.forEach((control: FormControl) => {
     control.clearValidators();
-    control.markAsUntouched();
+    control.markAsUntouched({ onlySelf: true });
     control.patchValue("", { onlySelf: true });
   });
 };
@@ -128,4 +129,4 @@ export const updateValueAndValidity = (controls: any[]) => {
   controls.forEach((control: FormControl) => {
     control.updateValueAndValidity({ onlySelf: true });
   });
-}
+};

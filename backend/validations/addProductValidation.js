@@ -1,43 +1,48 @@
 const Category = require('../models/Category');
 const Subcategory = require('../models/Subcategory');
 const BrandSubcategory = require('../models/BrandSubcategory');
+const Filter = require('../models/Filter');
+const FilterValue = require('../models/FilterValue');
+const FilterSubcategory = require('../models/FilterSubcategory');
+const CardInfo = require('../models/CardInfo');
 const { MAX_BID } = require('../config/configs');
 const { addSubtractDaysToDate } = require('../helpers/addSubtractDaysToDate');
 const { userCardValidation } = require('./updateUsersProfile');
+const { client } = require('../config/twilioConfig');
 
 exports.addProductValidation = async (
   {
-    productData, addressInformation,
-    cardInformation, categoryData,
-    subcategoryData, brandData,
+    productData,
+    addressInformation,
+    cardInformation,
+    categoryData,
+    subcategoryData,
+    brandData,
     filtersData
   },
-  userId, images
+  userId,
+  images
 ) => {
   let errors = {};
+  let choosenCardToken = '';
+  let isCategoryValid = false;
+  let isSubcategoryValid = false;
+  let isBrandValid = false;
   const nameNumberOfWords = productData.name
     ? productData.name.split(' ').filter(n => n != '').length
     : 0;
 
-  const descriptionNumberOfWords = productData.name
-    ? productData.name.split(' ').filter(n => n != '').length
+  const descriptionNumberOfWords = productData.description
+    ? productData.description.split(' ').filter(n => n != '').length
     : 0;
 
-  const validCategory = await Category.findOne({ where: { id: categoryData.id } });
-
-  const validSubcategory = await Subcategory.findOne({
-    where: { id: subcategoryData.id, CategoriesId: categoryData.id }
-  });
-
-  const validBrand = await BrandSubcategory.findOne({
-    where: { brandId: brandData.id, subcategoryId: subcategoryData.id }
-  });
-  
   const startDate = new Date(productData.startDate);
   startDate.setTime(startDate.getTime() + 60 * 60 * 1000);
 
   const endDate = new Date(productData.endDate);
   endDate.setTime(endDate.getTime() + 60 * 60 * 1000);
+
+  const { address, city, country, phone, zip } = addressInformation;
 
   //product name validation
   if (!productData.name) {
@@ -51,26 +56,85 @@ exports.addProductValidation = async (
   //category validation
   if (!categoryData.id || !categoryData.name) {
     errors.category = 'Category is required';
-  } else if (!validCategory) {
-    errors.category = 'Please select valid category';
+  } else {
+    const validCategory = await Category.findOne({ where: { id: categoryData.id } });
+    if (!validCategory) {
+      errors.category = 'Please select valid category';
+    } else {
+      isCategoryValid = true;
+    }
   }
 
   //subcategory validation
   if (!subcategoryData.id || !subcategoryData.name) {
     errors.subcategory = 'Subcategory is required';
-  } else if (!validSubcategory) {
-    errors.subcategory = 'Please select valid subcategory';
+  } else {
+    if (isCategoryValid) {
+      const validSubcategory = await Subcategory.findOne({
+        where: { id: subcategoryData.id, CategoriesId: categoryData.id }
+      });
+      if (!validSubcategory) {
+        errors.subcategory = 'Please select valid subcategory';
+      } else {
+        isSubcategoryValid = true;
+      }
+    }
   }
 
   //brand validation
   if (!brandData.id || !brandData.name) {
     errors.brand = 'Brand is required';
-  } else if (!validBrand) {
-    errors.brand = 'Please select valid brand';
+  } else {
+    if (isSubcategoryValid) {
+      const validBrand = await BrandSubcategory.findOne({
+        where: { brandId: brandData.id, subcategoryId: subcategoryData.id }
+      });
+      if (!validBrand) {
+        errors.brand = 'Please select valid brand';
+      }
+    }
   }
 
   //filters validation
-  if (validSubcategory) {
+  if (isSubcategoryValid) {
+    let filterErrors = [];
+    const { Filters } = await Subcategory.findOne({
+      where: {
+        id: subcategoryData.id
+      },
+      attributes: [],
+      include: {
+        model: Filter,
+        attributes: ['id', 'name'],
+        through: {
+          model: FilterSubcategory,
+          attributes: []
+        },
+        include: {
+          model: FilterValue,
+          attributes: ['value', 'id']
+        }
+      }
+    });
+    Filters.forEach((filter, index) => {
+      const findFilter = filtersData.find(filterData => filterData.parentId == filter.id);
+      if (!findFilter) {
+        filterErrors.push(`Filter ${filter.name} is required`);
+      } else {
+        const findFilterValue = filter.FilterValues.find(
+          ({ id, value }) => id == filtersData[index].id && value == filtersData[index].name
+        );
+        if (!findFilterValue) {
+          filterErrors.push(`Please select valid value for filter ${filter.name}`);
+        } else {
+          filterErrors.push('');
+        }
+      }
+    });
+
+    if (filterErrors.find(error => error != '')) {
+      errors.filterErrors = filterErrors;
+    }
   }
 
   //product description validation
@@ -110,7 +174,7 @@ exports.addProductValidation = async (
     errors.startDate = 'Please choose valid start date';
   } else if (startDate < new Date()) {
     errors.startDate =
-      'Auction cannot start in the past. Please choose current date or some other date in the future';
+      'Auction cannot start in the past. Please choose tomorrow or some other date in the future';
   }
 
   //end date validation
@@ -121,66 +185,85 @@ exports.addProductValidation = async (
     isNaN(endDate.getTime())
   ) {
     errors.endDate = 'Please choose valid end date';
-  } else if (endDate < new Date()) {
-    errors.endDate =
-      'Auction cannot end in the past. Please choose tommorow or some other date in the future';
-  } else if (!(endDate >= addSubtractDaysToDate(1))) {
-    errors.endDate = 'Auction sould end at least tommorow or some other date in the future';
+  } else if (!(endDate > addSubtractDaysToDate(1))) {
+    errors.endDate = 'Auction should end at least a day after auction start date';
   }
 
   // address validation
-  if (!addressInformation.address) {
+  if (!address) {
     errors.address = 'Address is required';
   }
-
-  if (!addressInformation.city) {
+  if (!city) {
     errors.city = 'City is required';
   }
-
-  if (!addressInformation.country) {
+  if (!country) {
     errors.country = 'Country is required';
   }
-
-  if (!addressInformation.phone) {
+  if (!phone) {
     errors.phone = 'Phone is required';
+  } else {
+    try {
+      await client.lookups.phoneNumbers(phone).fetch({ type: ['carrier'] });
+    } catch (error) {
+      errors.phone = error.message + '. Please use valid country code.';
+    }
   }
-
-  if (!addressInformation.zip) {
+  if (!zip) {
     errors.zip = 'Zip is required';
   }
 
   //credit card validation
   if (!cardInformation.useCard) {
-    if (!cardInformation.cvc) {
-      errors.cvc = 'CVC is required';
+    const { cvc, name, number, exp_year, exp_month } = cardInformation;
+    if (!cvc) {
+      errors.CVC = 'CVC is required';
     }
 
-    if (!cardInformation.cName) {
+    if (!name) {
       errors.cName = 'Name on card is required';
     }
 
-    if (!cardInformation.number) {
+    if (!number) {
       errors.cNumber = 'Card number is required';
     }
 
-    if (!cardInformation.exp_year) {
+    if (!exp_year) {
       errors.exp_year = 'Exparation year is required';
     }
 
-    if (!cardInformation.exp_month) {
-      errors.cvc = 'Exparation month is required';
+    if (!exp_month) {
+      errors.exp_month = 'Exparation month is required';
     }
 
-    delete cardInformation.useCard;
+    if (cvc && name && number && exp_year && exp_month) {
+      delete cardInformation.useCard;
+      const {
+        isValid,
+        errors: cardErrors,
+        cardInfoData: { cardToken }
+      } = await userCardValidation(cardInformation, userId, errors);
 
-    const {isValid, errors:cardErrors, cardInfoData} = await userCardValidation(cardInformation, userId, errors);
-
-    if(!isValid) {
-      errors.card = cardErrors.card;
+      if (!isValid) {
+        errors.card = cardErrors.card;
+      } else {
+        choosenCardToken = cardToken;
+      }
     }
   } else {
-
+    const { customerId } = await CardInfo.findOne({
+      raw: true,
+      subQuery: false,
+      where: { id: userId },
+      attributes: ['customerId']
+    });
+    if (!customerId) {
+      errors.card = 'Please provide valid credit card information';
+    } else {
+      choosenCardToken = {
+        customer: customerId
+      };
+    }
   }
 
-  return { errors: { errors }, isValid: isEmpty(errors) };
+  return { errors: { errors }, isValid: isEmpty(errors), choosenCardToken };
 };

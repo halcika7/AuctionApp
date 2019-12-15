@@ -11,6 +11,7 @@ export const ADD_USER_PRODUCT_START = "ADD_USER_PRODUCT_START";
 export const CLEAR_SUBATEGORIES = "CLEAR_SUBATEGORIES";
 export const CLEAR_BRANDS = "CLEAR_BRANDS";
 export const CLEAR_FILTERS = "CLEAR_FILTERS";
+export const CLEAR_ADD_PRODUCT_MESSAGES = "CLEAR_ADD_PRODUCT_MESSAGES";
 
 export class AddProductStart implements Action {
   readonly type = ADD_PRODUCT_START;
@@ -28,8 +29,9 @@ export class AddProductSuccess implements Action {
       subcategories?: Category[];
       Brands?: Brand[];
       Filters?: Filters[];
-      numberOfActiveProducts?: number;
+      hasActiveProduct?: boolean;
       userInfo?: AddProductUserInfo;
+      message?: string;
     }
   ) {}
 }
@@ -60,6 +62,11 @@ export class ClearFilters implements Action {
   constructor() {}
 }
 
+export class ClearAddProductMessages implements Action {
+  readonly type = 'CLEAR_ADD_PRODUCT_MESSAGES';
+  constructor() {}
+}
+
 export type AddProductActions =
   | AddProductStart
   | AddUserProductStart
@@ -67,4 +74,5 @@ export type AddProductActions =
   | AddProductFailed
   | ClearSubcategories
   | ClearBrands
-  | ClearFilters;
+  | ClearFilters
+  | ClearAddProductMessages;
