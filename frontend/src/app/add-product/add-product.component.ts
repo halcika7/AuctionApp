@@ -155,21 +155,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
     brand = false,
     filter = false
   }) {
-    if (category) {
-      this._selectedCategoryData = data;
-    }
-
-    if (subcategory) {
-      this._selectedSubcategoryData = data;
-    }
-
-    if (brand) {
-      this._selectedBrandData = data;
-    }
-
-    if (filter) {
-      this._selectedFilterData = data;
-    }
+    if (category) this._selectedCategoryData = data;
+    if (subcategory) this._selectedSubcategoryData = data;
+    if (brand) this._selectedBrandData = data;
+    if (filter) this._selectedFilterData = data;
   }
 
   firstStepCheckValidity() {

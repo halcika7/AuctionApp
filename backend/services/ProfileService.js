@@ -46,13 +46,17 @@ class ProfileService extends BaseService {
         userInfo,
         email
       );
+      if (!isValid) {
+        file && file.path && unlinkFiles([file]);
+        return super.returnResponse(403, errors);
+      }
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
         cardInfo,
         userId,
         email,
         requiredInfoErrors
       );
-      if (!isValid || !validCard) {
+      if (!validCard) {
         file && file.path && unlinkFiles([file]);
         return super.returnResponse(403, errors);
       }
