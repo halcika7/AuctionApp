@@ -44,11 +44,6 @@ const CardInfo = db.define(
       allowNull: true,
       defaultValue: null
     },
-    cardToken: {
-      type: Sequelize.STRING(255),
-      allowNull: true,
-      defaultValue: null
-    },
     cardFingerprint: {
       type: Sequelize.STRING(255),
       allowNull: true,

@@ -11,7 +11,6 @@ module.exports = {
         exp_month: null,
         cardId: null,
         customerId: null,
-        cardToken: null,
         cardFingerprint: null
       }
     ];

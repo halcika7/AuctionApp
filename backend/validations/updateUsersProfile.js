@@ -5,6 +5,7 @@ const stripe = require('../config/stripeConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
+const { validateCard } = require('../helpers/stripeHelpers');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -60,25 +61,15 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors) => 
     return { isValid: true, errors, cardInfoData: {} };
   }
   try {
-    const { id, card } = await stripe.tokens.create({
-      card: {
-        ...cardInfo
-      }
-    });
-    const findCardIfExists = await CardInfo.findOne({
-      where: { cardFingerprint: card.fingerprint },
-      attributes: ['id', 'cardFingerprint', 'customerId']
-    });
-
-    if (findCardIfExists && findCardIfExists.id !== userCardInfoId) {
-      errors.errors.card = 'Card already in use';
+    const { card, id, valid } = await validateCard(errors, userCardInfoId, cardInfo);
+    if (!valid) {
       return { isValid: false, errors };
     }
     let customerId;
     const customer = await CardInfo.findOne({
       raw: true,
       where: { id: userCardInfoId },
-      attributes: ['customerId']
+      attributes: ['customerId', 'cardId']
     });
     if (!customer) {
       const { id } = await stripe.customers.create({
@@ -89,24 +80,22 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors) => 
     } else {
       customerId = customer.customerId;
     }
-    await stripe.customers.createSource(customerId, { source: 'tok_mastercard' });
+    if (customer.cardId) {
+      await stripe.customers.deleteSource(customerId, customer.cardId);
+    }
+    await stripe.customers.createSource(customerId, { source: id });
     cardInfo = {
       ...cardInfo,
       customerId,
       cardId: card.id,
       cardFingerprint: card.fingerprint,
-      cardToken: id,
       number: '************' + card.last4,
       cvc: '****'
     };
 
     return { isValid: true, errors, cardInfoData: cardInfo };
   } catch (error) {
-    if (errors.errors) {
-      errors.errors.card = error.raw.message;
-    } else {
-      errors.card = error.raw.message;
-    }
+    errors.errors.card = error.raw.message;
     return { isValid: false, errors };
   }
 };

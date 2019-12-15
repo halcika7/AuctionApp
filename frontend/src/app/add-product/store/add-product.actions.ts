@@ -12,6 +12,7 @@ export const CLEAR_SUBATEGORIES = "CLEAR_SUBATEGORIES";
 export const CLEAR_BRANDS = "CLEAR_BRANDS";
 export const CLEAR_FILTERS = "CLEAR_FILTERS";
 export const CLEAR_ADD_PRODUCT_MESSAGES = "CLEAR_ADD_PRODUCT_MESSAGES";
+export const CLEAR_ADD_PRODUCT_STATE = "CLEAR_ADD_PRODUCT_STATE";
 
 export class AddProductStart implements Action {
   readonly type = ADD_PRODUCT_START;
@@ -67,6 +68,11 @@ export class ClearAddProductMessages implements Action {
   constructor() {}
 }
 
+export class ClearAddProductState implements Action {
+  readonly type = 'CLEAR_ADD_PRODUCT_STATE';
+  constructor() {}
+}
+
 export type AddProductActions =
   | AddProductStart
   | AddUserProductStart
@@ -75,4 +81,5 @@ export type AddProductActions =
   | ClearSubcategories
   | ClearBrands
   | ClearFilters
-  | ClearAddProductMessages;
+  | ClearAddProductMessages
+  | ClearAddProductState;

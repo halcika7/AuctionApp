@@ -7,8 +7,8 @@ const FilterSubcategory = require('../models/FilterSubcategory');
 const CardInfo = require('../models/CardInfo');
 const { MAX_BID } = require('../config/configs');
 const { addSubtractDaysToDate } = require('../helpers/addSubtractDaysToDate');
-const { userCardValidation } = require('./updateUsersProfile');
 const { client } = require('../config/twilioConfig');
+const { validateCard } = require('../helpers/stripeHelpers');
 
 exports.addProductValidation = async (
   {
@@ -27,7 +27,6 @@ exports.addProductValidation = async (
   let choosenCardToken = '';
   let isCategoryValid = false;
   let isSubcategoryValid = false;
-  let isBrandValid = false;
   const nameNumberOfWords = productData.name
     ? productData.name.split(' ').filter(n => n != '').length
     : 0;
@@ -236,21 +235,22 @@ exports.addProductValidation = async (
     }
 
     if (cvc && name && number && exp_year && exp_month) {
-      delete cardInformation.useCard;
-      const {
-        isValid,
-        errors: cardErrors,
-        cardInfoData: { cardToken }
-      } = await userCardValidation(cardInformation, userId, errors);
+      try {
+        delete cardInformation.useCard;
+        const {
+          valid,
+          id
+        } = await validateCard(errors, userId, cardInformation);
 
-      if (!isValid) {
-        errors.card = cardErrors.card;
-      } else {
-        choosenCardToken = cardToken;
+        if (valid) {
+          choosenCardToken = id;
+        }
+      } catch (error) {
+        console.log('TCL: error', error);
       }
     }
   } else {
-    const { customerId, cardId } = await CardInfo.findOne({
+    const { customerId } = await CardInfo.findOne({
       raw: true,
       subQuery: false,
       where: { id: userId },
@@ -260,8 +260,7 @@ exports.addProductValidation = async (
       errors.card = 'Please provide valid credit card information';
     } else {
       choosenCardToken = {
-        customer: customerId,
-        source: cardId
+        customer: customerId
       };
     }
   }

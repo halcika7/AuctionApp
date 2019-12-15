@@ -18,7 +18,8 @@ import * as fromApp from "@app/store/app.reducer";
 import {
   AddProductStart,
   AddUserProductStart,
-  ClearAddProductMessages
+  ClearAddProductMessages,
+  ClearAddProductState
 } from "./store/add-product.actions";
 import { AddProductService } from "./add-product.service";
 
@@ -115,7 +116,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.clearMessages();
+    this.store.dispatch(new ClearAddProductState());
     this.addProductService.changeStepValue(0);
   }
 

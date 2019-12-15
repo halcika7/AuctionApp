@@ -67,7 +67,7 @@ const initialState: State = {
     }
   },
   success: false,
-  message: ''
+  message: ""
 };
 
 export function addProductReducer(
@@ -95,7 +95,7 @@ export function addProductReducer(
         userInfo: action.payload.userInfo
           ? action.payload.userInfo
           : state.userInfo,
-        message: action.payload.message ? action.payload.message : '',
+        message: action.payload.message ? action.payload.message : "",
         success: action.payload.message ? true : false
       };
     }
@@ -103,16 +103,21 @@ export function addProductReducer(
       return {
         ...state,
         errors: action.payload.errors ? action.payload.errors : {},
-        message: action.payload.message ? action.payload.message : '',
+        message: action.payload.message ? action.payload.message : "",
         success: false
       };
     }
     case AddProductActions.CLEAR_ADD_PRODUCT_MESSAGES: {
       return {
         ...state,
-        message: '',
+        message: "",
         success: false
-      }
+      };
+    }
+    case AddProductActions.CLEAR_ADD_PRODUCT_STATE: {
+      return {
+        ...initialState
+      };
     }
     case AddProductActions.CLEAR_BRANDS: {
       return {
