@@ -60,6 +60,7 @@
     <button
       class="next"
       (click)="buttonClicked(false)"
+      [disabled]="!isValidStep"
     >
       next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
     </button>

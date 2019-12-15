@@ -2,7 +2,6 @@ const BaseService = require('./BaseService');
 const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
-const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty, removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
@@ -12,6 +11,7 @@ const {
   createRefreshToken,
   getOptionalInfoCard
 } = require('../helpers/authHelper');
+const { unlinkFiles } = require('../helpers/unlinkFiles');
 
 class ProfileService extends BaseService {
   constructor() {
@@ -53,7 +53,7 @@ class ProfileService extends BaseService {
         requiredInfoErrors
       );
       if (!isValid || !validCard) {
-        file && file.path && fs.unlinkSync(file.path);
+        file && file.path && unlinkFiles([file]);
         return super.returnResponse(403, errors);
       }
       if (file && file.path) {
@@ -61,7 +61,7 @@ class ProfileService extends BaseService {
           public_id: `user-${userId}`
         });
         userInfo.photo = secure_url;
-        fs.unlinkSync(file.path);
+        unlinkFiles([file]);
       } else {
         userInfo.photo = currentUser.photo;
       }

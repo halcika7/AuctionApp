@@ -250,7 +250,7 @@ exports.addProductValidation = async (
       }
     }
   } else {
-    const { customerId } = await CardInfo.findOne({
+    const { customerId, cardId } = await CardInfo.findOne({
       raw: true,
       subQuery: false,
       where: { id: userId },
@@ -260,7 +260,8 @@ exports.addProductValidation = async (
       errors.card = 'Please provide valid credit card information';
     } else {
       choosenCardToken = {
-        customer: customerId
+        customer: customerId,
+        source: cardId
       };
     }
   }

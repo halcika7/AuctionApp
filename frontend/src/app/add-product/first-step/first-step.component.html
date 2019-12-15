@@ -86,7 +86,7 @@
     >
       <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
     </button>
-    <button class="next" (click)="buttonClicked(false)" >
+    <button class="next" (click)="buttonClicked(false)" [disabled]="!isValid" >
       next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
     </button>
   </div>

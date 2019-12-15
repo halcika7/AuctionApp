@@ -11,11 +11,11 @@ const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
 const BaseService = require('./BaseService');
 const BidService = require('./BidService');
 const { addProductValidation } = require('../validations/addProductValidation');
-const fs = require('fs');
 const Product = require('../models/Product');
 const ProductImage = require('../models/ProductImage');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { transformProductData } = require('../helpers/transformProductData');
+const { unlinkFiles } = require('../helpers/unlinkFiles');
 const stripe = require('../config/stripeConfig');
 
 class ProductService extends BaseService {
@@ -120,7 +120,7 @@ class ProductService extends BaseService {
       );
 
       if (!isValid) {
-        if (images.length > 0) images.forEach(image => fs.unlinkSync(image.path));
+        if (images.length > 0) unlinkFiles(images);
         return super.returnResponse(403, errors);
       }
       const uploadImages = await Promise.all(
@@ -131,9 +131,7 @@ class ProductService extends BaseService {
       );
       if (productData.featured) {
         let source =
-          Object.keys(choosenCardToken).length > 0
-            ? choosenCardToken
-            : { source: choosenCardToken };
+          typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
         const charge = await stripe.charges.create({
           amount: 1000,
           currency: 'usd',
@@ -151,7 +149,7 @@ class ProductService extends BaseService {
         subcategoryData,
         userId
       );
-      if (images.length > 0) images.forEach(image => fs.unlinkSync(image.path));
+      if (images.length > 0) unlinkFiles(images);
 
       const product = await Product.create({ ...productData });
       Product.bulkCreate;
@@ -164,9 +162,11 @@ class ProductService extends BaseService {
 
       return super.returnResponse(200, { success: responseMessage });
     } catch (error) {
+      unlinkFiles(images);
       return super.returnGenericFailed();
     }
   }
+
 }
 
 const ProductServiceInstance = new ProductService();

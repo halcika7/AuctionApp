@@ -22,7 +22,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
   @Input() currentStep: number;
   @Output() submitForm = new EventEmitter<any>();
-  private _isValidStep = true;
+  private _isValidStep = false;
   private step: number = 3;
   private _years = getNextFourYears();
   private _months = getMonthNumber();
