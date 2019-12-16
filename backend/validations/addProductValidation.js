@@ -31,10 +31,6 @@ exports.addProductValidation = async (
     ? productData.name.split(' ').filter(n => n != '').length
     : 0;
 
-  const descriptionNumberOfWords = productData.description
-    ? productData.description.split(' ').filter(n => n != '').length
-    : 0;
-
   const startDate = new Date(productData.startDate);
   startDate.setTime(startDate.getTime() + 60 * 60 * 1000);
 
