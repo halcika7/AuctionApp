@@ -20,7 +20,8 @@
   }
 
   .content {
-    height: 100px;
+    @include flex(center, center, column);
+    height: 200px;
     background: getColor(white);
     z-index: 1;
     padding: 30px;
@@ -32,24 +33,28 @@
     }
 
     .buttons {
-      @include fontMixin(16px, regular, 0.63px, light_black);
       @include flex(center, space-between);
+      width: 100%;
 
       button {
+        @include fontMixin(16px, bold, 0.63px, light_black, $transform: uppercase);
+        @include flex(center, center);
+        @include fontMixin(18);
+        color: getColor(light_black);
         box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
-        color: getColor(white);
+        background: getColor(white);
+        height: 57px;
+        padding: 0;
         width: 48%;
-        cursor: pointer;
         outline: none;
+        cursor: pointer;
       }
 
       .confirm {
-        background: getColor(light_green);
         border: 3px solid getColor(light_green);
       }
 
       .close {
-        background: getColor(red);
         border: 3px solid getColor(red);
       }
     }
