@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
-const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require('../config/configs');
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, DEFAULT_USER_IMAGE } = require('../config/configs');
 
 exports.createAccessToken = ({ id, email }) =>
   jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
@@ -91,7 +91,7 @@ exports.createUser = async (
     password,
     optionalInfoId,
     cardInfoId,
-    photo: 'https://static.thenounproject.com/png/363633-200.png'
+    photo: DEFAULT_USER_IMAGE
   });
 };
 
