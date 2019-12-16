@@ -100,6 +100,7 @@ import {
 
 // Services, directives and pipes
 import { DropdownDirective } from "./shared/directives/dropdown.directive";
+import { DragDropDirective } from './shared/directives/drag-drop.directive';
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
@@ -129,6 +130,7 @@ import { CustomDateInputComponent } from "./add-product/second-step/custom-date-
     AlertComponent,
     InputComponent,
     DropdownDirective,
+    DragDropDirective,
     CategoriesListComponent,
     CarouselComponent,
     LandingPageProductsComponent,
