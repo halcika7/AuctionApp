@@ -8,7 +8,7 @@ module.exports = {
       reviews.push({
         rating: Math.floor(Math.random() * 5 + 1),
         productId: Math.floor(Math.random() * 100 + 1),
-        userId: Math.floor(Math.random() * 100 + 1)
+        userId: 1
       });
     }
     return queryInterface.bulkInsert('ProductReviews', reviews, {});

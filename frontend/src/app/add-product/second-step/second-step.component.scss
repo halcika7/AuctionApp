@@ -1,0 +1,82 @@
+@import "mixins";
+@import "variables";
+
+.date {
+  @include flex($justify: space-between);
+
+  @media (max-width: 740px) {
+    flex-wrap: wrap;
+
+    > app-custom-date-input {
+      width: 100%;
+
+      &:nth-child(2) {
+        margin-top: 30px;
+      }
+    }
+  }
+
+  > app-custom-date-input {
+    width: 48%;
+  }
+}
+
+p {
+  @include fontMixin(16px, regular, 0.56px, gray, $lineH: 30px);
+  @include margin($all: 13px 0 110px);
+}
+
+.price {
+  position: relative;
+  margin-bottom: 60px;
+
+  .invalid {
+    input {
+      border: 1px solid getColor(red);
+    }
+    fa-icon {
+      border-left: 1px solid getColor(red);
+      border-top: 1px solid getColor(red);
+      border-bottom: 1px solid getColor(red);
+    }
+  }
+
+  label {
+    @include fontMixin(18px, light, 0.63px, light_black);
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  input {
+    @include heightWidth(54px, 100%);
+    @include padding($all: 0 60px);
+    background: getColor(white);
+    border: 1px solid getColor(light_gray);
+    outline: 0;
+    box-sizing: border-box;
+  }
+
+  fa-icon {
+    @include heightWidth(54px, 54px);
+    @include flex(center, center);
+    position: absolute;
+    background: getColor(darker_white);
+    border: 1px solid getColor(light_gray);
+    box-sizing: border-box;
+  }
+}
+
+::ng-deep {
+  .owl-dt-inline-container,
+  .owl-dt-popup-container {
+    @media (max-width: 350px) {
+      width: 220px;
+    }
+  }
+
+  .input ~ span {
+    @include fontMixin(14px, light, $color: red);
+    margin-top: 5px;
+    display: block;
+  }
+}

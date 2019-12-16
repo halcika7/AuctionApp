@@ -1,0 +1,51 @@
+@import "mixins";
+@import "variables";
+
+.no-products {
+  max-width: 702px;
+  height: 535px;
+  margin: 39px auto 200px;
+  background: getColor(white);
+  border: 1px solid getColor(light_gray);
+
+  h3 {
+    @include flex(center, center);
+    @include fontMixin(20px, $letterS: 0.7px, $color: light_black);
+    height: 60px;
+    background: getColor(darker_white2);
+    margin: 0.3px;
+  }
+
+  svg {
+    @include margin($all: 57px auto 0);
+    max-height: 100px;
+    fill: getColor(purple);
+    display: block;
+  }
+
+  p {
+    @include fontMixin(18px, $letterS:0.63px, $color: light_black, $lineH: 22px);
+    @include margin($all: 11px 0 92px);
+    text-align: center;
+  }
+
+  button {
+    @include flex(center, center);
+    @include margin($all: 0 auto);
+    @include fontMixin(18px, $letterS: 0.63px, $color: light_black, $transform: uppercase);
+    @include heightWidth(57px, 300px);
+    background: getColor(white);
+    border: 3px solid getColor(purple);
+    box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+    outline: none;
+    cursor: pointer;
+
+    fa-icon {
+      margin-left: 19px;
+    }
+
+    @media (max-width: 360px) {
+      width: 90%;
+    }
+  }
+}

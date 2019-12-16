@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ProfileService } from "./../profile.service";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
@@ -9,10 +10,11 @@ import * as ProfileActions from "../store/profile.actions";
   templateUrl: "./profile-settings.component.html",
   styleUrls: ["./profile-settings.component.scss"]
 })
-export class ProfileSettingsComponent implements OnInit {
+export class ProfileSettingsComponent implements OnInit, OnDestroy {
   private _email: string;
   private _phone: string;
   private _showModal: boolean = false;
+  private subscription = new Subscription();
   constructor(
     private profileService: ProfileService,
     private store: Store<fromApp.AppState>
@@ -21,16 +23,22 @@ export class ProfileSettingsComponent implements OnInit {
   ngOnInit() {
     this.profileService.changeBreadcrumb("settings");
     this.store.dispatch(new ProfileActions.ProfileStart("/profile/userInfo"));
-    this.store
-      .select("profile")
-      .subscribe(({ userInfo: { email, phoneNumber } }) => {
-        if (email != undefined) {
-          this._email = email;
-        }
-        if (phoneNumber != undefined) {
-          this._phone = phoneNumber;
-        }
-      });
+    this.subscription.add(
+      this.store
+        .select("profile")
+        .subscribe(({ userInfo: { email, phoneNumber } }) => {
+          if (email != undefined) {
+            this._email = email;
+          }
+          if (phoneNumber != undefined) {
+            this._phone = phoneNumber;
+          }
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   openModal(value: boolean = true) {

@@ -44,7 +44,7 @@ function filterProducts({
   }
 
   if (type === 'heroProduct') {
-    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
+    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() AND p."auctionStart" <= NOW() ORDER BY random() ';
   } else {
     findProductsQuery += 'FROM public."Products" p WHERE ';
     numberOfProductsQuery +=
@@ -240,3 +240,10 @@ function buildPriceRangeQuery() {
     query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
   );
 }
+
+exports.hasActiveProduct = async userId => {
+  const findProduct = await Product.findOne({
+    where: { userId, auctionEnd: { [Op.gt]: new Date() } }
+  });
+  return findProduct ? true : false
+};

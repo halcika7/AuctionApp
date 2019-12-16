@@ -1,0 +1,154 @@
+@import "mixins";
+@import "variables";
+
+.group {
+  @include flex($justify: space-between);
+
+  app-input {
+    width: 48%;
+  }
+
+  @media (max-width: 450px) {
+    flex-wrap: wrap;
+
+    app-input {
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+}
+
+.checkbox {
+  label {
+    position: relative;
+    cursor: pointer;
+    padding-left: 25px;
+
+    fa-icon {
+      @include flex(center, center);
+      opacity: 0;
+      z-index: 2;
+      font-size: 15px;
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      display: none;
+
+      &:checked ~ fa-icon {
+        opacity: 1;
+      }
+    }
+
+    &:before,
+    fa-icon {
+      @include heightWidth(20px, 20px);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:before {
+      content: "";
+      background: getColor(white);
+      border: 1px solid getColor(light_gray);
+      box-sizing: border-box;
+    }
+  }
+
+  p {
+    @include fontMixin(14px, regular, 0.63px, gray, $lineH: 26px);
+    margin: 0;
+    padding-left: 25px;
+
+    &:nth-child(2) {
+      margin-top: 8px;
+    }
+  }
+
+  &.second {
+    margin-top: 39px;
+  }
+}
+
+.card-information {
+  margin-top: 75px;
+
+  h3 {
+    @include fontMixin(20px, regular, 0.7px, light_black);
+    padding-bottom: 8px;
+    border-bottom: 4px solid getColor(lighter_gray);
+    margin-bottom: 35px;
+  }
+
+  .group {
+    &:nth-child(2) {
+      margin-bottom: 31px;
+    }
+
+    &:nth-child(3) {
+      margin-bottom: 130px;
+    }
+
+    .date {
+      @include flex($justify: space-between);
+      width: 48%;
+
+      app-select-input {
+        width: 46%;
+
+        &:nth-child(2) {
+          margin-top: 28.2px;
+        }
+      }
+
+      @media (max-width: 718px) {
+        flex-wrap: wrap;
+
+        app-select-input {
+          width: 100%;
+
+          &:nth-child(2) {
+            margin-top: 15px;
+          }
+        }
+      }
+
+      @media (max-width: 450px) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .group {
+    .form-group {
+      margin: 0 !important;
+    }
+  }
+
+  .card-information {
+    .group {
+      .select-wrapper {
+        .select {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+.mt-39 {
+  margin-top: 39px;
+}
+
+.invalid-card {
+  @include fontMixin(14px, light, $color: red);
+  @include margin($all: 5px 0 0);
+  display: block;
+}

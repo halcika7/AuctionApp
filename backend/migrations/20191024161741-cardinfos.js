@@ -33,7 +33,12 @@ module.exports = {
         allowNull: true,
         defaultValue: null
       },
-      cardToken: {
+      customerId: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+        defaultValue: null
+      },
+      cardId: {
         type: Sequelize.STRING(255),
         allowNull: true,
         defaultValue: null

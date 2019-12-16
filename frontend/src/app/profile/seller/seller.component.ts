@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from 'rxjs';
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as ProfileActions from "../store/profile.actions";
@@ -15,6 +16,7 @@ export class SellerComponent implements OnInit, OnDestroy {
   private _products: ProfileProduct[] = [];
   private _offset: number = 0;
   private _noMore: boolean = false;
+  private subscription = new Subscription();
 
   constructor(
     private profileService: ProfileService,
@@ -24,13 +26,14 @@ export class SellerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.profileService.changeBreadcrumb("seller");
     this.getProducts();
-    this.store.select("profile").subscribe(({ products, noMore }) => {
+    this.subscription.add(this.store.select("profile").subscribe(({ products, noMore }) => {
       this._products = products;
       this._noMore = noMore;
-    });
+    }));
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.store.dispatch(new ProfileActions.ClearProfile());
   }
 

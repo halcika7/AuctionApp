@@ -25,7 +25,7 @@ class ShopService extends BaseService {
           [db.fn('coalesce', db.fn('MIN', db.col('price')), 0), 'min_price']
         ]
       });
-      return { status: 200, prices };
+      return super.returnResponse(200, { prices });
     } catch (error) {
       return super.returnGenericFailed();
     }

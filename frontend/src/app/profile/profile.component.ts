@@ -8,7 +8,7 @@ import {
   OnDestroy
 } from "@angular/core";
 import { ProfileService } from "./profile.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as ProfileActions from "./store/profile.actions";
@@ -23,18 +23,29 @@ export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
   private subscription = new Subscription();
   private _message: string;
   private _success: boolean;
+  private _showNav: boolean = true;
 
   constructor(
     private profileService: ProfileService,
     private router: Router,
+    private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
     private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
-    if (this.router.url === "/account") {
-      this.router.navigateByUrl("/account/profile");
-    }
+    this.subscription.add(
+      this.route.url.subscribe(data => {
+        if (this.router.url === "/account") {
+          this.router.navigateByUrl("/account/profile");
+        }
+        if (this.router.url === "/account/become-seller") {
+          this._showNav = false;
+        } else {
+          this._showNav = true;
+        }
+      })
+    );
     this.subscription.add(
       this.profileService.breadcrumbChanged.subscribe(value => {
         this._lastBreadcrumbLink = value;
@@ -85,5 +96,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   get success(): boolean {
     return this._success;
+  }
+
+  get showNav(): boolean {
+    return this._showNav;
   }
 }

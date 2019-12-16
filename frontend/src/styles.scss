@@ -1,6 +1,7 @@
 @import "variables";
 @import "resets";
 @import "mixins";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 
 .paddingL15 {
   @include padding($left: 21px !important);
@@ -124,7 +125,7 @@ app-footer {
   }
 
   .input {
-    background: getColor(darker_white);
+    // background: getColor(darker_white);
 
     input {
       @include padding($all: 0 30px);
@@ -133,7 +134,7 @@ app-footer {
       box-sizing: border-box;
       outline: none;
       border: 1px solid getColor(light_gray);
-      background: transparent;
+      background: getColor(darker_white);
     }
   }
 }
@@ -293,7 +294,8 @@ app-footer {
   margin-top: 43px !important;
 }
 
-.form-group .input input.ng-invalid {
+.form-group .input input.ng-invalid,
+.form-group .input textarea.ng-invalid {
   &.ng-touched {
     border: 1px solid getColor(red);
   }
@@ -578,6 +580,14 @@ app-footer {
 
 .mw-1800 {
   min-width: 1800px !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.hide {
+  display: none !important;
 }
 
 @media (max-width: 1199px) {

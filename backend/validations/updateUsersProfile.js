@@ -5,6 +5,7 @@ const stripe = require('../config/stripeConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
+const { validateCard } = require('../helpers/stripeHelpers');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -29,14 +30,13 @@ exports.userInfoValidation = async (userInfo, email) => {
     errors.dateOfBirth = 'Invalid date of birth';
   }
 
-  if(data.phoneNumber) {
+  if (data.phoneNumber) {
     try {
       await client.lookups.phoneNumbers(data.phoneNumber).fetch({ type: ['carrier'] });
     } catch (error) {
       errors.phoneNumber = error.message + '. Please use valid country code.';
     }
   }
-
 
   nameValidation('firstName', data.firstName, errors, 'First name');
   nameValidation('lastName', data.lastName, errors, 'Last name');
@@ -53,7 +53,7 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (cardInfo, userCardInfoId, errors) => {
+exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors) => {
   if (
     Object.keys(removeNullProperty(cardInfo)).length == 0 ||
     (cardInfo.cvc == '****' && cardInfo.number.includes('************'))
@@ -61,28 +61,35 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, errors) => {
     return { isValid: true, errors, cardInfoData: {} };
   }
   try {
-    const {
-      id,
-      card: { fingerprint, last4 }
-    } = await stripe.tokens.create({
-      card: {
-        ...cardInfo
-      }
-    });
-    const findCardIfExists = await CardInfo.findOne({
-      where: { cardFingerprint: fingerprint },
-      attributes: ['id', 'cardFingerprint']
-    });
-
-    if (findCardIfExists && findCardIfExists.id !== userCardInfoId) {
-      errors.errors.card = 'Card already in use';
+    const { card, id, valid } = await validateCard(errors, userCardInfoId, cardInfo);
+    if (!valid) {
       return { isValid: false, errors };
     }
+    let customerId;
+    const customer = await CardInfo.findOne({
+      raw: true,
+      where: { id: userCardInfoId },
+      attributes: ['customerId', 'cardId']
+    });
+    if (!customer) {
+      const { id } = await stripe.customers.create({
+        description: 'Customer for atlant auction app',
+        email
+      });
+      customerId = id;
+    } else {
+      customerId = customer.customerId;
+    }
+    if (customer.cardId) {
+      await stripe.customers.deleteSource(customerId, customer.cardId);
+    }
+    await stripe.customers.createSource(customerId, { source: id });
     cardInfo = {
       ...cardInfo,
-      cardFingerprint: fingerprint,
-      cardToken: id,
-      number: '************' + last4,
+      customerId,
+      cardId: card.id,
+      cardFingerprint: card.fingerprint,
+      number: '************' + card.last4,
       cvc: '****'
     };
 

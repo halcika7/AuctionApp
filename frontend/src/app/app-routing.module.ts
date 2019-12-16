@@ -19,6 +19,7 @@ import { EditProfileComponent } from "./profile/edit-profile/edit-profile.compon
 import { SellerComponent } from "./profile/seller/seller.component";
 import { WishlistComponent } from "./profile/wishlist/wishlist.component";
 import { BidsComponent } from "./profile/bids/bids.component";
+import { AddProductComponent } from './add-product/add-product.component';
 
 import { LoginGuard } from "./auth/login.guard";
 import { AuthGuard } from "./auth/auth.guard";
@@ -91,6 +92,11 @@ const appRoutes: Routes = [
       {
         path: "settings",
         component: ProfileSettingsComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: "become-seller",
+        component: AddProductComponent,
         canActivate: [AuthGuard]
       }
     ]

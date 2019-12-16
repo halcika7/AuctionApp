@@ -2,11 +2,16 @@ const BaseService = require('./BaseService');
 const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
-const fs = require('fs');
 const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullProperty, removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
-const { getUserInfo, createAccessToken, createRefreshToken } = require('../helpers/authHelper');
+const {
+  getUserInfo,
+  createAccessToken,
+  createRefreshToken,
+  getOptionalInfoCard
+} = require('../helpers/authHelper');
+const { unlinkFiles } = require('../helpers/unlinkFiles');
 
 class ProfileService extends BaseService {
   constructor() {
@@ -18,9 +23,7 @@ class ProfileService extends BaseService {
       const userInfo = await getUserInfo(id);
       return super.returnResponse(200, { userInfo });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 
@@ -29,9 +32,7 @@ class ProfileService extends BaseService {
       await User.update({ deactivated: true }, { where: { id } });
       return super.returnResponse(200, {});
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
     }
   }
 
@@ -40,18 +41,23 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
     try {
-      //userId, optionalInfoId, cardInfoId are same..
+      //userId, optionalInfoId and cardInfoId are same
       const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
         userInfo,
         email
       );
+      if (!isValid) {
+        file && file.path && unlinkFiles([file]);
+        return super.returnResponse(403, errors);
+      }
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
         cardInfo,
         userId,
+        email,
         requiredInfoErrors
       );
-      if (!isValid || !validCard) {
-        file && file.path && fs.unlinkSync(file.path);
+      if (!validCard) {
+        file && file.path && unlinkFiles([file]);
         return super.returnResponse(403, errors);
       }
       if (file && file.path) {
@@ -59,7 +65,7 @@ class ProfileService extends BaseService {
           public_id: `user-${userId}`
         });
         userInfo.photo = secure_url;
-        fs.unlinkSync(file.path);
+        unlinkFiles([file]);
       } else {
         userInfo.photo = currentUser.photo;
       }
@@ -87,9 +93,16 @@ class ProfileService extends BaseService {
 
       return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
     } catch (error) {
-      return super.returnResponse(403, {
-        message: 'Something happened. We were unable to perform request.'
-      });
+      return super.returnGenericFailed();
+    }
+  }
+
+  async userOptionalInfoWithCard(id) {
+    try {
+      const userInfo = await getOptionalInfoCard(id);
+      return super.returnResponse(200, { userInfo });
+    } catch (error) {
+      return super.returnGenericFailed();
     }
   }
 }

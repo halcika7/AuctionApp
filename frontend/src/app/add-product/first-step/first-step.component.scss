@@ -1,0 +1,80 @@
+@import "mixins";
+@import "variables";
+
+p {
+  @include margin($all: 11px 0 0);
+  @include fontMixin(16px, regular, 0.56px, gray);
+  text-align: right;
+}
+
+.category {
+  @include flex($justify: space-between);
+  margin-top: 30px;
+
+  @media (max-width: 590px) {
+    flex-wrap: wrap;
+
+    app-select-input {
+      width: 100%;
+      margin-top: 30px;
+    }
+  }
+}
+
+.brand,
+.filters {
+  app-select-input {
+    width: 100%;
+  }
+}
+
+.filters {
+  @include grid(2, 20px);
+  margin-top: 30px;
+
+  @media (max-width: 590px) {
+    @include grid(1, 0px);
+    margin-top: 0;
+
+    app-select-input {
+      width: 100%;
+      margin-top: 30px;
+    }
+  }
+}
+
+.description {
+  margin-top: 30px;
+}
+
+app-select-input {
+  width: 48%;
+}
+
+::ng-deep {
+  .category,
+  .brand,
+  .filters {
+    .select-wrapper {
+      .select {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .brand {
+    app-select-input {
+      .select-wrapper {
+        margin-top: 50px;
+      }
+    }
+  }
+
+  app-input {
+    &:first-child {
+      .form-group {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}

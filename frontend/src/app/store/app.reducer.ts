@@ -6,6 +6,7 @@ import * as fromCategoriesPage from "@app/containers/all-categories/store/all-ca
 import * as fromProductPage from "@app/product-page/store/product-page.reducer";
 import * as fromShopPage from "@app/shop-page/store/shop-page.reducer";
 import * as fromProfile from "@app/profile/store/profile.reducer";
+import * as fromAddProduct from "@app/add-product/store/add-product.reducer";
 
 export interface AppState {
   auth: fromAuth.State;
@@ -14,6 +15,7 @@ export interface AppState {
   productPage: fromProductPage.State;
   shopPage: fromShopPage.State;
   profile: fromProfile.State;
+  addProduct: fromAddProduct.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -22,5 +24,6 @@ export const appReducer: ActionReducerMap<AppState> = {
   categoriesPage: fromCategoriesPage.categoriesPageReducer,
   productPage: fromProductPage.productPageReducer,
   shopPage: fromShopPage.shopPageReducer,
-  profile: fromProfile.profileReducer
+  profile: fromProfile.profileReducer,
+  addProduct: fromAddProduct.addProductReducer
 };
