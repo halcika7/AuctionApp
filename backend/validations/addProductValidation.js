@@ -46,8 +46,8 @@ exports.addProductValidation = async (
   //product name validation
   if (!productData.name) {
     errors.name = 'Product name is required';
-  } else if (nameNumberOfWords < 2 || nameNumberOfWords > 5) {
-    errors.name = 'Please enter between 2 and 5 words';
+  } else if (nameNumberOfWords < 1 || nameNumberOfWords > 10) {
+    errors.name = 'Please enter between 1 and 10 words';
   } else if (productData.name.length > 60) {
     errors.name = 'Please enter product name that is not longer than 60 characters.';
   }
@@ -139,8 +139,6 @@ exports.addProductValidation = async (
   //product description validation
   if (!productData.description) {
     errors.description = 'Product description is required';
-  } else if (descriptionNumberOfWords < 100) {
-    errors.description = 'Please enter at least 100 words';
   } else if (productData.description.length > 700) {
     errors.description = 'Please enter product description that is not longer than 700 characters.';
   }
