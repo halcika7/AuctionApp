@@ -44,7 +44,7 @@ function filterProducts({
   }
 
   if (type === 'heroProduct') {
-    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() ORDER BY random() ';
+    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() AND p."auctionStart" <= NOW() ORDER BY random() ';
   } else {
     findProductsQuery += 'FROM public."Products" p WHERE ';
     numberOfProductsQuery +=

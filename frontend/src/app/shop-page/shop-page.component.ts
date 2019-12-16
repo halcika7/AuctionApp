@@ -201,7 +201,10 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   private dispatchActions(refreshBrands = false, refreshProducts = false) {
     refreshBrands && this.dispatchAction("/shop/brands");
     this._filterProduct.subcategoryId && this.dispatchAction("/shop/filters");
-    refreshProducts && this.dispatchAction("/shop/products");
+    refreshProducts &&
+      this.store.dispatch(
+        new ShopPageActions.ShopProductsStart(this._filterProduct)
+      );
     this.dispatchAction("/shop/prices");
   }
 
