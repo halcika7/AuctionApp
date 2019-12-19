@@ -40,6 +40,7 @@
         type="search"
         placeholder="Try enter: Shoes"
         (search)="onSearch($event, searchInput)"
+        [value]="searchValue"
       />
       <fa-icon
         [icon]="['fas', 'search']"

@@ -179,12 +179,6 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       : false;
   }
 
-  productNameChanged(value: string | null) {
-    this.filterProduct.name = value;
-    this.changeQueryParam(value);
-    this.dispatchActions(true, true);
-  }
-
   private checkActiveSubcategory() {
     if (this.categoryId && this.subcategoryId && this.categories.length > 0) {
       this._breadcrumbSubcategory = this.categories[
@@ -237,19 +231,15 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         orderBy: null
       };
       if (resetName) {
-        this.changeQueryParam(null);
+        this.router.navigate([], {
+          queryParams: { name: null },
+          queryParamsHandling: "merge"
+        });
       }
       this._filterIds = [];
     } else {
       this._filterProduct.offSet = 0;
     }
-  }
-
-  private changeQueryParam(value: string | null) {
-    this.router.navigate([], {
-      queryParams: { name: value },
-      queryParamsHandling: "merge"
-    });
   }
 
   get filterProduct() {
