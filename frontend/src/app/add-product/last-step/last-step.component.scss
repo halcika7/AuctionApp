@@ -1,6 +1,28 @@
 @import "mixins";
 @import "variables";
 
+::ng-deep {
+  .group {
+    .form-group {
+      margin: 0 !important;
+    }
+  }
+
+  .card-information {
+    .group {
+      .form-group {
+        margin: 0 !important;
+      }
+      .select-wrapper {
+        margin-top: 8px;
+        .select {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}
+
 .group {
   @include flex($justify: space-between);
 
@@ -86,57 +108,45 @@
   }
 
   .group {
-    &:nth-child(2) {
-      margin-bottom: 31px;
-    }
+    margin-bottom: 31px;
 
-    &:nth-child(3) {
+    &:last-child {
       margin-bottom: 130px;
     }
 
-    .date {
-      @include flex($justify: space-between);
+    .card-date-wrapper {
       width: 48%;
 
-      app-select-input {
-        width: 46%;
+      > label {
+        @include fontMixin(18px, light, 0.63px, light_black);
+        display: block;
 
-        &:nth-child(2) {
-          margin-top: 28.2px;
+        span {
+          color: getColor(red);
         }
       }
 
-      @media (max-width: 718px) {
-        flex-wrap: wrap;
+      .date {
+        @include flex($justify: space-between);
 
         app-select-input {
-          width: 100%;
+          width: 46%;
+        }
 
-          &:nth-child(2) {
-            margin-top: 15px;
+        @media (max-width: 718px) {
+          flex-wrap: wrap;
+
+          app-select-input {
+            width: 100%;
+
+            &:nth-child(2) {
+              margin-top: 15px;
+            }
           }
         }
-      }
 
-      @media (max-width: 450px) {
-        width: 100%;
-      }
-    }
-  }
-}
-
-::ng-deep {
-  .group {
-    .form-group {
-      margin: 0 !important;
-    }
-  }
-
-  .card-information {
-    .group {
-      .select-wrapper {
-        .select {
-          width: 100% !important;
+        @media (max-width: 450px) {
+          width: 100%;
         }
       }
     }
@@ -149,6 +159,6 @@
 
 .invalid-card {
   @include fontMixin(14px, light, $color: red);
-  @include margin($all: 5px 0 0);
+  @include margin($all: 5px 0 10px);
   display: block;
 }

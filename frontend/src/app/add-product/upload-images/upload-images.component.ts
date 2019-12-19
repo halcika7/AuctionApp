@@ -9,25 +9,26 @@ import { FormGroup } from "@angular/forms";
 export class UploadImagesComponent implements OnInit {
   @Input() form: FormGroup;
   private _files: File[] = [];
-  input;
-  urls = [];
+  private _input;
+  private _urls = [];
 
   constructor() {}
 
   ngOnInit() {
     this.loadFiles(this.form.value.images, true);
-    this.input = this.form.get("images");
+    this._input = this.form.get("images");
   }
 
   uploadFile(files) {
     this.loadFiles(files);
     this.setErrors();
   }
+
   deleteAttachment(event, index) {
     event.preventDefault();
     event.stopPropagation();
     this._files.splice(index, 1);
-    this.urls.splice(index, 1);
+    this._urls.splice(index, 1);
     this.setErrors();
   }
 
@@ -39,7 +40,7 @@ export class UploadImagesComponent implements OnInit {
       } else {
         const reader = new FileReader();
         reader.onload = e => {
-          this.urls.push(reader.result);
+          this._urls.push(reader.result);
         };
         reader.readAsDataURL(file);
       }
@@ -59,5 +60,13 @@ export class UploadImagesComponent implements OnInit {
       this.form.controls.images.setErrors({ minlength: { requiredLength: 3 } });
       this.form.controls.images.markAsTouched();
     }
+  }
+
+  get input() {
+    return this._input;
+  }
+
+  get urls() {
+    return this._urls;
   }
 }

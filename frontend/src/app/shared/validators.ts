@@ -53,13 +53,21 @@ export const NAME_VALIDATOR = (
   };
 };
 
-export const PHONE_VALIDATOR = (name: string) => {
-  return {
-    [name]: new FormControl("", [
-      Validators.minLength(7),
-      Validators.maxLength(15)
-    ])
-  };
+export const PHONE_VALIDATOR = (name: string, required: boolean = false) => {
+  return !required
+    ? {
+        [name]: new FormControl("", [
+          Validators.minLength(7),
+          Validators.maxLength(15)
+        ])
+      }
+    : {
+        [name]: new FormControl("", [
+          Validators.minLength(7),
+          Validators.maxLength(15),
+          Validators.required
+        ])
+      };
 };
 
 export const BASIC_INPUT = (name: string, dValue: any = "") => {
@@ -91,7 +99,10 @@ export const setErrors = (
     form.controls[objectProperty].markAsTouched({ onlySelf: true });
   } else {
     form.controls[objectProperty].setErrors({});
-    form.controls[objectProperty].setValue(form.controls[objectProperty].value, { onlySelf: true });
+    form.controls[objectProperty].setValue(
+      form.controls[objectProperty].value,
+      { onlySelf: true }
+    );
   }
 };
 

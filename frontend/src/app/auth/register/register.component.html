@@ -19,6 +19,7 @@
         [showErrors]="showErrors"
         [minLength]="2"
         [maxLength]="102"
+        [required]="true"
       ></app-input>
       <app-input
         id="lName"
@@ -30,6 +31,7 @@
         [showErrors]="showErrors"
         [minLength]="2"
         [maxLength]="102"
+        [required]="true"
       ></app-input>
       <app-input
         id="email"
@@ -41,6 +43,7 @@
         pattern="Please enter valid email address"
         [showErrors]="showErrors"
         autocomplete="new-password"
+        [required]="true"
       ></app-input>
       <app-input
         id="password"
@@ -52,6 +55,7 @@
         pattern="Your password needs to contain both lower and upper case characters, number and a special character."
         [showErrors]="showErrors"
         autocomplete="new-password"
+        [required]="true"
       ></app-input>
       <app-input
         id="confirmPassword"
@@ -63,6 +67,7 @@
         pattern="Your password needs to contain both lower and upper case characters, number and a special character."
         [showErrors]="showErrors"
         autocomplete="{something}"
+        [required]="true"
       ></app-input>
       <button type="submit" [disabled]="!isValidForm || isClicked">
         Register

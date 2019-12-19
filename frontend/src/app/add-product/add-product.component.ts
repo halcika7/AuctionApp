@@ -72,7 +72,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ...NAME_VALIDATOR("country"),
       ...NAME_VALIDATOR("city"),
       ...NAME_VALIDATOR("zip", 5, 5),
-      ...PHONE_VALIDATOR("phone"),
+      ...PHONE_VALIDATOR("phone", true),
       ...BASIC_INPUT("freeShipping", false),
       ...BASIC_INPUT("featureProduct", false),
       ...BASIC_INPUT("useCard", false),

@@ -26,7 +26,7 @@ export class SecondStepComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscription.add(this.form.valueChanges.subscribe(({ startDate, endDate, price }) => {
+    this.subscription.add(this.form.valueChanges.subscribe(({ startDate, endDate }) => {
       if (startDate) {
         !validateStartDate(startDate) &&
           this.form.controls.startDate.setErrors({ today: true });

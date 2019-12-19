@@ -16,6 +16,7 @@ import { ProfileService } from '@app/profile/profile.service';
 })
 export class DateInputComponent implements OnInit {
   @Input() withDays: boolean;
+  @Input() required: boolean = false;
   @Input() monthNumbers: boolean;
   @Input() label: string;
   @Input() error: string;

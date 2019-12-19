@@ -1,5 +1,5 @@
 <div class="select-wrapper" [ngClass]="{ invalid: invalid }">
-  <label *ngIf="label">{{ label }}</label>
+  <label *ngIf="label"><span>*</span>{{ label }}</label>
   <div class="select">
     <p appDropdown>
       <span>{{ selectedValue || default }}</span>

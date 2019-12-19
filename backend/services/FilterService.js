@@ -25,37 +25,44 @@ class FilterService extends BaseService {
           [Op.like]: `%${reqQueryData.name}%`
         });
       }
-      const { Filters } = await Subcategory.findOne({
-        where: {
-          id: reqQueryData.subcategoryId
-        },
-        attributes: [],
+      const includeProduct = {
         include: {
-          model: Filter,
-          attributes: ['id', 'name'],
+          model: Product,
+          where,
+          attributes: ['id'],
           through: {
-            model: FilterSubcategory,
+            model: FilterValueProduct,
             attributes: []
-          },
-          include: {
-            model: FilterValue,
-            attributes: ['value', 'id'],
-            include: {
-              model: Product,
-              where,
-              attributes: ['id'],
-              through: {
-                model: FilterValueProduct,
-                attributes: []
-              }
-            }
           }
         }
-      });
+      };
+      const Filters = await this.findFilters(reqQueryData.subcategoryId, includeProduct);
       return super.returnResponse(200, { Filters });
     } catch (error) {
       return super.returnGenericFailed();
     }
+  }
+
+  async findFilters(id, includeProduct) {
+    includeProduct = includeProduct ? includeProduct : {};
+    const { Filters } = await Subcategory.findOne({
+      where: { id },
+      attributes: [],
+      include: {
+        model: Filter,
+        attributes: ['id', 'name'],
+        through: {
+          model: FilterSubcategory,
+          attributes: []
+        },
+        include: {
+          model: FilterValue,
+          attributes: ['value', 'id'],
+          ...includeProduct
+        }
+      }
+    });
+    return Filters;
   }
 }
 

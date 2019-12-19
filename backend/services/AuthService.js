@@ -10,14 +10,14 @@ const {
   createUser,
   findUserByEmail,
   verifyRefreshToken,
-  hashPassword,
-  createOptionalInfo,
-  createCardInfo
+  hashPassword
 } = require('../helpers/authHelper');
 const { sendEmail } = require('../helpers/sendEmail');
 const BaseService = require('./BaseService');
 const User = require('../models/User');
-const stripe = require('../config/stripeConfig');
+const CardInfoService = require('../services/CardInfoService');
+const OptionalInfoService = require('../services/OptionalInfoService');
+const StripeService = require('../services/StripeService');
 
 class AuthService extends BaseService {
   constructor() {
@@ -28,14 +28,12 @@ class AuthService extends BaseService {
     try {
       const { errors, isValid } = await registerValidation(data);
       if (!isValid) return { status: 403, response: { ...errors } };
-      const { id } = await createOptionalInfo();
-      const { id:customerId } = await stripe.customers.create(
-        {
-          description: 'Customer for atlant auction app',
-          email: data.email
-        }
+      const { id } = await OptionalInfoService.create();
+      const { id: customerId } = await StripeService.createCustomer(
+        'Customer for atlant auction app',
+        data.email
       );
-      const { id:cardInfoId } = await createCardInfo(customerId);
+      const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId);
       await createUser(data, id, cardInfoId);
       return super.returnResponse(200, {
         response: { message: 'Account successfully created !' }

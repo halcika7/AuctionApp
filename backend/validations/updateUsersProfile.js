@@ -1,11 +1,10 @@
-const CardInfo = require('../models/CardInfo');
+const CardInfoService = require('../services/CardInfoService');
+const StripeService = require('../services/StripeService');
 const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
-const stripe = require('../config/stripeConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
 const { removeNullProperty } = require('../helpers/removeNullProperty');
-const { validateCard } = require('../helpers/stripeHelpers');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -53,37 +52,37 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors) => {
+exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
+  if (!isValidUserInfo) return { isValid: true };
+
   if (
     Object.keys(removeNullProperty(cardInfo)).length == 0 ||
     (cardInfo.cvc == '****' && cardInfo.number.includes('************'))
   ) {
     return { isValid: true, errors, cardInfoData: {} };
   }
+  let { customerId, cardId } = await CardInfoService.findUserCardInfo(userCardInfoId);
+
   try {
-    const { card, id, valid } = await validateCard(errors, userCardInfoId, cardInfo);
-    if (!valid) {
-      return { isValid: false, errors };
+    const { card, id, valid } = await StripeService.validateCard(errors, userCardInfoId, cardInfo);
+
+    if (!valid) return { isValid: false, errors };
+
+    if (!customerId) {
+      try {
+        const { id } = await StripeService.createCustomer('Customer for atlant auction app', email);
+        if(!id) throw new Error('Customer not created');
+        customerId = id;
+      } catch (error) {
+        errors.errors.card = 'We were unable to create new customer';
+        return { isValid: false, errors };
+      }
     }
-    let customerId;
-    const customer = await CardInfo.findOne({
-      raw: true,
-      where: { id: userCardInfoId },
-      attributes: ['customerId', 'cardId']
-    });
-    if (!customer) {
-      const { id } = await stripe.customers.create({
-        description: 'Customer for atlant auction app',
-        email
-      });
-      customerId = id;
-    } else {
-      customerId = customer.customerId;
-    }
-    if (customer.cardId) {
-      await stripe.customers.deleteSource(customerId, customer.cardId);
-    }
-    await stripe.customers.createSource(customerId, { source: id });
+
+    if (cardId) await StripeService.deleteSource(customerId, cardId);
+
+    await StripeService.createSource(customerId, id);
+
     cardInfo = {
       ...cardInfo,
       customerId,
@@ -95,7 +94,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors) => 
 
     return { isValid: true, errors, cardInfoData: cardInfo };
   } catch (error) {
-    errors.errors.card = error.raw.message;
+    errors.errors.card = 'We were unable to proccess card information. Please try some other time';
     return { isValid: false, errors };
   }
 };

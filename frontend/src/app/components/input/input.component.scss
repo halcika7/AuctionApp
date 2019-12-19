@@ -6,6 +6,10 @@
 
   label {
     margin-bottom: 8px;
+
+    span {
+      @include fontMixin(18px, light, $color: red);
+    }
   }
 
   input {
@@ -22,5 +26,11 @@
     outline: none;
     box-sizing: border-box;
     resize: vertical;
+  }
+}
+
+label {
+  span {
+    @include fontMixin(18px, light, $color: red);
   }
 }

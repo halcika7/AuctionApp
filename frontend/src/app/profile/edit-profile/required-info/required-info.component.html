@@ -21,6 +21,7 @@
         [input]="form.get('firstName')"
         profile="true"
         [showErrors]="true"
+        [required]="true"
       ></app-input>
       <app-input
         id="lastName"
@@ -32,6 +33,7 @@
         [input]="form.get('lastName')"
         profile="true"
         [showErrors]="true"
+        [required]="true"
       ></app-input>
       <app-select-input
         *ngIf="gender"
@@ -48,6 +50,7 @@
           label="Date of birth"
           [defaultDate]="date"
           [error]="dateError"
+          [required]="true"
         ></app-date-input>
       </ng-template>
       <app-input
@@ -72,6 +75,7 @@
         pattern="Please enter valid email address !!"
         profile="true"
         [showErrors]="true"
+        [required]="true"
       ></app-input>
     </div>
   </div>

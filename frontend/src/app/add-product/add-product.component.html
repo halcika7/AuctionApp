@@ -7,10 +7,11 @@
 ></app-alert>
 
 <app-no-active
-  *ngIf="!hasActiveProduct && stepNumber == 0 && hasActiveProduct != null"
+  *ngIf="stepNumber == 0 && hasActiveProduct == false"
 ></app-no-active>
 
 <div
+  *ngIf="stepNumber == 1"
   class="steps"
   [ngClass]="{
     first: stepNumber == 1,
@@ -45,7 +46,10 @@
         [hasActiveProduct]="hasActiveProduct"
         [currentStep]="stepNumber"
       ></app-first-step>
-      <app-second-step [form]="form" [currentStep]="stepNumber"></app-second-step>
+      <app-second-step
+        [form]="form"
+        [currentStep]="stepNumber"
+      ></app-second-step>
       <app-last-step
         [form]="form"
         (submitForm)="submitForm($event)"

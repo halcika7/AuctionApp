@@ -26,5 +26,6 @@ module.exports = {
   TWILIO_SID: process.env.TWILIO_SID,
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
   STRIPE_KEY: process.env.STRIPE_KEY,
-  DEFAULT_USER_IMAGE: 'https://static.thenounproject.com/png/363633-200.png'
+  DEFAULT_USER_IMAGE: 'https://static.thenounproject.com/png/363633-200.png',
+  FEATURING_PRODUCT_COST: 1000
 };

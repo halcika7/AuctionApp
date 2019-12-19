@@ -71,14 +71,6 @@ exports.getUserInfo = async id => {
   });
 };
 
-exports.createOptionalInfo = async () => {
-  return await OptionalInfo.create({});
-};
-
-exports.createCardInfo = async customerId => {
-  return await CardInfo.create({ customerId });
-};
-
 exports.createUser = async (
   { firstName, lastName, email, password },
   optionalInfoId,

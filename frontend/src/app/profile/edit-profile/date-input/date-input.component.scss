@@ -5,6 +5,10 @@ label {
   @include margin($all: 0 0 8px 0);
   @include fontMixin(18px, light, 0.63px, light_black);
   display: block;
+
+  span {
+    @include fontMixin(18px, light, 0.63px, red);
+  }
 }
 .date-wrapper {
   margin-top: 19px;

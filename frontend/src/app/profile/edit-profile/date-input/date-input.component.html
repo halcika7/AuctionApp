@@ -1,5 +1,5 @@
 <div class="date-wrapper">
-  <label>{{ label }}</label>
+  <label><span *ngIf="required">*</span>{{ label }}</label>
   <div class="inputs">
     <app-select-input
       [default]="defaultDate.year || 'Year'"

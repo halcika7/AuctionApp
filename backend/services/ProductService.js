@@ -1,3 +1,10 @@
+const BaseService = require('./BaseService');
+const BidService = require('./BidService');
+const StripeService = require('./StripeService');
+const CloudinaryService = require('./CloudinaryService');
+const Product = require('../models/Product');
+const ProductImage = require('../models/ProductImage');
+const FilterValueProduct = require('../models/FilterValueProduct');
 const {
   getFilteredProducts,
   getProductById,
@@ -7,16 +14,10 @@ const {
   hasActiveProduct
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
-const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
-const BaseService = require('./BaseService');
-const BidService = require('./BidService');
+const { LIMIT_SHOP_PRODUCTS, FEATURING_PRODUCT_COST } = require('../config/configs');
 const { addProductValidation } = require('../validations/addProductValidation');
-const Product = require('../models/Product');
-const ProductImage = require('../models/ProductImage');
-const { cloudinary } = require('../config/cloudinaryConfig');
 const { transformProductData } = require('../helpers/transformProductData');
 const { unlinkFiles } = require('../helpers/unlinkFiles');
-const stripe = require('../config/stripeConfig');
 
 class ProductService extends BaseService {
   constructor() {
@@ -105,6 +106,8 @@ class ProductService extends BaseService {
         subcategoryData = JSON.parse(reqBody.subcategoryData),
         brandData = JSON.parse(reqBody.brandData),
         filtersData = JSON.parse(reqBody.filtersData);
+        console.log('TCL: addProduct -> filtersData', filtersData)
+
       const { errors, isValid, choosenCardToken } = await addProductValidation(
         {
           productData,
@@ -123,25 +126,24 @@ class ProductService extends BaseService {
         if (images.length > 0) unlinkFiles(images);
         return super.returnResponse(403, errors);
       }
-      const uploadImages = await Promise.all(
-        images.map(async image => {
-          const { secure_url } = await cloudinary.uploader.upload(image.path);
-          return secure_url;
-        })
-      );
+
+      const uploadImages = await CloudinaryService.uploadProductImages(images);
+      
       if (productData.featured) {
         let source =
           typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
-        const charge = await stripe.charges.create({
-          amount: 1000,
-          currency: 'usd',
-          description: 'Featuring product',
-          ...source
-        });
-        if (charge.amount !== 1000) {
+
+        const charge = await StripeService.createCharge(
+          FEATURING_PRODUCT_COST,
+          'Featuring product',
+          source
+        );
+
+        if (charge.amount !== FEATURING_PRODUCT_COST) {
           productData.featured = false;
         }
       }
+
       productData = transformProductData(
         productData,
         uploadImages[0],
@@ -149,12 +151,16 @@ class ProductService extends BaseService {
         subcategoryData,
         userId
       );
+
       if (images.length > 0) unlinkFiles(images);
 
       const product = await Product.create({ ...productData });
-      Product.bulkCreate;
+
       const productImages = uploadImages.slice(1).map(image => ({ image, productId: product.id }));
+      const productFilters = filtersData.map(filter => ({ filterValueId: filter.id, productId: product.id }))
+
       await ProductImage.bulkCreate(productImages);
+      await FilterValueProduct.bulkCreate(productFilters);
 
       const responseMessage = productData.featured
         ? 'Product successfully added and charged $10.00 for featuring product'
@@ -163,10 +169,11 @@ class ProductService extends BaseService {
       return super.returnResponse(200, { success: responseMessage });
     } catch (error) {
       unlinkFiles(images);
-      return super.returnGenericFailed();
+      return super.returnResponse(403, {
+        message: 'Something happened. We were unable to perform request.'
+      });
     }
   }
-
 }
 
 const ProductServiceInstance = new ProductService();

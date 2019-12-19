@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { Category } from "@app/containers/all-categories/store/all-categories.reducer";
@@ -60,9 +67,11 @@ export class FirstStepComponent implements OnInit, OnDestroy {
           this._filterErrors = errors.filterErrors ? errors.filterErrors : [];
         })
     );
-    this.subscription.add(this.form.valueChanges.subscribe(() => {
-      this.checkValidity.emit();
-    }));
+    this.subscription.add(
+      this.form.valueChanges.subscribe(({ name, description, images }) => {
+        this.checkValidity.emit();
+      })
+    );
   }
 
   ngOnDestroy() {

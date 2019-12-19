@@ -19,6 +19,7 @@ class BrandService extends BaseService {
           [Op.like]: `%${reqQueryData.name}%`
         });
       }
+
       const subId = { ...removeNullProperty({ id: reqQueryData.subcategoryId }) };
       const Brands = await Brand.findAll({
         include: [

@@ -3,7 +3,7 @@
   [formGroup]="parentForm"
   [ngClass]="{ 'mt-43': !profile, profile: profile }"
 >
-  <label for="{{ id }}">{{ title }}</label>
+  <label for="{{ id }}"><span *ngIf="required">*</span>{{ title }}</label>
   <div class="input">
     <ng-template [ngIf]="isInput">
       <input

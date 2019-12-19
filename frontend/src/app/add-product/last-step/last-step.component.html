@@ -22,6 +22,7 @@
     showErrors="true"
     [minLength]="1"
     [maxLength]="101"
+    [required]="true"
   ></app-input>
   <div class="group mt-39">
     <app-input
@@ -35,6 +36,7 @@
       showErrors="true"
       [minLength]="1"
       [maxLength]="101"
+      [required]="true"
     ></app-input>
     <app-input
       id="city"
@@ -47,6 +49,7 @@
       showErrors="true"
       [minLength]="1"
       [maxLength]="101"
+      [required]="true"
     ></app-input>
   </div>
   <app-input
@@ -60,6 +63,7 @@
     showErrors="true"
     [minLength]="5"
     [maxLength]="6"
+    [required]="true"
   ></app-input>
   <app-input
     id="phone"
@@ -72,6 +76,7 @@
     showErrors="true"
     [minLength]="7"
     [maxLength]="16"
+    [required]="true"
   ></app-input>
   <div class="checkbox">
     <label
@@ -99,7 +104,7 @@
       ></fa-icon
     ></label>
   </div>
-  <div class="card-information" *ngIf="showCard">
+  <div class="card-information" [ngClass]="{ show: showCard, hide: !showCard }">
     <h3>Card Information</h3>
     <span *ngIf="cardError" class="invalid-card">{{ cardError }}</span>
     <div class="group">
@@ -115,6 +120,7 @@
         [profile]="true"
         [minLength]="1"
         [maxLength]="101"
+        [required]="true"
       ></app-input>
       <app-input
         id="cNumber"
@@ -128,25 +134,30 @@
         [profile]="true"
         [minLength]="13"
         [maxLength]="16"
+        [required]="true"
       ></app-input>
     </div>
     <div class="group">
-      <div class="date">
-        <app-select-input
-          label="Expiration year"
-          [default]="selectedYear || 'Year'"
-          [values]="years"
-          (valueChange)="changeSelectedYear($event)"
-          [error]="expYearError"
-          [invalid]="expYearError"
-        ></app-select-input>
-        <app-select-input
-          [default]="selectedMonth || 'Month'"
-          [values]="months"
-          (valueChange)="changeSelectedMonth($event)"
-          [error]="expMonthError"
-          [invalid]="expMonthError"
-        ></app-select-input>
+      <div class="card-date-wrapper">
+        <label><span>*</span>Expiration year</label>
+        <div class="date">
+          <app-select-input
+            [default]="selectedYear || 'Year'"
+            [values]="years"
+            (valueChange)="changeSelectedYear($event)"
+            [error]="expYearError"
+            [invalid]="expYearError"
+            [required]="true"
+          ></app-select-input>
+          <app-select-input
+            [default]="selectedMonth || 'Month'"
+            [values]="months"
+            (valueChange)="changeSelectedMonth($event)"
+            [error]="expMonthError"
+            [invalid]="expMonthError"
+            [required]="true"
+          ></app-select-input>
+        </div>
       </div>
       <app-input
         id="cvc"
@@ -160,6 +171,7 @@
         [profile]="true"
         [minLength]="3"
         [maxLength]="4"
+        [required]="true"
       ></app-input>
     </div>
   </div>

@@ -21,6 +21,7 @@ export class InputComponent implements OnInit {
   @Input() maxLength: number;
   @Input() profile: boolean = false;
   @Input() isInput: boolean = true;
+  @Input() required: boolean = false;
 
   constructor() {}
 

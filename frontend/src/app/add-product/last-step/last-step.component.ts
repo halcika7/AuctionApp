@@ -1,6 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 import { isEmptyObject } from "@app/shared/isEmptyObject";
 import {
   setValidators,
@@ -28,14 +35,14 @@ export class LastStepComponent implements OnInit, OnDestroy {
   private _months = getMonthNumber();
   private _selectedYear: number;
   private _selectedMonth: string;
-  private _showCard: boolean = true;
-  private _hasCard: boolean = false;
   private _userInfo;
   private _phoneNumber: string;
   private _expYearError: string;
   private _expMonthError: string;
   private _cardError: string;
-  private _usingOptionslInfo: boolean;
+  private _showCard: boolean = true;
+  private _hasCard: boolean = false;
+  private _usingOptionslInfo: boolean = false;
   private subscription = new Subscription();
 
   constructor(
@@ -46,28 +53,39 @@ export class LastStepComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._showCard = !this.form.value.useCard;
     this.checkValidity();
-    this.subscription.add(this.form.valueChanges.subscribe(data => {
-      this._showCard = !data.useCard;
-      this.patchValues(data.useOptionalInfo);
-      const { cName, cNumber, CVC } = this.form.controls;
-      if (!data.useCard) {
-        setValidators([cName, cNumber, CVC], "required");
-      } else {
-        clearValidators([cName, cNumber, CVC]);
-        this._selectedYear = null;
-        this._selectedMonth = null;
-      }
-      updateValueAndValidity([cName, cNumber, CVC]);
-      this.checkValidity();
-    }));
-    this.subscription.add(this.store.select("addProduct").subscribe(({ userInfo, errors }) => {
-      this._hasCard = userInfo.hasCard;
-      this._userInfo = userInfo.OptionalInfo;
-      this._phoneNumber = userInfo.phoneNumber;
-      this._expYearError = errors.exp_year;
-      this._expMonthError = errors.exp_month;
-      this._cardError = errors.card;
-    }));
+    this.subscription.add(
+      this.form.valueChanges.subscribe(({ useCard, useOptionalInfo }) => {
+        const { cName, cNumber, CVC } = this.form.controls;
+        if (this._usingOptionslInfo !== useOptionalInfo) {
+          this._usingOptionslInfo = useOptionalInfo;
+          this.patchValues();
+        }
+        if (this._showCard !== !useCard) {
+          this._showCard = !useCard;
+          if (useCard) {
+            setValidators([cName, cNumber, CVC], "required")
+            this._selectedYear = null;
+            this._selectedMonth = null;
+            this._expYearError = null;
+            this._expMonthError = null;
+          } else {
+            clearValidators([cName, cNumber, CVC]);
+          }
+          updateValueAndValidity([cName, cNumber, CVC]);
+        }
+        this.checkValidity();
+      })
+    );
+    this.subscription.add(
+      this.store.select("addProduct").subscribe(({ userInfo, errors }) => {
+        this._hasCard = userInfo.hasCard;
+        this._userInfo = userInfo.OptionalInfo;
+        this._phoneNumber = userInfo.phoneNumber;
+        this._expYearError = errors.exp_year;
+        this._expMonthError = errors.exp_month;
+        this._cardError = errors.card;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -100,34 +118,16 @@ export class LastStepComponent implements OnInit, OnDestroy {
     this._expMonthError = null;
   }
 
-  private patchValues(value) {
-    if (this._usingOptionslInfo !== value) {
-      this.form.controls.address.patchValue(
-        this.form.value.useOptionalInfo ? this._userInfo.street : "",
-        {
-          onlySelf: true
-        }
-      );
-      this.form.controls.country.patchValue(
-        this.form.value.useOptionalInfo ? this._userInfo.country : "",
-        {
-          onlySelf: true
-        }
-      );
-      this.form.controls.city.patchValue(
-        this.form.value.useOptionalInfo ? this._userInfo.city : "",
-        { onlySelf: true }
-      );
-      this.form.controls.zip.patchValue(
-        this.form.value.useOptionalInfo ? this._userInfo.zip : "",
-        { onlySelf: true }
-      );
-      this.form.controls.phone.patchValue(
-        this.form.value.useOptionalInfo ? this._phoneNumber : "",
-        { onlySelf: true }
-      );
-    }
-    this._usingOptionslInfo = value;
+  private patchValues() {
+    this.form.patchValue({
+      address: this.form.value.useOptionalInfo ? this._userInfo.street : "",
+      country: this.form.value.useOptionalInfo ? this._userInfo.country : "",
+      city: this.form.value.useOptionalInfo ? this._userInfo.city : "",
+      zip: this.form.value.useOptionalInfo ? this._userInfo.zip : "",
+      phone: this.form.value.useOptionalInfo ? this._phoneNumber : ""
+    });
+
+    this.form.updateValueAndValidity();
   }
 
   private checkValidity() {
@@ -142,7 +142,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
       CVC
     } = this.form.controls;
     let valid = partialFormValidity([address, country, city, zip, phone]);
-    if (this.form.controls.featureProduct) {
+    if (!this.form.controls.useCard) {
       valid = partialFormValidity([
         address,
         country,

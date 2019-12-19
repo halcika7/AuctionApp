@@ -32,27 +32,23 @@ class CategoryService extends BaseService {
     try {
       const categories = await Category.findAll({
         attributes: ['id', 'name'],
-        include: [
-          {
-            model: Subcategory,
-            attributes: [
-              'id',
-              'name',
-              [db.fn('COUNT', db.col('Subcategories.Products.id')), 'number_of_products']
-            ],
-            include: [
-              {
-                model: Product,
-                where: {
-                  auctionEnd: {
-                    [Op.gt]: new Date()
-                  }
-                },
-                attributes: []
+        include: {
+          model: Subcategory,
+          attributes: [
+            'id',
+            'name',
+            [db.fn('COUNT', db.col('Subcategories.Products.id')), 'number_of_products']
+          ],
+          include: {
+            model: Product,
+            where: {
+              auctionEnd: {
+                [Op.gt]: new Date()
               }
-            ]
+            },
+            attributes: []
           }
-        ],
+        },
         group: ['Category.id', 'Subcategories.id'],
         order: [['id', 'ASC']]
       });

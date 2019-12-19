@@ -99,7 +99,7 @@ table {
           @include fontMixin(16px, bold, 0.56px, light_black, $transform: uppercase, $decoration: none);
           @include heightWidth(46px, 100px);
           background: getColor(white);
-          border: 3px solid getCOlor(inputBorder);
+          border: 3px solid getColor(inputBorder);
           box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
           box-sizing: border-box;
         }

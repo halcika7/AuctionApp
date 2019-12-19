@@ -13,6 +13,7 @@
     [showErrors]="true"
     [minLength]="5"
     [maxLength]="61"
+    [required]="true"
   ></app-input>
   <p>Up to 10 words (60 characters)</p>
   <div class="category">
@@ -24,6 +25,7 @@
       (valueChange)="changeCategory($event)"
       [error]="categoryError"
       [invalid]="categoryError"
+      [required]="true"
     ></app-select-input>
     <app-select-input
       label="Select subcategory"
@@ -34,6 +36,7 @@
       (valueChange)="changeSubcategory($event)"
       [error]="subcategoryError"
       [invalid]="subcategoryError"
+      [required]="true"
     ></app-select-input>
   </div>
   <div class="brand">
@@ -46,6 +49,7 @@
       (valueChange)="changeBrand($event)"
       [error]="brandError"
       [invalid]="brandError"
+      [required]="true"
     ></app-select-input>
   </div>
   <div class="filters" *ngIf="filters.length > 0">
@@ -60,6 +64,7 @@
       (valueChange)="changeFilter($event)"
       [error]="filterErrors[index] || ''"
       [invalid]="filterErrors[index] || false"
+      [required]="true"
     ></app-select-input>
   </div>
   <div class="description">
@@ -74,6 +79,7 @@
       [isInput]="false"
       profile="true"
       [maxLength]="701"
+      [required]="true"
     ></app-input>
     <p>700 characters</p>
   </div>
