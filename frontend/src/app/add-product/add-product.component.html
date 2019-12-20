@@ -11,7 +11,7 @@
 ></app-no-active>
 
 <div
-  *ngIf="stepNumber == 1"
+  *ngIf="stepNumber != 0"
   class="steps"
   [ngClass]="{
     first: stepNumber == 1,
