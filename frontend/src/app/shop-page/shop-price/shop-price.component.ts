@@ -42,7 +42,6 @@ export class ShopPriceComponent implements OnInit, OnChanges {
 
   private setPrices() {
     this._minValue = this.prices.min_price;
-    console.log('TCL: ShopPriceComponent -> setPrices -> this.prices', this.prices)
     this._maxValue = this.prices.max_price;
     this._options = {
       floor: this._minValue,
