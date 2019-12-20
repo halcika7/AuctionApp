@@ -3,7 +3,6 @@ const User = require('../models/User');
 const CardInfoService = require('../services/CardInfoService');
 const OptionalInfoService = require('../services/OptionalInfoService');
 const CloudinaryService = require('../services/CloudinaryService');
-const { cloudinary } = require('../config/cloudinaryConfig');
 const { removeNullFromUserInfo } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const {
