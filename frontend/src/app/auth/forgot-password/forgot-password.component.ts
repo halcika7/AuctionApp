@@ -7,7 +7,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "./../auth";
 import { jwtDecode } from "@app/shared/jwtDecode";
-import { EMAIL_VALIDATOR } from "../validators";
+import { EMAIL_VALIDATOR } from "@app/shared/validators";
 
 @Component({
   selector: "app-forgot-password",

@@ -2,6 +2,8 @@ const Brand = require('./Brand');
 const Filter = require('./Filter');
 const FilterValue = require('./FilterValue');
 const User = require('./User');
+const OptionalInfo = require('./OptionalInfo');
+const CardInfo = require('./CardInfo');
 const Subcategory = require('./Subcategory');
 const ProductImage = require('./ProductImage');
 const ProductReview = require('./ProductReview');
@@ -9,7 +11,11 @@ const Bid = require('./Bid');
 const Category = require('./Category');
 const Product = require('./Product');
 
+User.belongsTo(OptionalInfo, { foreignKey: 'optionalInfoId', sourceKey: 'id' });
+User.belongsTo(CardInfo, { foreignKey: 'cardInfoId', sourceKey: 'id' });
+
 Bid.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+Bid.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
 
 Category.hasMany(Subcategory, { foreignKey: 'CategoriesId', sourceKey: 'id' });
 Subcategory.belongsTo(Category, {

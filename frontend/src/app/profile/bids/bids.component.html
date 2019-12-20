@@ -1,0 +1,11 @@
+<section class="container mt-70 mb-200">
+  <app-table [values]="bids" type="bids"></app-table>
+  <button
+    type="button"
+    class="primary-button left-right-margin-auto mt-40"
+    *ngIf="!noMore && bids.length > 0"
+    (click)="loadMore($event)"
+  >
+    Load More
+  </button>
+</section>

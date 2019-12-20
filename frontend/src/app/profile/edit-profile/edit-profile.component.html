@@ -1,0 +1,20 @@
+<section class="container">
+  <form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <app-required-info
+      [form]="form"
+      [date]="date"
+      [gender]="gender"
+    ></app-required-info>
+
+    <app-card-info [form]="form" [cardExp]="cardExp"></app-card-info>
+
+    <app-optional-info [form]="form"></app-optional-info>
+    <button
+      type="submit"
+      class="primary-button ml-auto uppercase"
+      [disabled]="!isValidForm || clicked"
+    >
+      Save Info
+    </button>
+  </form>
+</section>

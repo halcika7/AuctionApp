@@ -1,10 +1,11 @@
 # Atlantbh internship auction full stack web application
 
-> This project was made using Angular, Node.js, Express(Node.js web application framework), PostgreSQL 
+> This project was made using Angular, Node.js, Express(Node.js web application framework), PostgreSQL
 
 ** After downloading or cloning add the following file **
 
 ---> Add .env in root folder :
+
 ```
     ACCESS_TOKEN_SECRET=
     REFRESH_TOKEN_SECRET=
@@ -15,8 +16,15 @@
     DB_NAME=
     URL=http://localhost:3000 /* example */
     SEND_GRID=/* API_KEY */
+    CLOUDINARY_CLOUD=
+    CLOUDINARY_KEY=
+    CLOUDINARY_SECRET=
+    TWILIO_SID=
+    TWILIO_AUTH_TOKEN=
+    STRIPE_KEY=
     NODE_ENV=
 ```
+
 ** Run the following commands **
 
 ```bash

@@ -15,6 +15,9 @@ const {
 const { sendEmail } = require('../helpers/sendEmail');
 const BaseService = require('./BaseService');
 const User = require('../models/User');
+const CardInfoService = require('../services/CardInfoService');
+const OptionalInfoService = require('../services/OptionalInfoService');
+const StripeService = require('../services/StripeService');
 
 class AuthService extends BaseService {
   constructor() {
@@ -25,7 +28,13 @@ class AuthService extends BaseService {
     try {
       const { errors, isValid } = await registerValidation(data);
       if (!isValid) return { status: 403, response: { ...errors } };
-      await createUser(data);
+      const { id } = await OptionalInfoService.create();
+      const { id: customerId } = await StripeService.createCustomer(
+        'Customer for atlant auction app',
+        data.email
+      );
+      const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId);
+      await createUser(data, id, cardInfoId);
       return super.returnResponse(200, {
         response: { message: 'Account successfully created !' }
       });

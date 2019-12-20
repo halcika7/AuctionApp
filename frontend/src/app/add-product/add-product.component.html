@@ -1,0 +1,66 @@
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  [type]="success"
+  [closable]="true"
+  (closeAlert)="clearMessages()"
+></app-alert>
+
+<app-no-active
+  *ngIf="stepNumber == 0 && hasActiveProduct == false"
+></app-no-active>
+
+<div
+  *ngIf="stepNumber != 0"
+  class="steps"
+  [ngClass]="{
+    first: stepNumber == 1,
+    second: stepNumber == 2,
+    third: stepNumber == 3
+  }"
+>
+  <span class="circle">
+    <span></span>
+  </span>
+  <span class="line"><span></span></span>
+  <span class="circle"><span></span></span>
+  <span class="line"><span></span></span>
+  <span class="circle"><span></span></span>
+</div>
+
+<section
+  class="container"
+  [ngClass]="{
+    show: hasActiveProduct || stepNumber > 0,
+    hide: !hasActiveProduct && stepNumber < 1
+  }"
+>
+  <div class="product-information">
+    <h3 *ngIf="stepNumber == 1">detail information about product</h3>
+    <h3 *ngIf="stepNumber == 2">Set prices</h3>
+    <h3 *ngIf="stepNumber == 3">location & shipping</h3>
+    <div class="form">
+      <app-first-step
+        [form]="form"
+        (emitChanges)="firstStepValueChange($event)"
+        [brandData]="brandData"
+        [categoryData]="categoryData"
+        [subcategoryData]="subcategoryData"
+        [filterData]="filterData"
+        (checkValidity)="firstStepCheckValidity()"
+        [isValid]="isValid"
+        [hasActiveProduct]="hasActiveProduct"
+        [currentStep]="stepNumber"
+      ></app-first-step>
+      <app-second-step
+        [form]="form"
+        [currentStep]="stepNumber"
+      ></app-second-step>
+      <app-last-step
+        [form]="form"
+        (submitForm)="submitForm($event)"
+        [currentStep]="stepNumber"
+      ></app-last-step>
+    </div>
+  </div>
+</section>

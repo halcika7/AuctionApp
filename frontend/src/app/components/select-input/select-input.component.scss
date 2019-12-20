@@ -1,0 +1,134 @@
+@import "mixins";
+@import "variables";
+
+.select-wrapper {
+  margin-top: 19px;
+
+  &.invalid {
+    .select {
+      > p {
+        border: 1px solid getColor(red);
+      }
+
+      ul {
+        border: 1px solid getColor(red);
+        border-top: 0px;
+      }
+    }
+  }
+
+  label {
+    @include margin($all: 0 0 8px 0);
+    @include fontMixin(18px, regular, 0.63px, light_black);
+    display: block;
+
+    span {
+      @include fontMixin(18px, light, 0.63px, red);
+    }
+  }
+
+  .select {
+    width: 200px;
+    position: relative;
+
+    > p {
+      @include fontMixin(18px, light, 0.63px, light_black);
+      @include margin($all: 0);
+      @include flex(center);
+      @include heightWidth(46px, 100%);
+      padding-left: 17px;
+      background: getColor(darker_white);
+      border: 1px solid getColor(light_gray);
+      position: relative;
+      cursor: pointer;
+      box-sizing: border-box;
+      max-width: 100%;
+
+      span {
+        display: block;
+        &::first-letter {
+          text-transform: capitalize;
+        }
+      }
+
+      &:after,
+      &:before {
+        content: "";
+        @include heightWidth(12px, 4px);
+        position: absolute;
+        background: getColor(light_black);
+      }
+
+      &:after {
+        right: 26px;
+        transform: rotate(-45deg);
+        transition: all 0.3s ease-in-out;
+      }
+
+      &:before {
+        right: 20px;
+        transform: rotate(45deg);
+        transition: all 0.3s ease-in-out;
+      }
+
+      &.open {
+        &:after {
+          transform: rotate(-135deg);
+        }
+
+        &:before {
+          transform: rotate(135deg);
+        }
+
+        ~ ul {
+          display: block;
+        }
+      }
+    }
+
+    ul {
+      @include margin($all: 0);
+      @include padding($all: 10px 0);
+      display: none;
+      background: getColor(darker_white);
+      border: 1px solid getColor(light_gray);
+      border-top: 0px;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 2;
+
+      > p {
+        @include fontMixin(14px, regular, $color: light_black);
+        @include margin($all: 0);
+        @include padding($all: 0px 5px);
+        &:only-child {
+          background: transparent;
+          cursor: default;
+        }
+      }
+
+      li {
+        @include padding($all: 10px 5px);
+        cursor: pointer;
+        &::first-letter {
+          text-transform: capitalize;
+        }
+
+        &.active,
+        &:hover {
+          background: getColor(purple);
+          color: getColor(white);
+        }
+      }
+    }
+  }
+
+  > p {
+    @include fontMixin(14px, light, $color: red);
+    display: block;
+    @include margin($all: 5px 0 0);
+  }
+}

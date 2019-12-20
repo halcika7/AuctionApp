@@ -7,7 +7,8 @@ const {
   ENDS_IN_MAX_DAYS,
   STARTED_DAYS_AGO,
   AVG_RATING,
-  LIMIT_SIMILAR_PRODUCTS
+  LIMIT_SIMILAR_PRODUCTS,
+  DEFAULT_LIMIT_PRODUCTS
 } = require('../config/configs');
 const { addSubtractDaysToDate } = require('./addSubtractDaysToDate');
 
@@ -43,7 +44,8 @@ function filterProducts({
   }
 
   if (type === 'heroProduct') {
-    findProductsQuery += 'FROM public."Products" p WHERE p."auctionEnd" > NOW() AND p."auctionStart" <= NOW() ORDER BY random() ';
+    findProductsQuery +=
+      'FROM public."Products" p WHERE p."auctionEnd" > NOW() AND p."auctionStart" <= NOW() ORDER BY random() ';
   } else {
     findProductsQuery += 'FROM public."Products" p WHERE ';
     numberOfProductsQuery +=
@@ -77,24 +79,18 @@ function filterProducts({
     let q =
       'p."auctionEnd">NOW() AND p.id IN (SELECT p.id FROM public."Products" p JOIN public."FilterValueProducts" fp ON p.id=fp."productId"';
 
-    if (name) {
-      q += ` AND LOWER(p."name") LIKE LOWER('%${name}%') `;
-    }
+    if (name) q += ` AND LOWER(p."name") LIKE LOWER('%${name}%') `;
 
-    if (subcategoryId) {
-      q += ` AND p."subcategoryId"=${subcategoryId} `;
-    }
+    if (subcategoryId) q += ` AND p."subcategoryId"=${subcategoryId} `;
 
-    if (brandId) {
-      q += ` AND p."brandId"=${brandId} `;
-    }
+    if (brandId) q += ` AND p."brandId"=${brandId} `;
 
-    if (min && max) {
-      q += ` AND p.price>=${min} AND p.price<=${max} `;
-    }
+    if (min && max) q += ` AND p.price>=${min} AND p.price<=${max} `;
+
     if (filterValueIds.length > 0) {
       q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
     }
+    
     findProductsQuery += `${q}) `;
     numberOfProductsQuery += `${q});`;
     priceRangeQuery += `${q}) group by price_range order by price_range;`;
@@ -184,6 +180,41 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
   return length === 0 || length < Limit || length <= eq ? true : false;
 };
 
+exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
+  const auctionEnd = active ? { [Op.gt]: new Date() } : { [Op.lt]: new Date() };
+  const products = await Product.findAll({
+    subQuery: false,
+    where: { userId, auctionEnd },
+    attributes: [
+      'id',
+      'picture',
+      'name',
+      'subcategoryId',
+      'price',
+      'auctionEnd',
+      [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
+      [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids'],
+      [
+        db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
+        'status'
+      ]
+    ],
+    include: {
+      model: Bid,
+      attributes: []
+    },
+    order: [['auctionStart', 'DESC']],
+    limit,
+    offset,
+    group: ['Product.id']
+  });
+  const productsLength = await Product.count({
+    where: { userId, auctionEnd }
+  });
+  const noMore = this.noMoreProducts({ limit, offset, productsLength });
+  return { products, noMore };
+};
+
 function buildPriceRangeQuery() {
   let query = 'SELECT CASE';
   for (let i = 0; i < 900; i += 50) {
@@ -193,3 +224,10 @@ function buildPriceRangeQuery() {
     query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
   );
 }
+
+exports.hasActiveProduct = async userId => {
+  const findProduct = await Product.findOne({
+    where: { userId, auctionEnd: { [Op.gt]: new Date() } }
+  });
+  return findProduct ? true : false;
+};

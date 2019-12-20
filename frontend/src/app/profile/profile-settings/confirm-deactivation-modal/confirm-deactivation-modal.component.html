@@ -1,0 +1,10 @@
+<section class="confirm-deactivation">
+  <div class="content">
+    <h3>Are you sure you want to deactivate your account?</h3>
+    <div class="buttons">
+      <button class="close" (click)="onCancleClicked()">Cancel</button>
+      <button class="confirm" (click)="onConfirmClicked()">Confirm</button>
+    </div>
+  </div>
+  <div class="backdrop" (click)="onCancleClicked()"></div>
+</section>

@@ -19,6 +19,7 @@ class BrandService extends BaseService {
           [Op.like]: `%${reqQueryData.name}%`
         });
       }
+
       const subId = { ...removeNullProperty({ id: reqQueryData.subcategoryId }) };
       const Brands = await Brand.findAll({
         include: [
@@ -29,7 +30,7 @@ class BrandService extends BaseService {
         group: ['Brand.id', 'Subcategories->BrandSubcategories.id'],
         order: [['name', 'ASC']]
       });
-      return { status: 200, Brands };
+      return super.returnResponse(200, { Brands });
     } catch (error) {
       return super.returnGenericFailed();
     }

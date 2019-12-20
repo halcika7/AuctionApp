@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
-import { setErrors } from './validators';
+import { setErrors } from '@app/shared/validators';
 
 export class Auth {
   private _message: string;

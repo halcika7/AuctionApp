@@ -1,0 +1,36 @@
+@import "mixins";
+@import "variables";
+
+.profile {
+  @include margin($all: 19px 0 0 !important);
+
+  label {
+    margin-bottom: 8px;
+
+    span {
+      @include fontMixin(18px, light, $color: red);
+    }
+  }
+
+  input {
+    height: 46px;
+    @include padding($all: 0 16px);
+  }
+
+  textarea {
+    @include fontMixin(18px, light);
+    background: getColor(darker_white);
+    border: 1px solid getColor(light_gray);
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+}
+
+label {
+  span {
+    @include fontMixin(18px, light, $color: red);
+  }
+}

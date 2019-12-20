@@ -19,6 +19,9 @@ export class InputComponent implements OnInit {
   @Input() showErrors: boolean;
   @Input() minLength: number;
   @Input() maxLength: number;
+  @Input() profile: boolean = false;
+  @Input() isInput: boolean = true;
+  @Input() required: boolean = false;
 
   constructor() {}
 

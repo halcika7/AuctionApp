@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
-import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from "../validators";
+import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from "@app/shared/validators";
 
 @Component({
   selector: "app-login",

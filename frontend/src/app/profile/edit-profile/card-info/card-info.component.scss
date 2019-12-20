@@ -1,0 +1,9 @@
+@import "mixins";
+
+.inputs {
+  span {
+    @include fontMixin(14px, light, $color: red);
+    display: block;
+    margin-top: 5px;
+  }
+}

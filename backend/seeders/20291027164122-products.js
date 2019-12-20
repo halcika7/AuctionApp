@@ -120,11 +120,12 @@ module.exports = {
           name: faker.commerce.productName(),
           details: faker.lorem.paragraph(),
           picture: images[i],
-          price: faker.commerce.price() + 1,
+          price: faker.commerce.price(),
           featured: faker.random.boolean(),
+          freeShipping: faker.random.boolean(),
           auctionStart: startDate,
           auctionEnd: newDate,
-          userId: Math.floor(Math.random() * 2 + 1),
+          userId: 1,
           subcategoryId,
           brandId
         });

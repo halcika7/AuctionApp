@@ -1,0 +1,51 @@
+@import "mixins";
+@import "variables";
+
+.profile-nav {
+  @include flex(center, $wrap: wrap);
+  @include margin(40px, 14px);
+
+  @media (max-width: 444px) {
+    flex-direction: column;
+  }
+
+  > li {
+    margin-right: 10px;
+
+    @media (max-width: 680px) {
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 444px) {
+      width: 100%;
+    }
+
+    a {
+      @include flex(center, center);
+      @include fontMixin(
+        16px,
+        bold,
+        0.56px,
+        light_black,
+        $decoration: none,
+        $transform: capitalize
+      );
+      @include padding($all: 0px 20px);
+      background: getColor(darker_white3);
+      height: 46px;
+
+      @media (max-width: 444px) {
+        justify-content: flex-start;
+      }
+
+      &.active {
+        background: getColor(purple);
+        color: getColor(white);
+      }
+
+      > fa-icon {
+        margin-right: 10px;
+      }
+    }
+  }
+}

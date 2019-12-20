@@ -1,0 +1,23 @@
+@import "mixins";
+@import "variables";
+
+.required {
+  .two-cols {
+    @include flex();
+    @media (max-width: 820px) {
+      flex-wrap: wrap;
+
+      .picture {
+        margin-bottom: 20px;
+      }
+    }
+
+    .picture {
+      margin-right: 42px;
+    }
+
+    .inputs {
+      max-width: 600px;
+    }
+  }
+}

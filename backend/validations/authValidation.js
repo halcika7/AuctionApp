@@ -12,19 +12,19 @@ exports.registerValidation = async data => {
   data.confirmPassword = !isEmpty(data.confirmPassword) ? data.confirmPassword : '';
   data.email = !isEmpty(data.email) ? data.email : '';
 
-  nameValidation('firstName', data.firstName, errors, 'First name');
+  this.nameValidation('firstName', data.firstName, errors, 'First name');
 
-  nameValidation('lastName', data.lastName, errors, 'Last name');
+  this.nameValidation('lastName', data.lastName, errors, 'Last name');
 
-  passwordValidation(data.password, errors, {});
+  this.passwordValidation(data.password, errors, {});
 
-  passwordValidation(data.confirmPassword, errors, {
+  this.passwordValidation(data.confirmPassword, errors, {
     response: 'Confirm password',
     name: 'confirmPassword',
     checkEquality: data.password
   });
 
-  emailValidation(data.email, errors);
+  this.emailValidation(data.email, errors);
 
   if (!errors.email && user) {
     errors.email = 'Email already in use';
@@ -38,7 +38,17 @@ exports.loginValidation = async data => {
   let message = '';
   const user = await findUserByEmail(data.email);
 
-  emailValidation(data.email, errors);
+  if(!user) {
+    message = 'Incorrect email or password';
+    return this.returnData(errors, message, {});
+  }
+
+  if (user.deactivated) {
+    message = 'Your account is deactivated';
+    return this.returnData(errors, message, { user });
+  }
+
+  this.emailValidation(data.email, errors);
 
   if (isEmpty(data.password)) errors.password = 'Password is required';
 
@@ -57,7 +67,7 @@ exports.loginValidation = async data => {
     message = 'Please reset your password';
   }
 
-  return returnData(errors, message, { user });
+  return this.returnData(errors, message, { user });
 };
 
 exports.forgotPasswordValidation = async email => {
@@ -70,7 +80,7 @@ exports.forgotPasswordValidation = async email => {
     errors.email = 'User not found with provided email';
   }
 
-  return returnData(errors, '', { user });
+  return this.returnData(errors, '', { user });
 };
 
 exports.resetPasswordValidation = async (resetPasswordToken, password) => {
@@ -92,28 +102,28 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
     message = 'Invalid token';
   }
 
-  passwordValidation(password, errors, {});
+  this.passwordValidation(password, errors, {});
 
   if (!errors.password && samePasswords) {
     errors.password = 'Password already in use';
   }
 
-  return returnData(errors, message, { email: user.email });
+  return this.returnData(errors, message, { email: user.email });
 };
 
-function emailValidation(email, errors) {
+exports.emailValidation = (email, errors) => {
   if (isEmpty(email)) {
     errors.email = 'Email is required';
   } else if (!Validator.isEmail(email)) {
     errors.email = 'Please enter valid email address';
   }
-}
+};
 
-function passwordValidation(
+exports.passwordValidation = (
   password,
   errors,
   { response = 'Password', name = 'password', checkEquality = null }
-) {
+) => {
   if (isEmpty(password)) {
     errors[name] = `${response} is required`;
   } else if (!Validator.isLength(password, { min: 6 })) {
@@ -121,26 +131,25 @@ function passwordValidation(
   } else if (!Validator.isLength(password, { max: 30 })) {
     errors[name] = `${response} cannot exceed 100 characters`;
   } else if (!strongRegex.test(password)) {
-    errors[
-      name
-    ] = 'Your password needs to contain both lower and upper case characters, number and a special character.';
+    errors[name] =
+      'Your password needs to contain both lower and upper case characters, number and a special character.';
   }
   if (checkEquality && checkEquality !== password) {
     errors[name] = 'Confirm password should be equal to provided password';
   }
-}
+};
 
-function nameValidation(type, value, errors, resp) {
+exports.nameValidation = (type, value, errors, resp) => {
   if (isEmpty(value)) {
     errors[type] = resp + ' is required';
   } else if (!Validator.isLength(value, { min: 2 })) {
     errors[type] = resp + ' must contain at least 2 characters';
   } else if (!Validator.isLength(value, { max: 100 })) {
-    errors[type] = 'Please enter the last name that is not longer than 100 characters.';
+    errors[type] = resp + ' cannot exceed 100 characters';
   }
-}
+};
 
-function returnData(errors, message, returnValue) {
+exports.returnData = (errors, message, returnValue) => {
   if (!isEmpty(errors)) {
     return { errors: { errors }, isValid: false };
   } else if (!isEmpty(message)) {
@@ -148,4 +157,4 @@ function returnData(errors, message, returnValue) {
   } else {
     return { isValid: true, ...returnValue };
   }
-}
+};

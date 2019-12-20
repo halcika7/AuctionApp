@@ -14,7 +14,7 @@ import { MappedPriceRange } from "./../store/shop-page.reducer";
   templateUrl: "./shop-price.component.html",
   styleUrls: ["./shop-price.component.scss"]
 })
-export class ShopPriceComponent implements OnChanges {
+export class ShopPriceComponent implements OnInit, OnChanges {
   @Input() prices;
   @Input() priceRange: MappedPriceRange[];
   @Output() changeValues = new EventEmitter<any>();
@@ -28,18 +28,26 @@ export class ShopPriceComponent implements OnChanges {
 
   constructor() {}
 
+  ngOnInit() {
+    this.setPrices();
+  }
+
   ngOnChanges() {
-    this._minValue = this.prices.min_price;
-    this._maxValue = this.prices.max_price;
-    this._options = {
-      floor: this.minValue,
-      ceil: this.maxValue,
-      step: 0.1
-    };
+    this.setPrices();
   }
 
   changePrice(data) {
     this.changeValues.emit(data);
+  }
+
+  private setPrices() {
+    this._minValue = this.prices.min_price;
+    this._maxValue = this.prices.max_price;
+    this._options = {
+      floor: this._minValue,
+      ceil: this._maxValue,
+      step: 0.1
+    };
   }
 
   get minValue(): number {

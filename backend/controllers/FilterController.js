@@ -17,6 +17,13 @@ class FilterController extends BaseController {
     });
     return super.sendResponseWithMessage(res, status, { Filters }, failedMessage);
   }
+
+  async getAddProductFilters(req, res) {
+    const { status, Filters, failedMessage } = await FilterServiceInstance.getFilters({
+      subcategoryId: req.params.id
+    }, false);
+    return super.sendResponseWithMessage(res, status, { Filters }, failedMessage);
+  }
 }
 
 const FilterControllerInstance = new FilterController();

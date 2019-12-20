@@ -1,6 +1,7 @@
 @import "variables";
 @import "resets";
 @import "mixins";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 
 .paddingL15 {
   @include padding($left: 21px !important);
@@ -82,7 +83,7 @@ app-footer {
 
   label {
     @include margin($bottom: 15px);
-    @include fontMixin(18px, light, 0.63px, light_black);
+    @include fontMixin(18px, regular, 0.63px, light_black);
     display: block;
   }
 
@@ -124,7 +125,7 @@ app-footer {
   }
 
   .input {
-    background: getColor(darker_white);
+    // background: getColor(darker_white);
 
     input {
       @include padding($all: 0 30px);
@@ -133,7 +134,7 @@ app-footer {
       box-sizing: border-box;
       outline: none;
       border: 1px solid getColor(light_gray);
-      background: transparent;
+      background: getColor(darker_white);
     }
   }
 }
@@ -293,7 +294,8 @@ app-footer {
   margin-top: 43px !important;
 }
 
-.form-group .input input.ng-invalid {
+.form-group .input input.ng-invalid,
+.form-group .input textarea.ng-invalid {
   &.ng-touched {
     border: 1px solid getColor(red);
   }
@@ -457,7 +459,6 @@ app-footer {
 
   &:hover {
     .img {
-
       img {
         transform: translateY(-100%);
       }
@@ -538,6 +539,59 @@ app-footer {
       }
     }
   }
+}
+
+.primary-button {
+  height: 57px;
+  width: 243px;
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  cursor: pointer;
+  @include fontMixin(18px, bold, 0.63px, light_black);
+  position: relative;
+  @include flex(center, center);
+
+  &:disabled {
+    cursor: not-allowed;
+    @include fontMixin(18px, bold, 0.63px, light_gray);
+  }
+}
+
+.left-right-margin-auto {
+  @include margin($all: 0 auto);
+}
+
+.ml-auto {
+  @include margin($left: auto);
+}
+
+.mt-70 {
+  @include margin(70px);
+}
+
+.mb-200 {
+  @include margin($bottom: 200px);
+}
+
+.mt-40 {
+  @include margin(40px);
+}
+
+.mw-1800 {
+  min-width: 1800px !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.hide {
+  display: none !important;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 @media (max-width: 1199px) {

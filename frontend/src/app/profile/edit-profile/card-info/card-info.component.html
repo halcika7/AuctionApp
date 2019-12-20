@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="heading">
+    <h3>Card Information</h3>
+  </div>
+  <div class="one-col">
+    <div class="inputs">
+      <div class="two-cols">
+        <app-input
+          id="cName"
+          title="Name on card"
+          placeholder="e.g. Adam Smith"
+          type="text"
+          controlName="cName"
+          [parentForm]="form"
+          [input]="form.get('cName')"
+          profile="true"
+          [showErrors]="true"
+        ></app-input>
+        <app-input
+          id="cNumber"
+          title="Card Number"
+          placeholder="e.g. 4242 4242 4242"
+          type="tel"
+          controlName="cNumber"
+          [parentForm]="form"
+          [input]="form.get('cNumber')"
+          profile="true"
+          pattern="Invalid card number"
+          minLength="13"
+          maxLength="16"
+          [showErrors]="true"
+        ></app-input>
+      </div>
+      <div class="two-cols">
+        <div class="two-cols">
+          <app-date-input
+            *ngIf="showCardExp()"
+            [withDays]="false"
+            label="Expiration Date"
+            [defaultDate]="cardExp"
+            [monthNumbers]="true"
+          ></app-date-input>
+        </div>
+        <app-input
+          id="CVC"
+          title="CVC/CW"
+          placeholder="e.g. 1234"
+          type="tel"
+          controlName="CVC"
+          [parentForm]="form"
+          [input]="form.get('CVC')"
+          profile="true"
+          pattern="Invalid card cvc"
+          minLength="3"
+          maxLength="4"
+          [showErrors]="true"
+        ></app-input>
+      </div>
+      <span *ngIf="cardValidationError">{{ cardValidationError }}</span>
+    </div>
+  </div>
+</div>

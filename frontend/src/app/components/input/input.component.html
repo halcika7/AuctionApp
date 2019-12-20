@@ -1,32 +1,67 @@
-<div class="form-group mt-43" [formGroup]="parentForm">
-  <label for="{{ id }}">{{ title }}</label>
+<div
+  class="form-group"
+  [formGroup]="parentForm"
+  [ngClass]="{ 'mt-43': !profile, profile: profile }"
+>
+  <label for="{{ id }}"><span *ngIf="required">*</span>{{ title }}</label>
   <div class="input">
-    <input
-      *ngIf="minLength && maxLength"
-      type="{{ type }}"
+    <ng-template [ngIf]="isInput">
+      <input
+        *ngIf="minLength && maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        [maxlength]="maxLength"
+        [minlength]="minLength"
+        [autocomplete]="autocomplete"
+      />
+      <input
+        *ngIf="!minLength && !maxLength"
+        type="{{ type }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        formControlName="{{ controlName }}"
+        [autocomplete]="autocomplete"
+      />
+    </ng-template>
+    <textarea
+      *ngIf="!isInput"
       id="{{ id }}"
       placeholder="{{ placeholder }}"
       formControlName="{{ controlName }}"
+      cols="30"
+      rows="10"
       [maxlength]="maxLength"
       [minlength]="minLength"
-      [autocomplete]="autocomplete"
-    />
-    <input
-      *ngIf="!minLength && !maxLength"
-      type="{{ type }}"
-      id="{{ id }}"
-      placeholder="{{ placeholder }}"
-      formControlName="{{ controlName }}"
-      [autocomplete]="autocomplete"
-    />
+    ></textarea>
     <span *ngIf="input.invalid && input.touched && showErrors">
       <span *ngIf="input.errors['required']">{{ title }} is required</span>
+      <span
+        *ngIf="
+          input.errors['numberOfWordsValidator'] &&
+          !input.errors['numberOfWordsValidator'].max
+        "
+        >Please enter at least {{ input.errors["numberOfWordsValidator"].min }}
+        {{
+          input.errors["numberOfWordsValidator"].min == 1 ? "word" : "words"
+        }}</span
+      >
+      <span
+        *ngIf="
+          input.errors['numberOfWordsValidator'] &&
+          input.errors['numberOfWordsValidator'].max
+        "
+        >Please enter between
+        {{ input.errors["numberOfWordsValidator"].min }} and
+        {{ input.errors["numberOfWordsValidator"].max }} words</span
+      >
       <span *ngIf="input.errors['minlength']"
         >{{ title }} must contain at least
         {{ input.errors["minlength"].requiredLength }} characters</span
       >
       <span *ngIf="input.errors['maxlength']"
-        >{{ title }} cannot exceed
+        >Please enter the {{ title | lowercase }} that is not longer than
         {{ input.errors["maxlength"].requiredLength }} characters</span
       >
       <span *ngIf="input.errors['email'] || input.errors['pattern']">{{

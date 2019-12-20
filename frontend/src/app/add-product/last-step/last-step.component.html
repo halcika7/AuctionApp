@@ -1,0 +1,191 @@
+<div
+  class="last-step"
+  [formGroup]="form"
+  [ngClass]="{ show: currentStep == 3, hide: currentStep != 3 }"
+>
+  <div class="checkbox second" *ngIf="sowUseSavedInfo()">
+    <label
+      >Use saved info
+      <input type="checkbox" formControlName="useOptionalInfo"/><fa-icon
+        [icon]="['fas', 'check']"
+      ></fa-icon
+    ></label>
+  </div>
+  <app-input
+    id="address"
+    title="Address"
+    placeholder="e.g.678 Berge Tunnel Apt. 287"
+    type="text"
+    controlName="address"
+    [parentForm]="form"
+    [input]="form.get('address')"
+    showErrors="true"
+    [minLength]="1"
+    [maxLength]="101"
+    [required]="true"
+  ></app-input>
+  <div class="group mt-39">
+    <app-input
+      id="country"
+      title="Country"
+      placeholder="e.g.678 Berge Tunnel Apt. 287"
+      type="text"
+      controlName="country"
+      [parentForm]="form"
+      [input]="form.get('country')"
+      showErrors="true"
+      [minLength]="1"
+      [maxLength]="101"
+      [required]="true"
+    ></app-input>
+    <app-input
+      id="city"
+      title="City"
+      placeholder="e.g.678 Berge Tunnel Apt. 287"
+      type="text"
+      controlName="city"
+      [parentForm]="form"
+      [input]="form.get('city')"
+      showErrors="true"
+      [minLength]="1"
+      [maxLength]="101"
+      [required]="true"
+    ></app-input>
+  </div>
+  <app-input
+    id="zip"
+    title="Zip code"
+    placeholder="e.g.678 Berge Tunnel Apt. 287"
+    type="text"
+    controlName="zip"
+    [parentForm]="form"
+    [input]="form.get('zip')"
+    showErrors="true"
+    [minLength]="5"
+    [maxLength]="6"
+    [required]="true"
+  ></app-input>
+  <app-input
+    id="phone"
+    title="Phone"
+    placeholder="e.g. +38761222333"
+    type="tel"
+    controlName="phone"
+    [parentForm]="form"
+    [input]="form.get('phone')"
+    showErrors="true"
+    [minLength]="7"
+    [maxLength]="16"
+    [required]="true"
+  ></app-input>
+  <div class="checkbox">
+    <label
+      >Do you want to bear shipping cost?
+      <input type="checkbox" formControlName="freeShipping"/><fa-icon
+        [icon]="['fas', 'check']"
+      ></fa-icon
+    ></label>
+    <p>The average price of shipping cost is $10.00.</p>
+    <p>You have to provide us Billing information.</p>
+  </div>
+  <div class="checkbox second">
+    <label
+      >Feature product
+      <input type="checkbox" formControlName="featureProduct"/><fa-icon
+        [icon]="['fas', 'check']"
+      ></fa-icon
+    ></label>
+    <p>You will be charged $10.00 for featuring product.</p>
+  </div>
+  <div class="checkbox second" *ngIf="hasCard">
+    <label
+      >Use saved card <input type="checkbox" formControlName="useCard"/><fa-icon
+        [icon]="['fas', 'check']"
+      ></fa-icon
+    ></label>
+  </div>
+  <div class="card-information" [ngClass]="{ show: showCard, hide: !showCard }">
+    <h3>Card Information</h3>
+    <span *ngIf="cardError" class="invalid-card">{{ cardError }}</span>
+    <div class="group">
+      <app-input
+        id="cName"
+        title="Name on card"
+        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        type="text"
+        controlName="cName"
+        [parentForm]="form"
+        [input]="form.get('cName')"
+        showErrors="true"
+        [profile]="true"
+        [minLength]="1"
+        [maxLength]="101"
+        [required]="true"
+      ></app-input>
+      <app-input
+        id="cNumber"
+        title="Card number"
+        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        type="text"
+        controlName="cNumber"
+        [parentForm]="form"
+        [input]="form.get('cNumber')"
+        showErrors="true"
+        [profile]="true"
+        [minLength]="13"
+        [maxLength]="16"
+        [required]="true"
+      ></app-input>
+    </div>
+    <div class="group">
+      <div class="card-date-wrapper">
+        <label><span>*</span>Expiration year</label>
+        <div class="date">
+          <app-select-input
+            [default]="selectedYear || 'Year'"
+            [values]="years"
+            (valueChange)="changeSelectedYear($event)"
+            [error]="expYearError"
+            [invalid]="expYearError"
+            [required]="true"
+          ></app-select-input>
+          <app-select-input
+            [default]="selectedMonth || 'Month'"
+            [values]="months"
+            (valueChange)="changeSelectedMonth($event)"
+            [error]="expMonthError"
+            [invalid]="expMonthError"
+            [required]="true"
+          ></app-select-input>
+        </div>
+      </div>
+      <app-input
+        id="cvc"
+        title="CVC/CW"
+        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        type="text"
+        controlName="CVC"
+        [parentForm]="form"
+        [input]="form.get('CVC')"
+        showErrors="true"
+        [profile]="true"
+        [minLength]="3"
+        [maxLength]="4"
+        [required]="true"
+      ></app-input>
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="prev" (click)="buttonClicked()">
+      <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
+    </button>
+    <button
+      class="done"
+      type="submit"
+      (click)="process()"
+      [disabled]="!isValidStep"
+    >
+      done
+    </button>
+  </div>
+</div>

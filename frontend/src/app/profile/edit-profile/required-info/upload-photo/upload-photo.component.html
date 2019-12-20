@@ -1,0 +1,11 @@
+<img [src]="imgSrc" alt="" />
+<div class="wrapper-input-file" [formGroup]="parentForm">
+  <label>
+    Change Photo
+    <input
+      type="file"
+      (change)="onImageChange($event)"
+      accept="image/*"
+    />
+  </label>
+</div>

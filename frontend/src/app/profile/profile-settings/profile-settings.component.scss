@@ -1,0 +1,97 @@
+@import "mixins";
+@import "variables";
+
+.settings {
+  @include grid(2, 19px, $autoRows: 288px);
+  @include margin($all: 70px auto 200px auto);
+
+  @media (max-width: 701px) {
+    @include grid(1, 19px, $autoRows: 288px);
+  }
+
+  .setting-item {
+    background: getColor(white);
+    border: 1px solid getColor(light_gray);
+
+    h3 {
+      @include fontMixin(18px, regular, 0.63px, light_black);
+      @include flex(center);
+      @include margin($all: 0.1px 0.5px 0.1px);
+      background: getColor(darker_white3);
+      height: 50px;
+      padding-left: 33px;
+    }
+
+    .info {
+      @include padding($all: 29px 34px 41px);
+
+      p {
+        @include fontMixin(18px, regular, 0.63px, light_black, $lineH: 22px);
+
+        &.email-phone {
+          @include margin($all: 8px 02);
+          span {
+            @include fontMixin(18px, light, 0.63px, purple, $lineH: 22px);
+            margin-left: 10px;
+          }
+        }
+      }
+
+      button {
+        @include heightWidth(57px, 243px);
+        background: getColor(white);
+        border: 3px solid getColor(inputBorder);
+        box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+        @include fontMixin(
+          18px,
+          bold,
+          0.63px,
+          light_black,
+          $transform: uppercase
+        );
+        margin-top: 28px;
+        cursor: pointer;
+      }
+
+      .checkboxes {
+        label {
+          @include flex(center);
+          position: relative;
+          padding-left: 20px;
+          cursor: pointer;
+          margin-bottom: 16px;
+          box-sizing: border-box;
+          max-width: 200px;
+
+          fa-icon {
+            position: absolute;
+            left: 3.5px;
+            display: none;
+          }
+
+          span {
+            margin-left: 20px;
+          }
+
+          &:after {
+            content: "";
+            @include heightWidth(20px, 22px);
+            position: absolute;
+            left: 0;
+            border: 1px solid getColor(light_gray);
+            display: inline-block;
+          }
+          input {
+            display: none;
+
+            &:checked {
+               ~ fa-icon {
+                 display: block;
+               }
+            }
+          }
+        }
+      }
+    }
+  }
+}

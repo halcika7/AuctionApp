@@ -15,6 +15,13 @@ class BidController extends BaseController {
     }
     return super.sendResponse(res, status, { message, highest_bid, accessToken });
   }
+
+  async getUserBids(req, res) {
+    const { userId, accessToken } = req;
+    const { offset } = JSON.parse(req.query.data);
+    const { bids, noMore, status, message } = await BidService.getUserBids(userId, offset);
+    return super.sendResponseWithMessage(res, status, { bids, noMore, accessToken }, message);
+  }
 }
 
 const BidControllerInstance = new BidController();

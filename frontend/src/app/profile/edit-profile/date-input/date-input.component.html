@@ -1,0 +1,28 @@
+<div class="date-wrapper">
+  <label><span *ngIf="required">*</span>{{ label }}</label>
+  <div class="inputs">
+    <app-select-input
+      [default]="defaultDate.year || 'Year'"
+      [values]="years"
+      (valueChange)="yearOnChange($event)"
+      [invalid]="error"
+    ></app-select-input>
+    <app-select-input
+      [default]="defaultDate.month || 'Month'"
+      [values]="months"
+      (valueChange)="monthOnChange($event)"
+      liWhenValuesLength0="Please select year"
+      [invalid]="error"
+    ></app-select-input>
+    <ng-template [ngIf]="withDays">
+      <app-select-input
+        [default]="defaultDate.day || 'Day'"
+        [values]="days"
+        liWhenValuesLength0="Please select year and month"
+        (valueChange)="dayOnChange($event)"
+        [invalid]="error"
+      ></app-select-input>
+    </ng-template>
+  </div>
+  <p *ngIf="error">{{ error }}</p>
+</div>

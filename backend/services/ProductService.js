@@ -1,13 +1,23 @@
+const BaseService = require('./BaseService');
+const BidService = require('./BidService');
+const StripeService = require('./StripeService');
+const CloudinaryService = require('./CloudinaryService');
+const Product = require('../models/Product');
+const ProductImage = require('../models/ProductImage');
+const FilterValueProduct = require('../models/FilterValueProduct');
 const {
   getFilteredProducts,
   getProductById,
   getSimilarProducts,
-  noMoreProducts
+  getProfileProducts,
+  noMoreProducts,
+  hasActiveProduct
 } = require('../helpers/productFilter');
 const { decodeToken } = require('../helpers/authHelper');
-const { LIMIT_SHOP_PRODUCTS } = require('../config/configs');
-const BaseService = require('./BaseService');
-const BidService = require('./BidService');
+const { LIMIT_SHOP_PRODUCTS, FEATURING_PRODUCT_COST } = require('../config/configs');
+const { addProductValidation } = require('../validations/addProductValidation');
+const { transformProductData } = require('../helpers/transformProductData');
+const { unlinkFiles } = require('../helpers/unlinkFiles');
 
 class ProductService extends BaseService {
   constructor() {
@@ -22,7 +32,7 @@ class ProductService extends BaseService {
         offset: reqParams.offset,
         productsLength: numberOfProducts
       });
-      return { status: 200, products, noMore };
+      return super.returnResponse(200, { products, noMore });
     } catch (error) {
       return super.returnGenericFailed();
     }
@@ -33,7 +43,7 @@ class ProductService extends BaseService {
       const product = await getProductById(productId, subcategoryId);
       const { id } = decodeToken(token) || { id: undefined };
       const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
-      return { status: 200, product, bids };
+      return super.returnResponse(200, { product, bids });
     } catch (error) {
       return super.returnResponse(403, {});
     }
@@ -42,7 +52,7 @@ class ProductService extends BaseService {
   async findSimilarProducts(subcategoryId, id) {
     try {
       const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
-      return { status: 200, similarProducts };
+      return super.returnResponse(200, { similarProducts });
     } catch (error) {
       return super.returnResponse(403, { similarProducts: [] });
     }
@@ -62,9 +72,105 @@ class ProductService extends BaseService {
         offset: productWhere.offSet,
         productsLength: numberOfProducts
       });
-      return { status: 200, products, noMore, priceRange };
+      return super.returnResponse(200, { products, noMore, priceRange });
     } catch (error) {
       return super.returnGenericFailed();
+    }
+  }
+
+  async fetchUserProducts(reqQuery, userId) {
+    reqQuery = JSON.parse(reqQuery);
+    try {
+      const { products, noMore } = await getProfileProducts(reqQuery, userId);
+      return super.returnResponse(200, { products, noMore });
+    } catch (error) {
+      return super.returnGenericFailed();
+    }
+  }
+
+  async getActiveUserProductsCount(userId) {
+    try {
+      const active = await hasActiveProduct(userId);
+      return super.returnResponse(200, { hasActiveProduct: active });
+    } catch (error) {
+      return super.returnGenericFailed();
+    }
+  }
+
+  async addProduct(userId, images, reqBody) {
+    try {
+      let productData = JSON.parse(reqBody.productData),
+        addressInformation = JSON.parse(reqBody.addressInformation),
+        cardInformation = JSON.parse(reqBody.cardInformation),
+        categoryData = JSON.parse(reqBody.categoryData),
+        subcategoryData = JSON.parse(reqBody.subcategoryData),
+        brandData = JSON.parse(reqBody.brandData),
+        filtersData = JSON.parse(reqBody.filtersData);
+
+      const { errors, isValid, choosenCardToken } = await addProductValidation(
+        {
+          productData,
+          addressInformation,
+          cardInformation,
+          categoryData,
+          subcategoryData,
+          brandData,
+          filtersData
+        },
+        userId,
+        images
+      );
+
+      if (!isValid) {
+        if (images.length > 0) unlinkFiles(images);
+        return super.returnResponse(403, errors);
+      }
+
+      const uploadImages = await CloudinaryService.uploadProductImages(images);
+      
+      if (productData.featured) {
+        let source =
+          typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
+
+        const charge = await StripeService.createCharge(
+          FEATURING_PRODUCT_COST,
+          'Featuring product',
+          source
+        );
+
+        if (charge.amount !== FEATURING_PRODUCT_COST) {
+          productData.featured = false;
+        }
+      }
+
+      productData = transformProductData(
+        productData,
+        uploadImages[0],
+        brandData,
+        subcategoryData,
+        userId
+      );
+
+      if (images.length > 0) unlinkFiles(images);
+
+      const product = await Product.create({ ...productData });
+
+      const productImages = uploadImages.slice(1).map(image => ({ image, productId: product.id }));
+      const productFilters = filtersData.map(filter => ({ filterValueId: filter.id, productId: product.id }))
+
+      await ProductImage.bulkCreate(productImages);
+      await FilterValueProduct.bulkCreate(productFilters);
+
+      const responseMessage = productData.featured
+        ? 'Product successfully added and charged $10.00 for featuring product'
+        : 'Product successfully added';
+
+      return super.returnResponse(200, { success: responseMessage });
+    } catch (error) {
+      unlinkFiles(images);
+      return super.returnResponse(403, {
+        message: 'Something happened. We were unable to perform request.'
+      });
     }
   }
 }

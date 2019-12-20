@@ -41,20 +41,25 @@ const User = db.define(
     },
     photo: {
       type: Sequelize.STRING(255),
-      allowNull: true,
+      allowNull: false,
       defaultValue: null
     },
     gender: {
-      type: Sequelize.CHAR(6),
-      allowNull: true,
-      defaultValue: null
+      type: Sequelize.STRING(6),
+      allowNull: false,
+      defaultValue: 'Other'
     },
     phoneNumber: {
       type: Sequelize.STRING(20),
-      allowNull: true,
-      defaultValue: null
+      allowNull: false,
+      defaultValue: ''
     },
-    seller: {
+    dateOfBirth: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Date.now()
+    },
+    deactivated: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false
@@ -83,6 +88,15 @@ const User = db.define(
       references: {
         model: {
           tableName: 'OptionalInfos'
+        },
+        key: 'id'
+      }
+    },
+    cardInfoId: {
+      type: Sequelize.BIGINT,
+      references: {
+        model: {
+          tableName: 'CardInfos'
         },
         key: 'id'
       }
