@@ -97,7 +97,12 @@ export class ShopPageComponent implements OnInit, OnDestroy {
             this._products = products;
             this._brands = brands;
             this._filters = filters;
-            this._prices = prices;
+            if(this.showIfKeysLength(prices)) {
+              this._prices = {
+                max_price: prices.max_price + 1,
+                min_price: prices.min_price
+              };
+            }
             this._noMore = noMore;
             this._priceRange = priceRange;
           }
