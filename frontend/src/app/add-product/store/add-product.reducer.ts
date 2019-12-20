@@ -103,7 +103,7 @@ export function addProductReducer(
       return {
         ...state,
         errors: action.payload.errors ? action.payload.errors : {},
-        message: action.payload.message ? action.payload.message : "",
+        message: action.payload.failedMessage ? action.payload.failedMessage : "",
         success: false
       };
     }

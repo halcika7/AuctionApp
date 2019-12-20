@@ -113,7 +113,7 @@ export function profileReducer(
     case ProfileActions.UPDATE_PROFILE_FAILED: {
       return {
         ...state,
-        message: action.payload.message ? action.payload.message : "",
+        message: action.payload.failedMessage ? action.payload.failedMessage : "",
         errors: action.payload.errors ? action.payload.errors : {},
         success: false
       };

@@ -40,7 +40,7 @@ export class AddProductFailed implements Action {
   readonly type = ADD_PRODUCT_FAILED;
   constructor(
     public payload: {
-      message?: string;
+      failedMessage?: string;
       authorizationError?: string;
       accessToken?: string;
       errors?: any;

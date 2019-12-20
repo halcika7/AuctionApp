@@ -28,7 +28,13 @@
   <span class="circle"><span></span></span>
 </div>
 
-<section class="container" *ngIf="hasActiveProduct || stepNumber > 0">
+<section
+  class="container"
+  [ngClass]="{
+    show: hasActiveProduct || stepNumber > 0,
+    hide: !hasActiveProduct && stepNumber < 1
+  }"
+>
   <div class="product-information">
     <h3 *ngIf="stepNumber == 1">detail information about product</h3>
     <h3 *ngIf="stepNumber == 2">Set prices</h3>

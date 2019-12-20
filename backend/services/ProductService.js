@@ -106,7 +106,6 @@ class ProductService extends BaseService {
         subcategoryData = JSON.parse(reqBody.subcategoryData),
         brandData = JSON.parse(reqBody.brandData),
         filtersData = JSON.parse(reqBody.filtersData);
-        console.log('TCL: addProduct -> filtersData', filtersData)
 
       const { errors, isValid, choosenCardToken } = await addProductValidation(
         {

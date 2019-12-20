@@ -9,7 +9,7 @@ img {
 
 .wrapper-input-file {
   label {
-    @include fontMixin(16px, bold, 0.56px, light_black);
+    @include fontMixin(16px, bold, 0.56px, light_black, $transform: uppercase);
     @include flex(center, center);
     @include heightWidth(49px, 198px);
     background: getColor(white);

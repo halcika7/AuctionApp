@@ -77,7 +77,7 @@ export class UpdateProfileFailed implements Action {
   constructor(
     public payload: {
       errors?: any;
-      message?: string;
+      failedMessage?: string;
       authorizationError?: string;
       accessToken?: string;
     }

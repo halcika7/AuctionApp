@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { Subscription } from "rxjs";
 import { ProfileService } from "./../profile.service";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
@@ -26,6 +27,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
   private _isValidForm: boolean = false;
   private _clicked = false;
+  private subscription = new Subscription();
 
   constructor(
     private profileService: ProfileService,
@@ -50,31 +52,37 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       ...BASIC_INPUT("state"),
       ...BASIC_INPUT("image", null)
     });
-    this.store.select("profile").subscribe(({ userInfo, errors }) => {
-      this._clicked = false;
-      if (!emptyObject(userInfo)) {
-        this._date = !emptyObject(errors)
-          ? this._date
-          : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
-        this._cardEXP = !emptyObject(errors)
-          ? { ...this._cardEXP }
-          : {
-              year: userInfo.CardInfo.exp_year,
-              month: userInfo.CardInfo.exp_month
-            };
-        this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
-      }
-    });
-    this.form.statusChanges.subscribe(validity => {
-      if (validity === "VALID") {
-        this._isValidForm = true;
-      } else {
-        this._isValidForm = false;
-      }
-    });
+    this.subscription.add(
+      this.store.select("profile").subscribe(({ userInfo, errors }) => {
+        this._clicked = false;
+        if (!emptyObject(userInfo)) {
+          this._date = !emptyObject(errors)
+            ? this._date
+            : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
+          this._cardEXP = !emptyObject(errors)
+            ? { ...this._cardEXP }
+            : {
+                year: userInfo.CardInfo.exp_year,
+                month: userInfo.CardInfo.exp_month
+              };
+          this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
+        }
+      })
+    );
+    this.subscription.add(
+      this.form.statusChanges.subscribe(validity => {
+        if (validity === "VALID") {
+          this._isValidForm = true;
+        } else {
+          this._isValidForm = false;
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.store.dispatch(new ProfileActions.ClearProfile());
     this.store.dispatch(new ProfileActions.ClearProfileMessages());
   }
 
