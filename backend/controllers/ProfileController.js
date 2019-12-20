@@ -10,6 +10,7 @@ class ProfileController extends BaseController {
   async getUserInfo(req, res) {
     const { userId, accessToken } = req;
     const { userInfo, status, message } = await ProfileService.fetchUserInfo(userId);
+
     return super.sendResponseWithMessage(res, status, { userInfo, accessToken }, message);
   }
 
@@ -24,9 +25,11 @@ class ProfileController extends BaseController {
       accessToken,
       refreshToken
     } = await ProfileService.updateUserInfo(req.file, req.body, userId, email);
+
     if (refreshToken) {
       AuthService.setRefreshTokenCookie(res, refreshToken);
     }
+
     return super.sendResponseWithMessage(
       res,
       status,
@@ -38,12 +41,14 @@ class ProfileController extends BaseController {
   async deactivateAccount(req, res) {
     const { userId } = req;
     const { status, message } = await ProfileService.deactivateUserAccount(userId);
+
     return super.sendResponseWithMessage(res, status, {}, message);
   }
 
   async getUserOptionalInfo(req, res) {
     const { userId, accessToken } = req;
     const { status, message, userInfo } = await ProfileService.userOptionalInfoWithCard(userId);
+    
     return super.sendResponseWithMessage(res, status, { userInfo, accessToken }, message);
   }
 }

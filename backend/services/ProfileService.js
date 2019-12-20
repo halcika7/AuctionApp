@@ -21,6 +21,7 @@ class ProfileService extends BaseService {
   async fetchUserInfo(id) {
     try {
       const userInfo = await getUserInfo(id);
+
       return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnGenericFailed();
@@ -30,6 +31,7 @@ class ProfileService extends BaseService {
   async deactivateUserAccount(id) {
     try {
       await User.update({ deactivated: true }, { where: { id } });
+
       return super.returnResponse(200, {});
     } catch (error) {
       return super.returnGenericFailed();
@@ -60,6 +62,7 @@ class ProfileService extends BaseService {
         file && file.path && unlinkFiles([file]);
         return super.returnResponse(403, errors);
       }
+
       if (file && file.path) {
         const { secure_url } = await CloudinaryService.uploadProfilePhoto(file.path, userId);
 
@@ -69,6 +72,7 @@ class ProfileService extends BaseService {
       } else {
         userInfo.photo = currentUser.photo;
       }
+
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
 
       const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, userId);
@@ -95,6 +99,7 @@ class ProfileService extends BaseService {
   async userOptionalInfoWithCard(id) {
     try {
       const userInfo = await getOptionalInfoCard(id);
+      
       return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnGenericFailed();

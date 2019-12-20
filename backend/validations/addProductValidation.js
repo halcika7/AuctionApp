@@ -114,11 +114,13 @@ const validateCategSubcategBrand = async (errors, data, model, property, where, 
       validModel = true;
     }
   }
+
   return validModel;
 };
 
 const filterValidation = async (isSubcategoryValid, id, filtersData, errors) => {
   if (!isSubcategoryValid) return;
+
   let filterErrors = [];
   const Filters = await FilterService.findFilters(id);
 
@@ -194,6 +196,7 @@ const creditCardValidation = async (cardInformation, userId, errors) => {
       };
     }
   }
+  
   return choosenCardToken;
 };
 

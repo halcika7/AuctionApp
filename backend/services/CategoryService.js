@@ -22,6 +22,7 @@ class CategoryService extends BaseService {
         order: [['id', 'ASC']]
       };
       const categories = await Category.findAll(findObj);
+
       return super.returnResponse(200, { categories });
     } catch (error) {
       return super.returnGenericFailed();
@@ -52,6 +53,7 @@ class CategoryService extends BaseService {
         group: ['Category.id', 'Subcategories.id'],
         order: [['id', 'ASC']]
       });
+
       return super.returnResponse(200, { categories });
     } catch (error) {
       return super.returnGenericFailed();
@@ -64,6 +66,7 @@ class CategoryService extends BaseService {
         attributes: ['id', 'name'],
         order: [['id', 'ASC']]
       });
+
       return super.returnResponse(200, { categories });
     } catch (error) {
       return super.returnGenericFailed();
@@ -77,6 +80,7 @@ class CategoryService extends BaseService {
         attributes: ['id', 'name'],
         order: [['id', 'ASC']]
       });
+      
       return super.returnResponse(200, { subcategories });
     } catch (error) {
       return super.returnGenericFailed();

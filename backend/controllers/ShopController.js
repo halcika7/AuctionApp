@@ -13,6 +13,7 @@ class ShopController extends BaseController {
       brandId,
       name
     });
+    
     return super.sendResponseWithMessage(res, status, { prices }, failedMessage);
   }
 }

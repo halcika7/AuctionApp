@@ -10,9 +10,11 @@ class BidController extends BaseController {
     const { productId, bid } = req.body;
     const { userId, accessToken } = req;
     const { message, status, highest_bid } = await BidService.createBid(userId, productId, bid);
+
     if (status === 403) {
       return super.sendResponse(res, status, { message, accessToken });
     }
+
     return super.sendResponse(res, status, { message, highest_bid, accessToken });
   }
 
@@ -20,6 +22,7 @@ class BidController extends BaseController {
     const { userId, accessToken } = req;
     const { offset } = JSON.parse(req.query.data);
     const { bids, noMore, status, message } = await BidService.getUserBids(userId, offset);
+    
     return super.sendResponseWithMessage(res, status, { bids, noMore, accessToken }, message);
   }
 }

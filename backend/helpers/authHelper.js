@@ -3,7 +3,11 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
-const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, DEFAULT_USER_IMAGE } = require('../config/configs');
+const {
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  DEFAULT_USER_IMAGE
+} = require('../config/configs');
 const { db } = require('../config/database');
 
 exports.createAccessToken = ({ id, email }) =>
@@ -34,6 +38,7 @@ exports.comparePassword = async (psd1, psd2) => await bcrypt.compare(psd1, psd2)
 
 exports.findUserByEmail = async (email, withPassword = true) => {
   const exclude = withPassword ? [] : ['password'];
+
   return await User.findOne({
     attributes: { exclude },
     where: { email },

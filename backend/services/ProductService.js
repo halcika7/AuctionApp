@@ -32,6 +32,7 @@ class ProductService extends BaseService {
         offset: reqParams.offset,
         productsLength: numberOfProducts
       });
+
       return super.returnResponse(200, { products, noMore });
     } catch (error) {
       return super.returnGenericFailed();
@@ -43,6 +44,7 @@ class ProductService extends BaseService {
       const product = await getProductById(productId, subcategoryId);
       const { id } = decodeToken(token) || { id: undefined };
       const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
+
       return super.returnResponse(200, { product, bids });
     } catch (error) {
       return super.returnResponse(403, {});
@@ -52,6 +54,7 @@ class ProductService extends BaseService {
   async findSimilarProducts(subcategoryId, id) {
     try {
       const similarProducts = (await getSimilarProducts(subcategoryId, id)) || [];
+
       return super.returnResponse(200, { similarProducts });
     } catch (error) {
       return super.returnResponse(403, { similarProducts: [] });
@@ -72,6 +75,7 @@ class ProductService extends BaseService {
         offset: productWhere.offSet,
         productsLength: numberOfProducts
       });
+
       return super.returnResponse(200, { products, noMore, priceRange });
     } catch (error) {
       return super.returnGenericFailed();
@@ -82,6 +86,7 @@ class ProductService extends BaseService {
     reqQuery = JSON.parse(reqQuery);
     try {
       const { products, noMore } = await getProfileProducts(reqQuery, userId);
+
       return super.returnResponse(200, { products, noMore });
     } catch (error) {
       return super.returnGenericFailed();
@@ -91,6 +96,7 @@ class ProductService extends BaseService {
   async getActiveUserProductsCount(userId) {
     try {
       const active = await hasActiveProduct(userId);
+      
       return super.returnResponse(200, { hasActiveProduct: active });
     } catch (error) {
       return super.returnGenericFailed();

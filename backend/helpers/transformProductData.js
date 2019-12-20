@@ -14,8 +14,10 @@ module.exports.transformProductData = (
   productData.auctionStart.setTime(productData.auctionStart.getTime() + 60 * 60 * 1000);
   productData.auctionEnd = new Date(productData.endDate);
   productData.auctionEnd.setTime(productData.auctionEnd.getTime() + 60 * 60 * 1000);
+  
   delete productData.description;
   delete productData.endDate;
   delete productData.startDate;
+
   return productData;
 };

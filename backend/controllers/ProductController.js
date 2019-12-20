@@ -17,6 +17,7 @@ class ProductController extends BaseController {
         noMore
       });
     }
+
     return super.sendResponse(
       res,
       status,
@@ -32,11 +33,14 @@ class ProductController extends BaseController {
       req.params.subcategoryId,
       token
     );
+
     if (!product) {
       return super.sendResponse(res, status, { error: 'Product not found !' });
     }
+
     const { similarProducts } =
       (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) || [];
+
     return super.sendResponse(res, status, { product, similarProducts, bids });
   }
 
@@ -45,6 +49,7 @@ class ProductController extends BaseController {
       req.params.subcategoryId,
       req.params.id
     );
+
     return super.sendResponse(res, status, { similarProducts });
   }
 
@@ -60,6 +65,7 @@ class ProductController extends BaseController {
       priceRange,
       failedMessage
     } = await ProductServiceInstance.getShopProducts(prodWhere, filterValueIds);
+
     return super.sendResponseWithMessage(
       res,
       status,
@@ -74,6 +80,7 @@ class ProductController extends BaseController {
       req.query.data,
       userId
     );
+
     return super.sendResponseWithMessage(res, status, { products, noMore, accessToken }, message);
   }
 
@@ -84,6 +91,7 @@ class ProductController extends BaseController {
       status,
       message
     } = await ProductServiceInstance.getActiveUserProductsCount(userId);
+    
     return super.sendResponseWithMessage(
       res,
       status,

@@ -34,6 +34,7 @@ export class RegisterStart implements Action {
     }
   ) {}
 }
+
 export class RegisterSuccess implements Action {
   readonly type = REGISTER_SUCCESS;
   constructor(public payload: { message: string }) {}
@@ -43,6 +44,7 @@ export class LoginStart implements Action {
   readonly type = LOGIN_START;
   constructor(public payload: { email: string; password: string; remember: boolean }) {}
 }
+
 export class LoginSuccess implements Action {
   readonly type = LOGIN_SUCCESS;
   constructor(
@@ -57,6 +59,7 @@ export class LoginSuccess implements Action {
 export class LogoutStart implements Action {
   readonly type = LOGOUT_START;
 }
+
 export class LogoutSuccess implements Action {
   readonly type = LOGOUT_SUCCESS;
 }
@@ -64,6 +67,7 @@ export class LogoutSuccess implements Action {
 export class RefreshTokenStart implements Action {
   readonly type = REFRESH_ACCESS_TOKEN_START;
 }
+
 export class RefreshToken implements Action {
   readonly type = REFRESH_ACCESS_TOKEN;
   constructor(public payload: { accessToken: string }) {}
@@ -72,6 +76,7 @@ export class RefreshToken implements Action {
 export class AuthClearMessagess implements Action {
   readonly type = AUTH_CLEAR_MESSAGESS;
 }
+
 export class AuthFailed implements Action {
   readonly type = AUTH_FAILED;
   constructor(public payload: { errors?: any; message?: string }) {}
@@ -85,6 +90,7 @@ export class ForgotPasswordStart implements Action {
   readonly type = FORGOT_PASSWORD_START;
   constructor(public email: string) {}
 }
+
 export class ForgotPasswordSuccess implements Action {
   readonly type = FORGOT_PASSWORD_SUCCESS;
   constructor(public payload: { message: string }) {}
@@ -94,6 +100,7 @@ export class ResetPasswordStart implements Action {
   readonly type = RESET_PASSWORD_START;
   constructor(public resetPasswordToken: string, public password: string) {}
 }
+
 export class ResetPasswordSuccess implements Action {
   readonly type = RESET_PASSWORD_SUCCESS;
   constructor(public payload: { message: string }) {}

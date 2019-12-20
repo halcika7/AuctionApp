@@ -11,11 +11,13 @@ class ShopService extends BaseService {
   async getPrices(reqQueryData) {
     try {
       const where = returnWhereObject(reqQueryData, true);
+
       if (reqQueryData.name) {
         where[Op.and] = db.where(db.fn('lower', db.col('name')), {
           [Op.like]: `%${reqQueryData.name}%`
         });
       }
+
       const prices = await Product.findOne({
         where,
         raw: true,
@@ -25,6 +27,7 @@ class ShopService extends BaseService {
           [db.fn('coalesce', db.fn('MIN', db.col('price')), 0), 'min_price']
         ]
       });
+      
       return super.returnResponse(200, { prices });
     } catch (error) {
       return super.returnGenericFailed();

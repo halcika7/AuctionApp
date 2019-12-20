@@ -18,11 +18,13 @@ class StripeService extends BaseService {
 
     if (findCardIfExists && findCardIfExists.id !== userCardInfoId) {
       let cardError = 'Card already in use';
+
       if (errors.errors) {
         errors.errors.card = cardError;
       } else {
         errors.card = cardError;
       }
+
       return { valid: false, errors };
     }
 
@@ -31,6 +33,7 @@ class StripeService extends BaseService {
 
   async createCustomer(description, email) {
     if(!description || !email) return;
+    
     return await stripe.customers.create({ description, email });
   }
 

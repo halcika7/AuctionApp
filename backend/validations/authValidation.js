@@ -73,9 +73,11 @@ exports.loginValidation = async data => {
 exports.forgotPasswordValidation = async email => {
   let errors = {};
   const user = await findUserByEmail(email);
+
   if (!email) {
     errors.email = 'Email is required';
   }
+
   if (!user) {
     errors.email = 'User not found with provided email';
   }
@@ -124,6 +126,7 @@ exports.passwordValidation = (
   errors,
   { response = 'Password', name = 'password', checkEquality = null }
 ) => {
+
   if (isEmpty(password)) {
     errors[name] = `${response} is required`;
   } else if (!Validator.isLength(password, { min: 6 })) {
@@ -134,9 +137,11 @@ exports.passwordValidation = (
     errors[name] =
       'Your password needs to contain both lower and upper case characters, number and a special character.';
   }
+
   if (checkEquality && checkEquality !== password) {
     errors[name] = 'Confirm password should be equal to provided password';
   }
+  
 };
 
 exports.nameValidation = (type, value, errors, resp) => {

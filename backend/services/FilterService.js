@@ -15,16 +15,20 @@ class FilterService extends BaseService {
 
   async getFilters(reqQueryData) {
     try {
+
       if (!reqQueryData.subcategoryId) {
         let Filters = [];
         return { status: 200, Filters };
       }
+
       const where = returnWhereObject(reqQueryData, true);
+
       if (reqQueryData.name) {
         where[Op.and] = db.where(db.fn('lower', db.col('Filters.FilterValues.Products.name')), {
           [Op.like]: `%${reqQueryData.name}%`
         });
       }
+
       const includeProduct = {
         include: {
           model: Product,
@@ -37,6 +41,7 @@ class FilterService extends BaseService {
         }
       };
       const Filters = await this.findFilters(reqQueryData.subcategoryId, includeProduct);
+
       return super.returnResponse(200, { Filters });
     } catch (error) {
       return super.returnGenericFailed();
@@ -62,6 +67,7 @@ class FilterService extends BaseService {
         }
       }
     });
+    
     return Filters;
   }
 }

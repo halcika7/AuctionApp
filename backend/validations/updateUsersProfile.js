@@ -61,6 +61,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
   ) {
     return { isValid: true, errors, cardInfoData: {} };
   }
+  
   let { customerId, cardId } = await CardInfoService.findUserCardInfo(userCardInfoId);
 
   try {

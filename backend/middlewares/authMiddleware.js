@@ -7,6 +7,7 @@ module.exports = async (req, res, next) => {
     const decoded = decodeToken(authorization);
     const decodedRefresh = decodeToken(refreshToken);
     const user = await findUserByEmail(decoded.email, false);
+
     if (
       !authorization ||
       !refreshToken ||
@@ -30,6 +31,7 @@ module.exports = async (req, res, next) => {
       req.userId = decoded.id;
       req.email = decoded.email;
     }
+    
   } catch (error) {
     return res.status(401).json({ authorizationError: 'Unauthorized request. Please login' });
   }
