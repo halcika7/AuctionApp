@@ -34,7 +34,7 @@ export class ProfileEffects {
           catchError(data => {
             if (data.error.accessToken) {
               this.store.dispatch(
-                new RefreshToken({ accessToken: data.accessToken })
+                new RefreshToken({ accessToken: data.error.accessToken })
               );
             }
             if (data.error.authorizationError) {
@@ -69,7 +69,7 @@ export class ProfileEffects {
           catchError(data => {
             if (data.error.accessToken) {
               this.store.dispatch(
-                new RefreshToken({ accessToken: data.accessToken })
+                new RefreshToken({ accessToken: data.error.accessToken })
               );
             }
             if (data.error.authorizationError) {
@@ -103,7 +103,7 @@ export class ProfileEffects {
           catchError(data => {
             if (data.error.accessToken) {
               this.store.dispatch(
-                new RefreshToken({ accessToken: data.accessToken })
+                new RefreshToken({ accessToken: data.error.accessToken })
               );
             }
             if (data.error.authorizationError) {
@@ -124,7 +124,7 @@ export class ProfileEffects {
         catchError(data => {
           if (data.error.accessToken) {
             this.store.dispatch(
-              new RefreshToken({ accessToken: data.accessToken })
+              new RefreshToken({ accessToken: data.error.accessToken })
             );
           }
           if (data.error.authorizationError) {

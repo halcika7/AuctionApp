@@ -33,6 +33,7 @@ export class AddProductSuccess implements Action {
       hasActiveProduct?: boolean;
       userInfo?: AddProductUserInfo;
       message?: string;
+      accessToken?: string;
     }
   ) {}
 }

@@ -93,7 +93,7 @@ class ProductController extends BaseController {
   }
 
   async addProduct(req, res) {
-    const { userId } = req;
+    const { userId, accessToken } = req;
 
     const { status, message, success, errors } = await ProductServiceInstance.addProduct(
       userId,
@@ -104,7 +104,7 @@ class ProductController extends BaseController {
     return super.sendResponseWithMessage(
       res,
       status,
-      { errors, message: success },
+      { errors, message: success, accessToken },
       message
     );
   }
