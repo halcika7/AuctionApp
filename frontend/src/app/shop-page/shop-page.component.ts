@@ -100,7 +100,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
             if(this.showIfKeysLength(prices)) {
               this._prices = {
                 max_price: prices.max_price + 1,
-                min_price: prices.min_price
+                min_price: prices.min_price,
+                avg_price: prices.avg_price
               };
             }
             this._noMore = noMore;

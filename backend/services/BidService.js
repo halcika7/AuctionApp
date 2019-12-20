@@ -59,7 +59,7 @@ class BidService extends BaseService {
 
       await Bid.create({ price: bid, userId: userID, productId });
       return super.returnResponse(200, {
-        message: 'Congrats! You are the highest bider',
+        message: 'Congrats! You are the highest bidder',
         highest_bid: bid
       });
     } catch (error) {
