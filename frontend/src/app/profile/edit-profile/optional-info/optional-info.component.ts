@@ -19,14 +19,24 @@ export class OptionalInfoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.store
       .select("profile")
-      .subscribe(({ userInfo }) => {
+      .subscribe(({ userInfo, errors }) => {
         if (!emptyObject(userInfo)) {
           this.form.patchValue({
-            street: userInfo.OptionalInfo.street,
-            city: userInfo.OptionalInfo.city,
-            country: userInfo.OptionalInfo.country,
-            zip: userInfo.OptionalInfo.zip,
-            state: userInfo.OptionalInfo.state
+            street: emptyObject(errors)
+              ? userInfo.OptionalInfo.street
+              : this.form.value.street,
+            city: emptyObject(errors)
+              ? userInfo.OptionalInfo.city
+              : this.form.value.city,
+            country: emptyObject(errors)
+              ? userInfo.OptionalInfo.country
+              : this.form.value.country,
+            zip: emptyObject(errors)
+              ? userInfo.OptionalInfo.zip
+              : this.form.value.zip,
+            state: emptyObject(errors)
+              ? userInfo.OptionalInfo.state
+              : this.form.value.state
           });
         }
       });
