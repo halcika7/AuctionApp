@@ -42,7 +42,7 @@ class ProfileService extends BaseService {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
-    
+
     try {
       //userId, optionalInfoId and cardInfoId are same
       const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
@@ -67,7 +67,7 @@ class ProfileService extends BaseService {
         const { secure_url } = await CloudinaryService.uploadProfilePhoto(file.path, userId);
 
         userInfo.photo = secure_url;
-        
+
         unlinkFiles([file]);
       } else {
         userInfo.photo = currentUser.photo;
@@ -90,7 +90,6 @@ class ProfileService extends BaseService {
 
       return super.returnResponse(200, { success, userInfoData, accessToken, refreshToken });
     } catch (error) {
-      console.log('TCL: ProfileService -> updateUserInfo -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });
@@ -100,7 +99,7 @@ class ProfileService extends BaseService {
   async userOptionalInfoWithCard(id) {
     try {
       const userInfo = await getOptionalInfoCard(id);
-      
+
       return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnGenericFailed();

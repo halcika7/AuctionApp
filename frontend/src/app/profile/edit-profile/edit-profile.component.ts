@@ -67,6 +67,24 @@ export class EditProfileComponent implements OnInit, OnDestroy {
               };
           this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
         }
+
+        if(!emptyObject(errors)) {
+          this.form.setValue({
+            firstName: this.form.controls.firstName.value,
+            lastName: this.form.controls.lastName.value,
+            email: this.form.controls.email.value,
+            phoneNumber: this.form.controls.phoneNumber.value,
+            cName: this.form.controls.cName.value,
+            cNumber: this.form.controls.cNumber.value,
+            CVC: this.form.controls.CVC.value,
+            street: this.form.controls.street.value,
+            city: this.form.controls.city.value,
+            zip: this.form.controls.zip.value,
+            country: this.form.controls.country.value,
+            state: this.form.controls.state.value,
+            image: this.form.controls.image.value
+          });
+        }
       })
     );
     this.subscription.add(

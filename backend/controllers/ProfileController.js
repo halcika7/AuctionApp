@@ -48,7 +48,7 @@ class ProfileController extends BaseController {
   async getUserOptionalInfo(req, res) {
     const { userId, accessToken } = req;
     const { status, message, userInfo } = await ProfileService.userOptionalInfoWithCard(userId);
-    
+
     return super.sendResponseWithMessage(res, status, { userInfo, accessToken }, message);
   }
 }

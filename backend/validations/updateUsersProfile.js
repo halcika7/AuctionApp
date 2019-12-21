@@ -53,7 +53,7 @@ exports.userInfoValidation = async (userInfo, email) => {
 };
 
 exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
-  if (!isValidUserInfo) return { isValid: true };
+  if (!isValidUserInfo) return { isValid: true, errors };
 
   if (
     Object.keys(removeNullProperty(cardInfo)).length == 0 ||
