@@ -160,5 +160,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     formData.append("image", this.form.value.image);
     this._clicked = true;
     this.store.dispatch(new ProfileActions.UpdateProfileStart(formData));
+    window.scrollTo(0, 0);
   }
 }
