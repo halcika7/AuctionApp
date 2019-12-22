@@ -7,11 +7,11 @@ class CardInfoService extends BaseService {
   }
 
   async findUserCardInfo(id) {
-      return await CardInfo.findOne({
-        raw: true,
-        where: { id },
-        attributes: ['customerId', 'cardId']
-      });
+    return await CardInfo.findOne({
+      raw: true,
+      where: { id },
+      attributes: ['customerId', 'cardId']
+    });
   }
 
   async createCardInfo(customerId) {
@@ -19,11 +19,10 @@ class CardInfoService extends BaseService {
   }
 
   async updateCardInfo(cardInfoData, id) {
-      return await CardInfo.update(cardInfoData, {
-        where: { id }
-      });
+    return await CardInfo.update(cardInfoData, {
+      where: { id }
+    });
   }
-
 }
 
 const CardInfoServiceInstance = new CardInfoService();

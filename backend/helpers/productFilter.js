@@ -31,7 +31,7 @@ function filterProducts({
   const endsMaxDays = addSubtractDaysToDate(ENDS_IN_MAX_DAYS);
   const daysAgo = addSubtractDaysToDate(STARTED_DAYS_AGO, false);
   let replacements = null;
-  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
+  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details, p."userId" `;
   let numberOfProductsQuery = '';
   let priceRangeQuery = type === 'Shop' ? buildPriceRangeQuery() : null;
 
@@ -189,6 +189,7 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
 
 exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
   const auctionEnd = active ? { [Op.gt]: new Date() } : { [Op.lt]: new Date() };
+  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] }
   const products = await Product.findAll({
     subQuery: false,
     where: { userId, auctionEnd },
@@ -210,7 +211,7 @@ exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, of
       model: Bid,
       attributes: []
     },
-    order: [['auctionStart', 'DESC']],
+    ...order,
     limit,
     offset,
     group: ['Product.id']

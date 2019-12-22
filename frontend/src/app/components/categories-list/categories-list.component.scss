@@ -179,6 +179,7 @@
 
 .shop.categories > li.open:after {
   top: 8px;
+  background: getColor(purple);
 }
 
 .shop.categories > li.open > ul {

@@ -31,7 +31,8 @@ const Wishlist = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'Wishlists'
+    modelName: 'Wishlists',
+    timestamps: true
   }
 );
 

@@ -88,13 +88,22 @@
     @include flex(center, center);
     @include heightWidth(36px, 140px);
     @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
-    @include boxShadowBackground(false, white, 3px solid getColor(lighter_gray));
+    @include boxShadowBackground(
+      false,
+      white,
+      3px solid getColor(lighter_gray)
+    );
     cursor: pointer;
-    outline: none;
 
     fa-icon {
       @include fontMixin(20px, $color: lighter_gray);
       margin-left: 5px;
+    }
+
+    &.wishlisted {
+      fa-icon {
+        color: getColor(purple);
+      }
     }
   }
 }

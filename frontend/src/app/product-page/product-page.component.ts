@@ -6,6 +6,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as ProductPageActions from "./store/product-page.actions";
 import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
+import * as WishlistActions from "@app/wishlist/store/wishlist.actions";
 
 @Component({
   selector: "app-product-page",
@@ -24,6 +25,8 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _noBids = true;
   private _enteredPrice = null;
   private _disabled = false;
+  private _wishlisted: boolean = false;
+  private _wishlistedIds: string[];
   private subscription = new Subscription();
 
   constructor(
@@ -34,38 +37,57 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
+      this.store.select("wishlist").subscribe(({ wishlistIds }) => {
+        this._wishlistedIds = wishlistIds;
+        this.setWishlisted();
+      })
+    );
+
+    this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
         this._enteredPrice = null;
         if (!id || !subcategoryId) {
           this.router.navigate(["/404"]);
         }
-        this.store.dispatch(new ProductPageActions.ProductStart(id, subcategoryId));
-        this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
+        this.store.dispatch(
+          new ProductPageActions.ProductStart(id, subcategoryId)
+        );
+        this.store.dispatch(
+          new ProductPageActions.SimilarProductStart(id, subcategoryId)
+        );
       })
     );
 
     this.subscription.add(
       this.store
         .select("productPage")
-        .subscribe(({ product, similarProducts, bids, error, message, success }) => {
-          if (error) {
-            this.router.navigate(["/404"]);
+        .subscribe(
+          ({ product, similarProducts, bids, error, message, success }) => {
+            if (error) {
+              this.router.navigate(["/404"]);
+            }
+
+            if (success) {
+              this._enteredPrice = null;
+            }
+
+            this._product = product;
+            this._bids = bids;
+            this._similarProducts = similarProducts;
+            this._minPrice =
+              product.highest_bid >= product.price
+                ? product.highest_bid
+                : product.price;
+            this._hide =
+              new Date(product.auctionStart) > new Date() ? true : false;
+            this._noBids = product.highest_bid === 0 ? true : false;
+            this._message = message;
+            this._success = success;
+            this._disabled = !this._success;
+            this.setWishlisted();
+            this.setMessageDisabled();
           }
-          if (success) {
-            this._enteredPrice = null;
-          }
-          this._product = product;
-          this._bids = bids;
-          this._similarProducts = similarProducts;
-          this._minPrice =
-            product.highest_bid >= product.price ? product.highest_bid : product.price;
-          this._hide = new Date(product.auctionStart) > new Date() ? true : false;
-          this._noBids = product.highest_bid === 0 ? true : false;
-          this._message = message;
-          this._success = success;
-          this._disabled = !this._success;
-          this.setMessageDisabled();
-        })
+        )
     );
 
     this.subscription.add(
@@ -102,12 +124,38 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   onSubmit(input: HTMLInputElement) {
     this.store.dispatch(
-      new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
+      new ProductPageActions.ProductBidStart(
+        this.product.id,
+        parseFloat(input.value)
+      )
     );
   }
 
   clearMessages() {
     this.store.dispatch(new ProductPageActions.ClearProductMessages());
+  }
+
+  addRemoveFromWishlist(e: any) {
+    if (this._wishlisted) {
+      this.store.dispatch(
+        new WishlistActions.DeleteFromWishlistStart(this._product.id)
+      );
+    } else {
+      this.store.dispatch(
+        new WishlistActions.AddToWishlistStart(this._product.id)
+      );
+    }
+    e.target.blur();
+  }
+
+  private setWishlisted() {
+    if (this._product && this._product.id) {
+      this._wishlisted = this._wishlistedIds.filter(
+        value => value === this._product.id
+      )[0]
+        ? true
+        : false;
+    }
   }
 
   get product(): FullProduct {
@@ -152,5 +200,9 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   get disabled(): boolean {
     return this._disabled;
+  }
+
+  get wishlisted(): boolean {
+    return this._wishlisted;
   }
 }

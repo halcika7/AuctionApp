@@ -6,7 +6,7 @@
   @include margin($all: 0 0 20px);
   background: getColor(white);
   border: 1px solid getColor(light_gray);
-  max-height: 576px;
+  max-height: 300px;
   overflow-y: auto;
 }
 

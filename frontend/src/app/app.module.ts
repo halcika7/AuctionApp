@@ -64,6 +64,7 @@ import { ProductPageEffects } from "./product-page/store/product-page.effects";
 import { ShopPageEffects } from "./shop-page/store/shop-page.effects";
 import { ProfileEffects } from "./profile/store/profile.effects";
 import { AddProductEffects } from "./add-product/store/add-product.effects";
+import { WishlistEffects } from "./wishlist/store/wishlist.effects";
 
 // Font Awesome Icons
 import {
@@ -185,7 +186,8 @@ import { CustomDateInputComponent } from "./add-product/second-step/custom-date-
       ProductPageEffects,
       ShopPageEffects,
       ProfileEffects,
-      AddProductEffects
+      AddProductEffects,
+      WishlistEffects
     ]),
     FontAwesomeModule,
     Ng5SliderModule,

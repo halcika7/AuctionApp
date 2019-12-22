@@ -1,6 +1,11 @@
 <section class="container mt-70 mb-200">
-  <app-table [values]="[]"></app-table>
-  <!-- <button type="button" class="primary-button left-right-margin-auto mt-40">
+  <app-table [values]="products" type="products"></app-table>
+  <button
+    type="button"
+    class="primary-button left-right-margin-auto mt-40"
+    *ngIf="noMore == false && products.length > 0"
+    (click)="loadMore($event)"
+  >
     Load More
-  </button> -->
+  </button>
 </section>
