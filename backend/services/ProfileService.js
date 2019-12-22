@@ -3,7 +3,10 @@ const User = require('../models/User');
 const CardInfoService = require('../services/CardInfoService');
 const OptionalInfoService = require('../services/OptionalInfoService');
 const CloudinaryService = require('../services/CloudinaryService');
-const { removeNullFromUserInfo } = require('../helpers/removeNullProperty');
+const {
+  removeNullFromUserInfo,
+  removeNullFromOptionalUserInfo
+} = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const {
   getUserInfo,
@@ -42,6 +45,7 @@ class ProfileService extends BaseService {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
+    console.log('fired');
 
     try {
       //userId, optionalInfoId and cardInfoId are same
@@ -74,6 +78,8 @@ class ProfileService extends BaseService {
       }
 
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
+      const currentOptionalInfo = await OptionalInfoService.getOptionalInfo(userId);
+      optionalInfo = removeNullFromOptionalUserInfo(optionalInfo, currentOptionalInfo);
 
       const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, userId);
       const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, userId);
