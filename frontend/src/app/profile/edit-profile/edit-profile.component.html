@@ -4,6 +4,7 @@
       [form]="form"
       [date]="date"
       [gender]="gender"
+      (changeGender)="changeGender($event)"
     ></app-required-info>
 
     <app-card-info [form]="form" [cardExp]="cardExp"></app-card-info>

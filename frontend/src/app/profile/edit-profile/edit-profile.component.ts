@@ -86,6 +86,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ProfileActions.ClearProfileMessages());
   }
 
+  changeGender(value: string) {
+    this._gender = value;
+  }
+
   get form(): FormGroup {
     return this._form;
   }
@@ -122,6 +126,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         `${this._date.year}-${this._date.month}-${this._date.day}`
       )
     };
+    console.log("TCL: onSubmit -> this._gender", this._gender);
     const optionalInfo = {
       street: this.form.value.street,
       city: this.form.value.city,

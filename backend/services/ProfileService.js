@@ -45,7 +45,6 @@ class ProfileService extends BaseService {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
-    console.log('fired');
 
     try {
       //userId, optionalInfoId and cardInfoId are same
