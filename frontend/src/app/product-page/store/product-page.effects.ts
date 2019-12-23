@@ -38,8 +38,8 @@ export class ProductPageEffects {
             return new ProductPageActions.ProductBidSuccess(data);
           }),
           catchError(data => {
-            if (data.accessToken) {
-              this.store.dispatch(new RefreshToken({ accessToken: data.accessToken }));
+            if (data.error.accessToken) {
+              this.store.dispatch(new RefreshToken({ accessToken: data.error.accessToken }));
             }
             if (data.error.authorizationError) {
               this.store.dispatch(new LogoutStart());

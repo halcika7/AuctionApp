@@ -35,6 +35,14 @@ module.exports = {
         dateBid: {
           type: Sequelize.DATE,
           defaultValue: Date.now()
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.NOW
         }
       })
       .then(() => queryInterface.addIndex('Bids', ['productId']));

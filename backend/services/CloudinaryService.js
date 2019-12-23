@@ -7,7 +7,7 @@ class CloudinaryService extends BaseService {
   }
 
   async uploadProfilePhoto(path, id) {
-    await cloudinary.uploader.upload(path, {
+    return await cloudinary.uploader.upload(path, {
       public_id: `user-${id}`
     });
   }

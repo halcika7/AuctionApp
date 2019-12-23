@@ -77,7 +77,8 @@ const Product = db.define(
   },
   {
     sequelize: Sequelize,
-    modelName: 'Products'
+    modelName: 'Products',
+    timestamps: true
   }
 );
 

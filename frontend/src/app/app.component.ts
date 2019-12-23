@@ -5,6 +5,7 @@ import { filter } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import * as fromApp from "./store/app.reducer";
 import * as AuthActions from "./auth/store/auth.actions";
+import { UserWishlistIdsStart } from "./wishlist/store/wishlist.actions";
 
 @Component({
   selector: "app-root",
@@ -30,8 +31,12 @@ export class AppComponent implements OnInit {
           this._notFound = false;
         }
       });
-    if (localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")) {
+    if (
+      localStorage.getItem("accessToken") ||
+      sessionStorage.getItem("accessToken")
+    ) {
       this.store.dispatch(new AuthActions.RefreshTokenStart());
+      this.store.dispatch(new UserWishlistIdsStart());
     }
   }
 

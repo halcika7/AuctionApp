@@ -31,15 +31,17 @@ function filterProducts({
   const endsMaxDays = addSubtractDaysToDate(ENDS_IN_MAX_DAYS);
   const daysAgo = addSubtractDaysToDate(STARTED_DAYS_AGO, false);
   let replacements = null;
-  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details `;
+  let findProductsQuery = `SELECT p.id, p.name, p.price, p.picture, p."subcategoryId", p.details, p."userId" `;
   let numberOfProductsQuery = '';
   let priceRangeQuery = type === 'Shop' ? buildPriceRangeQuery() : null;
 
   if (type === 'topRated') {
     let q = `,ROUND(AVG(pr.rating), 2) AS avg_rating FROM public."Products" p JOIN public."ProductReviews" pr ON pr."productId"=p.id
     WHERE p."auctionEnd" > NOW() GROUP BY p.id HAVING ROUND(AVG(pr.rating), 2) >= ${AVG_RATING} ORDER BY ROUND(AVG(pr.rating), 2)`;
+
     findProductsQuery += q + ` DESC LIMIT ${limit} OFFSET ${offset};`;
     numberOfProductsQuery = 'SELECT COUNT(p.id) as number_of_products ' + q + `;`;
+
     return { findProductsQuery, numberOfProductsQuery };
   }
 
@@ -59,6 +61,7 @@ function filterProducts({
 
   if (type === 'newArrivals') {
     let q = 'p."auctionStart" > :ago AND p."auctionStart" <= :maxDay AND p."auctionEnd" > NOW() ';
+
     findProductsQuery += q + 'ORDER BY p."auctionStart" ASC ';
     numberOfProductsQuery += q + ';';
     replacements = { ago: daysAgo, maxDay: startsMaxDays };
@@ -66,6 +69,7 @@ function filterProducts({
 
   if (type === 'lastChance') {
     let q = 'p."auctionEnd" > NOW() AND p."auctionEnd" <= :endsMaxDays ';
+
     findProductsQuery += q + 'ORDER BY p."auctionEnd" ASC ';
     numberOfProductsQuery += q + ';';
     replacements = { endsMaxDays };
@@ -129,6 +133,7 @@ exports.getFilteredProducts = async obj => {
     : [{ number_of_products: 10 }];
   const priceRange =
     priceRangeQuery && (await db.query(priceRangeQuery, { type: db.QueryTypes.SELECT }));
+
   return {
     products,
     numberOfProducts: numberOfProducts[0].number_of_products,
@@ -161,6 +166,7 @@ exports.getSimilarProducts = async (subcategoryId, productId) => {
     subcategoryId,
     productId
   });
+
   return await db.query(findProductsQuery, { type: db.QueryTypes.SELECT });
 };
 
@@ -177,11 +183,13 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
   const Limit = parseInt(limit) ? parseInt(limit) : limit;
   const Offset = offset != null ? (parseInt(offset) ? parseInt(offset) : offset) : null;
   const eq = isNaN(Limit + Offset) ? Limit : Limit + Offset;
+
   return length === 0 || length < Limit || length <= eq ? true : false;
 };
 
 exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
   const auctionEnd = active ? { [Op.gt]: new Date() } : { [Op.lt]: new Date() };
+  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] }
   const products = await Product.findAll({
     subQuery: false,
     where: { userId, auctionEnd },
@@ -203,7 +211,7 @@ exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, of
       model: Bid,
       attributes: []
     },
-    order: [['auctionStart', 'DESC']],
+    ...order,
     limit,
     offset,
     group: ['Product.id']
@@ -212,14 +220,17 @@ exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, of
     where: { userId, auctionEnd }
   });
   const noMore = this.noMoreProducts({ limit, offset, productsLength });
+
   return { products, noMore };
 };
 
 function buildPriceRangeQuery() {
   let query = 'SELECT CASE';
+
   for (let i = 0; i < 900; i += 50) {
     query += ` when p.price>=${i} and p.price < ${i + 50} then '${i}-${i + 50}'`;
   }
+
   return (
     query + ` else '900+' end as price_range, count(1) as count FROM public."Products" p WHERE `
   );
@@ -229,5 +240,6 @@ exports.hasActiveProduct = async userId => {
   const findProduct = await Product.findOne({
     where: { userId, auctionEnd: { [Op.gt]: new Date() } }
   });
+  
   return findProduct ? true : false;
 };

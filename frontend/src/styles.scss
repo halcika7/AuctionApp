@@ -594,6 +594,12 @@ app-footer {
   text-transform: uppercase;
 }
 
+button.wishlisted {
+  fa-icon {
+    color: getColor(purple);
+  }
+}
+
 @media (max-width: 1199px) {
   .feature-products .collections {
     @include grid($templateCols: 33.3333% 33.3333% 33.3333%);

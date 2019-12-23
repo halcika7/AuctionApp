@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
 import { setErrors } from '@app/shared/validators';
+import { UserWishlistIdsStart } from '@app/wishlist/store/wishlist.actions';
 
 export class Auth {
   private _message: string;
@@ -32,6 +33,7 @@ export class Auth {
             localStorage.getItem("accessToken") ||
             sessionStorage.getItem("accessToken")
           ) {
+            this.authStore.dispatch(new UserWishlistIdsStart());
             this.subscription.unsubscribe();
             setTimeout(() => this.Router.navigate(["/"]), 1200);
           }

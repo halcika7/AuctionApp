@@ -16,6 +16,10 @@ class OptionalInfoService extends BaseService {
   async create() {
     return await OptionalInfo.create({});
   }
+
+  async getOptionalInfo(userId) {
+    return await OptionalInfo.findOne({ where: { id: userId } });
+  }
 }
 
 const OptionalInfoServiceInstance = new OptionalInfoService();

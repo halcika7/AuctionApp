@@ -3,7 +3,10 @@ const User = require('../models/User');
 const CardInfoService = require('../services/CardInfoService');
 const OptionalInfoService = require('../services/OptionalInfoService');
 const CloudinaryService = require('../services/CloudinaryService');
-const { removeNullFromUserInfo } = require('../helpers/removeNullProperty');
+const {
+  removeNullFromUserInfo,
+  removeNullFromOptionalUserInfo
+} = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const {
   getUserInfo,
@@ -21,6 +24,7 @@ class ProfileService extends BaseService {
   async fetchUserInfo(id) {
     try {
       const userInfo = await getUserInfo(id);
+
       return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnGenericFailed();
@@ -30,6 +34,7 @@ class ProfileService extends BaseService {
   async deactivateUserAccount(id) {
     try {
       await User.update({ deactivated: true }, { where: { id } });
+
       return super.returnResponse(200, {});
     } catch (error) {
       return super.returnGenericFailed();
@@ -40,7 +45,7 @@ class ProfileService extends BaseService {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
-    
+
     try {
       //userId, optionalInfoId and cardInfoId are same
       const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
@@ -60,16 +65,20 @@ class ProfileService extends BaseService {
         file && file.path && unlinkFiles([file]);
         return super.returnResponse(403, errors);
       }
+
       if (file && file.path) {
         const { secure_url } = await CloudinaryService.uploadProfilePhoto(file.path, userId);
 
         userInfo.photo = secure_url;
-        
+
         unlinkFiles([file]);
       } else {
         userInfo.photo = currentUser.photo;
       }
+
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
+      const currentOptionalInfo = await OptionalInfoService.getOptionalInfo(userId);
+      optionalInfo = removeNullFromOptionalUserInfo(optionalInfo, currentOptionalInfo);
 
       const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, userId);
       const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, userId);
@@ -95,6 +104,7 @@ class ProfileService extends BaseService {
   async userOptionalInfoWithCard(id) {
     try {
       const userInfo = await getOptionalInfoCard(id);
+
       return super.returnResponse(200, { userInfo });
     } catch (error) {
       return super.returnGenericFailed();

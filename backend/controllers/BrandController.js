@@ -14,16 +14,16 @@ class BrandController extends BaseController {
       subcategoryId,
       name
     });
+
     return super.sendResponseWithMessage(res, status, { Brands }, failedMessage);
   }
 
   async getAddProductBrands(req, res) {
     const { status, Brands, failedMessage } = await BrandServiceInstance.getSubcategoryBrands(
-      {
-        subcategoryId: req.params.id
-      },
+      { subcategoryId: req.params.id },
       false
     );
+
     return super.sendResponseWithMessage(res, status, { Brands }, failedMessage);
   }
 }

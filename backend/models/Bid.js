@@ -40,6 +40,7 @@ const Bid = db.define(
   {
     sequelize: Sequelize,
     modelName: 'Bids',
+    timestamps: true,
     indexes: [
       {
         unique: false,

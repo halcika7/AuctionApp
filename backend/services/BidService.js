@@ -26,31 +26,37 @@ class BidService extends BaseService {
         attributes: ['price', 'userId'],
         order: [['price', 'DESC']]
       });
+
       if (!auctionEnd) {
         return super.returnResponse(403, {
           message: 'Auction ended.Your bid was unsuccessfull!!'
         });
       }
+
       if (highestBid && highestBid.userId === userID) {
         return super.returnResponse(403, {
           message: 'You are already highest bidder'
         });
       }
+
       if (userID === userId) {
         return super.returnResponse(403, {
           message: 'You are not allowed to place bid on your own product'
         });
       }
+
       if (bid > MAX_BID) {
         return super.returnResponse(403, {
           message: `Maximum bid allowed is $${MAX_BID}!`
         });
       }
+
       if (!highestBid && price > bid) {
         return super.returnResponse(403, {
           message: 'Please bid higher or equal to product price!'
         });
       }
+
       if (highestBid && highestBid.price >= bid) {
         return super.returnResponse(403, {
           message: 'There are higher bids!'
@@ -58,8 +64,9 @@ class BidService extends BaseService {
       }
 
       await Bid.create({ price: bid, userId: userID, productId });
+
       return super.returnResponse(200, {
-        message: 'Congrats! You are the highest bider',
+        message: 'Congrats! You are the highest bidder',
         highest_bid: bid
       });
     } catch (error) {
@@ -123,15 +130,14 @@ class BidService extends BaseService {
         group: ['Bid.id', 'Product.id']
       });
       const length = await Bid.count({
-        where: {
-          userId
-        }
+        where: { userId }
       });
       const noMore = noMoreProducts({
         limit,
         offset,
         productsLength: length
       });
+
       return super.returnResponse(200, { bids, noMore });
     } catch (error) {
       return super.returnGenericFailed();

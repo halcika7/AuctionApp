@@ -1,9 +1,12 @@
 class BaseController {
   constructor(ChildClass) {
+
     if (!!ChildClass.instance) {
       return ChildClass.instance;
     }
+
     ChildClass.instance = this;
+
     return this;
   }
 
@@ -15,6 +18,7 @@ class BaseController {
     if (failedMessage) {
       return res.status(status).json({ failedMessage });
     }
+    
     return res.status(status).json(resObj);
   }
 

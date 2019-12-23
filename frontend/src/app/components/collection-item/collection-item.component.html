@@ -2,11 +2,23 @@
   <div class="img">
     <img [src]="item.picture" [alt]="item.name" />
     <div class="buttons">
-      <!-- <button type="button">
-        Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
-      </button> -->
-      <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+      <button
+        type="button"
+        [ngClass]="{ wishlisted: wishlisted }"
+        *ngIf="userId !== item.userId && userId"
+        (click)="addRemoveFromWishlist($event)"
+      >
+        Wishlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
+      </button>
+      <a
+        [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+        *ngIf="userId !== item.userId"
         >Bid <fa-icon [icon]="['fas', 'gavel']"></fa-icon
+      ></a>
+      <a
+        [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+        *ngIf="userId === item.userId"
+        >View <fa-icon [icon]="['fas', 'eye']"></fa-icon
       ></a>
     </div>
   </div>

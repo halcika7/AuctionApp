@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { Subscription } from "rxjs";
 import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
@@ -16,6 +16,7 @@ export class RequiredInfoComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
   @Input() gender: string;
   @Input() date: { day: number; year: number; month: string };
+  @Output() changeGender = new EventEmitter<any>();
   private _photo: string;
   private _genderError: string;
   private _dateError: string;
@@ -75,7 +76,7 @@ export class RequiredInfoComponent implements OnInit, OnDestroy {
   }
 
   genderChange(value: string) {
-    this.gender = value;
+    this.changeGender.emit(value);
   }
 
   get photo(): string {

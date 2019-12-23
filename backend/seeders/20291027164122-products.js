@@ -127,7 +127,9 @@ module.exports = {
           auctionEnd: newDate,
           userId: 1,
           subcategoryId,
-          brandId
+          brandId,
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
       }
     };

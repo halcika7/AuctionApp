@@ -27,7 +27,9 @@ class AuthService extends BaseService {
   async register(data) {
     try {
       const { errors, isValid } = await registerValidation(data);
+
       if (!isValid) return { status: 403, response: { ...errors } };
+
       const { id } = await OptionalInfoService.create();
       const { id: customerId } = await StripeService.createCustomer(
         'Customer for atlant auction app',
@@ -35,6 +37,7 @@ class AuthService extends BaseService {
       );
       const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId);
       await createUser(data, id, cardInfoId);
+
       return super.returnResponse(200, {
         response: { message: 'Account successfully created !' }
       });
@@ -48,10 +51,14 @@ class AuthService extends BaseService {
   async login(data) {
     try {
       const { errors, message, isValid, user } = await loginValidation(data);
+
       if (!isValid && errors) return super.returnResponse(403, { response: { ...errors } });
+
       if (!isValid && message) return super.returnResponse(403, { response: { message } });
+
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
+
       return {
         status: 200,
         response: {
@@ -72,9 +79,11 @@ class AuthService extends BaseService {
     try {
       const payload = verifyRefreshToken(token),
         user = await findUserByEmail(payload.email, false);
+
       if (!user) {
         return super.returnResponse(400, { response: { accessToken: '' } });
       }
+
       return {
         status: 200,
         response: { accessToken: createAccessToken(user) },
@@ -90,16 +99,20 @@ class AuthService extends BaseService {
   async forgotPassword(email) {
     try {
       const { errors, isValid, user } = await forgotPasswordValidation(email);
+
       if (!isValid && errors) return { status: 403, response: { ...errors } };
+
       const resetPasswordToken = createAccessToken(user, '1d');
       const { err } = await sendEmail(
         email,
         resetPasswordToken,
         "Need to reset your password? Just click the link below and you'll be on your way. If you did not make this request, please ignore this email."
       );
+
       if (err) {
         return { status: 403, response: { message: err } };
       }
+
       await User.update({ resetPasswordToken }, { where: { email } });
 
       return {
@@ -120,13 +133,17 @@ class AuthService extends BaseService {
         resetPasswordToken,
         password
       );
+
       if (!isValid && errors) return { status: 403, response: { ...errors } };
+
       if (!isValid && message) return { status: 403, response: { message } };
+
       const hashedPassword = await hashPassword(password);
       await User.update(
         { resetPasswordToken: null, password: hashedPassword },
         { where: { email } }
       );
+      
       return {
         status: 200,
         response: {

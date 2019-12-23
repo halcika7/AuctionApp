@@ -1,8 +1,6 @@
 exports.removeNullProperty = ({ ...object }) => {
   for (let property of Object.keys(object)) {
-    if (object[property] == null) {
-      delete object[property];
-    }
+    if (object[property] == null) delete object[property];
   }
   return object;
 };
@@ -26,3 +24,14 @@ exports.removeNullFromUserInfo = (userInfo, currentUser) => {
   return userInfo;
 };
 
+exports.removeNullFromOptionalUserInfo = (optionalInfo, currentOptionalInfo) => {
+  optionalInfo = this.removeNullProperty({
+    street: optionalInfo.street != currentOptionalInfo.street ? optionalInfo.street : null,
+    city: optionalInfo.city != currentOptionalInfo.city ? optionalInfo.city : null,
+    country: optionalInfo.country != currentOptionalInfo.country ? optionalInfo.country : null,
+    state: optionalInfo.state != currentOptionalInfo.state ? optionalInfo.state : null,
+    zip: optionalInfo.zip != currentOptionalInfo.zip ? optionalInfo.zip : null
+  });
+
+  return optionalInfo;
+};

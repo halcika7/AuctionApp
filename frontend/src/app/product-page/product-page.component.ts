@@ -6,13 +6,14 @@ import * as fromApp from "@app/store/app.reducer";
 import * as ProductPageActions from "./store/product-page.actions";
 import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
+import { Wishlist } from '@app/wishlist/wishlist';
 
 @Component({
   selector: "app-product-page",
   templateUrl: "./product-page.component.html",
   styleUrls: ["./product-page.component.scss"]
 })
-export class ProductPageComponent implements OnInit, OnDestroy {
+export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy {
   private _product: FullProduct;
   private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
@@ -30,7 +31,9 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super(store);
+  }
 
   ngOnInit() {
     this.subscription.add(
@@ -39,33 +42,48 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         if (!id || !subcategoryId) {
           this.router.navigate(["/404"]);
         }
-        this.store.dispatch(new ProductPageActions.ProductStart(id, subcategoryId));
-        this.store.dispatch(new ProductPageActions.SimilarProductStart(id, subcategoryId));
+        this.store.dispatch(
+          new ProductPageActions.ProductStart(id, subcategoryId)
+        );
+        this.store.dispatch(
+          new ProductPageActions.SimilarProductStart(id, subcategoryId)
+        );
       })
     );
 
     this.subscription.add(
       this.store
         .select("productPage")
-        .subscribe(({ product, similarProducts, bids, error, message, success }) => {
-          if (error) {
-            this.router.navigate(["/404"]);
+        .subscribe(
+          ({ product, similarProducts, bids, error, message, success }) => {
+            if(product.id) {
+              super.onInitWishlist(product.id, true);
+            }
+
+            if (error) {
+              this.router.navigate(["/404"]);
+            }
+
+            if (success) {
+              this._enteredPrice = null;
+            }
+
+            this._product = product;
+            this._bids = bids;
+            this._similarProducts = similarProducts;
+            this._minPrice =
+              product.highest_bid >= product.price
+                ? product.highest_bid
+                : product.price;
+            this._hide =
+              new Date(product.auctionStart) > new Date() ? true : false;
+            this._noBids = product.highest_bid === 0 ? true : false;
+            this._message = message;
+            this._success = success;
+            this._disabled = !this._success;
+            this.setMessageDisabled();
           }
-          if (success) {
-            this._enteredPrice = null;
-          }
-          this._product = product;
-          this._bids = bids;
-          this._similarProducts = similarProducts;
-          this._minPrice =
-            product.highest_bid >= product.price ? product.highest_bid : product.price;
-          this._hide = new Date(product.auctionStart) > new Date() ? true : false;
-          this._noBids = product.highest_bid === 0 ? true : false;
-          this._message = message;
-          this._success = success;
-          this._disabled = !this._success;
-          this.setMessageDisabled();
-        })
+        )
     );
 
     this.subscription.add(
@@ -77,6 +95,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
   }
@@ -102,7 +121,10 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   onSubmit(input: HTMLInputElement) {
     this.store.dispatch(
-      new ProductPageActions.ProductBidStart(this.product.id, parseFloat(input.value))
+      new ProductPageActions.ProductBidStart(
+        this.product.id,
+        parseFloat(input.value)
+      )
     );
   }
 
@@ -153,4 +175,5 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   get disabled(): boolean {
     return this._disabled;
   }
+
 }

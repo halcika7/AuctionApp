@@ -9,7 +9,10 @@ const ProductImage = require('./ProductImage');
 const ProductReview = require('./ProductReview');
 const Bid = require('./Bid');
 const Category = require('./Category');
-const Product = require('./Product');
+const Product = require('./Product');const Wishlist = require('./Wishlist');
+
+Wishlist.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+Wishlist.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
 
 User.belongsTo(OptionalInfo, { foreignKey: 'optionalInfoId', sourceKey: 'id' });
 User.belongsTo(CardInfo, { foreignKey: 'cardInfoId', sourceKey: 'id' });

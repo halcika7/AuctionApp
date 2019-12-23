@@ -86,6 +86,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ProfileActions.ClearProfileMessages());
   }
 
+  changeGender(value: string) {
+    this._gender = value;
+  }
+
   get form(): FormGroup {
     return this._form;
   }
@@ -142,5 +146,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     formData.append("image", this.form.value.image);
     this._clicked = true;
     this.store.dispatch(new ProfileActions.UpdateProfileStart(formData));
+    window.scrollTo(0, 0);
   }
 }

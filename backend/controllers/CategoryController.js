@@ -10,11 +10,13 @@ class CategoryController extends BaseController {
     const { categories, failedMessage, status } = !req.params.shop
       ? await CategoryServiceInstance.getCategoriesWithSubcategories()
       : await CategoryServiceInstance.getShopCategories();
+
     return super.sendResponseWithMessage(res, status, { categories }, failedMessage);
   }
 
   async getOnlyCategories(req, res) {
     const { status, categories, message } = await CategoryServiceInstance.getCategories();
+
     return super.sendResponseWithMessage(res, status, { categories }, message);
   }
 
@@ -24,6 +26,7 @@ class CategoryController extends BaseController {
       subcategories,
       message
     } = await CategoryServiceInstance.getCategorySubcategories(req.params.id);
+    
     return super.sendResponseWithMessage(res, status, { subcategories }, message);
   }
 }

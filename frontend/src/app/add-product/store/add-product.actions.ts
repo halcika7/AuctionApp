@@ -18,10 +18,12 @@ export class AddProductStart implements Action {
   readonly type = ADD_PRODUCT_START;
   constructor(public url: string) {}
 }
+
 export class AddUserProductStart implements Action {
   readonly type = ADD_USER_PRODUCT_START;
   constructor(public formData: FormData) {}
 }
+
 export class AddProductSuccess implements Action {
   readonly type = ADD_PRODUCT_SUCCESS;
   constructor(
@@ -33,9 +35,11 @@ export class AddProductSuccess implements Action {
       hasActiveProduct?: boolean;
       userInfo?: AddProductUserInfo;
       message?: string;
+      accessToken?: string;
     }
   ) {}
 }
+
 export class AddProductFailed implements Action {
   readonly type = ADD_PRODUCT_FAILED;
   constructor(

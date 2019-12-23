@@ -15,6 +15,7 @@ class FilterController extends BaseController {
       brandId,
       name
     });
+
     return super.sendResponseWithMessage(res, status, { Filters }, failedMessage);
   }
 
@@ -22,6 +23,7 @@ class FilterController extends BaseController {
     const { status, Filters, failedMessage } = await FilterServiceInstance.getFilters({
       subcategoryId: req.params.id
     }, false);
+    
     return super.sendResponseWithMessage(res, status, { Filters }, failedMessage);
   }
 }

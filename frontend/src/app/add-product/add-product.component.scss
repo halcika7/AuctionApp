@@ -114,7 +114,7 @@
 }
 
 ::ng-deep {
-  .buttons {
+  .add-product-buttons {
     @include flex($justify: space-between);
     margin-top: 40px;
 

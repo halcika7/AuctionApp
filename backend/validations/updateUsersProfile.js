@@ -53,7 +53,7 @@ exports.userInfoValidation = async (userInfo, email) => {
 };
 
 exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
-  if (!isValidUserInfo) return { isValid: true };
+  if (!isValidUserInfo) return { isValid: true, errors };
 
   if (
     Object.keys(removeNullProperty(cardInfo)).length == 0 ||
@@ -61,6 +61,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
   ) {
     return { isValid: true, errors, cardInfoData: {} };
   }
+  
   let { customerId, cardId } = await CardInfoService.findUserCardInfo(userCardInfoId);
 
   try {

@@ -7,6 +7,7 @@ export interface Product {
   picture?: string;
   subcategoryId?: string;
   details?: string;
+  userId?: string;
 }
 
 export interface State {

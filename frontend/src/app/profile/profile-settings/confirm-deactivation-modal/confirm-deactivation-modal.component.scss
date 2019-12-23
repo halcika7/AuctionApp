@@ -32,7 +32,7 @@
       @include fontMixin(18px, regular, 0.63px, light_black);
     }
 
-    .buttons {
+    .cd-buttons {
       @include flex(center, space-between);
       width: 100%;
 

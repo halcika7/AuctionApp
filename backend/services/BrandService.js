@@ -14,6 +14,7 @@ class BrandService extends BaseService {
   async getSubcategoryBrands(reqQueryData) {
     try {
       const where = returnWhereObject(reqQueryData, true);
+
       if (reqQueryData.name) {
         where[Op.and] = db.where(db.fn('lower', db.col('Products.name')), {
           [Op.like]: `%${reqQueryData.name}%`
@@ -30,6 +31,7 @@ class BrandService extends BaseService {
         group: ['Brand.id', 'Subcategories->BrandSubcategories.id'],
         order: [['name', 'ASC']]
       });
+      
       return super.returnResponse(200, { Brands });
     } catch (error) {
       return super.returnGenericFailed();

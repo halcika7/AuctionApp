@@ -4,7 +4,6 @@ import { Product } from "@app/landing-page/store/landing-page.reducers";
 export interface FullProduct extends Product {
   auctionStart: Date;
   auctionEnd: Date;
-  userId: string;
   highest_bid: string | number;
   number_of_bids: string | number;
   ProductImages: { image: string }[] | [];

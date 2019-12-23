@@ -5,6 +5,7 @@ module.exports.returnWhereObject = ({ min, max, subcategoryId, brandId }, auctio
   const obj = {
     ...removeNullProperty({ subcategoryId, brandId })
   };
+
   if (min && max) {
     obj['price'] = {
       [Op.and]: {
@@ -13,10 +14,12 @@ module.exports.returnWhereObject = ({ min, max, subcategoryId, brandId }, auctio
       }
     };
   }
+
   if (auctionEnd) {
     obj['auctionEnd'] = {
       [Op.gt]: new Date()
     };
   }
+  
   return obj;
 };
