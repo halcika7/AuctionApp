@@ -101,6 +101,11 @@
     }
 
     &.wishlisted {
+      @include boxShadowBackground(
+        false,
+        white,
+        3px solid getColor(purple)
+      );
       fa-icon {
         color: getColor(purple);
       }
