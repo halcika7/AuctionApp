@@ -6,14 +6,14 @@ import * as fromApp from "@app/store/app.reducer";
 import * as ProductPageActions from "./store/product-page.actions";
 import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
-import * as WishlistActions from "@app/wishlist/store/wishlist.actions";
+import { Wishlist } from '@app/wishlist/wishlist';
 
 @Component({
   selector: "app-product-page",
   templateUrl: "./product-page.component.html",
   styleUrls: ["./product-page.component.scss"]
 })
-export class ProductPageComponent implements OnInit, OnDestroy {
+export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy {
   private _product: FullProduct;
   private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
@@ -25,24 +25,17 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   private _noBids = true;
   private _enteredPrice = null;
   private _disabled = false;
-  private _wishlisted: boolean = false;
-  private _wishlistedIds: string[];
   private subscription = new Subscription();
 
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    super(store);
+  }
 
   ngOnInit() {
-    this.subscription.add(
-      this.store.select("wishlist").subscribe(({ wishlistIds }) => {
-        this._wishlistedIds = wishlistIds;
-        this.setWishlisted();
-      })
-    );
-
     this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
         this._enteredPrice = null;
@@ -63,6 +56,10 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         .select("productPage")
         .subscribe(
           ({ product, similarProducts, bids, error, message, success }) => {
+            if(product.id) {
+              super.onInitWishlist(product.id, true);
+            }
+
             if (error) {
               this.router.navigate(["/404"]);
             }
@@ -84,7 +81,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
             this._message = message;
             this._success = success;
             this._disabled = !this._success;
-            this.setWishlisted();
             this.setMessageDisabled();
           }
         )
@@ -99,6 +95,7 @@ export class ProductPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
   }
@@ -133,29 +130,6 @@ export class ProductPageComponent implements OnInit, OnDestroy {
 
   clearMessages() {
     this.store.dispatch(new ProductPageActions.ClearProductMessages());
-  }
-
-  addRemoveFromWishlist(e: any) {
-    if (this._wishlisted) {
-      this.store.dispatch(
-        new WishlistActions.DeleteFromWishlistStart(this._product.id)
-      );
-    } else {
-      this.store.dispatch(
-        new WishlistActions.AddToWishlistStart(this._product.id)
-      );
-    }
-    e.target.blur();
-  }
-
-  private setWishlisted() {
-    if (this._product && this._product.id) {
-      this._wishlisted = this._wishlistedIds.filter(
-        value => value === this._product.id
-      )[0]
-        ? true
-        : false;
-    }
   }
 
   get product(): FullProduct {
@@ -202,7 +176,4 @@ export class ProductPageComponent implements OnInit, OnDestroy {
     return this._disabled;
   }
 
-  get wishlisted(): boolean {
-    return this._wishlisted;
-  }
 }

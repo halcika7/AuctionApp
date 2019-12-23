@@ -15,7 +15,7 @@
         *ngIf="userId !== item.userId && userId"
         (click)="addRemoveFromWishlist($event)"
       >
-        Watchlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
+        Wishlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
       </button>
       <a
         [routerLink]="['/shop/products', item.subcategoryId, item.id]"
