@@ -15,7 +15,7 @@ class BidController extends BaseController {
       return super.sendResponse(res, status, { message, accessToken });
     }
 
-    socket.broadcast.emit('bid-added', { productId, highest_bid });
+    socket.broadcast.emit('bid-added', { productId, highest_bid, userId });
 
     return super.sendResponse(res, status, { message, accessToken });
   }

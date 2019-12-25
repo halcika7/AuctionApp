@@ -124,7 +124,7 @@ export class ProductPageComponent extends Wishlist
 
     this.socketService
       .listen("bid-added")
-      .subscribe(({ productId, highest_bid }) => {
+      .subscribe(({ productId, highest_bid, userId }) => {
         if (this._product.id === productId) {
           this.clearMessages();
           this._product.highest_bid = highest_bid;
@@ -133,11 +133,12 @@ export class ProductPageComponent extends Wishlist
             typeof this._product.number_of_bids === "string"
               ? parseInt(this._product.number_of_bids) + 1
               : this._product.number_of_bids + 1;
-          this.store.dispatch(
-            new ProductPageActions.SetMessage(
-              `Someone added new bid ($${highest_bid})`
-            )
-          );
+          this._userId !== userId &&
+            this.store.dispatch(
+              new ProductPageActions.SetMessage(
+                `Someone added new bid ($${highest_bid})`
+              )
+            );
         }
       });
 
