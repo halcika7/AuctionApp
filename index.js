@@ -29,7 +29,7 @@ app.use('/api/auth', require('./backend/routes/authentication/authRoutes'));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
 app.use('/api/categories', require('./backend/routes/categories/categories'));
 app.use('/api/products', require('./backend/routes/product/product'));
-app.use('/api/bids', require('./backend/routes/bid/bid'));
+app.use('/api/bids', require('./backend/routes/bid/bid')(io));
 app.use('/api/shop', require('./backend/routes/shop/shop'));
 app.use('/api/profile', require('./backend/routes/profile/profile'));
 app.use('/api/add-product', require('./backend/routes/product/add-product'));

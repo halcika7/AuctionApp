@@ -123,6 +123,21 @@ export class ProductPageComponent extends Wishlist
         this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
       });
 
+    this.socketService
+      .listen("bid-added")
+      .subscribe(({ productId, highest_bid }) => {
+        if (this._product.id === productId) {
+          this._product.highest_bid = highest_bid;
+          this._minPrice = highest_bid;
+          this._product.number_of_bids =
+            typeof this._product.number_of_bids === "string"
+              ? parseInt(this._product.number_of_bids) + 1
+              : this._product.number_of_bids + 1;
+          this._message = `Someone added new bid ($${highest_bid})`;
+          this._success = false;
+        }
+      });
+
     window.onbeforeunload = () => this.ngOnDestroy();
   }
 

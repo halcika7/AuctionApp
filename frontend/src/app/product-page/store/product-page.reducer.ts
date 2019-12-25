@@ -85,18 +85,9 @@ export function productPageReducer(
       };
     case ProductPageActions.PRODUCT_BID_SUCCESS:
       return {
-        ...initialState,
+        ...state,
         message: action.payload.message,
-        success: true,
-        product: {
-          ...state.product,
-          highest_bid: action.payload.highest_bid,
-          number_of_bids:
-            typeof state.product.number_of_bids === "string"
-              ? parseInt(state.product.number_of_bids) + 1
-              : state.product.number_of_bids + 1
-        },
-        similarProducts: state.similarProducts
+        success: true
       };
     case ProductPageActions.PRODUCT_BID_FAILED:
       return {
