@@ -7,8 +7,8 @@ class NotificationService extends BaseService {
   }
 
   addWatcherToProduct(data) {
-    const numberOfViewers = [...this.numberOfViewers];
-    const findIndex = numberOfViewers.findIndex(d => d.productId === data.productId);
+    const { numberOfViewers, findIndex } = this.getIndex(data.productId);
+
     if (findIndex === -1) {
       numberOfViewers.push({ views: data.views + 1, productId: data.productId });
     } else {
@@ -17,15 +17,14 @@ class NotificationService extends BaseService {
         productId: data.productId
       };
     }
-    this.numberOfViewers = [...numberOfViewers];
-    return findIndex !== -1
-      ? this.numberOfViewers[findIndex]
-      : this.numberOfViewers[this.numberOfViewers.length - 1];
+
+    this.setNumberOfViewers(numberOfViewers);
+    return this.returnViewers(findIndex);
   }
 
   removeWatcherFromProduct(productId) {
-    const numberOfViewers = [...this.numberOfViewers];
-    const findIndex = numberOfViewers.findIndex(d => d.productId === productId);
+    const { numberOfViewers, findIndex } = this.getIndex(productId);
+    
     if (!productId || findIndex === -1) return this.numberOfViewers;
 
     numberOfViewers[findIndex] = {
@@ -33,10 +32,24 @@ class NotificationService extends BaseService {
       productId
     };
 
-    this.numberOfViewers = [...numberOfViewers];
+    this.setNumberOfViewers(numberOfViewers);
+    return this.returnViewers(findIndex);
+  }
+
+  getIndex(productId) {
+    const numberOfViewers = [...this.numberOfViewers];
+    const findIndex = numberOfViewers.findIndex(d => d.productId === productId);
+    return { numberOfViewers, findIndex };
+  }
+
+  setNumberOfViewers(newNumberOfViewers) {
+    this.numberOfViewers = [...newNumberOfViewers];
+  }
+
+  returnViewers(findIndex) {
     return findIndex !== -1
-      ? this.numberOfViewers[findIndex]
-      : this.numberOfViewers[this.numberOfViewers.length - 1];
+    ? this.numberOfViewers[findIndex]
+    : this.numberOfViewers[this.numberOfViewers.length - 1];
   }
 }
 

@@ -1,6 +1,5 @@
 class BaseController {
   constructor(ChildClass) {
-
     if (!!ChildClass.instance) {
       return ChildClass.instance;
     }
@@ -18,12 +17,16 @@ class BaseController {
     if (failedMessage) {
       return res.status(status).json({ failedMessage });
     }
-    
+
     return res.status(status).json(resObj);
   }
 
   sendResponse(res, status, resObj) {
     return res.status(status).json(resObj);
+  }
+
+  getAuthorizationHeader(req) {
+    return req.headers.authorization.split(' ')[1] || null;
   }
 }
 

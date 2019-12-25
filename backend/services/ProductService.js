@@ -13,7 +13,6 @@ const {
   noMoreProducts,
   hasActiveProduct
 } = require('../helpers/productFilter');
-const { decodeToken } = require('../helpers/authHelper');
 const { LIMIT_SHOP_PRODUCTS, FEATURING_PRODUCT_COST } = require('../config/configs');
 const { addProductValidation } = require('../validations/addProductValidation');
 const { transformProductData } = require('../helpers/transformProductData');
@@ -42,7 +41,7 @@ class ProductService extends BaseService {
   async findProductById(productId, subcategoryId, token) {
     try {
       const product = await getProductById(productId, subcategoryId);
-      const { id } = decodeToken(token) || { id: undefined };
+      const { id } = super.decodeAuthorizationToken(token);
       const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
       const highestBid = await BidService.getHighestBid(productId);
       const message =

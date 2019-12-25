@@ -27,7 +27,7 @@ class ProductController extends BaseController {
   }
 
   async getProduct(req, res) {
-    const token = req.headers.authorization.split(' ')[1] || null;
+    const token = super.getAuthorizationHeader(req);
     const { product, bids, status, message } = await ProductServiceInstance.findProductById(
       req.params.id,
       req.params.subcategoryId,
