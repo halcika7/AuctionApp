@@ -24,7 +24,7 @@ module.exports = class BaseService {
     };
   }
 
-  decodeAuthorizationToken() {
+  decodeAuthorizationToken(token) {
     return decodeToken(token) || { id: undefined };
   }
 };
