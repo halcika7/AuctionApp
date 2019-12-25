@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "https://auction-webapp.herokuapp.com/api"
+  apiUrl: "https://polar-lake-39918.herokuapp.com/api",
+  socketUrl: "https://polar-lake-39918.herokuapp.com",
 };

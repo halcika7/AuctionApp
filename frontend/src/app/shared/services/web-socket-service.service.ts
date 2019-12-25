@@ -9,10 +9,10 @@ import { environment as prod } from "@env/environment.prod";
 })
 export class WebSocketServiceService {
   private _socket;
-  private uri: string = dev.production === false ? dev.apiUrl : prod.apiUrl;
+  private uri: string = dev.production === false ? dev.socketUrl : prod.socketUrl;
 
   constructor() {
-    this._socket = io("http://localhost:5000");
+    this._socket = io(this.uri);
   }
 
   listen(eventName: string) {
