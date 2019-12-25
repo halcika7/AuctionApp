@@ -42,7 +42,7 @@ class WishlistController extends BaseController {
       productId
     );
 
-    return super.sendResponse(res, status, { accessToken, ids });
+    return super.sendResponse(res, status, { accessToken, ids: ids ? ids : [] });
   }
 }
 

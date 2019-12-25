@@ -101,7 +101,6 @@ class ProductService extends BaseService {
 
       return super.returnResponse(200, { hasActiveProduct: active });
     } catch (error) {
-      console.log('TCL: getActiveUserProductsCount -> error', error)
       return super.returnGenericFailed();
     }
   }

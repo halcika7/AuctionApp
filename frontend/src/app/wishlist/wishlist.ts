@@ -18,12 +18,11 @@ export class Wishlist {
       this._store
         .select("wishlist")
         .pipe(
-          map(({ wishlistIds }) => {
-            this._wishlistedIds = wishlistIds;
-            return productPage
+          map(({ wishlistIds }) =>
+            productPage
               ? wishlistIds
-              : wishlistIds.filter(value => value === productId);
-          })
+              : wishlistIds.filter(value => value === productId)
+          )
         )
         .subscribe(data => {
           if (productPage) {
