@@ -90,6 +90,7 @@ export class WishlistEffects {
         )
         .pipe(
           map(data => {
+            console.log("TCL: data", data);
             if (data.accessToken) {
               this.store.dispatch(
                 new RefreshToken({ accessToken: data.accessToken })
