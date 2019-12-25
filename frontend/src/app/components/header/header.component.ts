@@ -58,8 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
     this.store.dispatch(new AuthActions.LogoutStart());
   }
 

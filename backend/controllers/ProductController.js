@@ -91,13 +91,8 @@ class ProductController extends BaseController {
       status,
       message
     } = await ProductServiceInstance.getActiveUserProductsCount(userId);
-    
-    return super.sendResponseWithMessage(
-      res,
-      status,
-      { hasActiveProduct, accessToken },
-      message
-    );
+
+    return super.sendResponseWithMessage(res, status, { hasActiveProduct, accessToken }, message);
   }
 
   async addProduct(req, res) {

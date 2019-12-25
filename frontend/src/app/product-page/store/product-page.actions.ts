@@ -16,6 +16,8 @@ export const PRODUCT_BID_FAILED = "PRODUCT_BID_FAILED";
 
 export const CLEAR_PRODUCT_MESSAGES = "CLEAR_PRODUCT_MESSAGES";
 
+export const SET_NUMBER_OF_VIEWERS = "SET_NUMBER_OF_VIEWERS";
+
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
   constructor() {}
@@ -75,6 +77,12 @@ export class ProductBidFailed implements Action {
   ) {}
 }
 
+export class SetNumberOfViewers implements Action {
+  readonly type = SET_NUMBER_OF_VIEWERS;
+
+  constructor(public payload: { views: number; productId: string }) {}
+}
+
 export type ProductPageActions =
   | ProductStart
   | ProductSuccess
@@ -84,4 +92,5 @@ export type ProductPageActions =
   | ProductBidFailed
   | SimilarProductStart
   | SimilarProductSuccess
+  | SetNumberOfViewers
   | ClearProductMessages;

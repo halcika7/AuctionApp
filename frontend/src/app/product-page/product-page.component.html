@@ -19,7 +19,10 @@
   <app-product-images></app-product-images>
   <div class="details">
     <h2>{{ product.name }}</h2>
-    <h4>Start from - {{ product.price | currency }}</h4>
+    <h4>
+      Start from -
+      <span class="productPrice">{{ product.price | currency }}</span>
+    </h4>
     <form class="bid" *ngIf="!hide" #form (submit)="onSubmit(form.price)">
       <div class="wrap">
         <div class="input">
@@ -42,9 +45,14 @@
       </div>
     </form>
     <div class="current-bid">
+      <p *ngIf="numberOfViewers > 1">
+        Currently watching You and {{ numberOfViewers - 1 }} more
+        {{ numberOfViewers - 1 == 1 ? "user" : "users" }}
+      </p>
       <ng-template [ngIf]="!hide">
         <p>
-          Highest bid: <span>{{ product.highest_bid | currency }}</span>
+          Highest bid:
+          <span class="highestPrice">{{ product.highest_bid | currency }}</span>
         </p>
         <p>Number of bids: {{ product.number_of_bids }}</p>
         <p>Time: {{ product.auctionEnd | dateAgo: [{ agoOrLeft: "left" }] }}</p>
@@ -73,7 +81,10 @@
       </p>
     </div>
     <div class="watchlist" *ngIf="userId !== product.userId && userId">
-      <button [ngClass]="{ 'wishlisted': wishlisted }" (click)="addRemoveFromWishlist($event)">
+      <button
+        [ngClass]="{ wishlisted: wishlisted }"
+        (click)="addRemoveFromWishlist($event)"
+      >
         Wishlist <fa-icon [icon]="['fas', 'heart']"></fa-icon>
       </button>
     </div>

@@ -22,6 +22,7 @@ export interface State {
   bids: Bid[];
   message: string;
   success: boolean;
+  numberOfViewers: { views?: number; productId?: string };
 }
 
 const initialState: State = {
@@ -43,7 +44,8 @@ const initialState: State = {
   error: "",
   bids: [],
   message: "",
-  success: false
+  success: false,
+  numberOfViewers: { views: 0, productId: null }
 };
 
 export function productPageReducer(
@@ -54,7 +56,10 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_START:
       return {
         ...initialState,
-        message: state.message === "Please login in order to place bid!" ? state.message : ""
+        message:
+          state.message === "Please login in order to place bid!"
+            ? state.message
+            : ""
       };
     case ProductPageActions.PRODUCT_SUCCESS:
       return {
@@ -101,6 +106,12 @@ export function productPageReducer(
           : "Please login in order to place bid!",
         success: false
       };
+    case ProductPageActions.SET_NUMBER_OF_VIEWERS: {
+      return {
+        ...state,
+        numberOfViewers: action.payload
+      };
+    }
     default:
       return state;
   }

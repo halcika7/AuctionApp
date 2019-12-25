@@ -35,7 +35,7 @@ export class Auth {
           ) {
             this.authStore.dispatch(new UserWishlistIdsStart());
             this.subscription.unsubscribe();
-            setTimeout(() => this.Router.navigate(["/"]), 1200);
+            setTimeout(() => this.Router.navigate(["/home"]), 2000);
           }
 
           if (this.form.controls.email) {
@@ -59,7 +59,6 @@ export class Auth {
 
           if (this._success) {
             this._showErrors = false;
-            this.form.reset();
             this._register || this._resetPassword
               ? setTimeout(
                   () => this.Router.navigate(["/home/auth/login"]),

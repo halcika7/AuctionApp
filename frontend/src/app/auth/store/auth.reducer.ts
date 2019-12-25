@@ -95,6 +95,13 @@ export function authReducer(
           : state.message,
         success: false
       };
+    case AuthActions.LOGOUT_SUCCESS: {
+      localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("accessToken");
+      return {
+        ...initialState
+      };
+    }
     default:
       return state;
   }

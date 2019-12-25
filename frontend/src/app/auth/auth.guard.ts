@@ -30,9 +30,9 @@ export class AuthGuard implements CanActivate {
     return this.store.select("auth").pipe(
       map(auth => {
         if (
-          !auth.accessToken &&
-          !localStorage.getItem("accessToken") &&
-          !sessionStorage.getItem("accessToken")
+          !auth.accessToken ||
+          (!localStorage.getItem("accessToken") &&
+            !sessionStorage.getItem("accessToken"))
         ) {
           this.router.navigate(["/home/auth/login"]);
           return false;

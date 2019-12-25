@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ɵConsole } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Params, Router } from "@angular/router";
@@ -6,14 +6,17 @@ import * as fromApp from "@app/store/app.reducer";
 import * as ProductPageActions from "./store/product-page.actions";
 import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
-import { Wishlist } from '@app/wishlist/wishlist';
+import { Wishlist } from "@app/wishlist/wishlist";
+import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-product-page",
   templateUrl: "./product-page.component.html",
   styleUrls: ["./product-page.component.scss"]
 })
-export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy {
+export class ProductPageComponent extends Wishlist
+  implements OnInit, OnDestroy {
   private _product: FullProduct;
   private _bids: Bid[] = [];
   private _similarProducts: Product[] = [];
@@ -26,16 +29,20 @@ export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy 
   private _enteredPrice = null;
   private _disabled = false;
   private subscription = new Subscription();
+  private _numberOfViewers = 0;
+  private _emitedCount = false;
 
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private socketService: WebSocketServiceService
   ) {
     super(store);
   }
 
   ngOnInit() {
+    this._emitedCount = false;
     this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
         this._enteredPrice = null;
@@ -55,8 +62,25 @@ export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy 
       this.store
         .select("productPage")
         .subscribe(
-          ({ product, similarProducts, bids, error, message, success }) => {
-            if(product.id) {
+          ({
+            product,
+            similarProducts,
+            bids,
+            error,
+            message,
+            success,
+            numberOfViewers
+          }) => {
+            if (product.id) {
+              if (numberOfViewers) {
+                this._numberOfViewers = numberOfViewers.views;
+              }
+              !this._emitedCount &&
+                this.socketService.emit("watch", {
+                  views: this._numberOfViewers,
+                  productId: product.id
+                });
+              this._emitedCount = true;
               super.onInitWishlist(product.id, true);
             }
 
@@ -92,9 +116,18 @@ export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy 
         this.setMessageDisabled();
       })
     );
+
+    this.socketService
+      .listen("watchers")
+      .subscribe((data: { views: number; productId: string }) => {
+        this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
+      });
+
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   ngOnDestroy() {
+    this.socketService.emit("removeWatcher", this._product.id);
     super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
@@ -176,4 +209,7 @@ export class ProductPageComponent extends Wishlist implements OnInit, OnDestroy 
     return this._disabled;
   }
 
+  get numberOfViewers(): number {
+    return this._numberOfViewers;
+  }
 }

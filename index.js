@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
+const http = require('http');
+const socketio = require('socket.io');
+const server = http.createServer(app);
+const io = socketio(server);
 const { URL } = require('./backend/config/configs');
 
 app.use(
@@ -30,6 +34,7 @@ app.use('/api/shop', require('./backend/routes/shop/shop'));
 app.use('/api/profile', require('./backend/routes/profile/profile'));
 app.use('/api/add-product', require('./backend/routes/product/add-product'));
 app.use('/api/wishlist', require('./backend/routes/wishlist/wishlist'));
+app.use('/api/notifications', require('./backend/routes/notifications/notifications')(io));
 
 // static assets for production
 if (process.env.NODE_ENV === 'production') {
@@ -43,4 +48,4 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+server.listen(port, () => console.log(`Server running on port ${port}`));
