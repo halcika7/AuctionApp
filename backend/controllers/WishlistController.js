@@ -41,7 +41,6 @@ class WishlistController extends BaseController {
       userId,
       productId
     );
-    console.log('TCL: WishlistController -> removeFromWishlist -> ids', ids);
 
     return super.sendResponse(res, status, { accessToken, ids: ids ? ids : [] });
   }
