@@ -66,7 +66,9 @@ export function productPageReducer(
         ...state,
         product: action.payload.product,
         bids: action.payload.bids ? action.payload.bids : [],
-        message: action.payload.message ? action.payload.message : state.message,
+        message: action.payload.message
+          ? action.payload.message
+          : state.message,
         success: action.payload.message ? false : state.success
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:
@@ -90,6 +92,12 @@ export function productPageReducer(
         ...state,
         message: action.payload.message,
         success: true
+      };
+    case ProductPageActions.PRODUCT_SET_MESSAGE:
+      return {
+        ...state,
+        message: action.message,
+        success: false
       };
     case ProductPageActions.PRODUCT_BID_FAILED:
       return {

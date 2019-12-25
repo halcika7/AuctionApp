@@ -133,8 +133,11 @@ export class ProductPageComponent extends Wishlist
             typeof this._product.number_of_bids === "string"
               ? parseInt(this._product.number_of_bids) + 1
               : this._product.number_of_bids + 1;
-          this._message = `Someone added new bid ($${highest_bid})`;
-          this._success = false;
+          this.store.dispatch(
+            new ProductPageActions.SetMessage(
+              `Someone added new bid ($${highest_bid})`
+            )
+          );
         }
       });
 

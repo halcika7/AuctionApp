@@ -18,6 +18,8 @@ export const CLEAR_PRODUCT_MESSAGES = "CLEAR_PRODUCT_MESSAGES";
 
 export const SET_NUMBER_OF_VIEWERS = "SET_NUMBER_OF_VIEWERS";
 
+export const PRODUCT_SET_MESSAGE = "PRODUCT_SET_MESSAGE";
+
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
   constructor() {}
@@ -85,6 +87,12 @@ export class SetNumberOfViewers implements Action {
   constructor(public payload: { views: number; productId: string }) {}
 }
 
+export class SetMessage implements Action {
+  readonly type = PRODUCT_SET_MESSAGE;
+
+  constructor(public message: string) {}
+}
+
 export type ProductPageActions =
   | ProductStart
   | ProductSuccess
@@ -95,4 +103,5 @@ export type ProductPageActions =
   | SimilarProductStart
   | SimilarProductSuccess
   | SetNumberOfViewers
+  | SetMessage
   | ClearProductMessages;
