@@ -143,6 +143,14 @@ class BidService extends BaseService {
       return super.returnGenericFailed();
     }
   }
+
+  async getHighestBid(productId) {
+    return await Bid.findOne({
+      raw: true,
+      where: { productId },
+      order: [['price', 'DESC']]
+    })
+  }
 }
 
 const BidServiceInstance = new BidService();

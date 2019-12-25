@@ -8,7 +8,6 @@ import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 import { Wishlist } from "@app/wishlist/wishlist";
 import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
-import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-product-page",
@@ -127,6 +126,7 @@ export class ProductPageComponent extends Wishlist
       .listen("bid-added")
       .subscribe(({ productId, highest_bid }) => {
         if (this._product.id === productId) {
+          this.clearMessages();
           this._product.highest_bid = highest_bid;
           this._minPrice = highest_bid;
           this._product.number_of_bids =

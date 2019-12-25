@@ -28,7 +28,7 @@ class ProductController extends BaseController {
 
   async getProduct(req, res) {
     const token = req.headers.authorization.split(' ')[1] || null;
-    const { product, bids, status } = await ProductServiceInstance.findProductById(
+    const { product, bids, status, message } = await ProductServiceInstance.findProductById(
       req.params.id,
       req.params.subcategoryId,
       token
@@ -41,7 +41,7 @@ class ProductController extends BaseController {
     const { similarProducts } =
       (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) || [];
 
-    return super.sendResponse(res, status, { product, similarProducts, bids });
+    return super.sendResponse(res, status, { product, similarProducts, bids, message });
   }
 
   async getSimilarProducts(req, res) {

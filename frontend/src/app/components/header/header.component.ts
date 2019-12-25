@@ -62,7 +62,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSearch(e: Event, input: HTMLInputElement) {
-    e.preventDefault();
     const splitUrl = this.router.url.split("/").length;
 
     if (

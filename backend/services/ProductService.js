@@ -44,8 +44,11 @@ class ProductService extends BaseService {
       const product = await getProductById(productId, subcategoryId);
       const { id } = decodeToken(token) || { id: undefined };
       const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
+      const highestBid = await BidService.getHighestBid(productId);
+      const message =
+        highestBid && highestBid.userId === id ? 'You are already highest bidder' : '';
 
-      return super.returnResponse(200, { product, bids });
+      return super.returnResponse(200, { product, bids, message });
     } catch (error) {
       return super.returnResponse(403, {});
     }
@@ -96,7 +99,7 @@ class ProductService extends BaseService {
   async getActiveUserProductsCount(userId) {
     try {
       const active = await hasActiveProduct(userId);
-      
+
       return super.returnResponse(200, { hasActiveProduct: active });
     } catch (error) {
       return super.returnGenericFailed();
@@ -133,7 +136,7 @@ class ProductService extends BaseService {
       }
 
       const uploadImages = await CloudinaryService.uploadProductImages(images);
-      
+
       if (productData.featured) {
         let source =
           typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
@@ -162,7 +165,10 @@ class ProductService extends BaseService {
       const product = await Product.create({ ...productData });
 
       const productImages = uploadImages.slice(1).map(image => ({ image, productId: product.id }));
-      const productFilters = filtersData.map(filter => ({ filterValueId: filter.id, productId: product.id }))
+      const productFilters = filtersData.map(filter => ({
+        filterValueId: filter.id,
+        productId: product.id
+      }));
 
       await ProductImage.bulkCreate(productImages);
       await FilterValueProduct.bulkCreate(productFilters);

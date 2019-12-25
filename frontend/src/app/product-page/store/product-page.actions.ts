@@ -30,7 +30,9 @@ export class ProductStart implements Action {
 
 export class ProductSuccess implements Action {
   readonly type = PRODUCT_SUCCESS;
-  constructor(public payload: { product: FullProduct; bids?: Bid[] }) {}
+  constructor(
+    public payload: { product: FullProduct; bids?: Bid[]; message?: string }
+  ) {}
 }
 
 export class ProductFailed implements Action {
