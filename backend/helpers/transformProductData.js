@@ -11,9 +11,9 @@ module.exports.transformProductData = (
   productData.brandId = brandData.id;
   productData.userId = userId;
   productData.auctionStart = new Date(productData.startDate);
-  productData.auctionStart.setTime(productData.auctionStart.getTime() + 60 * 60 * 1000);
+  productData.auctionStart.setHours(1, 0, 0, 0);
   productData.auctionEnd = new Date(productData.endDate);
-  productData.auctionEnd.setTime(productData.auctionEnd.getTime() + 60 * 60 * 1000);
+  productData.auctionEnd.setHours(1, 0, 0, 0);
   
   delete productData.description;
   delete productData.endDate;
