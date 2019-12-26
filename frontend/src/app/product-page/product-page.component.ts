@@ -30,6 +30,7 @@ export class ProductPageComponent extends Wishlist
   private subscription = new Subscription();
   private _numberOfViewers = 0;
   private _emitedCount = false;
+  private _subcategoryId;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -42,14 +43,19 @@ export class ProductPageComponent extends Wishlist
 
   ngOnInit() {
     this._emitedCount = false;
+
     this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
         this._enteredPrice = null;
         if (!id || !subcategoryId) {
           this.router.navigate(["/404"]);
         }
+        this._subcategoryId = subcategoryId;
         this.store.dispatch(
           new ProductPageActions.ProductStart(id, subcategoryId)
+        );
+        this.store.dispatch(
+          new ProductPageActions.GetProductBids(id, subcategoryId)
         );
         this.store.dispatch(
           new ProductPageActions.SimilarProductStart(id, subcategoryId)
@@ -74,18 +80,17 @@ export class ProductPageComponent extends Wishlist
               if (numberOfViewers) {
                 this._numberOfViewers = numberOfViewers.views;
               }
-              !this._emitedCount &&
+              if (!this._emitedCount) {
                 this.socketService.emit("watch", {
                   views: this._numberOfViewers,
                   productId: product.id
                 });
-              this._emitedCount = true;
+                this._emitedCount = true;
+              }
               super.onInitWishlist(product.id, true);
             }
 
-            if (error) {
-              this.router.navigate(["/404"]);
-            }
+            if (error) this.router.navigate(["/404"]);
 
             if (success) {
               this._enteredPrice = null;
@@ -116,31 +121,43 @@ export class ProductPageComponent extends Wishlist
       })
     );
 
-    this.socketService
-      .listen("watchers")
-      .subscribe((data: { views: number; productId: string }) => {
-        this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
-      });
+    this.subscription.add(
+      this.socketService
+        .listen("watchers")
+        .subscribe((data: { views: number; productId: string }) => {
+          this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
+        })
+    );
 
-    this.socketService
-      .listen("bid-added")
-      .subscribe(({ productId, highest_bid, userId }) => {
-        if (this._product.id === productId) {
-          this.clearMessages();
-          this._product.highest_bid = highest_bid;
-          this._minPrice = highest_bid;
-          this._product.number_of_bids =
-            typeof this._product.number_of_bids === "string"
-              ? parseInt(this._product.number_of_bids) + 1
-              : this._product.number_of_bids + 1;
-          this._userId !== userId &&
+    this.subscription.add(
+      this.socketService
+        .listen("bid-added")
+        .subscribe(({ productId, highest_bid, userId }) => {
+          if (this._product.id === productId) {
+            this.clearMessages();
             this.store.dispatch(
-              new ProductPageActions.SetMessage(
-                `Someone added new bid ($${highest_bid})`
-              )
+              new ProductPageActions.UpdateProductAfterBid(highest_bid)
             );
-        }
-      });
+
+            if (this._userId !== userId) {
+              this.store.dispatch(
+                new ProductPageActions.SetMessage(
+                  `Someone added new bid ($${highest_bid})`
+                )
+              );
+            }
+
+            if (this._product.userId === this._userId) {
+              this.store.dispatch(
+                new ProductPageActions.GetProductBids(
+                  productId,
+                  this._subcategoryId
+                )
+              );
+            }
+          }
+        })
+    );
 
     window.onbeforeunload = () => this.ngOnDestroy();
   }

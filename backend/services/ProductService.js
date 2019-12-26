@@ -42,12 +42,11 @@ class ProductService extends BaseService {
     try {
       const product = await getProductById(productId, subcategoryId);
       const { id } = super.decodeAuthorizationToken(token);
-      const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
       const highestBid = await BidService.getHighestBid(productId);
       const message =
         highestBid && highestBid.userId === id ? 'You are already highest bidder' : '';
 
-      return super.returnResponse(200, { product, bids, message });
+      return super.returnResponse(200, { product, message });
     } catch (error) {
       return super.returnResponse(403, {});
     }

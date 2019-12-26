@@ -20,6 +20,10 @@ export const SET_NUMBER_OF_VIEWERS = "SET_NUMBER_OF_VIEWERS";
 
 export const PRODUCT_SET_MESSAGE = "PRODUCT_SET_MESSAGE";
 
+export const GET_PRODUCT_BIDS = "GET_PRODUCT_BIDS";
+
+export const UPDATE_PRODUCT_AFTER_BID = "UPDATE_PRODUCT_AFTER_BID";
+
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
   constructor() {}
@@ -30,10 +34,20 @@ export class ProductStart implements Action {
   constructor(public id: string, public subcategoryId: string) {}
 }
 
+export class GetProductBids implements Action {
+  readonly type = GET_PRODUCT_BIDS;
+  constructor(public productId: string, public subcategoryId: string) {}
+}
+
+export class UpdateProductAfterBid implements Action {
+  readonly type = UPDATE_PRODUCT_AFTER_BID;
+  constructor(public highest_bid: any) {}
+}
+
 export class ProductSuccess implements Action {
   readonly type = PRODUCT_SUCCESS;
   constructor(
-    public payload: { product: FullProduct; bids?: Bid[]; message?: string }
+    public payload: { product?: FullProduct; bids?: Bid[]; message?: string }
   ) {}
 }
 
@@ -104,4 +118,6 @@ export type ProductPageActions =
   | SimilarProductSuccess
   | SetNumberOfViewers
   | SetMessage
+  | UpdateProductAfterBid
+  | GetProductBids
   | ClearProductMessages;

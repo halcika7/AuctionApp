@@ -27,6 +27,14 @@ class BidController extends BaseController {
 
     return super.sendResponseWithMessage(res, status, { bids, noMore, accessToken }, message);
   }
+
+  async getProductBids(req, res) {
+    const token = super.getAuthorizationHeader(req);
+    const { productId, subcategoryId } = req.params;
+    const { bids } = await BidService.filterBidsForProduct(productId, subcategoryId, token);
+
+    return super.sendResponse(res, 200, { bids });
+  }
 }
 
 const BidControllerInstance = new BidController();

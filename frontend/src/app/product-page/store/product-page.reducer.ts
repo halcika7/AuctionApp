@@ -64,8 +64,10 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_SUCCESS:
       return {
         ...state,
-        product: action.payload.product,
-        bids: action.payload.bids ? action.payload.bids : [],
+        product: action.payload.product
+          ? action.payload.product
+          : state.product,
+        bids: action.payload.bids ? action.payload.bids : state.bids,
         message: action.payload.message
           ? action.payload.message
           : state.message,
@@ -111,6 +113,19 @@ export function productPageReducer(
       return {
         ...state,
         numberOfViewers: action.payload
+      };
+    }
+    case ProductPageActions.UPDATE_PRODUCT_AFTER_BID: {
+      return {
+        ...state,
+        product: {
+          ...state.product,
+          highest_bid: action.highest_bid,
+          number_of_bids:
+            typeof state.product.number_of_bids === "string"
+              ? parseInt(state.product.number_of_bids) + 1
+              : state.product.number_of_bids + 1
+        }
       };
     }
     default:

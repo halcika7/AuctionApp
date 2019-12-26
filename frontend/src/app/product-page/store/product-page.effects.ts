@@ -25,6 +25,19 @@ export class ProductPageEffects {
   );
 
   @Effect()
+  GetProductBids = this.actions$.pipe(
+    ofType(ProductPageActions.GET_PRODUCT_BIDS),
+    switchMap(({ productId, subcategoryId }) => {
+      return this.http
+        .get<{ bids?: Bid[]; }>(`/products/bids/${productId}/${subcategoryId}`)
+        .pipe(
+          map(data => new ProductPageActions.ProductSuccess(data)),
+          catchError(data => of(new ProductPageActions.ProductFailed(data)))
+        );
+    })
+  );
+
+  @Effect()
   ProductBidStart = this.actions$.pipe(
     ofType(ProductPageActions.PRODUCT_BID_START),
     switchMap(({ productId, bid }) => {

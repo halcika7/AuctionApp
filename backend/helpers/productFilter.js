@@ -94,7 +94,7 @@ function filterProducts({
     if (filterValueIds.length > 0) {
       q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
     }
-    
+
     findProductsQuery += `${q}) `;
     numberOfProductsQuery += `${q});`;
     priceRangeQuery += `${q}) group by price_range order by price_range;`;
@@ -189,7 +189,7 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
 
 exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
   const auctionEnd = active ? { [Op.gt]: new Date() } : { [Op.lt]: new Date() };
-  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] }
+  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] };
   const products = await Product.findAll({
     subQuery: false,
     where: { userId, auctionEnd },
@@ -240,6 +240,6 @@ exports.hasActiveProduct = async userId => {
   const findProduct = await Product.findOne({
     where: { userId, auctionEnd: { [Op.gt]: new Date() } }
   });
-  
+
   return findProduct ? true : false;
 };
