@@ -2,6 +2,7 @@ import * as ProductPageActions from "./product-page.actions";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export interface FullProduct extends Product {
+  status?: string;
   auctionStart: Date;
   auctionEnd: Date;
   highest_bid: string | number;
@@ -23,6 +24,7 @@ export interface State {
   message: string;
   success: boolean;
   numberOfViewers: { views?: number; productId?: string };
+  highestBidUserId: string;
 }
 
 const initialState: State = {
@@ -45,7 +47,8 @@ const initialState: State = {
   bids: [],
   message: "",
   success: false,
-  numberOfViewers: { views: 0, productId: null }
+  numberOfViewers: { views: 0, productId: null },
+  highestBidUserId: ""
 };
 
 export function productPageReducer(
@@ -71,7 +74,10 @@ export function productPageReducer(
         message: action.payload.message
           ? action.payload.message
           : state.message,
-        success: action.payload.message ? false : state.success
+        success: action.payload.message ? false : state.success,
+        highestBidUserId: action.payload.highestBidUserId
+          ? action.payload.highestBidUserId
+          : ""
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:
       return {
@@ -125,7 +131,8 @@ export function productPageReducer(
             typeof state.product.number_of_bids === "string"
               ? parseInt(state.product.number_of_bids) + 1
               : state.product.number_of_bids + 1
-        }
+        },
+        highestBidUserId: action.highestBidUserId
       };
     }
     default:

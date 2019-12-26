@@ -19,7 +19,27 @@ exports.sendEmail = async (email, token, text) => {
         URL
       })
     });
-    
+
+    return { err: null };
+  } catch (err) {
+    return { err: err.message || err };
+  }
+};
+
+exports.notifyAuctionEnd = async (email, productId, subcategoryId, text) => {
+  try {
+    let reqPath = path.join(__dirname, '../');
+
+    await transporter.sendMail({
+      from: 'auctionapp@example.com',
+      to: email,
+      subject: 'Auction end',
+      html: pug.renderFile(reqPath + 'emails/auctionEnd.pug', {
+        text,
+        URL: URL + `/shop/products/${subcategoryId}/${productId}`
+      })
+    });
+
     return { err: null };
   } catch (err) {
     return { err: err.message || err };

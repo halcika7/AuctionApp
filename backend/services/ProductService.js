@@ -46,7 +46,11 @@ class ProductService extends BaseService {
       const message =
         highestBid && highestBid.userId === id ? 'You are already highest bidder' : '';
 
-      return super.returnResponse(200, { product, message });
+      return super.returnResponse(200, {
+        product,
+        message,
+        highestBidUserId: highestBid ? highestBid.userId : ''
+      });
     } catch (error) {
       return super.returnResponse(403, {});
     }

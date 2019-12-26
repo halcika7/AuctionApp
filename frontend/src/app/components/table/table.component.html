@@ -39,9 +39,7 @@
             }}</span>
           </td>
           <td>
-            <a
-              *ngIf="item.status === 'open'"
-              [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+            <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
               >View</a
             >
           </td>
@@ -74,7 +72,6 @@
           </td>
           <td>
             <a
-              *ngIf="item.Product.status === 'open'"
               [routerLink]="[
                 '/shop/products',
                 item.Product.subcategoryId,

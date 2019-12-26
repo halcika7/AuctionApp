@@ -41,13 +41,18 @@ export class GetProductBids implements Action {
 
 export class UpdateProductAfterBid implements Action {
   readonly type = UPDATE_PRODUCT_AFTER_BID;
-  constructor(public highest_bid: any) {}
+  constructor(public highest_bid: any, public highestBidUserId:string) {}
 }
 
 export class ProductSuccess implements Action {
   readonly type = PRODUCT_SUCCESS;
   constructor(
-    public payload: { product?: FullProduct; bids?: Bid[]; message?: string }
+    public payload: {
+      product?: FullProduct;
+      bids?: Bid[];
+      message?: string;
+      highestBidUserId?: string;
+    }
   ) {}
 }
 

@@ -8,6 +8,7 @@ import { FullProduct, Bid } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 import { Wishlist } from "@app/wishlist/wishlist";
 import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
+import { WindowOnBeforeUnload } from "./../shared/windowOnBeforeUnload";
 
 @Component({
   selector: "app-product-page",
@@ -31,6 +32,8 @@ export class ProductPageComponent extends Wishlist
   private _numberOfViewers = 0;
   private _emitedCount = false;
   private _subcategoryId;
+  private _highestBidUserId: string;
+  private windowUnload: WindowOnBeforeUnload;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -39,6 +42,7 @@ export class ProductPageComponent extends Wishlist
     private socketService: WebSocketServiceService
   ) {
     super(store);
+    this.windowUnload = new WindowOnBeforeUnload(socketService);
   }
 
   ngOnInit() {
@@ -74,12 +78,17 @@ export class ProductPageComponent extends Wishlist
             error,
             message,
             success,
-            numberOfViewers
+            numberOfViewers,
+            highestBidUserId
           }) => {
             if (product.id) {
+              this._highestBidUserId = highestBidUserId;
+              this.windowUnload.beforeUnload(product.id);
+
               if (numberOfViewers) {
                 this._numberOfViewers = numberOfViewers.views;
               }
+
               if (!this._emitedCount) {
                 this.socketService.emit("watch", {
                   views: this._numberOfViewers,
@@ -87,6 +96,7 @@ export class ProductPageComponent extends Wishlist
                 });
                 this._emitedCount = true;
               }
+
               super.onInitWishlist(product.id, true);
             }
 
@@ -136,7 +146,7 @@ export class ProductPageComponent extends Wishlist
           if (this._product.id === productId) {
             this.clearMessages();
             this.store.dispatch(
-              new ProductPageActions.UpdateProductAfterBid(highest_bid)
+              new ProductPageActions.UpdateProductAfterBid(highest_bid, userId)
             );
 
             if (this._userId !== userId) {
@@ -158,24 +168,23 @@ export class ProductPageComponent extends Wishlist
           }
         })
     );
-
-    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   ngOnDestroy() {
-    this.socketService.emit("removeWatcher", this._product.id);
     super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
   }
 
   private setMessageDisabled() {
-    if (this.product.id && !this._message) {
+    if (
+      this.product.id &&
+      !this._message &&
+      this.product.userId === this.userId
+    ) {
       this._message = this.hide
         ? ""
-        : this.product.userId === this.userId && this.userId !== ""
-        ? "You can't place bid on your own product"
-        : "";
+        : "You can't place bid on your own product";
     }
     this._disabled =
       this._message === "You can't place bid on your own product" ||
@@ -247,5 +256,9 @@ export class ProductPageComponent extends Wishlist
 
   get numberOfViewers(): number {
     return this._numberOfViewers;
+  }
+
+  get highestBidUserId(): string {
+    return this._highestBidUserId;
   }
 }

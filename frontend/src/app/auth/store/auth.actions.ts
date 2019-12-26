@@ -22,6 +22,8 @@ export const FORGOT_PASSWORD_SUCCESS = "FORGOT_PASSWORD_SUCCESS";
 export const RESET_PASSWORD_START = "RESET_PASSWORD_START";
 export const RESET_PASSWORD_SUCCESS = "RESET_PASSWORD_SUCCESS";
 
+export const REMOVE_LOGGED_USER = "REMOVE_LOGGED_USER";
+
 export class RegisterStart implements Action {
   readonly type = REGISTER_START;
   constructor(
@@ -42,7 +44,9 @@ export class RegisterSuccess implements Action {
 
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
-  constructor(public payload: { email: string; password: string; remember: boolean }) {}
+  constructor(
+    public payload: { email: string; password: string; remember: boolean }
+  ) {}
 }
 
 export class LoginSuccess implements Action {
@@ -106,6 +110,11 @@ export class ResetPasswordSuccess implements Action {
   constructor(public payload: { message: string }) {}
 }
 
+export class RemoveLoggedUser implements Action {
+  readonly type = REMOVE_LOGGED_USER;
+  constructor() {}
+}
+
 export type AuthActions =
   | RegisterStart
   | RegisterSuccess
@@ -121,4 +130,5 @@ export type AuthActions =
   | ForgotPasswordSuccess
   | ResetPasswordStart
   | ResetPasswordSuccess
+  | RemoveLoggedUser
   | ResetTokenExpired;

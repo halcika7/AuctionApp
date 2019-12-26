@@ -143,11 +143,15 @@ exports.getFilteredProducts = async obj => {
 
 exports.getProductById = async (id, subcategoryId) => {
   return await Product.findOne({
-    where: { id, subcategoryId, auctionEnd: { [Op.gt]: new Date() } },
+    where: { id, subcategoryId },
     attributes: {
       include: [
         [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
-        [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids']
+        [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids'],
+        [
+          db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
+          'status'
+        ]
       ],
       exclude: ['featured']
     },

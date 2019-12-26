@@ -1,5 +1,6 @@
 const AuthServiceInstance = require('../services/AuthService');
 const BaseController = require('./BaseController');
+const { decodeToken } = require('../helpers/authHelper');
 
 class AuthController extends BaseController {
   constructor() {
@@ -23,6 +24,9 @@ class AuthController extends BaseController {
   }
 
   async logout(req, res) {
+    const token = super.getAuthorizationHeader(req);
+    const { id } = decodeToken(token) || { id: undefined };
+    AuthServiceInstance.removeLoggedUser(id);
     AuthServiceInstance.setRefreshTokenCookie(res, '');
 
     return super.sendResponse(res, 200, { accessToken: '' });
@@ -52,8 +56,16 @@ class AuthController extends BaseController {
 
   async resetPassword(req, res) {
     const { status, response } = await AuthServiceInstance.resetPassword(req.body);
-    
+
     return super.sendResponse(res, status, response);
+  }
+
+  removeLoggedInUser(token) {
+    token = token.split(' ')[1];
+    const { id } = decodeToken(token) || { id: undefined };
+    AuthServiceInstance.removeLoggedUser(id);
+
+    return true;
   }
 }
 

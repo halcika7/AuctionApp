@@ -25,7 +25,9 @@ app.use(bodyParser.json());
 require('./backend/config/database');
 require('./backend/models/Associations');
 
-app.use('/api/auth', require('./backend/routes/authentication/authRoutes'));
+require('./backend/cron/cron')(io);
+
+app.use('/api/auth', require('./backend/routes/authentication/authRoutes')(io));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
 app.use('/api/categories', require('./backend/routes/categories/categories'));
 app.use('/api/products', require('./backend/routes/product/product'));

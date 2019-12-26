@@ -6,6 +6,8 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "./store/app.reducer";
 import * as AuthActions from "./auth/store/auth.actions";
 import { UserWishlistIdsStart } from "./wishlist/store/wishlist.actions";
+import { WindowOnBeforeUnload } from './shared/windowOnBeforeUnload';
+import { WebSocketServiceService } from './shared/services/web-socket-service.service';
 
 @Component({
   selector: "app-root",
@@ -14,12 +16,16 @@ import { UserWishlistIdsStart } from "./wishlist/store/wishlist.actions";
 })
 export class AppComponent implements OnInit {
   private _notFound = false;
+  private windowUnload: WindowOnBeforeUnload;
 
   constructor(
     private location: Location,
     private router: Router,
-    private store: Store<fromApp.AppState>
-  ) {}
+    private store: Store<fromApp.AppState>,
+    private socketService: WebSocketServiceService
+  ) {
+    this.windowUnload = new WindowOnBeforeUnload(socketService);
+  }
 
   ngOnInit() {
     this.router.events
@@ -38,6 +44,9 @@ export class AppComponent implements OnInit {
       this.store.dispatch(new AuthActions.RefreshTokenStart());
       this.store.dispatch(new UserWishlistIdsStart());
     }
+
+    this.windowUnload.beforeUnload();
+
   }
 
   get notFound(): boolean {
