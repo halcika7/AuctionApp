@@ -35,7 +35,7 @@ export class Auth {
             sessionStorage.getItem("accessToken")
           ) {
             this.authStore.dispatch(new UserWishlistIdsStart());
-            this.authStore.dispatch(new ClearProductMessages());
+            this.authStore.dispatch(new ClearProductMessages(true));
             this.subscription.unsubscribe();
             setTimeout(() => this.Router.navigate(["/home"]), 2000);
           }

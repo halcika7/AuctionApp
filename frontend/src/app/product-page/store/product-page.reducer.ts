@@ -25,6 +25,7 @@ export interface State {
   success: boolean;
   numberOfViewers: { views?: number; productId?: string };
   highestBidUserId: string;
+  wonAuction: boolean;
 }
 
 const initialState: State = {
@@ -48,7 +49,8 @@ const initialState: State = {
   message: "",
   success: false,
   numberOfViewers: { views: 0, productId: null },
-  highestBidUserId: ""
+  highestBidUserId: "",
+  wonAuction: false
 };
 
 export function productPageReducer(
@@ -77,7 +79,8 @@ export function productPageReducer(
         success: action.payload.message ? false : state.success,
         highestBidUserId: action.payload.highestBidUserId
           ? action.payload.highestBidUserId
-          : ""
+          : "",
+        wonAuction: action.payload.wonAuction
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:
       return {
@@ -93,7 +96,8 @@ export function productPageReducer(
       return {
         ...state,
         message: "",
-        success: false
+        success: false,
+        wonAuction: action.clearAuctionWon ? false : state.wonAuction
       };
     case ProductPageActions.PRODUCT_BID_SUCCESS:
       return {
@@ -133,6 +137,16 @@ export function productPageReducer(
               : state.product.number_of_bids + 1
         },
         highestBidUserId: action.highestBidUserId
+      };
+    }
+    case ProductPageActions.UPDATE_PRODUCT_AFTER_AUCTION_END: {
+      return {
+        ...state,
+        product: {
+          ...state.product,
+          status: 'closed'
+        },
+        wonAuction: action.wonAuction ? action.wonAuction : false
       };
     }
     default:

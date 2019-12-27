@@ -23,6 +23,9 @@
       Start from -
       <span class="productPrice">{{ product.price | currency }}</span>
     </h4>
+    <div class="wonAuction" *ngIf="wonAuction">
+      <p><span>Congratulation!</span> You outbid the competition.</p>
+    </div>
     <form class="bid" *ngIf="!hide" #form (submit)="onSubmit(form.price)">
       <div class="wrap">
         <div
@@ -51,19 +54,14 @@
         >
           Place bid
         </button>
-        <a
-          href=""
-          *ngIf="
-            product.status &&
-            product.status === 'closed' &&
-            highestBidUserId === userId
-          "
-          >PAY</a
-        >
       </div>
     </form>
     <div class="current-bid">
-      <p *ngIf="numberOfViewers > 1">
+      <p
+        *ngIf="
+          numberOfViewers > 1 && product.status && product.status !== 'closed'
+        "
+      >
         Currently watching You and {{ numberOfViewers - 1 }} more
         {{ numberOfViewers - 1 == 1 ? "user" : "users" }}
       </p>
@@ -100,7 +98,15 @@
         }}
       </p>
     </div>
-    <div class="watchlist" *ngIf="userId !== product.userId && userId">
+    <div
+      class="watchlist"
+      *ngIf="
+        userId !== product.userId &&
+        userId &&
+        product.status &&
+        product.status !== 'closed'
+      "
+    >
       <button
         [ngClass]="{ wishlisted: wishlisted }"
         (click)="addRemoveFromWishlist($event)"

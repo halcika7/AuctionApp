@@ -60,7 +60,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
             !accessToken &&
             !localStorage.getItem("accessToken") &&
             !sessionStorage.getItem("accessToken")
-          ) {
+            ) {
             this.router.navigate(["/home/auth/login"]);
           }
         })

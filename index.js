@@ -25,8 +25,6 @@ app.use(bodyParser.json());
 require('./backend/config/database');
 require('./backend/models/Associations');
 
-require('./backend/cron/cron')(io);
-
 app.use('/api/auth', require('./backend/routes/authentication/authRoutes')(io));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
 app.use('/api/categories', require('./backend/routes/categories/categories'));
@@ -37,6 +35,8 @@ app.use('/api/profile', require('./backend/routes/profile/profile'));
 app.use('/api/add-product', require('./backend/routes/product/add-product'));
 app.use('/api/wishlist', require('./backend/routes/wishlist/wishlist'));
 app.use('/api/notifications', require('./backend/routes/notifications/notifications')(io));
+
+require('./backend/cron/cron')(io);
 
 // static assets for production
 if (process.env.NODE_ENV === 'production') {

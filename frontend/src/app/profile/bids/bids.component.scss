@@ -1,0 +1,14 @@
+@import "mixins";
+@import "variables";
+
+.bidsAuctionWon {
+  margin-top: -40px;
+  padding-right: 20px;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  fa-icon {
+    @include fontMixin(17px, regular, 0.63px, purple);
+    cursor: pointer;
+  }
+}

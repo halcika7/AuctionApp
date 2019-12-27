@@ -5,6 +5,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as ProfileActions from "../store/profile.actions";
 import { ProfileService } from "./../profile.service";
 import { ProfileBid } from "../store/profile.reducer";
+import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
 
 @Component({
   selector: "app-bids",
@@ -15,21 +16,46 @@ export class BidsComponent implements OnInit, OnDestroy {
   private _bids: ProfileBid[] = [];
   private _noMore: boolean = false;
   private _offset: number = 0;
+  private _userId: string;
+  private _auctionWonMessage: string;
   private subscription = new Subscription();
 
   constructor(
     private profileService: ProfileService,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private socketService: WebSocketServiceService
   ) {}
 
   ngOnInit() {
     this.profileService.changeBreadcrumb("bids");
     this.getBids();
     this.subscription.add(
-      this.store.select("profile").subscribe(({ bids, noMore }) => {
-        this._bids = bids;
-        this._noMore = noMore;
+      this.store.select("auth").subscribe(({ userId }) => {
+        this._userId = userId;
       })
+    );
+    this.subscription.add(
+      this.store
+        .select("profile")
+        .subscribe(({ bids, noMore, auctionWonMessage }) => {
+          this._bids = bids;
+          this._noMore = noMore;
+          this._auctionWonMessage = auctionWonMessage;
+        })
+    );
+    this.subscription.add(
+      this.socketService
+        .listen("auction-ended")
+        .subscribe(({ userId, name, productId }) => {
+          if (this._userId === userId) {
+            this.store.dispatch(
+              new ProfileActions.SetAuctionWonMessage(
+                ` You outbid competition for ${name}.`,
+                productId
+              )
+            );
+          }
+        })
     );
   }
 
@@ -55,11 +81,19 @@ export class BidsComponent implements OnInit, OnDestroy {
     e.target.blur();
   }
 
+  clearMessages() {
+    this.store.dispatch(new ProfileActions.ClearProfileMessages(true));
+  }
+
   get bids(): ProfileBid[] {
     return this._bids;
   }
 
   get noMore(): boolean {
     return this._noMore;
+  }
+
+  get auctionWonMessage(): string {
+    return this._auctionWonMessage;
   }
 }

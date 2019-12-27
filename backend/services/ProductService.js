@@ -44,12 +44,17 @@ class ProductService extends BaseService {
       const { id } = super.decodeAuthorizationToken(token);
       const highestBid = await BidService.getHighestBid(productId);
       const message =
-        highestBid && highestBid.userId === id ? 'You are already highest bidder' : '';
+        highestBid && highestBid.userId === id && product.dataValues.status == 'open'
+          ? 'You are already highest bidder'
+          : '';
+      const wonAuction =
+        (highestBid && highestBid.userId === id && product.dataValues.status == 'closed') || false;
 
       return super.returnResponse(200, {
         product,
         message,
-        highestBidUserId: highestBid ? highestBid.userId : ''
+        highestBidUserId: highestBid ? highestBid.userId : '',
+        wonAuction
       });
     } catch (error) {
       return super.returnResponse(403, {});

@@ -33,6 +33,7 @@ export class ProductPageComponent extends Wishlist
   private _emitedCount = false;
   private _subcategoryId;
   private _highestBidUserId: string;
+  private _wonAuction: boolean;
   private windowUnload: WindowOnBeforeUnload;
 
   constructor(
@@ -79,7 +80,8 @@ export class ProductPageComponent extends Wishlist
             message,
             success,
             numberOfViewers,
-            highestBidUserId
+            highestBidUserId,
+            wonAuction
           }) => {
             if (product.id) {
               this._highestBidUserId = highestBidUserId;
@@ -119,6 +121,7 @@ export class ProductPageComponent extends Wishlist
             this._message = message;
             this._success = success;
             this._disabled = !this._success;
+            this._wonAuction = wonAuction;
             this.setMessageDisabled();
           }
         )
@@ -126,6 +129,9 @@ export class ProductPageComponent extends Wishlist
 
     this.subscription.add(
       this.store.select("auth").subscribe(({ userId }) => {
+        if(this._userId && !userId) {
+          this.store.dispatch(new ProductPageActions.ClearProductMessages(true));
+        }
         this._userId = userId;
         this.setMessageDisabled();
       })
@@ -168,9 +174,28 @@ export class ProductPageComponent extends Wishlist
           }
         })
     );
+
+    this.subscription.add(
+      this.socketService
+        .listen("auction-ended")
+        .subscribe(({ productId, userId }) => {
+          if (this._product.id === productId && this._userId === userId) {
+            this.clearMessages();
+            this.store.dispatch(
+              new ProductPageActions.UpdateProductAfterAuctionEnd(true)
+            );
+          } else if (this._product.id === productId) {
+            this.clearMessages();
+            this.store.dispatch(
+              new ProductPageActions.UpdateProductAfterAuctionEnd()
+            );
+          }
+        })
+    );
   }
 
   ngOnDestroy() {
+    this.socketService.emit("removeWatcher", this._product.id);
     super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
@@ -260,5 +285,9 @@ export class ProductPageComponent extends Wishlist
 
   get highestBidUserId(): string {
     return this._highestBidUserId;
+  }
+
+  get wonAuction(): boolean {
+    return this._wonAuction;
   }
 }

@@ -24,9 +24,12 @@ export const GET_PRODUCT_BIDS = "GET_PRODUCT_BIDS";
 
 export const UPDATE_PRODUCT_AFTER_BID = "UPDATE_PRODUCT_AFTER_BID";
 
+export const UPDATE_PRODUCT_AFTER_AUCTION_END =
+  "UPDATE_PRODUCT_AFTER_AUCTION_END";
+
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
-  constructor() {}
+  constructor(public clearAuctionWon?: boolean) {}
 }
 
 export class ProductStart implements Action {
@@ -41,7 +44,7 @@ export class GetProductBids implements Action {
 
 export class UpdateProductAfterBid implements Action {
   readonly type = UPDATE_PRODUCT_AFTER_BID;
-  constructor(public highest_bid: any, public highestBidUserId:string) {}
+  constructor(public highest_bid: any, public highestBidUserId: string) {}
 }
 
 export class ProductSuccess implements Action {
@@ -52,6 +55,7 @@ export class ProductSuccess implements Action {
       bids?: Bid[];
       message?: string;
       highestBidUserId?: string;
+      wonAuction?: boolean;
     }
   ) {}
 }
@@ -112,6 +116,12 @@ export class SetMessage implements Action {
   constructor(public message: string) {}
 }
 
+export class UpdateProductAfterAuctionEnd implements Action {
+  readonly type = UPDATE_PRODUCT_AFTER_AUCTION_END;
+
+  constructor(public wonAuction?: boolean) {}
+}
+
 export type ProductPageActions =
   | ProductStart
   | ProductSuccess
@@ -125,4 +135,5 @@ export type ProductPageActions =
   | SetMessage
   | UpdateProductAfterBid
   | GetProductBids
+  | UpdateProductAfterAuctionEnd
   | ClearProductMessages;

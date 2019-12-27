@@ -49,6 +49,7 @@ export interface State {
   errors: any;
   message: string;
   success: boolean;
+  auctionWonMessage: string;
 }
 
 const initialState: State = {
@@ -58,7 +59,8 @@ const initialState: State = {
   noMore: false,
   errors: {},
   message: "",
-  success: false
+  success: false,
+  auctionWonMessage: ''
 };
 
 export function profileReducer(
@@ -122,7 +124,22 @@ export function profileReducer(
       return {
         ...state,
         message: '',
-        success: false
+        success: false,
+        auctionWonMessage: action.clearAuctionWonMessage ? "" : state.auctionWonMessage
+      }
+    }
+    case ProfileActions.SET_AUCTION_WON_MESSAGE: {
+      const bids = [...state.bids].map(bid => {
+        if(bid.Product.id === action.productId) {
+          bid.Product.status = 'closed';
+        }
+
+        return bid;
+      })
+      return {
+        ...state,
+        auctionWonMessage: action.message,
+        bids
       }
     }
     default:

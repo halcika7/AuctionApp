@@ -187,6 +187,10 @@ class AuthService extends BaseService {
     this.loggedInUsers = loggedUsers;
   }
 
+  getLoggedUsers() {
+    return this.loggedInUsers;
+  }
+
   setRefreshTokenCookie(res, token) {
     return res.cookie('jid', token, { httpOnly: true });
   }
