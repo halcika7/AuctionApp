@@ -7,22 +7,17 @@ const { notifyAuctionEnd } = require('../helpers/sendEmail');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '0 0 0 * * *',
+      '00 00 00 * * *',
       async () => {
         try {
           const date = new Date();
-          date.setHours(25, 0, 0, 0);
-          console.log('TCL: date', date);
+          date.setHours(0, 0, 0, 0);
 
           const products = await Product.findAll({
             raw: true,
             where: { auctionEnd: date },
             attributes: ['id', 'subcategoryId', 'name', 'userId']
           });
-
-          localDate();
-
-          console.log('TCL: products', products.length);
 
           const productIds = products.map(product => product.id);
 
@@ -49,31 +44,31 @@ module.exports = io => {
                 name
               });
 
-              // await sendEmail(
-              //   user.email,
-              //   id,
-              //   subcategoryId,
-              //   `Congratulations youre bid was highest for ${name}`
-              // );
+              await sendEmail(
+                user.email,
+                id,
+                subcategoryId,
+                `Congratulations youre bid was highest for ${name}`
+              );
 
-              // await sendEmail(
-              //   owner.email,
-              //   id,
-              //   subcategoryId,
-              //   `Auction ended and highest bid for ${name} was ${bid.price}`
-              // );
+              await sendEmail(
+                owner.email,
+                id,
+                subcategoryId,
+                `Auction ended and highest bid for ${name} was ${bid.price}`
+              );
             } else {
               const { subcategoryId, name, userId } = products.find(product => product.id === id);
               const owner = await User.findOne({ raw: true, where: { id: userId } });
 
               socket.emit('auction-ended', { productId: id });
 
-              // await sendEmail(
-              //   owner.email,
-              //   id,
-              //   subcategoryId,
-              //   `Auction ended for ${name} without any bid`
-              // );
+              await sendEmail(
+                owner.email,
+                id,
+                subcategoryId,
+                `Auction ended for ${name} without any bid`
+              );
             }
           });
         } catch (error) {
@@ -85,12 +80,7 @@ module.exports = io => {
       'Etc/UTC'
     );
   });
-  return true;
 };
-
-function localDate() {
-  console.log('TCL: localDate -> new Date()', new Date());
-}
 
 async function sendEmail(email, productId, subcategoryId, text) {
   await notifyAuctionEnd(email, productId, subcategoryId, text);

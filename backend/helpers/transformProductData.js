@@ -13,7 +13,7 @@ module.exports.transformProductData = (
   productData.auctionStart = new Date(productData.startDate);
   productData.auctionStart.setHours(1, 0, 0, 0);
   productData.auctionEnd = new Date(productData.endDate);
-  productData.auctionEnd.setHours(1, 0, 0, 0);
+  productData.auctionEnd.setHours(0, 0, 0, 0);
   
   delete productData.description;
   delete productData.endDate;

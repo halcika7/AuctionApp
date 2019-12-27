@@ -114,7 +114,7 @@ module.exports = {
         let newDate = new Date(startDate);
         startDate.setDate(startDate.getDate() + faker.random.number(1));
         newDate.setDate(startDate.getDate() + faker.random.number(30));
-        newDate.setHours(1, 0, 0, 0);
+        newDate.setHours(0, 0, 0, 0);
         let brandId = min === max ? min : Math.floor(Math.random() * (max - min + 1) + min);
 
         products.push({
