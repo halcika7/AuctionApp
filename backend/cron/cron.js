@@ -7,7 +7,7 @@ const { notifyAuctionEnd } = require('../helpers/sendEmail');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '0 0 23 * * *',
+      '00 00 23 * * *',
       async () => {
         try {
           const date = new Date();
