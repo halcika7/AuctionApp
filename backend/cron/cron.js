@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-const Bid = require('../models/Bid');
+const Product = require('../models/Product');
 const WishlistService = require('../services/WishlistService');
 const BidService = require('../services/BidService');
 const { notifyAuctionEnd } = require('../helpers/sendEmail');
@@ -13,7 +13,7 @@ module.exports = io => {
       async () => {
         try {
           const date = new Date();
-          date.setHours(24, 0, 0, 0);
+          date.setHours(0, 0, 0, 0);
 
           const products = await findProductsByAuctionEnd(date);
           const productIds = products.map(product => product.id);
