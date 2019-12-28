@@ -7,11 +7,11 @@ const { notifyAuctionEnd } = require('../helpers/sendEmail');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '00 00 00 * * *',
+      '0 0 23 * * *',
       async () => {
         try {
           const date = new Date();
-          date.setHours(0, 0, 0, 0);
+          date.setHours(2, 0, 0, 0);
 
           const products = await Product.findAll({
             raw: true,
