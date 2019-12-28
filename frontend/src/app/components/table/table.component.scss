@@ -57,6 +57,14 @@ table {
         min-width: 100px;
         max-width: 120px;
 
+        &.highest-bid {
+          @include fontMixin(18px, regular, 0.63px, light_green);
+        }
+
+        &.bid {
+          @include fontMixin(18px, regular, 0.63px, light_blue);
+        }
+
         &:first-child {
           padding-left: 40px;
         }

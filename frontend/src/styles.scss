@@ -613,6 +613,10 @@ button.wishlisted {
     span {
       @include fontMixin(17px, bold, 0.63px, purple);
       @include margin($all: 0 10px 0 30px);
+
+      fa-icon {
+        margin-right: 5px;
+      }
     }
   }
 }

@@ -96,7 +96,8 @@ import {
   faChevronRight,
   faCalendarAlt,
   faDollarSign,
-  faEye
+  faEye,
+  faCheckCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
@@ -232,7 +233,8 @@ export class AppModule {
       faChevronRight,
       faCalendarAlt,
       faDollarSign,
-      faEye
+      faEye,
+      faCheckCircle
     );
   }
 }

@@ -24,7 +24,7 @@
       <span class="productPrice">{{ product.price | currency }}</span>
     </h4>
     <div class="wonAuction" *ngIf="wonAuction">
-      <p><span>Congratulation!</span> You outbid the competition.</p>
+      <p><span><fa-icon [icon]="['fas', 'check-circle']"></fa-icon>Congratulation!</span> You outbid the competition.</p>
     </div>
     <form class="bid" *ngIf="!hide" #form (submit)="onSubmit(form.price)">
       <div class="wrap">

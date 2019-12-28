@@ -1,6 +1,6 @@
 <section class="container mt-70 mb-200">
   <div class="wonAuction bidsAuctionWon" *ngIf="auctionWonMessage">
-    <p><span>Congratulation!</span>{{ auctionWonMessage }}</p>
+    <p><span><fa-icon [icon]="['fas', 'check-circle']"></fa-icon>Congratulation!</span>{{ auctionWonMessage }}</p>
     <fa-icon
       [icon]="['fas', 'times']"
       (click)="clearMessages()"
