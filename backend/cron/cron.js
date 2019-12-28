@@ -9,14 +9,16 @@ const { findProductsByAuctionEnd } = require('../helpers/productFilter');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '00 00 23 * * *',
+      '00 */1 * * * *',
       async () => {
         try {
           const date = new Date();
           date.setHours(0, 0, 0, 0);
+          console.log('TCL: date', date)
 
           const products = await findProductsByAuctionEnd(date);
           const productIds = products.map(product => product.id);
+          console.log('TCL: productIds', productIds)
 
           await WishlistService.removeFromWishlistByProductId(productIds);
 
