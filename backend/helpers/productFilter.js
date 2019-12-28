@@ -247,3 +247,11 @@ exports.hasActiveProduct = async userId => {
 
   return findProduct ? true : false;
 };
+
+exports.findProductsByAuctionEnd = async auctionEnd => {
+  return await Product.findAll({
+    raw: true,
+    where: { auctionEnd },
+    attributes: ['id', 'subcategoryId', 'name', 'userId']
+  });
+};

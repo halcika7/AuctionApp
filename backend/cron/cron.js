@@ -1,8 +1,10 @@
 const CronJob = require('cron').CronJob;
-const Product = require('../models/Product');
 const Bid = require('../models/Bid');
-const User = require('../models/User');
+const WishlistService = require('../services/WishlistService');
+const BidService = require('../services/BidService');
 const { notifyAuctionEnd } = require('../helpers/sendEmail');
+const { findUserById } = require('../helpers/authHelper');
+const { findProductsByAuctionEnd } = require('../helpers/productFilter');
 
 module.exports = io => {
   io.on('connection', socket => {
@@ -11,32 +13,23 @@ module.exports = io => {
       async () => {
         try {
           const date = new Date();
-          date.setHours(2, 0, 0, 0);
+          date.setHours(24, 0, 0, 0);
 
-          const products = await Product.findAll({
-            raw: true,
-            where: { auctionEnd: date },
-            attributes: ['id', 'subcategoryId', 'name', 'userId']
-          });
-
+          const products = await findProductsByAuctionEnd(date);
           const productIds = products.map(product => product.id);
 
+          await WishlistService.removeFromWishlistByProductId(productIds);
+
           await productIds.map(async id => {
-            const bid = await Bid.findOne({
-              raw: true,
-              where: { productId: id },
-              attributes: ['price', 'productId', 'userId'],
-              order: [['price', 'DESC']],
-              limit: 1
-            });
+            const bid = await BidService.getHighestBid(id);
 
             if (bid) {
               const { subcategoryId, name, userId } = products.find(
                 product => product.id === bid.productId
               );
 
-              const user = await User.findOne({ raw: true, where: { id: bid.userId } });
-              const owner = await User.findOne({ raw: true, where: { id: userId } });
+              const user = await findUserById(bid.userId);
+              const owner = await findUserById(userId);
 
               socket.emit('auction-ended', {
                 productId: id,
@@ -59,7 +52,7 @@ module.exports = io => {
               );
             } else {
               const { subcategoryId, name, userId } = products.find(product => product.id === id);
-              const owner = await User.findOne({ raw: true, where: { id: userId } });
+              const owner = await findUserById(userId);
 
               socket.emit('auction-ended', { productId: id });
 
