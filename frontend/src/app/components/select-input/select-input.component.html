@@ -1,7 +1,7 @@
 <div class="select-wrapper" [ngClass]="{ invalid: invalid }">
   <label *ngIf="label"><span>*</span>{{ label }}</label>
   <div class="select">
-    <p appDropdown>
+    <p appDropdown class="paragraphDropdown">
       <span>{{ selectedValue || default }}</span>
     </p>
     <ng-template [ngIf]="!object">
