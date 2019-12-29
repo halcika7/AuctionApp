@@ -7,7 +7,6 @@ exports.removeNullProperty = ({ ...object }) => {
 
 exports.removeNullFromUserInfo = (userInfo, currentUser) => {
   userInfo.dateOfBirth = new Date(userInfo.dateOfBirth);
-  userInfo.dateOfBirth.setHours(1, 0, 0, 0);
   userInfo = this.removeNullProperty({
     photo: userInfo.photo != currentUser.photo ? userInfo.photo : null,
     gender: userInfo.gender != currentUser.gender ? userInfo.gender : null,

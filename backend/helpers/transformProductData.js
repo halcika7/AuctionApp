@@ -11,13 +11,10 @@ module.exports.transformProductData = (
   productData.brandId = brandData.id;
   productData.userId = userId;
   productData.auctionStart = new Date(productData.startDate);
-  console.log('TCL: productData.startDate', productData.startDate)
-  productData.auctionStart.setHours(1, 0, 0, 0);
+  // productData.auctionStart.setTime(productData.auctionStart.getTime() + 60 * 60 * 1000);
   console.log('TCL: productData.auctionStart', productData.auctionStart)
   productData.auctionEnd = new Date(productData.endDate);
-  console.log('TCL: productData.endDate', productData.endDate)
-  productData.auctionEnd.setDate(productData.auctionEnd.getDate() + 1);
-  productData.auctionEnd.setHours(0, 0, 0, 0);
+  // productData.auctionEnd.setTime(productData.auctionEnd.getTime() + 60 * 60 * 1000);
   console.log('TCL: productData.auctionEnd', productData.auctionEnd)
   
   delete productData.description;

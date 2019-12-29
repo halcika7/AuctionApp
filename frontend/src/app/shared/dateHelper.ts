@@ -10,7 +10,7 @@ export const getYearMonthDay = (
   }).format(date);
   return {
     month,
-    day: date.getUTCDate(),
+    day: date.getDate(),
     year: date.getFullYear()
   };
 };
