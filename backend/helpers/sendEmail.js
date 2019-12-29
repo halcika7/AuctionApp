@@ -26,7 +26,7 @@ exports.sendEmail = async (email, token, text) => {
   }
 };
 
-exports.notifyAuctionEnd = async (email, productId, subcategoryId, text) => {
+exports.notifyAuctionEnd = async (email, productId, subcategoryId, text, toOwner) => {
   try {
     let reqPath = path.join(__dirname, '../');
 
@@ -36,7 +36,8 @@ exports.notifyAuctionEnd = async (email, productId, subcategoryId, text) => {
       subject: 'Auction end',
       html: pug.renderFile(reqPath + 'emails/auctionEnd.pug', {
         text,
-        URL: URL + `/shop/products/${subcategoryId}/${productId}`
+        URL: URL + `/shop/products/${subcategoryId}/${productId}`,
+        toOwner
       })
     });
 

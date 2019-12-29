@@ -40,7 +40,8 @@ module.exports = io => {
                 user.email,
                 id,
                 subcategoryId,
-                `Congratulations youre bid was highest for ${name}`
+                `Congratulations youre bid was highest for ${name}`,
+                false
               );
 
               await sendEmail(
@@ -74,6 +75,6 @@ module.exports = io => {
   });
 };
 
-async function sendEmail(email, productId, subcategoryId, text) {
-  await notifyAuctionEnd(email, productId, subcategoryId, text);
+async function sendEmail(email, productId, subcategoryId, text, owner = true) {
+  await notifyAuctionEnd(email, productId, subcategoryId, text, owner);
 }
