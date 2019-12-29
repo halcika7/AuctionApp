@@ -1,5 +1,4 @@
 const CronJob = require('cron').CronJob;
-const Product = require('../models/Product');
 const WishlistService = require('../services/WishlistService');
 const BidService = require('../services/BidService');
 const { notifyAuctionEnd } = require('../helpers/sendEmail');
@@ -9,11 +8,11 @@ const { findProductsByAuctionEnd } = require('../helpers/productFilter');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '00 00 00 * * *',
+      '00 00 23 * * *',
       async () => {
         try {
           const date = new Date();
-          date.setHours(0, 0, 0, 0);
+          date.setHours(23, 0, 0, 0);
 
           const products = await findProductsByAuctionEnd(date);
           const productIds = products.map(product => product.id);
