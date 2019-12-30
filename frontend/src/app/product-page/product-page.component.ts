@@ -76,7 +76,6 @@ export class ProductPageComponent extends Wishlist
             product,
             similarProducts,
             bids,
-            error,
             message,
             success,
             numberOfViewers,
@@ -102,7 +101,8 @@ export class ProductPageComponent extends Wishlist
               super.onInitWishlist(product.id, true);
             }
 
-            if (error) this.router.navigate(["/404"]);
+            if (message === "Product not found !")
+              this.router.navigate(["/404"]);
 
             if (success) {
               this._enteredPrice = null;
@@ -129,8 +129,10 @@ export class ProductPageComponent extends Wishlist
 
     this.subscription.add(
       this.store.select("auth").subscribe(({ userId }) => {
-        if(this._userId && !userId) {
-          this.store.dispatch(new ProductPageActions.ClearProductMessages(true));
+        if (this._userId && !userId) {
+          this.store.dispatch(
+            new ProductPageActions.ClearProductMessages(true)
+          );
         }
         this._userId = userId;
         this.setMessageDisabled();

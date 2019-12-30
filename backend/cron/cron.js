@@ -40,7 +40,7 @@ module.exports = io => {
                 user.email,
                 id,
                 subcategoryId,
-                `Congratulations youre bid was highest for ${name}`,
+                `Congratulations your bid was highest for ${name}`,
                 false
               );
 

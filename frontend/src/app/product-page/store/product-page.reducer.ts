@@ -19,7 +19,6 @@ export interface Bid {
 export interface State {
   product: FullProduct;
   similarProducts: Product[];
-  error: string;
   bids: Bid[];
   message: string;
   success: boolean;
@@ -34,6 +33,7 @@ const initialState: State = {
     name: "",
     details: "",
     picture: "",
+    status: "",
     price: 0,
     auctionStart: null,
     auctionEnd: null,
@@ -44,7 +44,6 @@ const initialState: State = {
     ProductImages: []
   },
   similarProducts: [],
-  error: "",
   bids: [],
   message: "",
   success: false,
@@ -90,7 +89,7 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_FAILED:
       return {
         ...initialState,
-        error: action.payload.error.error ? action.payload.error.error : ""
+        message: action.payload.error.message ? action.payload.error.message : ""
       };
     case ProductPageActions.CLEAR_PRODUCT_MESSAGES:
       return {
@@ -144,7 +143,7 @@ export function productPageReducer(
         ...state,
         product: {
           ...state.product,
-          status: 'closed'
+          status: "closed"
         },
         wonAuction: action.wonAuction ? action.wonAuction : false
       };

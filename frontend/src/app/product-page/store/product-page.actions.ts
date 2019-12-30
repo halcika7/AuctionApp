@@ -62,7 +62,7 @@ export class ProductSuccess implements Action {
 
 export class ProductFailed implements Action {
   readonly type = PRODUCT_FAILED;
-  constructor(public payload: { error: { error: string } }) {}
+  constructor(public payload: { error: { message: string } }) {}
 }
 
 export class SimilarProductStart implements Action {

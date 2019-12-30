@@ -41,7 +41,7 @@ class ProductController extends BaseController {
     );
 
     if (!product) {
-      return super.sendResponse(res, 403, { error: 'Product not found !' });
+      return super.sendResponse(res, 404, { message: 'Product not found !' });
     }
 
     return super.sendResponse(res, status, { product, highestBidUserId, wonAuction, message });
