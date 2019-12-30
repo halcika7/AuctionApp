@@ -2,8 +2,9 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    const option = [
-      {
+    const option = [];
+    for (let i = 0; i < 51; i++) {
+      option.push({
         name: null,
         number: null,
         cvc: null,
@@ -12,8 +13,8 @@ module.exports = {
         cardId: null,
         customerId: null,
         cardFingerprint: null
-      }
-    ];
+      });
+    }
     return queryInterface.bulkInsert('CardInfos', option, {});
   },
 

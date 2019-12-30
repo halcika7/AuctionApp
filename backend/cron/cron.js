@@ -50,6 +50,7 @@ module.exports = io => {
                 subcategoryId,
                 `Auction ended and highest bid for ${name} was ${bid.price}`
               );
+
             } else {
               const { subcategoryId, name, userId } = products.find(product => product.id === id);
               const owner = await findUserById(userId);
@@ -76,5 +77,5 @@ module.exports = io => {
 };
 
 async function sendEmail(email, productId, subcategoryId, text, owner = true) {
-  await notifyAuctionEnd(email, productId, subcategoryId, text, owner);
+  return await notifyAuctionEnd(email, productId, subcategoryId, text, owner);
 }
