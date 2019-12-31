@@ -197,6 +197,7 @@ export class ProductPageComponent extends Wishlist
   }
 
   ngOnDestroy() {
+    this.windowUnload.beforeUnload();
     this.socketService.emit("removeWatcher", this._product.id);
     super.onDestroy();
     this.subscription.unsubscribe();
