@@ -43,7 +43,7 @@ export class ProductPageComponent extends Wishlist
     private socketService: WebSocketServiceService
   ) {
     super(store);
-    this.windowUnload = new WindowOnBeforeUnload(socketService);
+    this.windowUnload = new WindowOnBeforeUnload(this.socketService);
   }
 
   ngOnInit() {
