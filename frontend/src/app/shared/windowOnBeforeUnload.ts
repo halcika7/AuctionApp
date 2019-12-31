@@ -18,6 +18,8 @@ export class WindowOnBeforeUnload {
           : "Bearer " + sessionStorage.getItem("accessToken");
         this.socketService.emit("removeloggeduser", token);
       }
+
+      this.socketService.disconnect();
     };
   }
 }
