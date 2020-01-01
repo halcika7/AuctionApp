@@ -6,7 +6,7 @@ class BidController extends BaseController {
     super(BidController);
   }
 
-  async makeBid(req, res, socket) {
+  async makeBid(req, res, io) {
     const { productId, bid } = req.body;
     const { userId, accessToken } = req;
     const { message, status, highest_bid } = await BidService.createBid(userId, productId, bid);
@@ -15,7 +15,7 @@ class BidController extends BaseController {
       return super.sendResponse(res, status, { message, accessToken });
     }
 
-    socket.broadcast.emit('bid-added', { productId, highest_bid, userId });
+    io.emit('bid-added', { productId, highest_bid, userId });
 
     return super.sendResponse(res, status, { message, accessToken });
   }
