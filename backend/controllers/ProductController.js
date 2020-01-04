@@ -32,6 +32,7 @@ class ProductController extends BaseController {
       product,
       highestBidUserId,
       wonAuction,
+      ownerInfo,
       status,
       message
     } = await ProductServiceInstance.findProductById(
@@ -44,7 +45,7 @@ class ProductController extends BaseController {
       return super.sendResponse(res, 404, { message: 'Product not found !' });
     }
 
-    return super.sendResponse(res, status, { product, highestBidUserId, wonAuction, message });
+    return super.sendResponse(res, status, { product, highestBidUserId, wonAuction, message, ownerInfo });
   }
 
   async getSimilarProducts(req, res) {

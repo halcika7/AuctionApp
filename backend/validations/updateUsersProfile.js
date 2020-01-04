@@ -52,7 +52,7 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
+exports.userCardValidation = async (req, cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
   if (!isValidUserInfo) return { isValid: true, errors };
 
   if (
@@ -62,7 +62,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
     return { isValid: true, errors, cardInfoData: {} };
   }
   
-  let { customerId, cardId } = await CardInfoService.findUserCardInfo(userCardInfoId);
+  let { customerId, cardId, accountId } = await CardInfoService.findUserCardInfo(userCardInfoId);
 
   try {
     const { card, id, valid } = await StripeService.validateCard(errors, userCardInfoId, cardInfo);
@@ -71,9 +71,11 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
 
     if (!customerId) {
       try {
-        const { id } = await StripeService.createCustomer('Customer for atlant auction app', email);
-        if(!id) throw new Error('Customer not created');
-        customerId = id;
+        const { id:customer } = await StripeService.createCustomer('Customer for atlant auction app', email);
+        const account = await StripeService.createAccount(req, email);
+        if(!customer || !account) throw new Error('Customer or Account not created');
+        customerId = customer;
+        accountId = account.id;
       } catch (error) {
         errors.errors.card = 'We were unable to create new customer';
         return { isValid: false, errors };
@@ -87,6 +89,7 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
     cardInfo = {
       ...cardInfo,
       customerId,
+      accountId,
       cardId: card.id,
       cardFingerprint: card.fingerprint,
       number: '************' + card.last4,

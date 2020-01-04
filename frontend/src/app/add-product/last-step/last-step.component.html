@@ -14,7 +14,7 @@
   <app-input
     id="address"
     title="Address"
-    placeholder="e.g.678 Berge Tunnel Apt. 287"
+    placeholder="e.g. 722 Nostrand Ave, Brooklyn"
     type="text"
     controlName="address"
     [parentForm]="form"
@@ -28,7 +28,7 @@
     <app-input
       id="country"
       title="Country"
-      placeholder="e.g.678 Berge Tunnel Apt. 287"
+      placeholder="e.g.678 USA"
       type="text"
       controlName="country"
       [parentForm]="form"
@@ -41,7 +41,7 @@
     <app-input
       id="city"
       title="City"
-      placeholder="e.g.678 Berge Tunnel Apt. 287"
+      placeholder="e.g. New York"
       type="text"
       controlName="city"
       [parentForm]="form"
@@ -55,7 +55,7 @@
   <app-input
     id="zip"
     title="Zip code"
-    placeholder="e.g.678 Berge Tunnel Apt. 287"
+    placeholder="e.g. 10005"
     type="text"
     controlName="zip"
     [parentForm]="form"
@@ -78,7 +78,7 @@
     [maxLength]="16"
     [required]="true"
   ></app-input>
-  <div class="checkbox">
+  <div class="checkbox" *ngIf="!payment">
     <label
       >Do you want to bear shipping cost?
       <input type="checkbox" formControlName="freeShipping"/><fa-icon
@@ -88,7 +88,7 @@
     <p>The average price of shipping cost is $10.00.</p>
     <p>You have to provide us Billing information.</p>
   </div>
-  <div class="checkbox second">
+  <div class="checkbox second" *ngIf="!payment">
     <label
       >Feature product
       <input type="checkbox" formControlName="featureProduct"/><fa-icon
@@ -111,7 +111,7 @@
       <app-input
         id="cName"
         title="Name on card"
-        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        placeholder="e.g. Don Joe"
         type="text"
         controlName="cName"
         [parentForm]="form"
@@ -125,7 +125,7 @@
       <app-input
         id="cNumber"
         title="Card number"
-        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        placeholder="e.g. 4242424242424242"
         type="text"
         controlName="cNumber"
         [parentForm]="form"
@@ -133,7 +133,7 @@
         showErrors="true"
         [profile]="true"
         [minLength]="13"
-        [maxLength]="16"
+        [maxLength]="17"
         [required]="true"
       ></app-input>
     </div>
@@ -162,7 +162,7 @@
       <app-input
         id="cvc"
         title="CVC/CW"
-        placeholder="e.g.678 Berge Tunnel Apt. 287"
+        placeholder="e.g. 123"
         type="text"
         controlName="CVC"
         [parentForm]="form"
@@ -170,20 +170,21 @@
         showErrors="true"
         [profile]="true"
         [minLength]="3"
-        [maxLength]="4"
+        [maxLength]="5"
         [required]="true"
       ></app-input>
     </div>
   </div>
   <div class="add-product-buttons">
-    <button class="prev" (click)="buttonClicked()">
+    <button class="prev" (click)="buttonClicked()" *ngIf="!payment">
       <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
     </button>
     <button
       class="done"
       type="submit"
       (click)="process()"
-      [disabled]="!isValidStep"
+      [disabled]="!isValidStep || clicked"
+      [ngClass]="{'ml-auto': payment}"
     >
       done
     </button>

@@ -24,7 +24,23 @@
       <span class="productPrice">{{ product.price | currency }}</span>
     </h4>
     <div class="wonAuction" *ngIf="wonAuction">
-      <p><span><fa-icon [icon]="['fas', 'check-circle']"></fa-icon>Congratulation!</span> You outbid the competition.</p>
+      <p *ngIf="!product.paid">
+        <span
+          ><fa-icon [icon]="['fas', 'check-circle']"></fa-icon
+          >Congratulation!</span
+        >
+        You outbid the competition.
+      </p>
+      <p *ngIf="product.paid">
+        <span
+          ><fa-icon [icon]="['fas', 'check-circle']"></fa-icon
+          >Congratulation!</span
+        >
+        You have successfully purchased this product.
+      </p>
+    </div>
+    <div class="payment-button" *ngIf="wonAuction && !product.paid">
+      <a [routerLink]="['/shop/payment', product.subcategoryId, product.id]">Pay</a>
     </div>
     <form class="bid" *ngIf="!hide" #form (submit)="onSubmit(form.price)">
       <div class="wrap">
@@ -56,6 +72,12 @@
         </button>
       </div>
     </form>
+    <div class="owner-info">
+      Seller: <img [src]="ownerInfo.photo" [alt]="ownerInfo.full_name" />
+      <span>{{ ownerInfo.full_name }}</span>
+      <fa-icon [icon]="['fas', 'star']"></fa-icon>
+      <span>{{ownerInfo.avg_rating}} / 5</span>
+    </div>
     <div class="current-bid">
       <p
         *ngIf="

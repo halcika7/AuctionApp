@@ -1,0 +1,25 @@
+<section class="rate-owner">
+  <div class="content">
+    <h3>Seller rating</h3>
+    <div class="user-info">
+      <img
+        src="https://cms-assets.tutsplus.com/uploads/users/144/profiles/2366/profileImage/profile_thumbnail%20low.jpg"
+        alt=""
+      />
+      <span>User name</span>
+      <p>Please, rate a seller!</p>
+      <div class="rating" [ngClass]="class">
+        <span (click)="onChangeRating(5, 'five')">☆</span>
+        <span (click)="onChangeRating(4, 'four')">☆</span>
+        <span (click)="onChangeRating(3, 'three')">☆</span>
+        <span (click)="onChangeRating(2, 'two')">☆</span>
+        <span (click)="onChangeRating(1, 'one')">☆</span>
+      </div>
+    </div>
+    <div class="cd-buttons">
+      <button class="close" (click)="onConfirmClicked(true)">Skip</button>
+      <button class="confirm" (click)="onConfirmClicked()" [disabled]="selectedRating == null">Done</button>
+    </div>
+  </div>
+  <div class="backdrop"></div>
+</section>

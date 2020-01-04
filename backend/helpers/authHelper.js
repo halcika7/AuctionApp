@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Review = require('../models/Review');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
 const {
@@ -124,3 +125,46 @@ exports.getOptionalInfoCard = async id => {
     ]
   });
 };
+
+exports.productOwnerInfo = async id =>
+  await User.findOne({
+    raw: true,
+    where: { id },
+    attributes: [
+      'photo',
+      [db.fn('concat', db.col('firstName'), ' ', db.col('lastName')), 'full_name'],
+      [
+        db.fn(
+          'coalesce',
+          db.fn('ROUND', db.fn('AVG', db.cast(db.col('Reviews.rating'), 'numeric')), 2),
+          0
+        ),
+        'avg_rating'
+      ]
+    ],
+    include: {
+      model: Review,
+      attributes: []
+    },
+    group: ['User.id']
+  });
+
+exports.getUsersOptionalInfoIdAndCardInfoId = async id =>
+  await User.findOne({
+    raw: true,
+    where: { id },
+    attributes: [
+      [db.col('OptionalInfo.id'), 'optionalInfoId'],
+      [db.col('CardInfo.id'), 'cardInfoId']
+    ],
+    include: [
+      {
+        model: OptionalInfo,
+        attributes: []
+      },
+      {
+        model: CardInfo,
+        attributes: []
+      }
+    ]
+  });

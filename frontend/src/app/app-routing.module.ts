@@ -19,7 +19,8 @@ import { EditProfileComponent } from "./profile/edit-profile/edit-profile.compon
 import { SellerComponent } from "./profile/seller/seller.component";
 import { WishlistComponent } from "./profile/wishlist/wishlist.component";
 import { BidsComponent } from "./profile/bids/bids.component";
-import { AddProductComponent } from './add-product/add-product.component';
+import { AddProductComponent } from "./add-product/add-product.component";
+import { PaymentComponent } from "./payment/payment.component";
 
 import { LoginGuard } from "./auth/login.guard";
 import { AuthGuard } from "./auth/auth.guard";
@@ -69,7 +70,12 @@ const appRoutes: Routes = [
       { path: "about", component: AboutComponent },
       { path: "privacy", component: PrivacyComponent },
       { path: "terms", component: ConditionsComponent },
-      { path: "products/:subcategoryId/:id", component: ProductPageComponent }
+      { path: "products/:subcategoryId/:id", component: ProductPageComponent },
+      {
+        path: "payment/:subcategoryId/:id",
+        component: PaymentComponent,
+        canActivate: [AuthGuard]
+      }
     ]
   },
   {

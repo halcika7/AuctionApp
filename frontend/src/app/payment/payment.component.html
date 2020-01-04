@@ -1,0 +1,30 @@
+<app-rate-owner *ngIf="openRateUserModal" (confirmOrder)="confirmOrder($event)"></app-rate-owner>
+
+<app-breadcrumb
+  title="single product"
+  [other]="[
+    { value: 'shop /', link: '/shop' },
+    { value: 'payment', link: '' }
+  ]"
+></app-breadcrumb>
+
+<app-alert
+  *ngIf="message"
+  [message]="message"
+  [type]="success"
+  [closable]="!success"
+  (closeAlert)="clearMessages()"
+></app-alert>
+
+<div class="product-information">
+  <h3>Payment</h3>
+  <div class="form">
+    <app-last-step
+      [form]="form"
+      (submitForm)="submitForm($event)"
+      [currentStep]="3"
+      [payment]="true"
+      [clicked]="clicked"
+    ></app-last-step>
+  </div>
+</div>

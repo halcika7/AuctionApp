@@ -1,6 +1,7 @@
 const BaseService = require('./BaseService');
 const CardInfo = require('../models/CardInfo');
 const stripe = require('../config/stripeConfig');
+const fs = require('fs');
 
 class StripeService extends BaseService {
   constructor() {
@@ -9,7 +10,7 @@ class StripeService extends BaseService {
 
   async validateCard(errors, userCardInfoId, cardInfo) {
     const { card, id } = await stripe.tokens.create({
-      card: { ...cardInfo }
+      card: { ...cardInfo, currency: 'usd' }
     });
     const findCardIfExists = await CardInfo.findOne({
       where: { cardFingerprint: card.fingerprint },
@@ -32,8 +33,8 @@ class StripeService extends BaseService {
   }
 
   async createCustomer(description, email) {
-    if(!description || !email) return;
-    
+    if (!description || !email) return;
+
     return await stripe.customers.create({ description, email });
   }
 
@@ -56,6 +57,96 @@ class StripeService extends BaseService {
       description,
       ...source
     });
+  }
+
+  async createTransfer(accountId, amount, source, description) {
+    amount = this.calculateStripeFees(amount);
+    return await stripe.charges.create({
+      amount,
+      currency: 'usd',
+      description,
+      ...source,
+      transfer_data: {
+        destination: accountId
+      }
+    });
+  }
+
+  async createAccount(req, email) {
+    const account = await stripe.accounts.create({
+      type: 'custom',
+      country: 'US',
+      email,
+      requested_capabilities: ['card_payments', 'transfers']
+    });
+
+    await this.updateAccount(req, account.id, email);
+
+    return account;
+  }
+
+  async updateAccount(req, accountId, email) {
+    const ff = fs.readFileSync('./backend/images/img1.jpg');
+    const fb = fs.readFileSync('./backend/images/img2.jpg');
+    const back = await stripe.files.create({
+      purpose: 'identity_document',
+      file: {
+        data: ff,
+        name: 'file.jpg',
+        type: 'application/octet-stream'
+      }
+    });
+    const front = await stripe.files.create({
+      purpose: 'identity_document',
+      file: {
+        data: fb,
+        name: 'file.jpg',
+        type: 'application/octet-stream'
+      }
+    });
+    return await stripe.accounts.update(accountId, {
+      business_type: 'individual',
+      business_profile: {
+        name: 'some bussiness',
+        url: 'https://ebay.com',
+        product_description: 'General Contractors-Residential and Commercial',
+        mcc: '5734'
+      },
+      individual: {
+        address: {
+          city: 'New York',
+          country: 'US',
+          line1: '707 Nostrand Ave, Brooklyn, NY 11216, United States',
+          postal_code: '11216',
+          state: 'New York'
+        },
+        dob: {
+          day: 20,
+          month: 2,
+          year: 1980
+        },
+        ssn_last_4: '8888',
+        id_number: '000008888',
+        email,
+        phone: '+1 (718) 493-1375',
+        first_name: 'John',
+        last_name: 'Doe',
+        verification: {
+          document: {
+            front: front.id,
+            back: back.id
+          }
+        }
+      },
+      tos_acceptance: {
+        date: Math.floor(Date.now() / 1000),
+        ip: req.connection.remoteAddress // Assumes you're not using a proxy
+      }
+    });
+  }
+
+  calculateStripeFees(amount) {
+    return parseInt(amount - (amount * 0.0029 + 0.3)) * 100;
   }
 }
 

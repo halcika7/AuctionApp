@@ -1,3 +1,5 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
 <section class="container">
   <form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-required-info

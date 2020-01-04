@@ -12,7 +12,9 @@ const {
   getUserInfo,
   createAccessToken,
   createRefreshToken,
-  getOptionalInfoCard
+  getOptionalInfoCard,
+  productOwnerInfo,
+  getUsersOptionalInfoIdAndCardInfoId
 } = require('../helpers/authHelper');
 const { unlinkFiles } = require('../helpers/unlinkFiles');
 
@@ -41,7 +43,7 @@ class ProfileService extends BaseService {
     }
   }
 
-  async updateUserInfo(file, { userInfo, optionalInfo, cardInfo }, userId, email) {
+  async updateUserInfo(req, file, { userInfo, optionalInfo, cardInfo }, userId, email) {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
@@ -54,6 +56,7 @@ class ProfileService extends BaseService {
       );
 
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
+        req,
         cardInfo,
         userId,
         email,
@@ -80,8 +83,10 @@ class ProfileService extends BaseService {
       const currentOptionalInfo = await OptionalInfoService.getOptionalInfo(userId);
       optionalInfo = removeNullFromOptionalUserInfo(optionalInfo, currentOptionalInfo);
 
-      const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, userId);
-      const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, userId);
+      const { optionalInfoId, cardInfoId } = await getUsersOptionalInfoIdAndCardInfoId(userId);
+
+      const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, optionalInfoId);
+      const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, cardInfoId);
       const [updateUserInfo] = await User.update({ ...userInfo }, { where: { id: userId } });
       const userInfoData = await getUserInfo(userId);
 
@@ -109,6 +114,10 @@ class ProfileService extends BaseService {
     } catch (error) {
       return super.returnGenericFailed();
     }
+  }
+
+  async getProductOwnerInfo(id) {
+    return await productOwnerInfo(id);
   }
 }
 

@@ -683,6 +683,25 @@ button.wishlisted {
       display: none;
     }
   }
+
+  .wonAuction {
+    @include flex(center, center);
+    @include heightWidth(auto, 100%);
+
+    p {
+      @include flex(center, center, column);
+      margin-bottom: 10px;
+
+      span {
+        @include fontMixin(17px, bold, 0.63px, purple);
+        @include margin($all: 10px 0px);
+
+        fa-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 990px) {

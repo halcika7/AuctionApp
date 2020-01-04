@@ -28,6 +28,8 @@ import * as fromApp from "@app/store/app.reducer";
 export class LastStepComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
   @Input() currentStep: number;
+  @Input() payment: boolean = false;
+  @Input() clicked: boolean = false;
   @Output() submitForm = new EventEmitter<any>();
   private _isValidStep = false;
   private step: number = 3;
@@ -52,18 +54,22 @@ export class LastStepComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._showCard = !this.form.value.useCard;
+    const { cName, cNumber, CVC } = this.form.controls;
+    if (this.showCard) {
+      setValidators([cName, cNumber, CVC], ['cName', 'cNumber', 'CVC']);
+    }
     this.checkValidity();
     this.subscription.add(
       this.form.valueChanges.subscribe(({ useCard, useOptionalInfo }) => {
-        const { cName, cNumber, CVC } = this.form.controls;
         if (this._usingOptionslInfo !== useOptionalInfo) {
           this._usingOptionslInfo = useOptionalInfo;
           this.patchValues();
         }
-        if (this._showCard !== !useCard) {
+
+        if(this.showCard !== !useCard) {
           this._showCard = !useCard;
-          if (useCard) {
-            setValidators([cName, cNumber, CVC], "required")
+          if (!useCard) {
+            setValidators([cName, cNumber, CVC], ['cName', 'cNumber', 'CVC']);
             this._selectedYear = null;
             this._selectedMonth = null;
             this._expYearError = null;
@@ -142,7 +148,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
       CVC
     } = this.form.controls;
     let valid = partialFormValidity([address, country, city, zip, phone]);
-    if (!this.form.controls.useCard) {
+    if (!this.form.value.useCard) {
       valid = partialFormValidity([
         address,
         country,

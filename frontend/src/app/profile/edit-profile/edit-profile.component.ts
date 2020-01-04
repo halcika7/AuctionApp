@@ -27,6 +27,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
   private _isValidForm: boolean = false;
   private _clicked = false;
+  private _showSpinner: boolean = false;
   private subscription = new Subscription();
 
   constructor(
@@ -55,6 +56,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.store.select("profile").subscribe(({ userInfo, errors }) => {
         this._clicked = false;
+        this._showSpinner = false;
         if (!emptyObject(userInfo)) {
           this._date = !emptyObject(errors)
             ? this._date
@@ -114,6 +116,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     return this._isValidForm;
   }
 
+  get showSpinner(): boolean {
+    return this._showSpinner;
+  }
+
   onSubmit() {
     const formData = new FormData();
     const userInfo = {
@@ -147,5 +153,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this._clicked = true;
     this.store.dispatch(new ProfileActions.UpdateProfileStart(formData));
     window.scrollTo(0, 0);
+    this._showSpinner = true;
   }
 }

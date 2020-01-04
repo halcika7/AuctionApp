@@ -3,6 +3,7 @@ import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export interface FullProduct extends Product {
   status?: string;
+  paid?: boolean;
   auctionStart: Date;
   auctionEnd: Date;
   highest_bid: string | number;
@@ -16,6 +17,12 @@ export interface Bid {
   User: { firstName: string; lastName: string; photo: string };
 }
 
+export interface OwnerInfo {
+  photo: string;
+  full_name: string;
+  avg_rating: string;
+}
+
 export interface State {
   product: FullProduct;
   similarProducts: Product[];
@@ -24,6 +31,7 @@ export interface State {
   success: boolean;
   numberOfViewers: { views?: number; productId?: string };
   highestBidUserId: string;
+  ownerInfo: OwnerInfo;
   wonAuction: boolean;
 }
 
@@ -42,6 +50,11 @@ const initialState: State = {
     highest_bid: "",
     number_of_bids: "",
     ProductImages: []
+  },
+  ownerInfo: {
+    photo: '',
+    full_name: '',
+    avg_rating: ''
   },
   similarProducts: [],
   bids: [],
@@ -79,6 +92,7 @@ export function productPageReducer(
         highestBidUserId: action.payload.highestBidUserId
           ? action.payload.highestBidUserId
           : "",
+        ownerInfo: action.payload.ownerInfo ? action.payload.ownerInfo : state.ownerInfo,
         wonAuction: action.payload.wonAuction
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:
@@ -89,7 +103,9 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_FAILED:
       return {
         ...initialState,
-        message: action.payload.error.message ? action.payload.error.message : ""
+        message: action.payload.error.message
+          ? action.payload.error.message
+          : ""
       };
     case ProductPageActions.CLEAR_PRODUCT_MESSAGES:
       return {

@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import * as fromApp from "@app/store/app.reducer";
 import * as ProductPageActions from "./store/product-page.actions";
-import { FullProduct, Bid } from "./store/product-page.reducer";
+import { FullProduct, Bid, OwnerInfo } from "./store/product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 import { Wishlist } from "@app/wishlist/wishlist";
 import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
@@ -35,6 +35,7 @@ export class ProductPageComponent extends Wishlist
   private _highestBidUserId: string;
   private _wonAuction: boolean;
   private windowUnload: WindowOnBeforeUnload;
+  private _ownerInfo: OwnerInfo;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -80,7 +81,8 @@ export class ProductPageComponent extends Wishlist
             success,
             numberOfViewers,
             highestBidUserId,
-            wonAuction
+            wonAuction,
+            ownerInfo
           }) => {
             if (product.id) {
               this._highestBidUserId = highestBidUserId;
@@ -122,6 +124,7 @@ export class ProductPageComponent extends Wishlist
             this._success = success;
             this._disabled = !this._success;
             this._wonAuction = wonAuction;
+            this._ownerInfo = ownerInfo;
             this.setMessageDisabled();
           }
         )
@@ -210,7 +213,7 @@ export class ProductPageComponent extends Wishlist
       !this._message &&
       this.product.userId === this.userId
     ) {
-      this._message = this.hide
+      this._message = this.hide || this.product.status == 'closed'
         ? ""
         : "You can't place bid on your own product";
     }
@@ -292,5 +295,9 @@ export class ProductPageComponent extends Wishlist
 
   get wonAuction(): boolean {
     return this._wonAuction;
+  }
+
+  get ownerInfo(): OwnerInfo {
+    return this._ownerInfo;
   }
 }

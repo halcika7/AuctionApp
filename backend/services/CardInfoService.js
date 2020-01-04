@@ -10,7 +10,7 @@ class CardInfoService extends BaseService {
     return await CardInfo.findOne({
       raw: true,
       where: { id },
-      attributes: ['customerId', 'cardId']
+      attributes: ['customerId', 'cardId', 'accountId']
     });
   }
 

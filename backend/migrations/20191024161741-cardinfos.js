@@ -33,6 +33,11 @@ module.exports = {
         allowNull: true,
         defaultValue: null
       },
+      accountId: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+        defaultValue: null
+      },
       customerId: {
         type: Sequelize.STRING(255),
         allowNull: true,

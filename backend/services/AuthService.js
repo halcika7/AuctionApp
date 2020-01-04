@@ -28,7 +28,7 @@ class AuthService extends BaseService {
     this.loggedInUsers = [];
   }
 
-  async register(data) {
+  async register(req, data) {
     try {
       const { errors, isValid } = await registerValidation(data);
 
@@ -39,7 +39,8 @@ class AuthService extends BaseService {
         'Customer for atlant auction app',
         data.email
       );
-      const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId);
+      const account = await StripeService.createAccount(req, data.email);
+      const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId, account.id);
       await createUser(data, id, cardInfoId);
 
       return super.returnResponse(200, {

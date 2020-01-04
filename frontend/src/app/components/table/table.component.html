@@ -47,7 +47,7 @@
           </td>
         </tr>
       </ng-template>
-      <ng-template [ngIf]="type === 'bids'">
+      <ng-template [ngIf]="type === 'bids' && values.length > 0">
         <ng-template ngFor let-item [ngForOf]="values">
           <tr class="spacer">
             <td></td>
@@ -106,22 +106,35 @@
             </td>
             <td>
               <a
+                *ngIf="
+                  item.Product.status !== 'closed' &&
+                  item.price !== item.Product.highest_bid ||
+                  item.Product.paid === 't'
+                "
+                [routerLink]="[
+                  '/shop/products',
+                  item.Product.subcategoryId,
+                  item.Product.id
+                ]"
+                >View</a
+              >
+              <a
+                *ngIf="
+                  item.Product.status === 'closed' &&
+                  item.price === item.Product.highest_bid &&
+                  item.Product.paid !== 't'
+                "
                 [ngClass]="{
                   won:
                     item.Product.status === 'closed' &&
                     item.price === item.Product.highest_bid
                 }"
                 [routerLink]="[
-                  '/shop/products',
+                  '/shop/payment',
                   item.Product.subcategoryId,
                   item.Product.id
                 ]"
-                >{{
-                  item.Product.status === "closed" &&
-                  item.price === item.Product.highest_bid
-                    ? "Pay"
-                    : "View"
-                }}</a
+                >Pay</a
               >
             </td>
           </tr>

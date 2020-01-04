@@ -9,7 +9,10 @@ const ProductImage = require('./ProductImage');
 const ProductReview = require('./ProductReview');
 const Bid = require('./Bid');
 const Category = require('./Category');
-const Product = require('./Product');const Wishlist = require('./Wishlist');
+const Product = require('./Product');
+const Wishlist = require('./Wishlist');
+const Order = require('./Order');
+const Review = require('./Review');
 
 Wishlist.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
 Wishlist.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
@@ -19,6 +22,13 @@ User.belongsTo(CardInfo, { foreignKey: 'cardInfoId', sourceKey: 'id' });
 
 Bid.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
 Bid.belongsTo(Product, { foreignKey: 'productId', sourceKey: 'id' });
+
+Review.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+Review.belongsTo(User, { foreignKey: 'ownerId', sourceKey: 'id' });
+User.hasMany(Review, { foreignKey: 'ownerId', sourceKey: 'id' });
+
+Order.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+Order.belongsTo(User, { foreignKey: 'ownerId', sourceKey: 'id' });
 
 Category.hasMany(Subcategory, { foreignKey: 'CategoriesId', sourceKey: 'id' });
 Subcategory.belongsTo(Category, {
@@ -35,11 +45,15 @@ Product.belongsTo(Subcategory, {
   foreignKey: 'subcategoryId',
   sourceKey: 'id'
 });
+
 Subcategory.hasMany(Product, {
   foreignKey: 'subcategoryId',
   sourceKey: 'id'
 });
+
 Product.belongsTo(Brand, { foreignKey: 'brandId', sourceKey: 'id' });
+Product.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+Product.belongsTo(Order, { foreignKey: 'orderId', sourceKey: 'id' });
 Brand.hasMany(Product, { foreignKey: 'brandId', sourceKey: 'id' });
 
 Product.belongsToMany(FilterValue, {

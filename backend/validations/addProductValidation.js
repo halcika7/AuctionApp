@@ -7,6 +7,7 @@ const StripeService = require('../services/StripeService');
 const { MAX_BID } = require('../config/configs');
 const { addSubtractDaysToDate } = require('../helpers/addSubtractDaysToDate');
 const { client } = require('../config/twilioConfig');
+const isEmpty = require('./is-empty');
 
 exports.addProductValidation = async (
   {
@@ -91,9 +92,9 @@ exports.addProductValidation = async (
 
   validateDates(productData.startDate, productData.endDate, errors);
 
-  await addressValidation(addressInformation, errors);
+  await this.addressValidation(addressInformation, errors);
 
-  const choosenCardToken = await creditCardValidation(cardInformation, userId, errors);
+  const choosenCardToken = await this.creditCardValidation(cardInformation, userId, errors);
 
   return { errors: { errors }, isValid: isEmpty(errors), choosenCardToken };
 };
@@ -145,12 +146,17 @@ const filterValidation = async (isSubcategoryValid, id, filtersData, errors) => 
   }
 };
 
-const addressValidation = async (addressInformation, errors) => {
+exports.addressValidation = async (addressInformation, errors) => {
   const { address, city, country, phone, zip } = addressInformation;
 
   if (!address) errors.address = 'Address is required';
+  else if (address.length > 100) errors.address = 'Address cannot exceed 100 characters';
+
   if (!city) errors.city = 'City is required';
+  else if (city.length > 100) errors.address = 'City cannot exceed 100 characters';
+
   if (!country) errors.country = 'Country is required';
+  else if (country.length > 100) errors.address = 'Country cannot exceed 100 characters';
 
   if (!phone) {
     errors.phone = 'Phone is required';
@@ -163,16 +169,26 @@ const addressValidation = async (addressInformation, errors) => {
   }
 
   if (!zip) errors.zip = 'Zip is required';
+  else if (zip.length !== 5) errors.zip = 'Zip code length must be exactly 5';
 };
 
-const creditCardValidation = async (cardInformation, userId, errors) => {
+exports.creditCardValidation = async (cardInformation, userId, errors) => {
   let choosenCardToken = '';
   const { cvc, name, number, exp_year, exp_month } = cardInformation;
+  const { customerId, cardId, accountId } = await CardInfoService.findUserCardInfo(userId);
 
   if (!cardInformation.useCard) {
     if (!cvc) errors.CVC = 'CVC is required';
+    else if (cvc.length < 3) errors.CVC = 'CVC must contain at least 3 characters';
+    else if (cvc.length > 4) errors.CVC = 'CVC cannot exceed 4 characters';
+
     if (!name) errors.cName = 'Name on card is required';
+    else if (name.length > 100) errors.cName = 'Name on card cannot exceed 100 characters';
+
     if (!number) errors.cNumber = 'Card number is required';
+    else if (number.length < 13) errors.cNumber = 'Card number must contain at least 13 characters';
+    else if (number.length > 16) errors.cNumber = 'Card number cannot exceed 16 characters';
+
     if (!exp_year) errors.exp_year = 'Expiration year is required';
     if (!exp_month) errors.exp_month = 'Expiration month is required';
 
@@ -186,13 +202,12 @@ const creditCardValidation = async (cardInformation, userId, errors) => {
       }
     }
   } else {
-    const { customerId } = await CardInfoService.findUserCardInfo(userId);
-
     if (!customerId) {
       errors.card = 'Please provide valid credit card information';
     } else {
       choosenCardToken = {
-        customer: customerId
+        customer: customerId,
+        card: cardId
       };
     }
   }

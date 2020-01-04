@@ -62,7 +62,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AddProductStart("/add-product/activeproducts"));
 
     this._form = new FormGroup({
-      ...NAME_VALIDATOR("name", 5, 60, [numberOfWordsValidator(1, 10)]),
+      ...NAME_VALIDATOR("name", 1, 60, [numberOfWordsValidator(1, 10)]),
       ...NAME_VALIDATOR("description", 1, 700),
       ...NAME_VALIDATOR("images", 3, 20),
       ...NAME_VALIDATOR("price", 1, 20000),

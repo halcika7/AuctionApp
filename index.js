@@ -35,6 +35,7 @@ app.use('/api/profile', require('./backend/routes/profile/profile'));
 app.use('/api/add-product', require('./backend/routes/product/add-product'));
 app.use('/api/wishlist', require('./backend/routes/wishlist/wishlist'));
 app.use('/api/notifications', require('./backend/routes/notifications/notifications')(io));
+app.use('/api/payment', require('./backend/routes/payment/payment'));
 
 require('./backend/cron/cron')(io);
 

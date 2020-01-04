@@ -19,7 +19,8 @@ import {
 })
 export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   private _isValidForm = false;
-  private formSubscription: Subscription;
+  private registerSubscription = new Subscription();
+  private _showSpinner: boolean = false;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {
     super(
@@ -37,26 +38,41 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.formSubscription = super.form.statusChanges.subscribe(validity => {
-      if (validity === "VALID") {
-        this._isValidForm = true;
-      } else {
-        this._isValidForm = false;
-      }
-    });
+    this.registerSubscription.add(
+      super.form.statusChanges.subscribe(validity => {
+        if (validity === "VALID") {
+          this._isValidForm = true;
+        } else {
+          this._isValidForm = false;
+        }
+      })
+    );
+
+    this.registerSubscription.add(
+      this.store.select("auth").subscribe(({ finished }) => {
+        if (finished) {
+          this._showSpinner = false;
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.formSubscription.unsubscribe();
+    this.registerSubscription.unsubscribe();
     super.destroy();
   }
 
   onSubmit() {
+    this._showSpinner = true;
     super.isClicked = true;
     this.store.dispatch(new AuthActions.RegisterStart({ ...super.form.value }));
   }
 
   get isValidForm(): boolean {
     return this._isValidForm;
+  }
+
+  get showSpinner(): boolean {
+    return this._showSpinner;
   }
 }

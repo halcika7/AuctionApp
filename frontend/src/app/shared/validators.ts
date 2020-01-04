@@ -122,9 +122,23 @@ export const numberOfWordsValidator = (min = 2, max = 5) => {
   };
 };
 
-export const setValidators = (controls: any[], validator) => {
-  controls.forEach((control: FormControl) => {
-    control.setValidators(Validators[validator]);
+export const setValidators = (controls: any[], names: string[]) => {
+  controls.forEach((control: FormControl, index: number) => {
+    if (names[index] == "cName") {
+      control.setValidators([Validators.required, Validators.maxLength(100)]);
+    } else if (names[index] == "cNumber") {
+      control.setValidators([
+        Validators.required,
+        Validators.maxLength(16),
+        Validators.minLength(13)
+      ]);
+    } else {
+      control.setValidators([
+        Validators.required,
+        Validators.maxLength(4),
+        Validators.minLength(3)
+      ]);
+    }
   });
 };
 

@@ -129,6 +129,7 @@ module.exports = {
           userId: 1,
           subcategoryId,
           brandId,
+          orderId: i + 1,
           createdAt: new Date(),
           updatedAt: new Date()
         });
