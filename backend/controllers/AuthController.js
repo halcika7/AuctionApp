@@ -1,6 +1,7 @@
 const AuthServiceInstance = require('../services/AuthService');
 const BaseController = require('./BaseController');
 const { decodeToken } = require('../helpers/authHelper');
+const { PassportService } = require('../services/PassportService');
 
 class AuthController extends BaseController {
   constructor() {
@@ -21,6 +22,10 @@ class AuthController extends BaseController {
     }
 
     return super.sendResponse(res, status, response);
+  }
+
+  socialLogin(req, res, provider) {
+    return PassportService.socialCallback(req, res, provider);
   }
 
   async logout(req, res) {

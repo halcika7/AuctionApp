@@ -10,6 +10,7 @@ const socketio = require('socket.io');
 const server = http.createServer(app);
 const io = socketio(server);
 const { URL } = require('./backend/config/configs');
+const { passport } = require('./backend/services/PassportService');
 
 app.use(
   cors({
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
 
 require('./backend/config/database');
 require('./backend/models/Associations');
