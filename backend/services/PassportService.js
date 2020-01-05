@@ -12,9 +12,6 @@ const {
 } = require('../config/configs');
 const User = require('../models/User');
 const AuthService = require('./AuthService');
-const StripeService = require('./StripeService');
-const OptionalInfoService = require('./OptionalInfoService');
-const CardInfoService = require('./CardInfoService');
 const BaseService = require('./BaseService');
 const { createAccessToken, createRefreshToken } = require('../helpers/authHelper');
 
@@ -23,52 +20,36 @@ class PassportService extends BaseService {
     super(PassportService);
   }
 
-  async googleStartegy(req, token, tokenSecret, profile, done) {
-    return this.passportAuthenticationHelper(req, profile, done, { googleId: true });
-  }
-
-  async facebookStrategy(req, token, tokenSecret, profile, done) {
-    return this.passportAuthenticationHelper(req, profile, done, { facebookId: true });
-  }
-
   socialCallback(req, res, provider) {
     return passport.authenticate(
       provider,
       { session: false, failureRedirect: '/' },
-      (err, user, info) => this.callbackHelper(err, user, info, res)
-    )(req, res);
+      (err, user, info) => this.passportCallback(err, user, info, res)
+    )(req, res, provider);
   }
 
-  async passportAuthenticationHelper(req, profile, done, { googleId = false, facebookId = false }) {
+  async passportStrategy(req, profile, done, { googleId = false, facebookId = false }) {
+    let updateObject = {};
     const whereObj = { where: { email: profile._json.email } };
     const findUserWithEmail = await User.findOne({ raw: true, ...whereObj });
 
     if (googleId) {
       whereObj.where.googleId = profile.id;
+      updateObject.googleId = profile.id;
     } else if (facebookId) {
       whereObj.where.facebookId = profile.id;
+      updateObject.facebookId = profile.id;
     }
 
-    const findUserWithEmailAndGoogleId = await User.findOne({ raw: true, ...whereObj });
+    const findUserWithEmailSocialId = await User.findOne({ raw: true, ...whereObj });
 
     if (
-      (findUserWithEmailAndGoogleId && findUserWithEmailAndGoogleId.deactivated) ||
+      (findUserWithEmailSocialId && findUserWithEmailSocialId.deactivated) ||
       (findUserWithEmail && findUserWithEmail.deactivated)
     ) {
-
       return done(new Error('User blocked!'));
     } else if (!findUserWithEmail) {
-
-      const { id } = await OptionalInfoService.create();
-
-      const { id: customerId } = await StripeService.createCustomer(
-        'Customer for atlant auction app',
-        profile._json.email
-      );
-
-      const account = await StripeService.createAccount(req, profile._json.email);
-
-      const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId, account.id);
+      const { id, cardInfoId } = await AuthService.createUserData(req, profile._json.email);
 
       const socialIds = {
         googleId: googleId ? profile.id : null,
@@ -87,26 +68,18 @@ class PassportService extends BaseService {
       });
 
       return done(null, user);
-    } else if (!findUserWithEmailAndGoogleId) {
-
-      let updateObject = {};
-
-      if (googleId) {
-        updateObject.googleId = profile.id;
-      } else if (facebookId) {
-        updateObject.facebookId = profile.id;
-      }
-
+    } else if (!findUserWithEmailSocialId) {
       await User.update({ ...updateObject }, { where: { id: findUserWithEmail.id } });
 
       const user = await User.findOne({ raw: true, where: { id: findUserWithEmail.id } });
-      
+
       return done(null, user);
     }
-    return done(null, findUserWithEmailAndGoogleId);
+
+    return done(null, findUserWithEmailSocialId);
   }
 
-  async callbackHelper(err, user, info, res) {
+  async passportCallback(err, user, info, res) {
     try {
       if (err) return res.redirect(`${URL}/home/auth/login?err=${err}`);
 
@@ -146,7 +119,9 @@ passport.use(
       passReqToCallback: true
     },
     (req, token, tokenSecret, profile, done) =>
-      PassportServiceInstance.googleStartegy(req, token, tokenSecret, profile, done)
+      PassportServiceInstance.passportStrategy(req, profile, done, {
+        googleId: true
+      })
   )
 );
 
@@ -160,7 +135,9 @@ passport.use(
       passReqToCallback: true
     },
     (req, token, tokenSecret, profile, done) =>
-      PassportServiceInstance.facebookStrategy(req, token, tokenSecret, profile, done)
+      PassportServiceInstance.passportStrategy(req, profile, done, {
+        facebookId: true
+      })
   )
 );
 

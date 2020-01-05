@@ -29,6 +29,7 @@ class AuthController extends BaseController {
   }
 
   async logout(req, res) {
+    req.logout();
     const token = super.getAuthorizationHeader(req);
     const { id } = decodeToken(token) || { id: undefined };
     AuthServiceInstance.removeLoggedUser(id);
