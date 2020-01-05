@@ -52,7 +52,7 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (req, cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
+exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
   if (!isValidUserInfo) return { isValid: true, errors };
 
   if (
@@ -72,7 +72,7 @@ exports.userCardValidation = async (req, cardInfo, userCardInfoId, email, errors
     if (!customerId) {
       try {
         const { id:customer } = await StripeService.createCustomer('Customer for atlant auction app', email);
-        const account = await StripeService.createAccount(req, email);
+        const account = await StripeService.createAccount(email);
         if(!customer || !account) throw new Error('Customer or Account not created');
         customerId = customer;
         accountId = account.id;

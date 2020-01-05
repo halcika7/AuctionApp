@@ -72,7 +72,7 @@ class StripeService extends BaseService {
     });
   }
 
-  async createAccount(req, email) {
+  async createAccount(email) {
     const account = await stripe.accounts.create({
       type: 'custom',
       country: 'US',
@@ -80,12 +80,12 @@ class StripeService extends BaseService {
       requested_capabilities: ['card_payments', 'transfers']
     });
 
-    await this.updateAccount(req, account.id, email);
+    await this.updateAccount(account.id, email);
 
     return account;
   }
 
-  async updateAccount(req, accountId, email) {
+  async updateAccount(accountId, email) {
     const ff = fs.readFileSync('./backend/images/img1.jpg');
     const fb = fs.readFileSync('./backend/images/img2.jpg');
     const back = await stripe.files.create({
@@ -104,6 +104,15 @@ class StripeService extends BaseService {
         type: 'application/octet-stream'
       }
     });
+    const ip =
+      Math.floor(Math.random() * 255) +
+      1 +
+      '.' +
+      (Math.floor(Math.random() * 255) + 0) +
+      '.' +
+      (Math.floor(Math.random() * 255) + 0) +
+      '.' +
+      (Math.floor(Math.random() * 255) + 0);
     return await stripe.accounts.update(accountId, {
       business_type: 'individual',
       business_profile: {
@@ -140,7 +149,7 @@ class StripeService extends BaseService {
       },
       tos_acceptance: {
         date: Math.floor(Date.now() / 1000),
-        ip: req.connection.remoteAddress // Assumes you're not using a proxy
+        ip
       }
     });
   }
