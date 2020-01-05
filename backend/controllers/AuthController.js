@@ -9,7 +9,7 @@ class AuthController extends BaseController {
   }
 
   async registerUser(req, res) {
-    const { status, response } = await AuthServiceInstance.register(req, req.body);
+    const { status, response } = await AuthServiceInstance.register(req.body);
 
     return super.sendResponse(res, status, response);
   }

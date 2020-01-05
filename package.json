@@ -9,6 +9,7 @@
     "frontend": "npm start --prefix frontend",
     "frontend-install": "npm install --prefix frontend",
     "create-db": "node ./backend/config/createDb.js",
+    "generate-users": "node ./backend/config/createDefaultUsers.js",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",

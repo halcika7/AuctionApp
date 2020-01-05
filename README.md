@@ -41,3 +41,9 @@
 
     npm run dev
 ```
+If you want to seed database 
+
+```bash
+    npm run generate-users
+    npm run seed
+```

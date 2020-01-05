@@ -1,37 +1,13 @@
 'use strict';
-const faker = require('faker');
+const fs = require('fs');
+const data = fs.readFileSync('./userData.json');
+const jsonParsed = JSON.parse(data);
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    let users = [
-      {
-        firstName: 'Haris',
-        lastName: 'Beslic2',
-        email: 'harisbeslic32@gmail.com',
-        photo: 'https://static.thenounproject.com/png/363633-200.png',
-        password: '$2a$10$EvaQJZf.TU7POOzXv.n69.xbrtamfBQU5GAx/rfm86JftI6jlFk9m',
-        roleId: Math.floor(Math.random() * 2 + 1),
-        optionalInfoId: 1,
-        cardInfoId: 1,
-        googleId: null,
-        facebookId: null
-      }
-    ];
-    for (let i = 2; i < 52; i++) {
-      users.push({
-        firstName: 'Semir',
-        lastName: 'lastname',
-        email: `sema${i - 1}@gmail.com`,
-        photo: 'https://static.thenounproject.com/png/363633-200.png',
-        password: '$2a$10$9DXn5n4Q.0ZyYQm6uMWr0OVtKzagWH41PWAfWvgncMV3l/Q9QSGNu',
-        roleId: Math.floor(Math.random() * 2 + 1),
-        optionalInfoId: i,
-        cardInfoId: i,
-        googleId: null,
-        facebookId: null
-      });
-    }
-    return queryInterface.bulkInsert('Users', users, {});
+    fs.unlinkSync('./userData.json');
+
+    return queryInterface.bulkInsert('Users', jsonParsed.userData, {});
   },
 
   down: (queryInterface, Sequelize) => {

@@ -28,7 +28,7 @@ class PassportService extends BaseService {
     )(req, res, provider);
   }
 
-  async passportStrategy(req, profile, done, { googleId = false, facebookId = false }) {
+  async passportStrategy(profile, done, { googleId = false, facebookId = false }) {
     let updateObject = {};
     const whereObj = { where: { email: profile._json.email } };
     const findUserWithEmail = await User.findOne({ raw: true, ...whereObj });
@@ -49,7 +49,7 @@ class PassportService extends BaseService {
     ) {
       return done(new Error('User blocked!'));
     } else if (!findUserWithEmail) {
-      const { id, cardInfoId } = await AuthService.createUserData(req, profile._json.email);
+      const { id, cardInfoId } = await AuthService.createUserData(profile._json.email);
 
       const socialIds = {
         googleId: googleId ? profile.id : null,
@@ -115,11 +115,10 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: GOOGLE_CALLBACK,
-      passReqToCallback: true
+      callbackURL: GOOGLE_CALLBACK
     },
-    (req, token, tokenSecret, profile, done) =>
-      PassportServiceInstance.passportStrategy(req, profile, done, {
+    (token, tokenSecret, profile, done) =>
+      PassportServiceInstance.passportStrategy(profile, done, {
         googleId: true
       })
   )
@@ -131,11 +130,10 @@ passport.use(
       clientID: FACEBOOK_CLIENT_ID,
       clientSecret: FACEBOOK_CLIENT_SECRET,
       callbackURL: FACEBOOK_CALLBACK,
-      profileFields: ['id', 'displayName', 'photos', 'email', 'gender', 'name'],
-      passReqToCallback: true
+      profileFields: ['id', 'displayName', 'photos', 'email', 'gender', 'name']
     },
-    (req, token, tokenSecret, profile, done) =>
-      PassportServiceInstance.passportStrategy(req, profile, done, {
+    (token, tokenSecret, profile, done) =>
+      PassportServiceInstance.passportStrategy(profile, done, {
         facebookId: true
       })
   )
