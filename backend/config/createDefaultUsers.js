@@ -20,10 +20,10 @@ const createStripeAccounts = async () => {
     fs.writeFileSync('./cardInfoData.json', JSON.stringify({ cardInfoData }));
 
     console.log('okk');
-    process.kill(process.pid);
+    // process.kill(process.pid);
   } catch (error) {
     console.log('TCL: ann -> error', error);
-    process.kill(process.pid);
+    // process.kill(process.pid);
   }
 };
 
