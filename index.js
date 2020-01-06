@@ -26,7 +26,7 @@ app.use(passport.initialize());
 
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
-      if (req.headers['x-forwarded-proto'] !== 'https')
+      if (!req.secure && req.headers['x-forwarded-proto'] !== 'https')
           return res.redirect('https://' + req.headers.host + req.url);
       else
           return next();
@@ -36,10 +36,6 @@ app.use((req, res, next) => {
 
 require('./backend/config/database');
 require('./backend/models/Associations');
-
-app.get('/.well-known/acme-challenge/:content', function(req, res) {
-  res.send('qBI8OL_zZ1PcOtlWsdT6rdMiFSi2i0OmMmunNnYXLcE')
-})
 
 app.use('/api/auth', require('./backend/routes/authentication/authRoutes')(io));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
