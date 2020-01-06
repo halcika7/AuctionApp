@@ -12,8 +12,6 @@ const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 const port = process.env.PORT || 4000;
 
-app.use('https://halcstore.cloudflareaccess.com', require('./backend/routes/authentication/facebookCallback'));
-
 app.use(
   cors({
     origin: URL,
