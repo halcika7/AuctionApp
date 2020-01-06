@@ -5,16 +5,31 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
-const socketio = require('socket.io');
-const http = require('http');
-const server = http.createServer(app);
-const io = socketio(server);
+const port = process.env.PORT || 4000;
+const forceSSL = require('express-force-ssl');
+const fs = require('fs');
+const https = require('https');
+const server = https.createServer(
+  {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+  },
+  app
+);
+const io = require('socket.io').listen(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 
+app.set('forceSSLOptions', {
+  enable301Redirects: true,
+  trustXFPHeader: false,
+  httpsPort: port,
+  sslRequiredMessage: 'SSL Required.'
+});
+
 app.use(
   cors({
-    origin: URL,
+    origin: URL
     // credentials: true
   })
 );
@@ -22,6 +37,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(forceSSL);
 app.use(passport.initialize());
 
 require('./backend/config/database');
@@ -50,7 +66,5 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
   });
 }
-
-const port = process.env.PORT || 4000;
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
