@@ -16,13 +16,6 @@ app.use(enforce.HTTPS({ trustProtoHeader: true }))
 
 const port = process.env.PORT || 4000;
 
-app.set('forceSSLOptions', {
-  enable301Redirects: true,
-  trustXFPHeader: false,
-  httpsPort: port,
-  sslRequiredMessage: 'SSL Required.'
-});
-
 app.use(
   cors({
     origin: URL,

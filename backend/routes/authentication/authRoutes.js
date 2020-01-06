@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const forceSSL = require('express-force-ssl');
 const AuthController = require('../../controllers/AuthController');
 const { passport } = require('../../services/PassportService');
 
@@ -21,7 +20,6 @@ module.exports = io => {
 
   router.get(
     '/google',
-    forceSSL,
     passport.authenticate('google', {
       scope: ['profile', 'email']
     })
@@ -29,17 +27,16 @@ module.exports = io => {
 
   router.get(
     '/facebook',
-    forceSSL,
     passport.authenticate('facebook', {
       scope: 'email'
     })
   );
 
-  router.get('/google/callback', forceSSL, (req, res) =>
+  router.get('/google/callback', (req, res) =>
     AuthController.socialLogin(req, res, 'google')
   );
 
-  router.get('/facebook/callback', forceSSL, (req, res) =>
+  router.get('/facebook/callback', (req, res) =>
     AuthController.socialLogin(req, res, 'facebook')
   );
 
