@@ -14,8 +14,8 @@ class CardInfoService extends BaseService {
     });
   }
 
-  async createCardInfo(customerId) {
-    return await CardInfo.create({ customerId });
+  async createCardInfo(customerId, accountId) {
+    return await CardInfo.create({ customerId, accountId });
   }
 
   async updateCardInfo(cardInfoData, id) {

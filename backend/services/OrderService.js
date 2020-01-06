@@ -69,7 +69,6 @@ class OrderService extends BaseService {
         ownerId: userId
       });
     } catch (error) {
-      console.log('TCL: updateOrder -> error', error)
       return super.returnResponse(403, {
         message: 'Something happened. We were unable to perform request.'
       });

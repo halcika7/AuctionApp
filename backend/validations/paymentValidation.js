@@ -11,7 +11,7 @@ exports.paymentViewValidation = async (id, subcategoryId, userId) => {
     return { valid: false };
   }
 
-  return { valid: true };
+  return { valid: true, highestBid };
 };
 
 exports.validateUserPayment = async (
@@ -23,7 +23,7 @@ exports.validateUserPayment = async (
 ) => {
   let errors = {};
   let message = '';
-  const { valid } = await this.paymentViewValidation(productId, subcategoryId, bidderId);
+  const { valid, highestBid } = await this.paymentViewValidation(productId, subcategoryId, bidderId);
 
   if (!valid) {
     return { message: 'Product not found!' };
