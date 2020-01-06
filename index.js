@@ -7,6 +7,8 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 4000;
 const fs = require('fs');
+const http = require('http');
+const httpServer = http.createServer();
 const https = require('https');
 const secureServer = https.createServer(
   {
@@ -16,7 +18,7 @@ const secureServer = https.createServer(
   app
 );
 
-const io = require('socket.io')(secureServer);
+const io = require('socket.io')(httpServer);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService')
 
@@ -60,3 +62,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 secureServer.listen(port, () => console.log(`Server running on port ${port}`));
+httpServer.listen(port, () => console.log(`Server running on port ${port}`));
