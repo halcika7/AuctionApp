@@ -104,6 +104,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
   }
 
   process() {
+    this._isValidStep = false;
     this.submitForm.emit({
       exp_year: this.selectedYear,
       exp_month: this.selectedMonth

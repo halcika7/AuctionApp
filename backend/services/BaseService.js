@@ -1,12 +1,12 @@
 const { decodeToken } = require('../helpers/authHelper');
+const { URL } = require('../config/configs');
 
 module.exports = class BaseService {
   constructor(ChildClass) {
-
     if (!ChildClass.instance) {
       ChildClass.instance = this;
     }
-    
+
     return ChildClass.instance;
   }
 
@@ -26,5 +26,12 @@ module.exports = class BaseService {
 
   decodeAuthorizationToken(token) {
     return decodeToken(token) || { id: undefined };
+  }
+
+  redirectAfterLogin(res, { accessToken, message, err }) {
+    if (err) return res.redirect(`${URL}/home/auth/login?err=${err}`);
+    return res.redirect(
+      `${URL}/home/auth/login?token=${accessToken}&message=${message}&remember=${true}`
+    );
   }
 };

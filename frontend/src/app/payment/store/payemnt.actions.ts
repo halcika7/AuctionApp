@@ -1,6 +1,6 @@
 import { Action } from "@ngrx/store";
 
-export const CHACK_USER_VALIDITY = "CHACK_USER_VALIDITY";
+export const CHECK_USER_VALIDITY = "CHECK_USER_VALIDITY";
 export const MAKE_PAYMENT = "MAKE_PAYMENT";
 
 export const PAYMENT_PAGE_SUCCESS = "PAYMENT_PAGE_SUCCESS";
@@ -9,7 +9,7 @@ export const PAYMENT_PAGE_FAILED = "PAYMENT_PAGE_FAILED";
 export const CLEAR_PAYMENT_MESSAGES = "CLEAR_PAYMENT_MESSAGES";
 
 export class CheckUserValidity implements Action {
-  readonly type = CHACK_USER_VALIDITY;
+  readonly type = CHECK_USER_VALIDITY;
   constructor(public data: { productId: string; subcategoryId: string }) {}
 }
 

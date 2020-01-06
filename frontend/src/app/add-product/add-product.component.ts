@@ -11,7 +11,8 @@ import {
   numberOfWordsValidator,
   BASIC_INPUT,
   PHONE_VALIDATOR,
-  setErrors
+  setErrors,
+  clearValidators
 } from "../shared/validators";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
@@ -46,6 +47,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   private _message: string;
   private _success: boolean;
   private subscription = new Subscription();
+  private _controls: any[] = [];
 
   constructor(
     private addProductService: AddProductService,
@@ -82,6 +84,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ...BASIC_INPUT("CVC")
     });
 
+    Object.keys(this._form.controls).forEach(control => {
+      this._controls.push(this._form.controls[control]);
+    })
+
     this.subscription.add(
       this.store
         .select("addProduct")
@@ -97,6 +103,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
               this.addProductService.changeStepValue(1);
             }
             if (this._message && this._success) {
+              clearValidators(this._controls);
               setTimeout(() => {
                 this.router.navigate(["/account/profile"]);
               }, 3000);

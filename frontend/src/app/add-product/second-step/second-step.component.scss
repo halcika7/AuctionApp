@@ -42,7 +42,7 @@ p {
   }
 
   label {
-    @include fontMixin(18px, light, 0.63px, light_black);
+    @include fontMixin(18px, regular, 0.63px, light_black);
     display: block;
     margin-bottom: 15px;
   }

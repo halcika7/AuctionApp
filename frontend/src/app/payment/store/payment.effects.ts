@@ -12,7 +12,7 @@ import { AddProductFailed } from "@app/add-product/store/add-product.actions";
 export class PaymentPageEffects {
   @Effect()
   checkUserStart = this.actions$.pipe(
-    ofType(PaymentPageActions.CHACK_USER_VALIDITY),
+    ofType(PaymentPageActions.CHECK_USER_VALIDITY),
     switchMap(({ data }) => {
       return this.http.post<any>("/payment/checkuservalidity", data).pipe(
         map(data => {

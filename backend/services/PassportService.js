@@ -1,5 +1,5 @@
 const passport = require('passport');
-const { Strategy: GoolgeStrategy } = require('passport-google-oauth20');
+const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
 const { Strategy: FacebookStrategy } = require('passport-facebook');
 const {
   GOOGLE_CLIENT_ID,
@@ -47,7 +47,7 @@ class PassportService extends BaseService {
       (findUserWithEmailSocialId && findUserWithEmailSocialId.deactivated) ||
       (findUserWithEmail && findUserWithEmail.deactivated)
     ) {
-      return done(new Error('User blocked!'));
+      return done(new Error(`User ${profile._json.email} is deactivated.`));
     } else if (!findUserWithEmail) {
       const { id, cardInfoId } = await AuthService.createUserData(profile._json.email);
 
@@ -81,20 +81,21 @@ class PassportService extends BaseService {
 
   async passportCallback(err, user, info, res) {
     try {
-      if (err) return res.redirect(`${URL}/home/auth/login?err=${err}`);
+      if (err) return super.redirectAfterLogin(res, { err });
 
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
 
       AuthService.setRefreshTokenCookie(res, refreshToken);
 
-      return res.redirect(
-        `${URL}/home/auth/login?token=${accessToken}&message=${"You're successfully logged in"}&remember=${true}`
-      );
+      return super.redirectAfterLogin(res, {
+        accessToken,
+        message: "You're successfully logged in"
+      });
     } catch (error) {
-      return res.redirect(
-        `${URL}/home/auth/login?err=${'Something happened. We were unable to perform request.'}`
-      );
+      return super.redirectAfterLogin(res, {
+        err: 'Something happened. We were unable to perform request.'
+      });
     }
   }
 }
@@ -111,7 +112,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 passport.use(
-  new GoolgeStrategy(
+  new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,

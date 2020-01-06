@@ -65,7 +65,7 @@ class OrderService extends BaseService {
       }
 
       return super.returnResponse(200, {
-        message: "You have successfully paid order. We'll let you know when the product ships.",
+        message: "You have successfully paid order. The order will be shipped soon.",
         ownerId: userId
       });
     } catch (error) {
