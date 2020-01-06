@@ -11,6 +11,18 @@ const io = require('socket.io').listen(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 
+const enforce = require('express-sslify');
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
+
+const port = process.env.PORT || 4000;
+
+app.set('forceSSLOptions', {
+  enable301Redirects: true,
+  trustXFPHeader: false,
+  httpsPort: port,
+  sslRequiredMessage: 'SSL Required.'
+});
+
 app.use(
   cors({
     origin: URL,
@@ -49,7 +61,5 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
   });
 }
-
-const port = process.env.PORT || 4000;
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
