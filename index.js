@@ -11,14 +11,11 @@ const server = http.createServer(app);
 const io = socketio(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
-const sslRedirect = require('heroku-ssl-redirect');
-
-app.use(sslRedirect());
 
 app.use(
   cors({
     origin: URL,
-    credentials: true
+    // credentials: true
   })
 );
 app.use(cookieParser());
