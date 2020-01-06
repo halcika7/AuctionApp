@@ -12,6 +12,16 @@ const io = socketio(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    console.log('TCL: req.headers[x-forwarded-proto]', req.headers['x-forwarded-proto']);
+    console.log('TCL: req.secure', req.secure);
+    if (!req.secure && req.headers['x-forwarded-proto'] !== 'https')
+      return res.redirect('https://' + req.headers.host + req.url);
+    else return next();
+  } else return next();
+});
+
 app.use(
   cors({
     origin: URL,
@@ -23,16 +33,6 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
-
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production') {
-      if (!req.secure && req.headers['x-forwarded-proto'] !== 'https')
-          return res.redirect('https://' + req.headers.host + req.url);
-      else
-          return next();
-  } else
-      return next();
-});
 
 require('./backend/config/database');
 require('./backend/models/Associations');
