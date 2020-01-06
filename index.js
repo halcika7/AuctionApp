@@ -6,7 +6,6 @@ const compression = require('compression');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 4000;
-const forceSSL = require('express-force-ssl');
 const fs = require('fs');
 const https = require('https');
 const server = https.createServer(
@@ -18,26 +17,18 @@ const server = https.createServer(
 );
 const io = require('socket.io').listen(server);
 const { URL } = require('./backend/config/configs');
-const { passport } = require('./backend/services/PassportService');
-
-app.set('forceSSLOptions', {
-  enable301Redirects: true,
-  trustXFPHeader: false,
-  httpsPort: port,
-  sslRequiredMessage: 'SSL Required.'
-});
+const { passport } = require('./backend/services/PassportService')
 
 app.use(
   cors({
-    origin: URL
-    // credentials: true
+    origin: URL,
+    credentials: true
   })
 );
 app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(forceSSL);
 app.use(passport.initialize());
 
 require('./backend/config/database');
