@@ -11,12 +11,9 @@ const server = http.createServer(app);
 const io = socketio(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
+const sslRedirect = require('heroku-ssl-redirect');
 
-app.use((req, res, next) => {
-  console.log('TCL: req.url', req.url)
-  console.log('TCL: req.secure', req.secure)
-  return next();
-})
+app.use(sslRedirect());
 
 app.use(
   cors({
