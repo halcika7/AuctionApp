@@ -43,7 +43,7 @@ class ProfileService extends BaseService {
     }
   }
 
-  async updateUserInfo(req, file, { userInfo, optionalInfo, cardInfo }, userId, email) {
+  async updateUserInfo( file, { userInfo, optionalInfo, cardInfo }, userId, email) {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
     cardInfo = JSON.parse(cardInfo);
@@ -56,7 +56,6 @@ class ProfileService extends BaseService {
       );
 
       const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
-        req,
         cardInfo,
         userId,
         email,
