@@ -25,6 +25,13 @@ module.exports = io => {
     })
   );
 
+  router.get(
+    '/facebook',
+    passport.authenticate('facebook', {
+      scope: 'email'
+    })
+  );
+
   router.get('/google/callback', (req, res) => AuthController.socialLogin(req, res, 'google'));
 
   router.get('/facebook/callback', (req, res) => AuthController.socialLogin(req, res, 'facebook'));
