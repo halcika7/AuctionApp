@@ -32,13 +32,9 @@ module.exports = io => {
     })
   );
 
-  router.get('/google/callback', (req, res) =>
-    AuthController.socialLogin(req, res, 'google')
-  );
+  router.get('/google/callback', (req, res) => AuthController.socialLogin(req, res, 'google'));
 
-  router.get('/facebook/callback', (req, res) =>
-    AuthController.socialLogin(req, res, 'facebook')
-  );
+  router.get('/facebook/callback', (req, res) => AuthController.socialLogin(req, res, 'facebook'));
 
   return router;
 };

@@ -12,7 +12,8 @@ const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 
 const enforce = require('express-sslify');
-app.use(enforce.HTTPS({ trustProtoHeader: true }))
+app.use(enforce.HTTPS());
+app.set('trust proxy', true);
 
 const port = process.env.PORT || 4000;
 
