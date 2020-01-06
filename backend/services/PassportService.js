@@ -116,7 +116,8 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: GOOGLE_CALLBACK
+      callbackURL: GOOGLE_CALLBACK,
+      proxy: true
     },
     (token, tokenSecret, profile, done) =>
       PassportServiceInstance.passportStrategy(profile, done, {

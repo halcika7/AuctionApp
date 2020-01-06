@@ -30,8 +30,14 @@ module.exports = {
   FEATURING_PRODUCT_COST: 1000,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  GOOGLE_CALLBACK: '/api/auth/google/callback',
-  FACEBOOK_CALLBACK: 'https://www.halcstore.com/api/auth/facebook/callback',
+  GOOGLE_CALLBACK:
+    process.env.NODE_ENV === 'production'
+      ? 'https://polar-lake-39918.herokuapp.com/api/auth/google/callback'
+      : '/api/auth/google/callback',
+  FACEBOOK_CALLBACK:
+    process.env.NODE_ENV === 'production'
+      ? 'https://polar-lake-39918.herokuapp.com/api/auth/facebook/callback'
+      : '/api/auth/facebook/callback',
   FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET
 };
