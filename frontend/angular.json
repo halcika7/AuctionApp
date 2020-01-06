@@ -61,13 +61,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frontend:build",
-            "ssl": true
+            "browserTarget": "frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "frontend:build:production",
-              "ssl": true
+              "browserTarget": "frontend:build:production"
             }
           }
         },

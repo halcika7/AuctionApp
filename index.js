@@ -10,11 +10,6 @@ const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
-
-const enforce = require('express-sslify');
-app.use(enforce.HTTPS());
-app.set('trust proxy', true);
-
 const port = process.env.PORT || 4000;
 
 app.use(
@@ -23,6 +18,7 @@ app.use(
     credentials: true
   })
 );
+app.set('trust proxy', true);
 app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
