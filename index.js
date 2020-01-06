@@ -5,22 +5,20 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
-const http = require('http');
 const socketio = require('socket.io');
-const server = http.createServer(app);
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+   key: fs.readFileSync('./private.key', 'utf8'),
+  cert: fs.readFileSync('./public.cert', 'utf8')
+};
+
+ // Create HTTPs server.
+const server = https.createServer(options, app);
 const io = socketio(server);
 const { URL } = require('./backend/config/configs');
-const { passport } = require('./backend/services/PassportService');
-
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production') {
-    console.log('TCL: req.headers[x-forwarded-proto]', req.headers['x-forwarded-proto']);
-    console.log('TCL: req.secure', req.secure);
-    if (!req.secure && req.headers['x-forwarded-proto'] !== 'https')
-      return res.redirect('https://' + req.headers.host + req.url);
-    else return next();
-  } else return next();
-});
+const { passport } = require('./backend/services/PassportService')
 
 app.use(
   cors({
