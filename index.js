@@ -5,17 +5,9 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
-const port = process.env.PORT || 4000;
-const fs = require('fs');
-const https = require('https');
-const key = fs.readFileSync('./key.pem', { encoding: 'utf8' }, function(err, data) {
-  console.log(data);
-});
-const cert = fs.readFileSync('./cert.pem', { encoding: 'utf8' }, function(err, data) {
-  console.log(data);
-});
-const secureServer = https.createServer({ key, cert }, app);
-const io = require('socket.io').listen(secureServer);
+const http = require('http');
+const server = http.createServer(app);
+const io = require('socket.io').listen(server);
 const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 
@@ -58,7 +50,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-secureServer.listen(port, () => {
-  console.log('TCL: process.env', process.env)
-  console.log(`Server running on port ${port}`)
-});
+const port = process.env.PORT || 4000;
+
+server.listen(port, () => console.log(`Server running on port ${port}`));
