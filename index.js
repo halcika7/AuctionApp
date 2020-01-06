@@ -7,20 +7,17 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 4000;
 const fs = require('fs');
-const http = require('http');
-const httpServer = http.createServer();
 const https = require('https');
-const secureServer = https.createServer(
-  {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem')
-  },
-  app
-);
-
-const io = require('socket.io')(httpServer);
+const key = fs.readFileSync('./key.pem', { encoding: 'utf8' }, function(err, data) {
+  console.log(data);
+});
+const cert = fs.readFileSync('./cert.pem', { encoding: 'utf8' }, function(err, data) {
+  console.log(data);
+});
+const secureServer = https.createServer({ key, cert }, app);
+const io = require('socket.io').listen(secureServer);
 const { URL } = require('./backend/config/configs');
-const { passport } = require('./backend/services/PassportService')
+const { passport } = require('./backend/services/PassportService');
 
 app.use(
   cors({
@@ -61,4 +58,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-secureServer.listen(port, () => console.log(`Server running on port ${port}`));
+secureServer.listen(port, () => {
+  console.log('TCL: process.env', process.env)
+  console.log(`Server running on port ${port}`)
+});
