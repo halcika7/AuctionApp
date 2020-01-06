@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "https://halcstore.com/api",
-  socketUrl: "https://halcstore.com"
+  apiUrl: "https://www.halcstore.com/api",
+  socketUrl: "https://www.halcstore.com"
 };
