@@ -37,7 +37,7 @@ export class LoginComponent extends Auth implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._url = dev.production === false ? dev.apiUrl : '/api';
+    this._url = dev.production === false ? dev.apiUrl : prod.apiUrl;
 
     this._loginSubscription.add(
       this.route.queryParams.subscribe(({ token, message, remember, err }) => {
