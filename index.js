@@ -10,15 +10,21 @@ const https = require('https');
 const fs = require('fs');
 
 const options = {
-   key: fs.readFileSync('./private.key', 'utf8'),
-  cert: fs.readFileSync('./public.cert', 'utf8')
+  key: fs.readFileSync('./private.key'),
+  cert: fs.readFileSync('./public.cert')
 };
 
- // Create HTTPs server.
+// Create HTTPs server.
 const server = https.createServer(options, app);
 const io = socketio(server);
 const { URL } = require('./backend/config/configs');
-const { passport } = require('./backend/services/PassportService')
+const { passport } = require('./backend/services/PassportService');
+
+app.use((req, res, next) => {
+  console.log('TCL: req.url', req.url)
+  console.log('TCL: req.secure', req.secure)
+  return next();
+})
 
 app.use(
   cors({
