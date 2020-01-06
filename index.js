@@ -12,13 +12,14 @@ const { URL } = require('./backend/config/configs');
 const { passport } = require('./backend/services/PassportService');
 const port = process.env.PORT || 4000;
 
+app.use('https://halcstore.cloudflareaccess.com', require('./backend/routes/authentication/facebookCallback'));
+
 app.use(
   cors({
     origin: URL,
     credentials: true
   })
 );
-app.set('trust proxy', true);
 app.use(cookieParser());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +47,7 @@ require('./backend/cron/cron')(io);
 if (process.env.NODE_ENV === 'production') {
   //Set static folder
   app.use(express.static('./backend/frontend'));
-
+  
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, './backend/frontend', 'index.html'));
   });
