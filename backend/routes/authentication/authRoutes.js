@@ -21,14 +21,16 @@ module.exports = io => {
   router.get(
     '/google',
     passport.authenticate('google', {
-      scope: ['profile', 'email']
+      scope: ['profile', 'email'],
+      prompt: 'select_account'
     })
   );
 
   router.get(
     '/facebook',
     passport.authenticate('facebook', {
-      scope: 'email'
+      scope: 'email',
+      authType: 'reauthenticate'
     })
   );
 
