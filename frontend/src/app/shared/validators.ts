@@ -126,19 +126,20 @@ export const setValidators = (controls: any[], names: string[]) => {
   controls.forEach((control: FormControl, index: number) => {
     if (names[index] == "cName") {
       control.setValidators([Validators.required, Validators.maxLength(100)]);
-    } else if (names[index] == "cNumber") {
+    } else if (names[index] == "cardNumber") {
       control.setValidators([
         Validators.required,
         Validators.maxLength(16),
         Validators.minLength(13)
       ]);
-    } else {
+    } else if (names[index] == 'cardCvc') {
       control.setValidators([
         Validators.required,
         Validators.maxLength(4),
         Validators.minLength(3)
       ]);
     }
+    control.updateValueAndValidity({ onlySelf: true });
   });
 };
 
@@ -147,6 +148,7 @@ export const clearValidators = (controls: any[]) => {
     control.clearValidators();
     control.markAsUntouched({ onlySelf: true });
     control.patchValue("", { onlySelf: true });
+    control.updateValueAndValidity({ onlySelf: true });
   });
 };
 

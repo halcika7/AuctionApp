@@ -53,6 +53,7 @@ exports.findUserById = async id => {
 
 exports.getUserInfo = async id => {
   return await User.findOne({
+    subQuery: false,
     where: { id },
     include: [
       {
@@ -63,9 +64,7 @@ exports.getUserInfo = async id => {
       },
       {
         model: CardInfo,
-        attributes: {
-          exclude: ['id', 'cardToken', 'cardFingerprint']
-        }
+        attributes: ['name', 'number', 'cvc', 'exp_year', 'exp_month']
       }
     ],
     attributes: [
@@ -76,7 +75,11 @@ exports.getUserInfo = async id => {
       'photo',
       'gender',
       'phoneNumber',
-      'dateOfBirth'
+      'dateOfBirth',
+      [
+        db.literal(`CASE WHEN "CardInfo"."cardFingerprint" is null THEN false ELSE true END`),
+        'hasCard'
+      ]
     ]
   });
 };

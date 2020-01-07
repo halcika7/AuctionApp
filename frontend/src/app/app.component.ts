@@ -8,6 +8,7 @@ import * as AuthActions from "./auth/store/auth.actions";
 import { UserWishlistIdsStart } from "./wishlist/store/wishlist.actions";
 import { WindowOnBeforeUnload } from "./shared/windowOnBeforeUnload";
 import { WebSocketServiceService } from "./shared/services/web-socket-service.service";
+import { StripeServiceService } from './shared/services/stripe-service.service';
 
 @Component({
   selector: "app-root",

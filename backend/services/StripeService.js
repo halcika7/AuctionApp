@@ -8,10 +8,9 @@ class StripeService extends BaseService {
     super(StripeService);
   }
 
-  async validateCard(errors, userCardInfoId, cardInfo) {
-    const { card, id } = await stripe.tokens.create({
-      card: { ...cardInfo, currency: 'usd' }
-    });
+  async validateCard(errors, userCardInfoId, token) {
+    const card = await this.retreiveCard(token);
+
     const findCardIfExists = await CardInfo.findOne({
       where: { cardFingerprint: card.fingerprint },
       attributes: ['id', 'cardFingerprint', 'customerId']
@@ -29,13 +28,21 @@ class StripeService extends BaseService {
       return { valid: false, errors };
     }
 
-    return { valid: true, card, id };
+    return { valid: true, card };
   }
 
   async createCustomer(description, email) {
     if (!description || !email) return;
 
     return await stripe.customers.create({ description, email });
+  }
+
+  async retreiveCard(tok) {
+    const {
+      card: { id, fingerprint, exp_month, exp_year, last4 }
+    } = await stripe.tokens.retrieve(tok);
+
+    return { id, fingerprint, exp_month, exp_year, last4 };
   }
 
   async deleteCustomer(customerId) {

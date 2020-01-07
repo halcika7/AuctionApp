@@ -10,10 +10,10 @@ import {
   EMAIL_VALIDATOR,
   NAME_VALIDATOR,
   BASIC_INPUT,
-  PHONE_VALIDATOR,
-  CARD_FIELD
+  PHONE_VALIDATOR
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
+import { StripeServiceService } from "@app/shared/services/stripe-service.service";
 
 @Component({
   selector: "app-edit-profile",
@@ -24,15 +24,17 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
   private _gender: string;
   private _date: { day: number; year: number; month: string };
-  private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
   private _isValidForm: boolean = false;
   private _clicked = false;
   private _showSpinner: boolean = false;
   private subscription = new Subscription();
+  private _hasCard: boolean = false;
+  private _validCard: boolean = true;
 
   constructor(
     private profileService: ProfileService,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private stripe: StripeServiceService
   ) {}
 
   ngOnInit() {
@@ -44,33 +46,39 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       ...EMAIL_VALIDATOR(true),
       ...PHONE_VALIDATOR("phoneNumber"),
       ...BASIC_INPUT("cName"),
-      ...CARD_FIELD("cNumber", {}),
-      ...CARD_FIELD("CVC", { min: 3, max: 4 }),
+      ...BASIC_INPUT("cardNumber"),
+      ...BASIC_INPUT("cardCvc"),
+      ...BASIC_INPUT("cardExpiry"),
       ...BASIC_INPUT("street"),
       ...BASIC_INPUT("city"),
       ...BASIC_INPUT("zip"),
       ...BASIC_INPUT("country"),
       ...BASIC_INPUT("state"),
-      ...BASIC_INPUT("image", null)
+      ...BASIC_INPUT("image", null),
+      ...BASIC_INPUT("changeCard", false)
     });
+
+    this.stripe.mount();
+
     this.subscription.add(
       this.store.select("profile").subscribe(({ userInfo, errors }) => {
         this._clicked = false;
         this._showSpinner = false;
         if (!emptyObject(userInfo)) {
+          this._validCard = userInfo.hasCard ? true : false;
+          if (userInfo.hasCard) {
+            this.form.controls.changeCard.setValue(false);
+            this.stripe.clear();
+          }
           this._date = !emptyObject(errors)
             ? this._date
             : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
-          this._cardEXP = !emptyObject(errors)
-            ? { ...this._cardEXP }
-            : {
-                year: userInfo.CardInfo.exp_year,
-                month: userInfo.CardInfo.exp_month
-              };
+
           this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
         }
       })
     );
+
     this.subscription.add(
       this.form.statusChanges.subscribe(validity => {
         if (validity === "VALID") {
@@ -78,6 +86,21 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         } else {
           this._isValidForm = false;
         }
+
+        this.checkForm();
+      })
+    );
+
+    this.subscription.add(
+      this.stripe.cardValidity.subscribe(data => {
+        this._form.value.changeCard;
+        if (data.valid && this.form.value.cName) {
+          this._validCard = true;
+        } else {
+          this._validCard = false;
+        }
+
+        this.checkForm();
       })
     );
   }
@@ -92,6 +115,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this._gender = value;
   }
 
+  checkForm() {
+    if (this.form.value.changeCard) {
+      this._isValidForm =
+        this._isValidForm && this._validCard && this.form.value.cName;
+    }
+  }
+
   get form(): FormGroup {
     return this._form;
   }
@@ -104,23 +134,27 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     return this._date;
   }
 
-  get cardExp() {
-    return this._cardEXP;
-  }
-
   get clicked(): boolean {
     return this._clicked;
-  }
-
-  get isValidForm(): boolean {
-    return this._isValidForm;
   }
 
   get showSpinner(): boolean {
     return this._showSpinner;
   }
 
-  onSubmit() {
+  get hasCard(): boolean {
+    return this._hasCard;
+  }
+
+  get validCard(): boolean {
+    return this._validCard;
+  }
+
+  get isValidForm(): boolean {
+    return this._isValidForm;
+  }
+
+  async onSubmit() {
     const formData = new FormData();
     const userInfo = {
       firstName: this.form.value.firstName,
@@ -139,16 +173,15 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       zip: this.form.value.zip,
       state: this.form.value.state
     };
-    const cardInfo = {
-      number: this.form.value.cNumber,
-      name: this.form.value.cName,
-      cvc: this.form.value.CVC,
-      exp_month: this._cardEXP.month,
-      exp_year: this._cardEXP.year
-    };
+
+    formData.append("name", this.form.value.cName);
+    const { token = { id: "" } } = await this.stripe.create(
+      this.form.value.cName
+    );
+    formData.append("token", token.id);
+    formData.append("changeCard", this.form.value.changeCard);
     formData.append("userInfo", JSON.stringify(userInfo));
     formData.append("optionalInfo", JSON.stringify(optionalInfo));
-    formData.append("cardInfo", JSON.stringify(cardInfo));
     formData.append("image", this.form.value.image);
     this._clicked = true;
     this.store.dispatch(new ProfileActions.UpdateProfileStart(formData));

@@ -4,7 +4,6 @@ const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
-const { removeNullProperty } = require('../helpers/removeNullProperty');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -52,20 +51,41 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
-  if (!isValidUserInfo) return { isValid: true, errors };
-
-  if (
-    Object.keys(removeNullProperty(cardInfo)).length == 0 ||
-    (cardInfo.cvc == '****' && cardInfo.number.includes('************'))
-  ) {
-    return { isValid: true, errors, cardInfoData: {} };
+exports.userCardValidation = async (
+  token,
+  name,
+  changeCard,
+  userCardInfoId,
+  email,
+  errors,
+  isValidUserInfo
+) => {
+  if (name && name.length > 100) {
+    errors.errors.card = 'Name on card cannot exceed 100 characters';
+    return {
+      isValid: false,
+      errors
+    };
   }
 
-  let { customerId, cardId, accountId } = await CardInfoService.findUserCardInfo(userCardInfoId);
+  if ((name && !token) || (changeCard && !token)) {
+    errors.errors.card = 'Invalid credit card info';
+    return {
+      isValid: false,
+      errors
+    };
+  }
+
+  if (!isValidUserInfo || !token) return { isValid: true, errors };
+
+  let { customerId, cardId, accountId, cardFingerprint } = await CardInfoService.findUserCardInfo(
+    userCardInfoId
+  );
 
   try {
-    const { card, id, valid } = await StripeService.validateCard(errors, userCardInfoId, cardInfo);
+    const { card, valid } = await StripeService.validateCard(errors, userCardInfoId, token);
+
+    if (cardFingerprint === card.fingerprint) return { isValid: true, errors };
 
     if (!valid) return { isValid: false, errors };
 
@@ -87,16 +107,18 @@ exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isV
 
     if (cardId) await StripeService.deleteSource(customerId, cardId);
 
-    await StripeService.createSource(customerId, id);
+    await StripeService.createSource(customerId, token);
 
-    cardInfo = {
-      ...cardInfo,
+    const cardInfo = {
+      name,
+      number: '************' + card.last4,
+      cvc: '***',
+      exp_year: card.exp_year,
+      exp_month: card.exp_month,
       customerId,
       accountId,
       cardId: card.id,
-      cardFingerprint: card.fingerprint,
-      number: '************' + card.last4,
-      cvc: '****'
+      cardFingerprint: card.fingerprint
     };
 
     return { isValid: true, errors, cardInfoData: cardInfo };

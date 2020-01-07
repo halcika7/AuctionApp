@@ -104,7 +104,7 @@ import {
 
 // Services, directives and pipes
 import { DropdownDirective } from "./shared/directives/dropdown.directive";
-import { DragDropDirective } from './shared/directives/drag-drop.directive';
+import { DragDropDirective } from "./shared/directives/drag-drop.directive";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
@@ -117,9 +117,9 @@ import { SecondStepComponent } from "./add-product/second-step/second-step.compo
 import { NoActiveComponent } from "./add-product/no-active/no-active.component";
 import { UploadImagesComponent } from "./add-product/upload-images/upload-images.component";
 import { CustomDateInputComponent } from "./add-product/second-step/custom-date-input/custom-date-input.component";
-import { PaymentComponent } from './payment/payment.component';
-import { RateOwnerComponent } from './payment/rate-owner/rate-owner.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
+import { PaymentComponent } from "./payment/payment.component";
+import { RateOwnerComponent } from "./payment/rate-owner/rate-owner.component";
+import { SpinnerComponent } from "./components/spinner/spinner.component";
 
 @NgModule({
   declarations: [

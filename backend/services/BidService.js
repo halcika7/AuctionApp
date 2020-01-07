@@ -112,7 +112,7 @@ class BidService extends BaseService {
       const bids = await Bid.findAll({
         subQuery: false,
         where: { userId },
-        attributes: ['dateBid', 'price'],
+        attributes: ['createdAt', 'price'],
         include: {
           model: Product,
           attributes: [
@@ -143,7 +143,7 @@ class BidService extends BaseService {
         },
         limit,
         offset,
-        order: [['dateBid', 'DESC']],
+        order: [['createdAt', 'DESC']],
         group: ['Bid.id', 'Product.id', 'Product->Order.paid']
       });
       const length = await Bid.count({

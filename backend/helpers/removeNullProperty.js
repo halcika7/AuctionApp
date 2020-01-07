@@ -34,3 +34,20 @@ exports.removeNullFromOptionalUserInfo = (optionalInfo, currentOptionalInfo) => 
 
   return optionalInfo;
 };
+
+exports.removeNullFromUserCardInfo = (currentCardInfo, cardInfo) => {
+  cardInfo = this.removeNullProperty({
+    name: currentCardInfo.name != cardInfo.name ? cardInfo.name : null,
+    number: currentCardInfo.number != cardInfo.number ? cardInfo.number : null,
+    cvc: currentCardInfo.cvc != cardInfo.cvc ? cardInfo.cvc : null,
+    exp_year: currentCardInfo.exp_year != cardInfo.exp_year ? cardInfo.exp_year : null,
+    exp_month: currentCardInfo.exp_month != cardInfo.exp_month ? cardInfo.exp_month : null,
+    accountId: currentCardInfo.accountId != cardInfo.accountId ? cardInfo.accountId : null,
+    customerId: currentCardInfo.customerId != cardInfo.customerId ? cardInfo.customerId : null,
+    cardId: currentCardInfo.cardId != cardInfo.cardId ? cardInfo.cardId : null,
+    cardFingerprint:
+      currentCardInfo.cardFingerprint != cardInfo.cardFingerprint ? cardInfo.cardFingerprint : null
+  });
+
+  return cardInfo;
+};

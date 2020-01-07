@@ -7,3 +7,136 @@
     margin-top: 5px;
   }
 }
+
+.inputs.hascard {
+  .name,
+  .number,
+  .exp-date,
+  .cvc {
+    margin: 19px 0 0 !important;
+
+    label {
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0.63px;
+      color: #252525;
+      display: block;
+    }
+
+    div {
+      padding: 0 16px;
+      height: 46px;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      border: 1px solid #d8d8d8;
+      background: #fcfcfc;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 300;
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.card-number {
+  margin: 19px 0 0 !important;
+
+  &.invalid {
+    .StripeElement {
+      border: 1px solid getColor(red);
+    }
+  }
+
+
+  label {
+    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.63px;
+    color: #252525;
+    display: block;
+  }
+
+  .StripeElement {
+    padding: 0 16px;
+    height: 46px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid #d8d8d8;
+    background: #fcfcfc;
+  }
+}
+
+::ng-deep {
+  .card-number {
+    .StripeElement {
+      display: flex;
+      align-items: center;
+      * {
+        font-size: 18px !important;
+        font-weight: 300 !important;
+      }
+
+      > div {
+        width: 100% !important;
+        height: 20px;
+
+        .ElementsApp {
+          color: grey;
+        }
+      }
+    }
+  }
+}
+
+.checkbox {
+  margin: 20px 0;
+
+  label {
+    position: relative;
+    cursor: pointer;
+    padding-left: 25px;
+
+    fa-icon {
+      @include flex(center, center);
+      opacity: 0;
+      z-index: 2;
+      font-size: 15px;
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      display: none;
+
+      &:checked ~ fa-icon {
+        opacity: 1;
+      }
+    }
+
+    &:before,
+    fa-icon {
+      @include heightWidth(20px, 20px);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:before {
+      content: "";
+      background: getColor(white);
+      border: 1px solid getColor(light_gray);
+      box-sizing: border-box;
+    }
+  }
+}

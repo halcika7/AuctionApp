@@ -29,54 +29,58 @@ class PassportService extends BaseService {
   }
 
   async passportStrategy(profile, done, { googleId = false, facebookId = false }) {
-    let updateObject = {};
-    const whereObj = { where: { email: profile._json.email } };
-    const findUserWithEmail = await User.findOne({ raw: true, ...whereObj });
-
-    if (googleId) {
-      whereObj.where.googleId = profile.id;
-      updateObject.googleId = profile.id;
-    } else if (facebookId) {
-      whereObj.where.facebookId = profile.id;
-      updateObject.facebookId = profile.id;
+    try {
+      let updateObject = {};
+      const whereObj = { where: { email: profile._json.email } };
+      const findUserWithEmail = await User.findOne({ raw: true, ...whereObj });
+  
+      if (googleId) {
+        whereObj.where.googleId = profile.id;
+        updateObject.googleId = profile.id;
+      } else if (facebookId) {
+        whereObj.where.facebookId = profile.id;
+        updateObject.facebookId = profile.id;
+      }
+  
+      const findUserWithEmailSocialId = await User.findOne({ raw: true, ...whereObj });
+  
+      if (
+        (findUserWithEmailSocialId && findUserWithEmailSocialId.deactivated) ||
+        (findUserWithEmail && findUserWithEmail.deactivated)
+      ) {
+        return done(new Error(`User ${profile._json.email} is deactivated.`));
+      } else if (!findUserWithEmail) {
+        const { id, cardInfoId } = await AuthService.createUserData(profile._json.email);
+  
+        const socialIds = {
+          googleId: googleId ? profile.id : null,
+          facebookId: facebookId ? profile.id : null
+        };
+  
+        const user = await User.create({
+          email: profile._json.email,
+          firstName: googleId ? profile._json.given_name : profile._json.first_name,
+          lastName: googleId ? profile._json.family_name : profile._json.last_name,
+          photo: googleId ? profile._json.picture : profile._json.picture.data.url,
+          roleId: 1,
+          ...socialIds,
+          optionalInfoId: id,
+          cardInfoId
+        });
+  
+        return done(null, user);
+      } else if (!findUserWithEmailSocialId) {
+        await User.update({ ...updateObject }, { where: { id: findUserWithEmail.id } });
+  
+        const user = await User.findOne({ raw: true, where: { id: findUserWithEmail.id } });
+  
+        return done(null, user);
+      }
+  
+      return done(null, findUserWithEmailSocialId);
+    } catch (error) {
+      return done(error.message, null);
     }
-
-    const findUserWithEmailSocialId = await User.findOne({ raw: true, ...whereObj });
-
-    if (
-      (findUserWithEmailSocialId && findUserWithEmailSocialId.deactivated) ||
-      (findUserWithEmail && findUserWithEmail.deactivated)
-    ) {
-      return done(new Error(`User ${profile._json.email} is deactivated.`));
-    } else if (!findUserWithEmail) {
-      const { id, cardInfoId } = await AuthService.createUserData(profile._json.email);
-
-      const socialIds = {
-        googleId: googleId ? profile.id : null,
-        facebookId: facebookId ? profile.id : null
-      };
-
-      const user = await User.create({
-        email: profile._json.email,
-        firstName: googleId ? profile._json.given_name : profile._json.first_name,
-        lastName: googleId ? profile._json.family_name : profile._json.last_name,
-        photo: googleId ? profile._json.picture : profile._json.picture.data.url,
-        roleId: 1,
-        ...socialIds,
-        optionalInfoId: id,
-        cardInfoId
-      });
-
-      return done(null, user);
-    } else if (!findUserWithEmailSocialId) {
-      await User.update({ ...updateObject }, { where: { id: findUserWithEmail.id } });
-
-      const user = await User.findOne({ raw: true, where: { id: findUserWithEmail.id } });
-
-      return done(null, user);
-    }
-
-    return done(null, findUserWithEmailSocialId);
   }
 
   async passportCallback(err, user, info, res) {

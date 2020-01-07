@@ -81,7 +81,7 @@
                   : "0"
               }}
             </td>
-            <td>{{ item.dateBid | date: "dd MMM yyyy" }}</td>
+            <td>{{ item.createdAt | date: "dd MMM yyyy" }}</td>
             <td>{{ item.Product.price | currency }}</td>
             <td
               [ngClass]="{
