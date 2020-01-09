@@ -10,7 +10,8 @@ import {
   EMAIL_VALIDATOR,
   NAME_VALIDATOR,
   BASIC_INPUT,
-  PHONE_VALIDATOR
+  PHONE_VALIDATOR,
+  CARD_FIELD
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
 import { StripeServiceService } from "@app/shared/services/stripe-service.service";
@@ -22,6 +23,13 @@ import { StripeServiceService } from "@app/shared/services/stripe-service.servic
 })
 export class EditProfileComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
+  private cardInfo: FormGroup = new FormGroup({
+    ...BASIC_INPUT("changeCard", false),
+    ...CARD_FIELD("cName", { max: 100, min: 1 }),
+    ...CARD_FIELD("cardNumber", {}),
+    ...CARD_FIELD("cardCvc", { min: 3, max: 4 }),
+    ...CARD_FIELD("cardExpiry", { min: 4, max: 4 })
+  });
   private _gender: string;
   private _date: { day: number; year: number; month: string };
   private _isValidForm: boolean = false;
@@ -29,7 +37,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _showSpinner: boolean = false;
   private subscription = new Subscription();
   private _hasCard: boolean = false;
-  private _validCard: boolean = true;
+  private _validCard: boolean;
+  private _cardError: string;
 
   constructor(
     private profileService: ProfileService,
@@ -45,20 +54,16 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       ...NAME_VALIDATOR("lastName"),
       ...EMAIL_VALIDATOR(true),
       ...PHONE_VALIDATOR("phoneNumber"),
-      ...BASIC_INPUT("cName"),
-      ...BASIC_INPUT("cardNumber"),
-      ...BASIC_INPUT("cardCvc"),
-      ...BASIC_INPUT("cardExpiry"),
       ...BASIC_INPUT("street"),
       ...BASIC_INPUT("city"),
       ...BASIC_INPUT("zip"),
       ...BASIC_INPUT("country"),
       ...BASIC_INPUT("state"),
       ...BASIC_INPUT("image", null),
-      ...BASIC_INPUT("changeCard", false)
+      cardInfo: this.cardInfo
     });
 
-    this.stripe.mount();
+    this.stripe.createElements();
 
     this.subscription.add(
       this.store.select("profile").subscribe(({ userInfo, errors }) => {
@@ -66,15 +71,50 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         this._showSpinner = false;
         if (!emptyObject(userInfo)) {
           this._validCard = userInfo.hasCard ? true : false;
+
           if (userInfo.hasCard) {
-            this.form.controls.changeCard.setValue(false);
+            this.cardInfo.controls.changeCard.setValue(false);
+          }
+
+          if (userInfo.hasCard && !errors.card) {
+            this.cardInfo.controls.cName.setValue("");
             this.stripe.clear();
           }
+
           this._date = !emptyObject(errors)
             ? this._date
             : { ...getYearMonthDay(buildDate(userInfo.dateOfBirth)) };
 
           this._gender = !emptyObject(errors) ? this._gender : userInfo.gender;
+        }
+
+        if (!emptyObject(errors)) {
+          const {
+            firstName,
+            lastName,
+            gender,
+            email,
+            phoneNumber,
+            dateOfBirth,
+            card
+          } = errors;
+          if (firstName) {
+            this.scrollWindow(350);
+          } else if (lastName) {
+            this.scrollWindow(460);
+          } else if (gender) {
+            this.scrollWindow(560);
+          } else if (dateOfBirth) {
+            this.scrollWindow(660);
+          } else if (phoneNumber) {
+            this.scrollWindow(750);
+          } else if (email) {
+            this.scrollWindow(840);
+          } else if (card) {
+            this.scrollWindow(1000);
+          }
+        } else {
+          this._cardError = "";
         }
       })
     );
@@ -86,26 +126,18 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         } else {
           this._isValidForm = false;
         }
-
-        this.checkForm();
       })
     );
 
     this.subscription.add(
-      this.stripe.cardValidity.subscribe(data => {
-        this._form.value.changeCard;
-        if (data.valid && this.form.value.cName) {
-          this._validCard = true;
-        } else {
-          this._validCard = false;
-        }
-
-        this.checkForm();
+      this.stripe.cardValid.subscribe(value => {
+        this._validCard = value;
       })
     );
   }
 
   ngOnDestroy() {
+    this.stripe.unmount();
     this.subscription.unsubscribe();
     this.store.dispatch(new ProfileActions.ClearProfile());
     this.store.dispatch(new ProfileActions.ClearProfileMessages());
@@ -115,11 +147,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this._gender = value;
   }
 
-  checkForm() {
-    if (this.form.value.changeCard) {
-      this._isValidForm =
-        this._isValidForm && this._validCard && this.form.value.cName;
-    }
+  private scrollWindow(value: number) {
+    window.scrollTo(0, value);
   }
 
   get form(): FormGroup {
@@ -146,12 +175,12 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     return this._hasCard;
   }
 
-  get validCard(): boolean {
-    return this._validCard;
-  }
-
   get isValidForm(): boolean {
     return this._isValidForm;
+  }
+
+  get cardError(): string {
+    return this._cardError;
   }
 
   async onSubmit() {
@@ -174,12 +203,18 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       state: this.form.value.state
     };
 
-    formData.append("name", this.form.value.cName);
-    const { token = { id: "" } } = await this.stripe.create(
-      this.form.value.cName
-    );
-    formData.append("token", token.id);
-    formData.append("changeCard", this.form.value.changeCard);
+    if (this._validCard) {
+      formData.append("name", this.form.value.cardInfo.cName);
+      const { token = { id: "" }, error } = await this.stripe.create(
+        this.form.value.cardInfo.cName
+      );
+      if (error) {
+        this._cardError = error.message;
+        return false;
+      }
+      formData.append("token", token.id);
+      formData.append("changeCard", this.form.value.cardInfo.changeCard);
+    }
     formData.append("userInfo", JSON.stringify(userInfo));
     formData.append("optionalInfo", JSON.stringify(optionalInfo));
     formData.append("image", this.form.value.image);

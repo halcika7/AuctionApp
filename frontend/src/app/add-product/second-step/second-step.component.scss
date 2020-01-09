@@ -45,6 +45,10 @@ p {
     @include fontMixin(18px, regular, 0.63px, light_black);
     display: block;
     margin-bottom: 15px;
+
+    span {
+      @include fontMixin(18px, regular, 0.63px, red);
+    }
   }
 
   input {

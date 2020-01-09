@@ -23,6 +23,7 @@ import {
   ClearAddProductState
 } from "./store/add-product.actions";
 import { AddProductService } from "./add-product.service";
+import { emptyObject } from "@app/shared/checkEmptyObject";
 
 @Component({
   selector: "app-add-product",
@@ -31,6 +32,12 @@ import { AddProductService } from "./add-product.service";
 })
 export class AddProductComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
+  private cardInfo: FormGroup = new FormGroup({
+    ...BASIC_INPUT("cName"),
+    ...BASIC_INPUT("cardNumber"),
+    ...BASIC_INPUT("cardCvc"),
+    ...BASIC_INPUT("cardExpiry")
+  });
   private _hasActiveProduct: boolean;
   private _stepNumber: number;
   private numberOfFilters = 0;
@@ -79,14 +86,12 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ...BASIC_INPUT("featureProduct", false),
       ...BASIC_INPUT("useCard", false),
       ...BASIC_INPUT("useOptionalInfo", false),
-      ...BASIC_INPUT("cName"),
-      ...BASIC_INPUT("cNumber"),
-      ...BASIC_INPUT("CVC")
+      cardInfo: this.cardInfo
     });
 
     Object.keys(this._form.controls).forEach(control => {
       this._controls.push(this._form.controls[control]);
-    })
+    });
 
     this.subscription.add(
       this.store
@@ -140,10 +145,12 @@ export class AddProductComponent implements OnInit, OnDestroy {
     } else if (errors.price || errors.startDate || errors.endDate) {
       this.addProductService.setStepNumber = 2;
       this._stepNumber = 2;
-    } else if (Object.keys(errors).length > 0) {
+    } else if (!emptyObject(errors)) {
       this.addProductService.setStepNumber = 3;
       this._stepNumber = 3;
     }
+
+    !emptyObject(errors) && window.scrollTo(0, 300);
   }
 
   private setFormErrors() {
@@ -182,7 +189,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ClearAddProductMessages());
   }
 
-  submitForm(data) {
+  submitForm(cardToken) {
     const formData = new FormData();
     const productData = {
       name: this.form.value.name,
@@ -202,11 +209,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
     };
     const cardInformation = {
       useCard: this.form.value.useCard,
-      cvc: this.form.value.CVC,
-      name: this.form.value.cName,
-      number: this.form.value.cNumber,
-      exp_year: data.exp_year || null,
-      exp_month: data.exp_month || null
+      token: cardToken,
+      name: this.cardInfo.value.cName
     };
     formData.append("productData", JSON.stringify(productData));
     formData.append("addressInformation", JSON.stringify(addressInformation));
@@ -233,6 +237,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   get form(): FormGroup {
     return this._form;
+  }
+
+  get nestedForm(): FormGroup {
+    return this.cardInfo;
   }
 
   get stepNumber(): number {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Renderer2 } from "@angular/core";
 import { Auth } from "@app/auth/auth";
 import { Router } from "@angular/router";
 import { FormGroup } from "@angular/forms";
@@ -22,7 +22,11 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   private registerSubscription = new Subscription();
   private _showSpinner: boolean = false;
 
-  constructor(private store: Store<fromApp.AppState>, private router: Router) {
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private router: Router,
+    private render: Renderer2
+  ) {
     super(
       store,
       new FormGroup({
@@ -32,7 +36,8 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
         ...PASSWORD_VALIDATOR(false, "confirmPassword"),
         ...EMAIL_VALIDATOR()
       }),
-      router
+      router,
+      render
     );
     super.register = true;
   }

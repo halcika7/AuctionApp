@@ -9,7 +9,11 @@
       (changeGender)="changeGender($event)"
     ></app-required-info>
 
-    <app-card-info [form]="form"></app-card-info>
+    <app-card-info
+      [formGroup]="form.controls.cardInfo"
+      [form]="form"
+      [cardError]="cardError"
+    ></app-card-info>
 
     <app-optional-info [form]="form"></app-optional-info>
     <button

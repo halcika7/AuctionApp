@@ -49,6 +49,7 @@ class ProfileService extends BaseService {
     optionalInfo = JSON.parse(optionalInfo);
 
     try {
+      // throw new Error('asjoifas');
       //userId, optionalInfoId and cardInfoId are same
       const { errors: requiredInfoErrors, isValid, currentUser } = await userInfoValidation(
         userInfo,

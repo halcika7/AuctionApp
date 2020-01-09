@@ -30,6 +30,8 @@ export class UploadImagesComponent implements OnInit {
     this._files.splice(index, 1);
     this._urls.splice(index, 1);
     this.setErrors();
+    this.form.patchValue({ images: this._files });
+    this.form.get("images").updateValueAndValidity();
   }
 
   private loadFiles(files, onInit = false) {
@@ -59,6 +61,11 @@ export class UploadImagesComponent implements OnInit {
     } else if (this._files.length < 3) {
       this.form.controls.images.setErrors({ minlength: { requiredLength: 3 } });
       this.form.controls.images.markAsTouched();
+    } else if (this._files.length > 20) {
+      this.form.controls.images.setErrors({ maxlength: { requiredLength: 20 } });
+      this.form.controls.images.markAsTouched();
+    } else {
+      this.form.controls.images.setErrors({});
     }
   }
 

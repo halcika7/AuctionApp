@@ -3,9 +3,10 @@ import { FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
-import { setErrors } from '@app/shared/validators';
-import { UserWishlistIdsStart } from '@app/wishlist/store/wishlist.actions';
+import { setErrors } from "@app/shared/validators";
+import { UserWishlistIdsStart } from "@app/wishlist/store/wishlist.actions";
 import { ClearProductMessages } from "@app/product-page/store/product-page.actions";
+import { Renderer2 } from '@angular/core';
 
 export class Auth {
   private _message: string;
@@ -21,7 +22,8 @@ export class Auth {
   constructor(
     private authStore: Store<any>,
     private Form: FormGroup,
-    private Router: Router
+    private Router: Router,
+    private renderer: Renderer2
   ) {
     this.clearMessages();
     this._form = this.Form;
@@ -41,17 +43,17 @@ export class Auth {
           }
 
           if (this.form.controls.email) {
-            setErrors(errors, 'email', this.form, message);
+            setErrors(errors, "email", this.form, message);
           }
 
           if (this.form.controls.password) {
-            setErrors(errors, 'password', this.form, message);
+            setErrors(errors, "password", this.form, message);
           }
 
           if (this._register) {
-            setErrors(errors, 'firstName', this.form, message);
-            setErrors(errors, 'lastName', this.form, message);
-            setErrors(errors, 'confirmPassword', this.form, message);
+            setErrors(errors, "firstName", this.form, message);
+            setErrors(errors, "lastName", this.form, message);
+            setErrors(errors, "confirmPassword", this.form, message);
           }
 
           this._message = message;
@@ -61,6 +63,7 @@ export class Auth {
 
           if (this._success) {
             this._showErrors = false;
+            this.renderer.addClass(document.body, "no-click");
             this._register || this._resetPassword
               ? setTimeout(
                   () => this.Router.navigate(["/home/auth/login"]),
@@ -80,6 +83,7 @@ export class Auth {
       this.form.controls[control].markAsUntouched({});
     }
     this.subscription.unsubscribe();
+    this.renderer.removeClass(document.body, "no-click");
   }
 
   clearMessages() {

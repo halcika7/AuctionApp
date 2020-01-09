@@ -12,13 +12,9 @@ export class StripeServiceService {
     }
   };
   private elements = (<any>window).stripe.elements();
-  private cardNumber = this.elements.create("cardNumber", {
-    style: this.style
-  });
-  private cardExpiry = this.elements.create("cardExpiry", {
-    style: this.style
-  });
-  private cardCvc = this.elements.create("cardCvc", { style: this.style });
+  private cardNumber;
+  private cardExpiry;
+  private cardCvc;
   private cardValidationErrors = {
     cardNumber: {
       empty: true,
@@ -39,24 +35,34 @@ export class StripeServiceService {
   stripeErrors = new Subject<any>();
   cardValidity = new Subject<any>();
   cardData = new Subject<any>();
+  cardValid = new Subject<boolean>();
 
   constructor() {}
 
-  mount() {
-    this.cardNumber.mount("#cardNumber");
-    this.cardExpiry.mount("#cardExpiry");
-    this.cardCvc.mount("#cardCvc");
-    this.cardNumber.on("change", event => {
-      this.addValidation(event);
-    });
+  createElements() {
+    setTimeout(() => {
+      this.cardNumber = this.elements.create("cardNumber", {
+        style: this.style
+      });
+      this.cardExpiry = this.elements.create("cardExpiry", {
+        style: this.style
+      });
+      this.cardCvc = this.elements.create("cardCvc", { style: this.style });
 
-    this.cardCvc.on("change", event => {
-      this.addValidation(event);
-    });
+      this.mount();
+    }, 0);
+  }
 
-    this.cardExpiry.on("change", event => {
-      this.addValidation(event);
-    });
+  unmount() {
+    this.cardNumber.unmount();
+    this.cardExpiry.unmount();
+    this.cardCvc.unmount();
+    this.cardNumber.destroy();
+    this.cardExpiry.destroy();
+    this.cardCvc.destroy();
+    this.cardNumber = null;
+    this.cardExpiry = null;
+    this.cardCvc = null;
   }
 
   clear() {
@@ -87,7 +93,7 @@ export class StripeServiceService {
     this.cardValidity.next({
       untouched: Empty === 3,
       error,
-      valid: Empty === 0 && Complete === 3
+      valid: (Empty === 0 && Complete === 3) || (Empty === 3 && Complete === 0)
     });
 
     this.cardData.next({
@@ -104,5 +110,23 @@ export class StripeServiceService {
     };
     this.stripeErrors.next(error ? error.message : "");
     this.checkCardValidity();
+  }
+
+  private mount() {
+    this.cardNumber.mount("#cardNumber");
+    this.cardExpiry.mount("#cardExpiry");
+    this.cardCvc.mount("#cardCvc");
+
+    this.cardNumber.on("change", event => {
+      this.addValidation(event);
+    });
+
+    this.cardCvc.on("change", event => {
+      this.addValidation(event);
+    });
+
+    this.cardExpiry.on("change", event => {
+      this.addValidation(event);
+    });
   }
 }

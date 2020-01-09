@@ -124,7 +124,7 @@ export const numberOfWordsValidator = (min = 2, max = 5) => {
 
 export const setValidators = (controls: any[], names: string[]) => {
   controls.forEach((control: FormControl, index: number) => {
-    if (names[index] == "cName") {
+    if (names[index] == "cName" || names[index] == "cardExpiry") {
       control.setValidators([Validators.required, Validators.maxLength(100)]);
     } else if (names[index] == "cardNumber") {
       control.setValidators([
@@ -132,7 +132,7 @@ export const setValidators = (controls: any[], names: string[]) => {
         Validators.maxLength(16),
         Validators.minLength(13)
       ]);
-    } else if (names[index] == 'cardCvc') {
+    } else if (names[index] == "cardCvc") {
       control.setValidators([
         Validators.required,
         Validators.maxLength(4),

@@ -123,7 +123,7 @@ exports.getOptionalInfoCard = async id => {
       },
       {
         model: CardInfo,
-        attributes: []
+        attributes: ['name', 'number', 'cvc', 'exp_year', 'exp_month']
       }
     ]
   });

@@ -1,16 +1,16 @@
-<div class="card" [formGroup]="form">
+<div class="card" [ngClass]="className" [formGroup]="formGroup">
   <div class="heading">
     <h3>Card Information</h3>
   </div>
   <div class="one-col">
-    <div *ngIf="hasCard">
+    <div *ngIf="hasCard && !required">
       <p>
-        You saved one card already. If you want to change card please check box
-        below
+        You have saved one card already. If you want to change card please check
+        box below.
       </p>
       <div class="checkbox">
         <label
-          >Do you want to bear shipping cost?
+          >Do you want to change credit card?
           <input type="checkbox" formControlName="changeCard"/><fa-icon
             [icon]="['fas', 'check']"
           ></fa-icon
@@ -19,7 +19,10 @@
     </div>
     <div
       class="inputs"
-      [ngStyle]="{ display: !hasCard || changeCard ? 'block' : 'none' }"
+      [ngStyle]="{
+        display:
+          ((!hasCard || changeCard) && !required) || (showCard && required) ? 'block' : 'none'
+      }"
     >
       <div class="two-cols">
         <app-input
@@ -28,27 +31,28 @@
           placeholder="e.g. Adam Smith"
           type="text"
           controlName="cName"
-          [parentForm]="form"
-          [input]="form.get('cName')"
+          [parentForm]="formGroup"
+          [input]="formGroup.get('cName')"
           profile="true"
           [showErrors]="true"
           [minLength]="1"
           [maxLength]="102"
+          [required]="required"
         ></app-input>
         <div class="card-number" [ngClass]="{ invalid: _cardNumberError }">
-          <label>Card Number</label>
+          <label><span *ngIf="required">*</span>Card Number</label>
           <div id="cardNumber"></div>
           <span>{{ _cardNumberError }}</span>
         </div>
       </div>
       <div class="two-cols">
         <div class="card-number" [ngClass]="{ invalid: _cardExpiryError }">
-          <label>Expiration Date</label>
+          <label><span *ngIf="required">*</span>Expiration Date</label>
           <div id="cardExpiry"></div>
           <span>{{ _cardExpiryError }}</span>
         </div>
         <div class="card-number" [ngClass]="{ invalid: _cardCvcError }">
-          <label>CVC/CW</label>
+          <label><span *ngIf="required">*</span>CVC/CW</label>
           <div id="cardCvc"></div>
           <span>{{ _cardCvcError }}</span>
         </div>
@@ -56,16 +60,19 @@
       <span *ngIf="cardValidationError">{{ cardValidationError }}</span>
       <span *ngIf="cardError">{{ cardError }}</span>
     </div>
-    <div class="inputs hascard" *ngIf="hasCard && !changeCard">
+    <div
+      class="inputs hascard"
+      *ngIf="(hasCard && !changeCard) || (!showCard && required)"
+    >
       <div class="two-cols">
         <div class="name">
-          <label>Name on card</label>
+          <label><span *ngIf="required">*</span>Name on card</label>
           <div class="cardName">
             {{ cardInfo.name }}
           </div>
         </div>
         <div class="number">
-          <label>Card Number</label>
+          <label><span *ngIf="required">*</span>Card Number</label>
           <div class="cardNumber">
             {{ cardInfo.number.slice(0, 4) }}
             {{ cardInfo.number.slice(4, 8) }}
@@ -76,17 +83,18 @@
       </div>
       <div class="two-cols">
         <div class="exp-date">
-          <label>Expiration Date</label>
+          <label><span *ngIf="required">*</span>Expiration Date</label>
           <div class="expDate">
             {{
               cardInfo.exp_month.length == 1
                 ? "0" + cardInfo.exp_month
                 : cardInfo.exp_month
-            }}/ {{ cardInfo.exp_year }}
+            }}
+            / {{ cardInfo.exp_year }}
           </div>
         </div>
         <div class="cvc">
-          <label>CVC/CW</label>
+          <label><span *ngIf="required">*</span>CVC/CW</label>
           <div class="ccvc">
             {{ cardInfo.cvc }}
           </div>

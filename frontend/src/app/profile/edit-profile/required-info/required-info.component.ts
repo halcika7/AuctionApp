@@ -45,7 +45,7 @@ export class RequiredInfoComponent implements OnInit, OnDestroy {
             email: !emptyObject(errors)
               ? this.form.value.email
               : userInfo.email,
-            image: !emptyObject(errors) ? this.form.value.image : null
+            image: this.form.value.image
           });
         }
         if (!emptyObject(errors)) {

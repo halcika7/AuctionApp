@@ -7,6 +7,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from "@app/shared/validators";
 import { Subscription } from "rxjs";
+import { Renderer2 } from '@angular/core';
 
 import { environment as dev } from "@env/environment";
 import { environment as prod } from "@env/environment.prod";
@@ -23,7 +24,8 @@ export class LoginComponent extends Auth implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     protected router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private render: Renderer2
   ) {
     super(
       store,
@@ -32,7 +34,8 @@ export class LoginComponent extends Auth implements OnInit, OnDestroy {
         ...PASSWORD_VALIDATOR(true),
         remember: new FormControl(false)
       }),
-      router
+      router,
+      render
     );
   }
 

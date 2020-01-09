@@ -22,6 +22,10 @@ app-footer {
   @include margin(auto);
 }
 
+.no-click {
+  pointer-events: none !important;
+}
+
 .container,
 .container-fluid {
   @include margin($right: auto, $left: auto);

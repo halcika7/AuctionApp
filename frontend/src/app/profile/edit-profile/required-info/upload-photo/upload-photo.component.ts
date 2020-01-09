@@ -1,12 +1,12 @@
 import { FormGroup } from "@angular/forms";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnChanges } from "@angular/core";
 
 @Component({
   selector: "app-upload-photo",
   templateUrl: "./upload-photo.component.html",
   styleUrls: ["./upload-photo.component.scss"]
 })
-export class UploadPhotoComponent implements OnInit {
+export class UploadPhotoComponent implements OnInit, OnChanges {
   @Input() imgUrl: string;
   @Input() parentForm: FormGroup;
   @Input() controlName: string;
@@ -15,6 +15,10 @@ export class UploadPhotoComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this._imgSrc = this.imgUrl;
+  }
+
+  ngOnChanges() {
     this._imgSrc = this.imgUrl;
   }
 

@@ -7,6 +7,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "@app/auth/auth";
 import { PASSWORD_VALIDATOR } from "@app/shared/validators";
+import { Renderer2 } from "@angular/core";
 
 @Component({
   selector: "app-reset-password",
@@ -16,13 +17,18 @@ import { PASSWORD_VALIDATOR } from "@app/shared/validators";
 export class ResetPasswordComponent extends Auth implements OnInit, OnDestroy {
   private _isVaildForm: boolean = false;
   private formSubscription: Subscription;
-  constructor(private store: Store<fromApp.AppState>, private router: Router) {
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private router: Router,
+    private render: Renderer2
+  ) {
     super(
       store,
       new FormGroup({
         ...PASSWORD_VALIDATOR()
       }),
-      router
+      router,
+      render
     );
     super.resetPassword = true;
   }

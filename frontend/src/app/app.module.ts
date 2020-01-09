@@ -48,7 +48,7 @@ import { WishlistComponent } from "./profile/wishlist/wishlist.component";
 import { TableComponent } from "./components/table/table.component";
 import { RequiredInfoComponent } from "./profile/edit-profile/required-info/required-info.component";
 import { OptionalInfoComponent } from "./profile/edit-profile/optional-info/optional-info.component";
-import { CardInfoComponent } from "./profile/edit-profile/card-info/card-info.component";
+import { CardInfoComponent } from "./components/card-info/card-info.component";
 import { ShopPageComponent } from "./shop-page/shop-page.component";
 import { CollectionListItemComponent } from "./components/collection-list-item/collection-list-item.component";
 import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component";

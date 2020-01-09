@@ -104,77 +104,14 @@
       ></fa-icon
     ></label>
   </div>
-  <div class="card-information" [ngClass]="{ show: showCard, hide: !showCard }">
-    <h3>Card Information</h3>
-    <span *ngIf="cardError" class="invalid-card">{{ cardError }}</span>
-    <div class="group">
-      <app-input
-        id="cName"
-        title="Name on card"
-        placeholder="e.g. Don Joe"
-        type="text"
-        controlName="cName"
-        [parentForm]="form"
-        [input]="form.get('cName')"
-        showErrors="true"
-        [profile]="true"
-        [minLength]="1"
-        [maxLength]="101"
-        [required]="true"
-      ></app-input>
-      <app-input
-        id="cNumber"
-        title="Card number"
-        placeholder="e.g. 4242424242424242"
-        type="text"
-        controlName="cNumber"
-        [parentForm]="form"
-        [input]="form.get('cNumber')"
-        showErrors="true"
-        [profile]="true"
-        [minLength]="13"
-        [maxLength]="17"
-        [required]="true"
-      ></app-input>
-    </div>
-    <div class="group">
-      <div class="card-date-wrapper">
-        <label><span>*</span>Expiration year</label>
-        <div class="date">
-          <app-select-input
-            [default]="selectedYear || 'Year'"
-            [values]="years"
-            (valueChange)="changeSelectedYear($event)"
-            [error]="expYearError"
-            [invalid]="expYearError"
-            [required]="true"
-          ></app-select-input>
-          <app-select-input
-            [default]="selectedMonth || 'Month'"
-            [values]="months"
-            (valueChange)="changeSelectedMonth($event)"
-            [error]="expMonthError"
-            [invalid]="expMonthError"
-            [required]="true"
-          ></app-select-input>
-        </div>
-      </div>
-      <app-input
-        id="cvc"
-        title="CVC/CW"
-        placeholder="e.g. 123"
-        type="text"
-        controlName="CVC"
-        [parentForm]="form"
-        [input]="form.get('CVC')"
-        showErrors="true"
-        [profile]="true"
-        [minLength]="3"
-        [maxLength]="5"
-        [required]="true"
-      ></app-input>
-    </div>
-  </div>
+  <app-card-info
+    [formGroup]="form.controls.cardInfo"
+    [form]="form"
+    className="card-information"
+    [required]="true"
+    [showCard]="showCard"
+    [cardError]="cardError"
+  ></app-card-info>
   <div class="add-product-buttons">
     <button class="prev" (click)="buttonClicked()" *ngIf="!payment">
       <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
@@ -183,8 +120,8 @@
       class="done"
       type="submit"
       (click)="process()"
+      [ngClass]="{ 'ml-auto': payment }"
       [disabled]="!isValidStep || clicked"
-      [ngClass]="{'ml-auto': payment}"
     >
       done
     </button>

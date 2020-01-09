@@ -174,29 +174,18 @@ exports.addressValidation = async (addressInformation, errors) => {
 
 exports.creditCardValidation = async (cardInformation, userId, errors) => {
   let choosenCardToken = '';
-  const { cvc, name, number, exp_year, exp_month } = cardInformation;
+  const { name, token, useCard } = cardInformation;
   const { customerId, cardId, accountId } = await CardInfoService.findUserCardInfo(userId);
 
-  if (!cardInformation.useCard) {
-    if (!cvc) errors.CVC = 'CVC is required';
-    else if (cvc.length < 3) errors.CVC = 'CVC must contain at least 3 characters';
-    else if (cvc.length > 4) errors.CVC = 'CVC cannot exceed 4 characters';
+  if (!useCard) {
 
     if (!name) errors.cName = 'Name on card is required';
     else if (name.length > 100) errors.cName = 'Name on card cannot exceed 100 characters';
 
-    if (!number) errors.cNumber = 'Card number is required';
-    else if (number.length < 13) errors.cNumber = 'Card number must contain at least 13 characters';
-    else if (number.length > 16) errors.cNumber = 'Card number cannot exceed 16 characters';
-
-    if (!exp_year) errors.exp_year = 'Expiration year is required';
-    if (!exp_month) errors.exp_month = 'Expiration month is required';
-
-    if (cvc && name && number && exp_year && exp_month) {
+    if (token) {
       try {
-        delete cardInformation.useCard;
-        const { valid, id } = await StripeService.validateCard(errors, userId, cardInformation);
-        choosenCardToken = valid ? id : '';
+        const { valid } = await StripeService.validateCard(errors, userId, token);
+        choosenCardToken = valid ? token : '';
       } catch (error) {
         errors.card = error.message;
       }
@@ -211,7 +200,7 @@ exports.creditCardValidation = async (cardInformation, userId, errors) => {
       };
     }
   }
-  
+
   return choosenCardToken;
 };
 

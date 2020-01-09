@@ -60,6 +60,8 @@ exports.userCardValidation = async (
   errors,
   isValidUserInfo
 ) => {
+  if (!isValidUserInfo || !token || !changeCard) return { isValid: true, errors };
+
   if (name && name.length > 100) {
     errors.errors.card = 'Name on card cannot exceed 100 characters';
     return {
@@ -76,8 +78,6 @@ exports.userCardValidation = async (
     };
   }
 
-  if (!isValidUserInfo || !token) return { isValid: true, errors };
-
   let { customerId, cardId, accountId, cardFingerprint } = await CardInfoService.findUserCardInfo(
     userCardInfoId
   );
@@ -85,9 +85,9 @@ exports.userCardValidation = async (
   try {
     const { card, valid } = await StripeService.validateCard(errors, userCardInfoId, token);
 
-    if (cardFingerprint === card.fingerprint) return { isValid: true, errors };
-
     if (!valid) return { isValid: false, errors };
+
+    if (cardFingerprint === card.fingerprint) return { isValid: true, errors };
 
     if (!customerId) {
       try {
@@ -105,9 +105,21 @@ exports.userCardValidation = async (
       }
     }
 
-    if (cardId) await StripeService.deleteSource(customerId, cardId);
+    if (cardId) {
+      try {
+        await StripeService.deleteSource(customerId, cardId);
+      } catch (error) {
+        errors.errors.card = error.raw.message;
+        return { isValid: false, errors };
+      }
+    }
 
-    await StripeService.createSource(customerId, token);
+    try {
+      await StripeService.createSource(customerId, token);
+    } catch (error) {
+      errors.errors.card = error.raw.message;
+        return { isValid: false, errors };
+    }
 
     const cardInfo = {
       name,
