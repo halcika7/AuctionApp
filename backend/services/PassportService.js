@@ -137,7 +137,7 @@ passport.use(
       clientSecret: FACEBOOK_CLIENT_SECRET,
       callbackURL: FACEBOOK_CALLBACK,
       profileFields: ['id', 'displayName', 'photos', 'email', 'gender', 'name'],
-      proxy: true
+      proxy: process.env.NODE_ENV === 'production' ? true : false
     },
     (token, tokenSecret, profile, done) =>
       PassportServiceInstance.passportStrategy(profile, done, {
