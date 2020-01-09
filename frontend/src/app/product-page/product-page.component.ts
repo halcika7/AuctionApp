@@ -140,19 +140,7 @@ export class ProductPageComponent extends Wishlist
         .listen("watchers")
         .subscribe(
           (data: { views: number; productId: string; userIds: string[] }) => {
-            if (this._userId) {
-              this.windowUnload.beforeUnload(this._product.id, this._userId);
-              const findUserId = data.userIds.findIndex(
-                id => id === this._userId
-              );
-              if (findUserId === -1) {
-                this._emitedCount = false;
-                this.addWatcher();
-              }
-            }
-            this.store.dispatch(
-              new ProductPageActions.SetNumberOfViewers(data)
-            );
+            this.socketWatcherHelper(data);
           }
         )
     );
@@ -167,20 +155,7 @@ export class ProductPageComponent extends Wishlist
             );
             if (productIdIndex !== -1) {
               let newData = data[productIdIndex];
-              if (this._userId) {
-                this.windowUnload.beforeUnload(this._product.id, this._userId);
-                const findUserId = newData.userIds.findIndex(
-                  id => id === this._userId
-                );
-
-                if (findUserId === -1) {
-                  this._emitedCount = false;
-                  this.addWatcher();
-                }
-              }
-              this.store.dispatch(
-                new ProductPageActions.SetNumberOfViewers(newData)
-              );
+              this.socketWatcherHelper(newData);
             }
           }
         )
@@ -248,6 +223,22 @@ export class ProductPageComponent extends Wishlist
     this._enteredPrice = null;
   }
 
+  private socketWatcherHelper(data: {
+    views: number;
+    productId: string;
+    userIds: string[];
+  }) {
+    if (this._userId) {
+      this.windowUnload.beforeUnload(this._product.id, this._userId);
+      const findUserId = data.userIds.findIndex(id => id === this._userId);
+      if (findUserId === -1) {
+        this._emitedCount = false;
+        this.addWatcher();
+      }
+    }
+    this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
+  }
+
   private setMessageDisabled() {
     if (
       this.product &&
@@ -267,29 +258,20 @@ export class ProductPageComponent extends Wishlist
   }
 
   private addWatcher() {
-    if (
-      !this._emitedCount &&
-      this._userId &&
-      this._product &&
-      this._product.id
-    ) {
-      this.socketService.emit("watch", {
-        views: this._numberOfViewers,
-        productId: this._product.id,
-        userId: this._userId
-      });
-      this._emitedCount = true;
-    } else if (
-      !this._emitedCount &&
-      !this._userId &&
-      this._product &&
-      this._product.id
-    ) {
-      this.socketService.emit("watch", {
-        views: this._numberOfViewers,
-        productId: this._product.id,
-        userId: null
-      });
+    if (!this._emitedCount && this._product && this._product.id) {
+      if (this._userId) {
+        this.socketService.emit("watch", {
+          views: this._numberOfViewers,
+          productId: this._product.id,
+          userId: this._userId
+        });
+      } else if (!this._userId) {
+        this.socketService.emit("watch", {
+          views: this._numberOfViewers,
+          productId: this._product.id,
+          userId: null
+        });
+      }
       this._emitedCount = true;
     }
   }
