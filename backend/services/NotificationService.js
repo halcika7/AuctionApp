@@ -71,20 +71,22 @@ class NotificationService extends BaseService {
   }
 
   removeUserFromAllProducts(io, userId) {
+    let toUpdatedNumberOfViewers = [...this.numberOfViewers];
     let numberOfViewers = [...this.numberOfViewers];
 
-    numberOfViewers = numberOfViewers.map(data => {
+    numberOfViewers = numberOfViewers.filter((data, index) => {
       const userIdIndex = data.userIds.findIndex(id => id === userId);
-      if (userIdIndex) {
+      if (userIdIndex !== -1) {
         data.userIds = data.userIds.filter(id => id !== userId);
         data.views = data.views - 1;
+        toUpdatedNumberOfViewers[index] = { ...data };
       }
-      return data;
+      return userIdIndex !== -1 ? data : null;
     });
 
-    this.numberOfViewers = [...numberOfViewers];
+    this.numberOfViewers = [...toUpdatedNumberOfViewers];
 
-    return io.emit('afterLogoutWatchers', this.numberOfViewers);
+    return io.emit('afterLogoutWatchers', numberOfViewers);
   }
 }
 

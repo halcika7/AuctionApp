@@ -78,7 +78,8 @@
         *ngIf="
           product.status &&
           product.status !== 'closed' &&
-          !userId
+          !userId &&
+          numberOfViewers > 0
         "
       >
         Currently watching {{ numberOfViewers }}
