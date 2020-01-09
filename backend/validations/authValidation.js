@@ -38,7 +38,7 @@ exports.loginValidation = async data => {
   let message = '';
   const user = await findUserByEmail(data.email);
 
-  if(!user) {
+  if (!user) {
     message = 'Incorrect email or password';
     return this.returnData(errors, message, {});
   }
@@ -57,9 +57,13 @@ exports.loginValidation = async data => {
   }
 
   if (!isEmpty(data.password) && user) {
-    const byCrypt = await comparePassword(data.password, user.password);
-    if (!byCrypt) {
-      message = 'Incorrect email or password';
+    try {
+      const byCrypt = await comparePassword(data.password, user.password);
+      if (!byCrypt) {
+        message = 'Incorrect email or password';
+      }
+    } catch (error) {
+      message = 'Please try with Facebook or Google login';
     }
   }
 
@@ -126,7 +130,6 @@ exports.passwordValidation = (
   errors,
   { response = 'Password', name = 'password', checkEquality = null }
 ) => {
-
   if (isEmpty(password)) {
     errors[name] = `${response} is required`;
   } else if (!Validator.isLength(password, { min: 6 })) {
@@ -141,7 +144,6 @@ exports.passwordValidation = (
   if (checkEquality && checkEquality !== password) {
     errors[name] = 'Confirm password should be equal to provided password';
   }
-  
 };
 
 exports.nameValidation = (type, value, errors, resp) => {
