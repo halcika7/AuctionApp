@@ -57,8 +57,9 @@
           <span>{{ _cardCvcError }}</span>
         </div>
       </div>
-      <span *ngIf="cardValidationError">{{ cardValidationError }}</span>
-      <span *ngIf="cardError">{{ cardError }}</span>
+      <span *ngIf="cardValidationError && !cardError">{{ cardValidationError }}</span>
+      <span *ngIf="cardError && !cardValidationError">{{ cardError }}</span>
+      <span *ngIf="cardError && cardValidationError">{{ cardError }}</span>
     </div>
     <div
       class="inputs hascard"
@@ -100,8 +101,9 @@
           </div>
         </div>
       </div>
-      <span *ngIf="cardValidationError">{{ cardValidationError }}</span>
-      <span *ngIf="cardError">{{ cardError }}</span>
+      <span *ngIf="cardValidationError && !cardError">{{ cardValidationError }}</span>
+      <span *ngIf="cardError && !cardValidationError">{{ cardError }}</span>
+      <span *ngIf="cardError && cardValidationError">{{ cardError }}</span>
     </div>
   </div>
 </div>

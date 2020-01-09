@@ -121,6 +121,7 @@
       type="submit"
       (click)="process()"
       [ngClass]="{ 'ml-auto': payment }"
+      [disabled]="!isValidStep || clicked"
     >
       done
     </button>
