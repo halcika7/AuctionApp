@@ -22,7 +22,7 @@ export interface State {
   bids: Bid[];
   message: string;
   success: boolean;
-  numberOfViewers: { views?: number; productId?: string };
+  numberOfViewers: { views?: number; productId?: string; userIds?: string[] };
   highestBidUserId: string;
   wonAuction: boolean;
 }
@@ -47,7 +47,7 @@ const initialState: State = {
   bids: [],
   message: "",
   success: false,
-  numberOfViewers: { views: 0, productId: null },
+  numberOfViewers: { views: 0, productId: null, userIds: [] },
   highestBidUserId: "",
   wonAuction: false
 };
@@ -89,7 +89,9 @@ export function productPageReducer(
     case ProductPageActions.PRODUCT_FAILED:
       return {
         ...initialState,
-        message: action.payload.error.message ? action.payload.error.message : ""
+        message: action.payload.error.message
+          ? action.payload.error.message
+          : ""
       };
     case ProductPageActions.CLEAR_PRODUCT_MESSAGES:
       return {

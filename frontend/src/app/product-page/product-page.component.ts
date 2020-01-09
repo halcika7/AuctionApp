@@ -50,6 +50,22 @@ export class ProductPageComponent extends Wishlist
     this._emitedCount = false;
 
     this.subscription.add(
+      this.store.select("auth").subscribe(({ userId }) => {
+        if (this._userId && !userId) {
+          this.store.dispatch(
+            new ProductPageActions.ClearProductMessages(true)
+          );
+        }
+
+        this._userId = userId;
+
+        if (userId) this.addWatcher();
+
+        this.setMessageDisabled();
+      })
+    );
+
+    this.subscription.add(
       this.route.params.subscribe(({ id, subcategoryId }: Params) => {
         this._enteredPrice = null;
         if (!id || !subcategoryId) {
@@ -84,18 +100,9 @@ export class ProductPageComponent extends Wishlist
           }) => {
             if (product.id) {
               this._highestBidUserId = highestBidUserId;
-              this.windowUnload.beforeUnload(product.id);
 
               if (numberOfViewers) {
                 this._numberOfViewers = numberOfViewers.views;
-              }
-
-              if (!this._emitedCount) {
-                this.socketService.emit("watch", {
-                  views: this._numberOfViewers,
-                  productId: product.id
-                });
-                this._emitedCount = true;
               }
 
               super.onInitWishlist(product.id, true);
@@ -109,6 +116,7 @@ export class ProductPageComponent extends Wishlist
             }
 
             this._product = product;
+            this.addWatcher();
             this._bids = bids;
             this._similarProducts = similarProducts;
             this._minPrice =
@@ -128,23 +136,54 @@ export class ProductPageComponent extends Wishlist
     );
 
     this.subscription.add(
-      this.store.select("auth").subscribe(({ userId }) => {
-        if (this._userId && !userId) {
-          this.store.dispatch(
-            new ProductPageActions.ClearProductMessages(true)
-          );
-        }
-        this._userId = userId;
-        this.setMessageDisabled();
-      })
+      this.socketService
+        .listen("watchers")
+        .subscribe(
+          (data: { views: number; productId: string; userIds: string[] }) => {
+            if (this._userId) {
+              this.windowUnload.beforeUnload(this._product.id, this._userId);
+              const findUserId = data.userIds.findIndex(
+                id => id === this._userId
+              );
+              if (findUserId === -1) {
+                this._emitedCount = false;
+                this.addWatcher();
+              }
+            }
+            this.store.dispatch(
+              new ProductPageActions.SetNumberOfViewers(data)
+            );
+          }
+        )
     );
 
     this.subscription.add(
       this.socketService
-        .listen("watchers")
-        .subscribe((data: { views: number; productId: string }) => {
-          this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
-        })
+        .listen("afterLogoutWatchers")
+        .subscribe(
+          (data: { views: number; productId: string; userIds: string[] }[]) => {
+            const productIdIndex = data.findIndex(
+              values => values.productId === this._product.id
+            );
+            if (productIdIndex !== -1) {
+              let newData = data[productIdIndex];
+              if (this._userId) {
+                this.windowUnload.beforeUnload(this._product.id, this._userId);
+                const findUserId = newData.userIds.findIndex(
+                  id => id === this._userId
+                );
+
+                if (findUserId === -1) {
+                  this._emitedCount = false;
+                  this.addWatcher();
+                }
+              }
+              this.store.dispatch(
+                new ProductPageActions.SetNumberOfViewers(newData)
+              );
+            }
+          }
+        )
     );
 
     this.subscription.add(
@@ -197,8 +236,13 @@ export class ProductPageComponent extends Wishlist
   }
 
   ngOnDestroy() {
-    this.windowUnload.beforeUnload();
-    this.socketService.emit("removeWatcher", this._product.id);
+    this.windowUnload.beforeUnload(this._product.id, this.userId);
+    if (this._userId) {
+      this.socketService.emit("removeWatcher", {
+        productId: this._product.id,
+        userId: this._userId
+      });
+    }
     super.onDestroy();
     this.subscription.unsubscribe();
     this._enteredPrice = null;
@@ -206,6 +250,7 @@ export class ProductPageComponent extends Wishlist
 
   private setMessageDisabled() {
     if (
+      this.product &&
       this.product.id &&
       !this._message &&
       this.product.userId === this.userId
@@ -219,6 +264,34 @@ export class ProductPageComponent extends Wishlist
       this._message === "Please login in order to place bid!"
         ? true
         : false;
+  }
+
+  private addWatcher() {
+    if (
+      !this._emitedCount &&
+      this._userId &&
+      this._product &&
+      this._product.id
+    ) {
+      this.socketService.emit("watch", {
+        views: this._numberOfViewers,
+        productId: this._product.id,
+        userId: this._userId
+      });
+      this._emitedCount = true;
+    } else if (
+      !this._emitedCount &&
+      !this._userId &&
+      this._product &&
+      this._product.id
+    ) {
+      this.socketService.emit("watch", {
+        views: this._numberOfViewers,
+        productId: this._product.id,
+        userId: null
+      });
+      this._emitedCount = true;
+    }
   }
 
   valueChange(e) {

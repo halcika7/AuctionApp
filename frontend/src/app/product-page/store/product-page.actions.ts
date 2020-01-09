@@ -107,7 +107,7 @@ export class ProductBidFailed implements Action {
 export class SetNumberOfViewers implements Action {
   readonly type = SET_NUMBER_OF_VIEWERS;
 
-  constructor(public payload: { views: number; productId: string }) {}
+  constructor(public payload: { views: number; productId: string; userIds: string[] }) {}
 }
 
 export class SetMessage implements Action {
