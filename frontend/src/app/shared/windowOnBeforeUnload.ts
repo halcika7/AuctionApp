@@ -7,7 +7,6 @@ export class WindowOnBeforeUnload {
     window.onbeforeunload = () => {
       if (productId) {
         this.socketService.emit("removeWatcher", { productId, userId });
-        this.socketService.disconnect();
       }
 
       if (
@@ -19,8 +18,6 @@ export class WindowOnBeforeUnload {
           : "Bearer " + sessionStorage.getItem("accessToken");
         this.socketService.emit("removeloggeduser", token);
       }
-
-      this.socketService.disconnect();
     };
   }
 }

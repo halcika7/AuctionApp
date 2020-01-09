@@ -61,7 +61,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.store.dispatch(new AuthActions.LogoutStart());
-    this.socket.disconnect();
   }
 
   onSearch(e: Event, input: HTMLInputElement) {
