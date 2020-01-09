@@ -1,13 +1,22 @@
 import * as PaymentPageActions from "./payemnt.actions";
+import { OwnerInfo } from '@app/product-page/store/product-page.reducer';
 
 export interface State {
   message: string;
   success: boolean;
+  ownerInfo: OwnerInfo;
+  previousRating: number;
 }
 
 const initialState: State = {
   message: "",
-  success: false
+  success: false,
+  ownerInfo: {
+    photo: '',
+    full_name: '',
+    avg_rating: ''
+  },
+  previousRating: null
 };
 
 export function paymentReducer(
@@ -25,8 +34,10 @@ export function paymentReducer(
     case PaymentPageActions.PAYMENT_PAGE_SUCCESS: {
       return {
         ...state,
-        message: action.message ? action.message : '',
-        success: action.message ? true : false
+        message: action.payload.message ? action.payload.message : '',
+        ownerInfo: action.payload.ownerInfo ? action.payload.ownerInfo : state.ownerInfo,
+        previousRating: action.payload.rating ? action.payload.rating : state.previousRating,
+        success: action.payload.message ? true : false
       };
     }
     case PaymentPageActions.CLEAR_PAYMENT_MESSAGES: {

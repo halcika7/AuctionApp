@@ -121,11 +121,7 @@
           .card-number {
             label {
               span {
-                margin-bottom: 8px;
-                font-size: 18px;
-                font-weight: 400;
-                letter-spacing: 0.63px;
-                color: getColor(red);
+                @include fontMixin(18px, regular, 0.63px, red);
                 display: inline !important;
               }
             }

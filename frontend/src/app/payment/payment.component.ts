@@ -1,3 +1,4 @@
+import { isEmptyObject } from "@app/shared/isEmptyObject";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ActivatedRoute, Params, Router } from "@angular/router";
@@ -12,7 +13,8 @@ import {
   setErrors
 } from "../shared/validators";
 import { Subscription } from "rxjs";
-import { map } from 'rxjs/operators';
+import { map } from "rxjs/operators";
+import { OwnerInfo } from '@app/product-page/store/product-page.reducer';
 
 @Component({
   selector: "app-payment",
@@ -21,14 +23,22 @@ import { map } from 'rxjs/operators';
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   private productId: string;
+  private _cardInfo: FormGroup = new FormGroup({
+    ...BASIC_INPUT("cName"),
+    ...BASIC_INPUT("cardNumber"),
+    ...BASIC_INPUT("cardCvc"),
+    ...BASIC_INPUT("cardExpiry")
+  });
   private subcategoryId: string;
+  private token: string;
   private _form: FormGroup;
-  private _selectedYear: number;
-  private _selectedMonth: string;
   private _openRateUserModal: boolean = false;
   private _message: string;
   private _success: boolean;
   private _clicked: boolean;
+  private _ownerInfo: OwnerInfo;
+  private _previousRating: number;
+  private _userRating: number;
   private subscription = new Subscription();
 
   constructor(
@@ -48,9 +58,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       ...PHONE_VALIDATOR("phone", true),
       ...BASIC_INPUT("useCard", false),
       ...BASIC_INPUT("useOptionalInfo", false),
-      ...BASIC_INPUT("cName"),
-      ...BASIC_INPUT("cNumber"),
-      ...BASIC_INPUT("CVC")
+      cardInfo: this._cardInfo
     });
 
     this.subscription.add(
@@ -62,7 +70,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             !accessToken &&
             !localStorage.getItem("accessToken") &&
             !sessionStorage.getItem("accessToken")
-            ) {
+          ) {
             this.router.navigate(["/home/auth/login"]);
           }
         })
@@ -73,24 +81,27 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (!id || !subcategoryId) this.router.navigate(["/404"]);
         this.productId = id;
         this.subcategoryId = subcategoryId;
+        const info = {
+          productId: id,
+          subcategoryId
+        };
 
-        this.store.dispatch(
-          new PaymentPageActions.CheckUserValidity({
-            productId: id,
-            subcategoryId
-          })
-        );
+        this.store.dispatch(new PaymentPageActions.CheckUserValidity(info));
+
+        this.store.dispatch(new PaymentPageActions.GetOwnerInfo(info));
       })
     );
 
     this.subscription.add(
-      this.store.select("payment").subscribe(({ message, success }) => {
+      this.store.select("payment").subscribe(({ message, success, ownerInfo, previousRating }) => {
         if (message == "Product not found !") this.router.navigate(["/404"]);
         this._message = message;
         this._success = success;
-        this._clicked = false
+        this._clicked = false;
+        this._ownerInfo = ownerInfo;
+        this._previousRating = previousRating;
 
-        if(success) {
+        if (success) {
           setTimeout(() => {
             this.router.navigate(["/home"]);
           }, 4000);
@@ -99,14 +110,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.store
-        .select("addProduct")
-        .subscribe(
-          ({ errors }) => {
-            this.setFormErrors(errors);
-            this._clicked = false;
-          }
-        )
+      this.store.select("addProduct").subscribe(({ errors }) => {
+        this.setFormErrors(errors);
+        this.windowScrolls(errors);
+        this._clicked = false;
+      })
     );
   }
 
@@ -115,9 +123,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  submitForm(data) {
-    this._selectedYear = data.exp_year;
-    this._selectedMonth = data.exp_month;
+  submitForm(token: string) {
+    this.token = token;
     this._openRateUserModal = true;
     this._clicked = true;
   }
@@ -133,32 +140,46 @@ export class PaymentComponent implements OnInit, OnDestroy {
     };
     const cardInformation = {
       useCard: this.form.value.useCard,
-      cvc: this.form.value.CVC,
       name: this.form.value.cName,
-      number: this.form.value.cNumber,
-      exp_year: this._selectedYear,
-      exp_month: this._selectedMonth
+      token: this.token
     };
-    const userRating = value;
+    this._userRating = value;
     this.store.dispatch(
       new PaymentPageActions.MakePayment({
         addressInformation,
         cardInformation,
-        userRating,
+        userRating: this._userRating,
         productId: this.productId,
         subcategoryId: this.subcategoryId
       })
     );
+    this.windowScrolls({});
   }
 
   clearMessages() {
-    this.store.dispatch(new PaymentPageActions.ClearPaymentMessages())
+    this.store.dispatch(new PaymentPageActions.ClearPaymentMessages());
   }
 
   private setFormErrors(errors) {
     Object.keys(this._form.controls).forEach(key => {
       setErrors(errors, key, this._form);
     });
+  }
+
+  private windowScrolls(errors) {
+    if (isEmptyObject(errors)) {
+      window.scrollTo(0, 0);
+    } else if (errors.address) {
+      window.scrollTo(0, 420);
+    } else if (errors.city || errors.country) {
+      window.scrollTo(0, 540);
+    } else if (errors.zip) {
+      window.scrollTo(0, 670);
+    } else if (errors.phone) {
+      window.scrollTo(0, 790);
+    } else if (errors.card) {
+      window.scrollTo(0, 950);
+    }
   }
 
   get form(): FormGroup {
@@ -179,5 +200,21 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   get clicked(): boolean {
     return this._clicked;
+  }
+
+  get cardInfo(): FormGroup {
+    return this._cardInfo;
+  }
+
+  get ownerInfo(): OwnerInfo {
+    return this._ownerInfo;
+  }
+
+  get previousRating(): number {
+    return this._previousRating;
+  }
+
+  get userRating(): number {
+    return this._userRating;
   }
 }

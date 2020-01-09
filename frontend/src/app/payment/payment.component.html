@@ -1,4 +1,10 @@
-<app-rate-owner *ngIf="openRateUserModal" (confirmOrder)="confirmOrder($event)"></app-rate-owner>
+<app-rate-owner
+  *ngIf="openRateUserModal"
+  (confirmOrder)="confirmOrder($event)"
+  [ownerInfo]="ownerInfo"
+  [previousRating]="previousRating"
+  [userRating]="userRating"
+></app-rate-owner>
 
 <app-breadcrumb
   title="single product"
@@ -21,6 +27,7 @@
   <div class="form">
     <app-last-step
       [form]="form"
+      [nestedGroup]="cardInfo"
       (submitForm)="submitForm($event)"
       [currentStep]="3"
       [payment]="true"

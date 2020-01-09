@@ -21,7 +21,7 @@
 
   .content {
     @include flex(center, $direction: column);
-    @include heightWidth(400px, 500px);
+    @include heightWidth(440px, 500px);
     margin-top: 200px;
     max-width: 75%;
     background: getColor(white);
@@ -67,6 +67,20 @@
       p {
         @include margin($all: 0);
         @include fontMixin(18px, bold, 0.63px, light_black);
+
+        &.previousRating {
+          @include fontMixin(18px, regular, 0.63px, light_black);
+          @include margin($all: 10px 0);
+
+          fa-icon {
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 0.52px;
+            color: #8367d8;
+            line-height: 22px;
+            margin-right: 5px;
+          }
+        }
       }
 
       .rating {

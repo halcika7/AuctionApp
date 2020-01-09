@@ -29,6 +29,14 @@ class ReviewService extends BaseService {
       return super.returnGenericFailed();
     }
   }
+
+  async findReview(userId, ownerId) {
+    return await Review.findOne({
+      raw: true,
+      where: { userId, ownerId },
+      attributes: ['rating']
+    });
+  }
 }
 
 const ReviewServiceInstance = new ReviewService();

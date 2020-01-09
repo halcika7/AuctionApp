@@ -178,7 +178,6 @@ exports.creditCardValidation = async (cardInformation, userId, errors) => {
   const { customerId, cardId, accountId } = await CardInfoService.findUserCardInfo(userId);
 
   if (!useCard) {
-
     if (!name) errors.cName = 'Name on card is required';
     else if (name.length > 100) errors.cName = 'Name on card cannot exceed 100 characters';
 
