@@ -228,16 +228,16 @@ export class ProductPageComponent extends Wishlist
     productId: string;
     userIds: string[];
   }) {
-    if (data.productId === this._product.id) {
-      if (this._userId) {
-        this.windowUnload.beforeUnload(this._product.id, this._userId);
+    if (this._userId) {
+      this.windowUnload.beforeUnload(this._product.id, this._userId);
+      if (data.productId === this._product.id) {
         const findUserId = data.userIds.findIndex(id => id === this._userId);
         if (findUserId === -1) {
           this._emitedCount = false;
           this.addWatcher();
         }
+        this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
       }
-      this.store.dispatch(new ProductPageActions.SetNumberOfViewers(data));
     }
   }
 
