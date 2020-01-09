@@ -32,8 +32,10 @@ export class StripeServiceService {
       message: ""
     }
   };
-  stripeErrors = new Subject<any>();
-  cardValidity = new Subject<any>();
+  cardValidity = new Subject<{
+    untouched: boolean;
+    valid: boolean;
+  }>();
   cardData = new Subject<any>();
   cardValid = new Subject<boolean>();
 
@@ -77,22 +79,15 @@ export class StripeServiceService {
 
   checkCardValidity() {
     let Empty = 0;
-    let error = "";
     let Complete = 0;
 
-    Object.values(this.cardValidationErrors).forEach(
-      ({ empty, complete, message }) => {
-        if (empty) Empty++;
-        if (message) {
-          error += message;
-        }
-        if (complete) Complete++;
-      }
-    );
+    Object.values(this.cardValidationErrors).forEach(({ empty, complete }) => {
+      if (empty) Empty++;
+      if (complete) Complete++;
+    });
 
     this.cardValidity.next({
       untouched: Empty === 3,
-      error,
       valid: (Empty === 0 && Complete === 3) || (Empty === 3 && Complete === 0)
     });
 
@@ -108,7 +103,6 @@ export class StripeServiceService {
       complete,
       message: error ? error.message : ""
     };
-    this.stripeErrors.next(error ? error.message : "");
     this.checkCardValidity();
   }
 

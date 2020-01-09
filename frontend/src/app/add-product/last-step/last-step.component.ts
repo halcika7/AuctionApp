@@ -75,7 +75,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
           this.patchValues();
         }
 
-        if (this.showCard !== !useCard) {
+        if (this.showCard == useCard) {
           this._showCard = !useCard;
           if (!useCard) {
             setValidators(

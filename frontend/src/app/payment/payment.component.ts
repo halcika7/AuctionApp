@@ -14,7 +14,7 @@ import {
 } from "../shared/validators";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
-import { OwnerInfo } from '@app/product-page/store/product-page.reducer';
+import { OwnerInfo } from "@app/product-page/store/product-page.reducer";
 
 @Component({
   selector: "app-payment",
@@ -93,20 +93,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.store.select("payment").subscribe(({ message, success, ownerInfo, previousRating }) => {
-        if (message == "Product not found !") this.router.navigate(["/404"]);
-        this._message = message;
-        this._success = success;
-        this._clicked = false;
-        this._ownerInfo = ownerInfo;
-        this._previousRating = previousRating;
+      this.store
+        .select("payment")
+        .subscribe(({ message, success, ownerInfo, previousRating }) => {
+          if (message == "Product not found !") this.router.navigate(["/404"]);
+          this._message = message;
+          this._success = success;
+          this._clicked = false;
+          this._ownerInfo = ownerInfo;
+          this._previousRating = previousRating;
 
-        if (success) {
-          setTimeout(() => {
-            this.router.navigate(["/home"]);
-          }, 4000);
-        }
-      })
+          if (success) {
+            setTimeout(() => {
+              this.router.navigate(["/home"]);
+            }, 4000);
+          }
+        })
     );
 
     this.subscription.add(
@@ -153,7 +155,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         subcategoryId: this.subcategoryId
       })
     );
-    this.windowScrolls({});
   }
 
   clearMessages() {
@@ -167,19 +168,24 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   private windowScrolls(errors) {
+    let elementId = "";
     if (isEmptyObject(errors)) {
       window.scrollTo(0, 0);
+      return;
     } else if (errors.address) {
-      window.scrollTo(0, 420);
+      elementId = "#address";
     } else if (errors.city || errors.country) {
-      window.scrollTo(0, 540);
+      elementId = "#city";
     } else if (errors.zip) {
-      window.scrollTo(0, 670);
+      elementId = "#zip";
     } else if (errors.phone) {
-      window.scrollTo(0, 790);
+      elementId = "#phone";
     } else if (errors.card) {
-      window.scrollTo(0, 950);
+      elementId = "#card-info";
     }
+
+    if (elementId)
+      document.querySelector(elementId).scrollIntoView({ behavior: "smooth" });
   }
 
   get form(): FormGroup {

@@ -99,22 +99,23 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             card
           } = errors;
           if (firstName) {
-            this.scrollWindow(350);
+            this.scrollWindow("#firstName");
           } else if (lastName) {
-            this.scrollWindow(460);
+            this.scrollWindow("#lastName");
           } else if (gender) {
-            this.scrollWindow(560);
+            this.scrollWindow("#gender");
           } else if (dateOfBirth) {
-            this.scrollWindow(660);
+            this.scrollWindow("#dateOfBirth");
           } else if (phoneNumber) {
-            this.scrollWindow(750);
+            this.scrollWindow("#phoneNumber");
           } else if (email) {
-            this.scrollWindow(840);
+            this.scrollWindow("#email");
           } else if (card) {
-            this.scrollWindow(1000);
+            this.scrollWindow("#card-info");
           }
         } else {
           this._cardError = "";
+          window.scrollTo(0, 0);
         }
       })
     );
@@ -147,8 +148,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this._gender = value;
   }
 
-  private scrollWindow(value: number) {
-    window.scrollTo(0, value);
+  private scrollWindow(id: string) {
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
   }
 
   get form(): FormGroup {
@@ -203,24 +204,24 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       state: this.form.value.state
     };
 
-    if (this._validCard) {
+    if (this._validCard && this.cardInfo.value.changeCard) {
       formData.append("name", this.form.value.cardInfo.cName);
       const { token = { id: "" }, error } = await this.stripe.create(
         this.form.value.cardInfo.cName
       );
       if (error) {
         this._cardError = error.message;
+        this.scrollWindow("#card-info")
         return false;
       }
       formData.append("token", token.id);
-      formData.append("changeCard", this.form.value.cardInfo.changeCard);
+      formData.append("changeCard", this.cardInfo.value.changeCard);
     }
     formData.append("userInfo", JSON.stringify(userInfo));
     formData.append("optionalInfo", JSON.stringify(optionalInfo));
     formData.append("image", this.form.value.image);
     this._clicked = true;
     this.store.dispatch(new ProfileActions.UpdateProfileStart(formData));
-    window.scrollTo(0, 0);
     this._showSpinner = true;
   }
 }

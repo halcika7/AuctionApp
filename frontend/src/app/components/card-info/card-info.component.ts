@@ -65,14 +65,7 @@ export class CardInfoComponent implements OnInit, OnDestroy {
       this.subscription.add(
         this.formGroup.controls.changeCard.valueChanges.subscribe(value => {
           this._changeCard = value;
-          if (
-            ((this.formGroup.value.cName && this._cardUntouched) ||
-              (this.formGroup.value.cName && !this._cardUntouched) ||
-              (!this.formGroup.value.cName && !this._cardUntouched) ||
-              (!this.formGroup.value.cName && this._cardUntouched)) &&
-            !this._cardValid &&
-            this._changeCard
-          ) {
+          if (!this._cardValid && this._changeCard) {
             setValidators(
               [cardNumber, cardCvc, cardExpiry],
               ["cardNumber", "cardCvc", "cardExpiry"]
@@ -126,11 +119,7 @@ export class CardInfoComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.formGroup.controls.cName.valueChanges.subscribe(value => {
-        if (
-          (value && this._cardUntouched && !this._cardValid) ||
-          (value && !this._cardUntouched && !this._cardValid) ||
-          (!value && !this._cardUntouched && !this._cardValid)
-        ) {
+        if (!this._cardValid && (value || !this._cardUntouched)) {
           setValidators(
             [cardNumber, cardCvc, cardExpiry],
             ["cardNumber", "cardCvc", "cardExpiry"]
