@@ -32,6 +32,7 @@ export class StripeServiceService {
       message: ""
     }
   };
+  private readonly STRIPE_FORM_COMPLETED = 3;
   cardValidity = new Subject<{
     untouched: boolean;
     valid: boolean;
@@ -87,23 +88,20 @@ export class StripeServiceService {
     });
 
     this.cardValidity.next({
-      untouched: Empty === 3,
-      valid: (Empty === 0 && Complete === 3) || (Empty === 3 && Complete === 0)
+      //setting untouched value if all stripe elements are empty
+      untouched: Empty === this.STRIPE_FORM_COMPLETED,
+      // stripe form is valid if all inputs are empty and not complete ||
+      // all inputs empty and completed.
+      // First part is needed for profile credit card update because it is not required so I can disable credit card validation if its valid
+      valid:
+        (Empty === 0 && Complete === this.STRIPE_FORM_COMPLETED) ||
+        (Empty === this.STRIPE_FORM_COMPLETED && Complete === 0)
     });
 
     this.cardData.next({
       ...this.cardValidationErrors,
-      valid: Empty === 0 && Complete === 3
+      valid: Empty === 0 && Complete === this.STRIPE_FORM_COMPLETED
     });
-  }
-
-  private addValidation({ elementType, empty, complete, error }) {
-    this.cardValidationErrors[elementType] = {
-      empty,
-      complete,
-      message: error ? error.message : ""
-    };
-    this.checkCardValidity();
   }
 
   private mount() {
@@ -122,5 +120,17 @@ export class StripeServiceService {
     this.cardExpiry.on("change", event => {
       this.addValidation(event);
     });
+  }
+
+  private addValidation({ elementType, empty, complete, error }) {
+    // Stripe returns element type e.g. CardElement, empty if elementType is empty
+    // complete if not empty and valid card number
+
+    this.cardValidationErrors[elementType] = {
+      empty,
+      complete,
+      message: error ? error.message : ""
+    };
+    this.checkCardValidity();
   }
 }
