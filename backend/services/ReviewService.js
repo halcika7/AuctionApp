@@ -1,6 +1,5 @@
 const BaseService = require('./BaseService');
 const Review = require('../models/Review');
-const { db, Op } = require('../config/database');
 
 class ReviewService extends BaseService {
   constructor() {

@@ -107,9 +107,7 @@
             <td>
               <a
                 *ngIf="
-                  item.Product.status !== 'closed' &&
-                  item.price !== item.Product.highest_bid ||
-                  item.Product.paid === 't'
+                  item.Product.status !== 'closed'
                 "
                 [routerLink]="[
                   '/shop/products',

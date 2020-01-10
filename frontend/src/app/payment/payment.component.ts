@@ -104,6 +104,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this._previousRating = previousRating;
 
           if (success) {
+            window.scrollTo(0, 0);
             setTimeout(() => {
               this.router.navigate(["/home"]);
             }, 4000);
@@ -142,7 +143,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     };
     const cardInformation = {
       useCard: this.form.value.useCard,
-      name: this.form.value.cName,
+      name: this._cardInfo.value.cName,
       token: this.token
     };
     this._userRating = value;
@@ -165,6 +166,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     Object.keys(this._form.controls).forEach(key => {
       setErrors(errors, key, this._form);
     });
+    if (errors.cName) {
+      setErrors(errors, "cName", this._cardInfo);
+    }
   }
 
   private windowScrolls(errors) {
@@ -180,7 +184,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       elementId = "#zip";
     } else if (errors.phone) {
       elementId = "#phone";
-    } else if (errors.card) {
+    } else if (errors.card || errors.cName) {
       elementId = "#card-info";
     }
 
