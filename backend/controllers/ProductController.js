@@ -27,21 +27,24 @@ class ProductController extends BaseController {
   }
 
   async getProduct(req, res) {
-    const token = req.headers.authorization.split(' ')[1] || null;
-    const { product, bids, status } = await ProductServiceInstance.findProductById(
+    const token = super.getAuthorizationHeader(req);
+    const {
+      product,
+      highestBidUserId,
+      wonAuction,
+      status,
+      message
+    } = await ProductServiceInstance.findProductById(
       req.params.id,
       req.params.subcategoryId,
       token
     );
 
     if (!product) {
-      return super.sendResponse(res, status, { error: 'Product not found !' });
+      return super.sendResponse(res, 404, { message: 'Product not found !' });
     }
 
-    const { similarProducts } =
-      (await ProductServiceInstance.findSimilarProducts(product.subcategoryId, product.id)) || [];
-
-    return super.sendResponse(res, status, { product, similarProducts, bids });
+    return super.sendResponse(res, status, { product, highestBidUserId, wonAuction, message });
   }
 
   async getSimilarProducts(req, res) {
@@ -91,13 +94,8 @@ class ProductController extends BaseController {
       status,
       message
     } = await ProductServiceInstance.getActiveUserProductsCount(userId);
-    
-    return super.sendResponseWithMessage(
-      res,
-      status,
-      { hasActiveProduct, accessToken },
-      message
-    );
+
+    return super.sendResponseWithMessage(res, status, { hasActiveProduct, accessToken }, message);
   }
 
   async addProduct(req, res) {

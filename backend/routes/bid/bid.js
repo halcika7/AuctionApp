@@ -2,7 +2,12 @@ const router = require('express').Router();
 const BidController = require('../../controllers/BidController');
 const authMiddleware = require('../../middlewares/authMiddleware');
 
-// Categories Routes
-router.post('/make', authMiddleware, BidController.makeBid);
+// Bid Routes
+module.exports = io => {
+    io.on('connection', socket => {
+        router.post('/make', authMiddleware, (req, res) => BidController.makeBid(req, res, io));
+    });
 
-module.exports = router;
+    return router;
+}
+

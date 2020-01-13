@@ -13,7 +13,6 @@ const {
   noMoreProducts,
   hasActiveProduct
 } = require('../helpers/productFilter');
-const { decodeToken } = require('../helpers/authHelper');
 const { LIMIT_SHOP_PRODUCTS, FEATURING_PRODUCT_COST } = require('../config/configs');
 const { addProductValidation } = require('../validations/addProductValidation');
 const { transformProductData } = require('../helpers/transformProductData');
@@ -42,10 +41,21 @@ class ProductService extends BaseService {
   async findProductById(productId, subcategoryId, token) {
     try {
       const product = await getProductById(productId, subcategoryId);
-      const { id } = decodeToken(token) || { id: undefined };
-      const { bids } = id === product.userId && (await BidService.filterBidsForProduct(productId));
+      const { id } = super.decodeAuthorizationToken(token);
+      const highestBid = await BidService.getHighestBid(productId);
+      const message =
+        highestBid && highestBid.userId === id && product.dataValues.status == 'open'
+          ? 'You are already highest bidder'
+          : '';
+      const wonAuction =
+        (highestBid && highestBid.userId === id && product.dataValues.status == 'closed') || false;
 
-      return super.returnResponse(200, { product, bids });
+      return super.returnResponse(200, {
+        product,
+        message,
+        highestBidUserId: highestBid ? highestBid.userId : '',
+        wonAuction
+      });
     } catch (error) {
       return super.returnResponse(403, {});
     }
@@ -96,7 +106,7 @@ class ProductService extends BaseService {
   async getActiveUserProductsCount(userId) {
     try {
       const active = await hasActiveProduct(userId);
-      
+
       return super.returnResponse(200, { hasActiveProduct: active });
     } catch (error) {
       return super.returnGenericFailed();
@@ -133,7 +143,7 @@ class ProductService extends BaseService {
       }
 
       const uploadImages = await CloudinaryService.uploadProductImages(images);
-      
+
       if (productData.featured) {
         let source =
           typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
@@ -162,7 +172,10 @@ class ProductService extends BaseService {
       const product = await Product.create({ ...productData });
 
       const productImages = uploadImages.slice(1).map(image => ({ image, productId: product.id }));
-      const productFilters = filtersData.map(filter => ({ filterValueId: filter.id, productId: product.id }))
+      const productFilters = filtersData.map(filter => ({
+        filterValueId: filter.id,
+        productId: product.id
+      }));
 
       await ProductImage.bulkCreate(productImages);
       await FilterValueProduct.bulkCreate(productFilters);

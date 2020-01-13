@@ -16,7 +16,20 @@ export class ProductPageEffects {
     ofType(ProductPageActions.PRODUCT_START),
     switchMap(({ id, subcategoryId }) => {
       return this.http
-        .get<{ product: FullProduct; bids?: Bid[]; error?: string }>(`/products/${id}/${subcategoryId}`)
+        .get<{ product: FullProduct; bids?: Bid[]; message?: string }>(`/products/${id}/${subcategoryId}`)
+        .pipe(
+          map(data => new ProductPageActions.ProductSuccess(data)),
+          catchError(data => of(new ProductPageActions.ProductFailed(data)))
+        );
+    })
+  );
+
+  @Effect()
+  GetProductBids = this.actions$.pipe(
+    ofType(ProductPageActions.GET_PRODUCT_BIDS),
+    switchMap(({ productId, subcategoryId }) => {
+      return this.http
+        .get<{ bids?: Bid[]; }>(`/products/bids/${productId}/${subcategoryId}`)
         .pipe(
           map(data => new ProductPageActions.ProductSuccess(data)),
           catchError(data => of(new ProductPageActions.ProductFailed(data)))

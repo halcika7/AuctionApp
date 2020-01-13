@@ -2,7 +2,7 @@ const BaseService = require('./BaseService');
 const Bid = require('../models/Bid');
 const User = require('../models/User');
 const Product = require('../models/Product');
-const { getAuctionEndProduct, noMoreProducts } = require('../helpers/productFilter');
+const { getAuctionEndProduct, noMoreProducts, getProductById } = require('../helpers/productFilter');
 const { LIMIT_BIDS, MAX_BID, DEFAULT_LIMIT_PRODUCTS } = require('../config/configs');
 const { db } = require('../config/database');
 
@@ -74,8 +74,13 @@ class BidService extends BaseService {
     }
   }
 
-  async filterBidsForProduct(productId) {
+  async filterBidsForProduct(productId, subcategoryId, token) {
     try {
+      const { id } = super.decodeAuthorizationToken(token);
+      const product = await getProductById(productId, subcategoryId);
+      
+      if(id !== product.userId) return { bids: [] };
+
       const bids = await Bid.findAll({
         where: {
           productId
@@ -142,6 +147,14 @@ class BidService extends BaseService {
     } catch (error) {
       return super.returnGenericFailed();
     }
+  }
+
+  async getHighestBid(productId) {
+    return await Bid.findOne({
+      raw: true,
+      where: { productId },
+      order: [['price', 'DESC']]
+    })
   }
 }
 

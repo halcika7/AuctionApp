@@ -1,3 +1,5 @@
+const { decodeToken } = require('../helpers/authHelper');
+
 module.exports = class BaseService {
   constructor(ChildClass) {
 
@@ -20,5 +22,9 @@ module.exports = class BaseService {
       status,
       ...objectResp
     };
+  }
+
+  decodeAuthorizationToken(token) {
+    return decodeToken(token) || { id: undefined };
   }
 };

@@ -46,6 +46,10 @@ exports.findUserByEmail = async (email, withPassword = true) => {
   });
 };
 
+exports.findUserById = async id => {
+  return await User.findOne({ raw: true, where: { id } });
+};
+
 exports.getUserInfo = async id => {
   return await User.findOne({
     where: { id },

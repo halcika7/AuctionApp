@@ -2,7 +2,7 @@ const BaseService = require('./BaseService');
 const Wishlist = require('../models/Wishlist');
 const Product = require('../models/Product');
 const Bid = require('../models/Bid');
-const { db } = require('../config/database');
+const { db, Op } = require('../config/database');
 const { DEFAULT_LIMIT_PRODUCTS } = require('../config/configs');
 const { noMoreProducts } = require('../helpers/productFilter');
 
@@ -123,6 +123,10 @@ class WishlistService extends BaseService {
       where: { userId },
       attributes: [[db.fn('array_agg', db.col('productId')), 'ids']]
     });
+  }
+
+  async removeFromWishlistByProductId(productIds) {
+    return await Wishlist.destroy({ where: { productId: { [Op.in]: productIds } } });
   }
 }
 

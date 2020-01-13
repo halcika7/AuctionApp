@@ -22,6 +22,10 @@ const StripeService = require('../services/StripeService');
 class AuthService extends BaseService {
   constructor() {
     super(AuthService);
+    /**
+     * @type Array<{ id: string; email: string }>
+     */
+    this.loggedInUsers = [];
   }
 
   async register(data) {
@@ -59,6 +63,8 @@ class AuthService extends BaseService {
       const accessToken = createAccessToken(user),
         refreshToken = createRefreshToken(user);
 
+      this.pushLoggedUser(user);
+
       return {
         status: 200,
         response: {
@@ -83,6 +89,8 @@ class AuthService extends BaseService {
       if (!user) {
         return super.returnResponse(400, { response: { accessToken: '' } });
       }
+
+      this.pushLoggedUser(user);
 
       return {
         status: 200,
@@ -143,7 +151,7 @@ class AuthService extends BaseService {
         { resetPasswordToken: null, password: hashedPassword },
         { where: { email } }
       );
-      
+
       return {
         status: 200,
         response: {
@@ -158,6 +166,29 @@ class AuthService extends BaseService {
         }
       };
     }
+  }
+
+  pushLoggedUser({ id, email }) {
+    const findIndex = this.loggedInUsers.findIndex(user => user.id === id);
+    if (findIndex === -1) {
+      this.loggedInUsers.push({ id, email });
+    }
+  }
+
+  removeLoggedUser(id) {
+    if (!id) return;
+    const loggedUsers = [...this.loggedInUsers];
+    const findIndex = this.loggedInUsers.findIndex(user => user.id === id);
+
+    if (findIndex !== -1) {
+      loggedUsers.splice(findIndex, 1);
+    }
+
+    this.loggedInUsers = loggedUsers;
+  }
+
+  getLoggedUsers() {
+    return this.loggedInUsers;
   }
 
   setRefreshTokenCookie(res, token) {

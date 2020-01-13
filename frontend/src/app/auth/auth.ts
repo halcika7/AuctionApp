@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { AuthClearMessagess } from "@app/auth/store/auth.actions";
 import { setErrors } from '@app/shared/validators';
 import { UserWishlistIdsStart } from '@app/wishlist/store/wishlist.actions';
+import { ClearProductMessages } from "@app/product-page/store/product-page.actions";
 
 export class Auth {
   private _message: string;
@@ -34,8 +35,9 @@ export class Auth {
             sessionStorage.getItem("accessToken")
           ) {
             this.authStore.dispatch(new UserWishlistIdsStart());
+            this.authStore.dispatch(new ClearProductMessages(true));
             this.subscription.unsubscribe();
-            setTimeout(() => this.Router.navigate(["/"]), 1200);
+            setTimeout(() => this.Router.navigate(["/home"]), 2000);
           }
 
           if (this.form.controls.email) {
@@ -59,7 +61,6 @@ export class Auth {
 
           if (this._success) {
             this._showErrors = false;
-            this.form.reset();
             this._register || this._resetPassword
               ? setTimeout(
                   () => this.Router.navigate(["/home/auth/login"]),

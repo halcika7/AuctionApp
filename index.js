@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
 const app = express();
+const http = require('http');
+const socketio = require('socket.io');
+const server = http.createServer(app);
+const io = socketio(server);
 const { URL } = require('./backend/config/configs');
 
 app.use(
@@ -21,15 +25,18 @@ app.use(bodyParser.json());
 require('./backend/config/database');
 require('./backend/models/Associations');
 
-app.use('/api/auth', require('./backend/routes/authentication/authRoutes'));
+app.use('/api/auth', require('./backend/routes/authentication/authRoutes')(io));
 app.use('/api/landing', require('./backend/routes/landing-page/landingRoutes'));
 app.use('/api/categories', require('./backend/routes/categories/categories'));
 app.use('/api/products', require('./backend/routes/product/product'));
-app.use('/api/bids', require('./backend/routes/bid/bid'));
+app.use('/api/bids', require('./backend/routes/bid/bid')(io));
 app.use('/api/shop', require('./backend/routes/shop/shop'));
 app.use('/api/profile', require('./backend/routes/profile/profile'));
 app.use('/api/add-product', require('./backend/routes/product/add-product'));
 app.use('/api/wishlist', require('./backend/routes/wishlist/wishlist'));
+app.use('/api/notifications', require('./backend/routes/notifications/notifications')(io));
+
+require('./backend/cron/cron')(io);
 
 // static assets for production
 if (process.env.NODE_ENV === 'production') {
@@ -41,6 +48,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+server.listen(port, () => console.log(`Server running on port ${port}`));

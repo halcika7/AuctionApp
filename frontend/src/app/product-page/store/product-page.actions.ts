@@ -16,9 +16,20 @@ export const PRODUCT_BID_FAILED = "PRODUCT_BID_FAILED";
 
 export const CLEAR_PRODUCT_MESSAGES = "CLEAR_PRODUCT_MESSAGES";
 
+export const SET_NUMBER_OF_VIEWERS = "SET_NUMBER_OF_VIEWERS";
+
+export const PRODUCT_SET_MESSAGE = "PRODUCT_SET_MESSAGE";
+
+export const GET_PRODUCT_BIDS = "GET_PRODUCT_BIDS";
+
+export const UPDATE_PRODUCT_AFTER_BID = "UPDATE_PRODUCT_AFTER_BID";
+
+export const UPDATE_PRODUCT_AFTER_AUCTION_END =
+  "UPDATE_PRODUCT_AFTER_AUCTION_END";
+
 export class ClearProductMessages implements Action {
   readonly type = CLEAR_PRODUCT_MESSAGES;
-  constructor() {}
+  constructor(public clearAuctionWon?: boolean) {}
 }
 
 export class ProductStart implements Action {
@@ -26,14 +37,32 @@ export class ProductStart implements Action {
   constructor(public id: string, public subcategoryId: string) {}
 }
 
+export class GetProductBids implements Action {
+  readonly type = GET_PRODUCT_BIDS;
+  constructor(public productId: string, public subcategoryId: string) {}
+}
+
+export class UpdateProductAfterBid implements Action {
+  readonly type = UPDATE_PRODUCT_AFTER_BID;
+  constructor(public highest_bid: any, public highestBidUserId: string) {}
+}
+
 export class ProductSuccess implements Action {
   readonly type = PRODUCT_SUCCESS;
-  constructor(public payload: { product: FullProduct; bids?: Bid[] }) {}
+  constructor(
+    public payload: {
+      product?: FullProduct;
+      bids?: Bid[];
+      message?: string;
+      highestBidUserId?: string;
+      wonAuction?: boolean;
+    }
+  ) {}
 }
 
 export class ProductFailed implements Action {
   readonly type = PRODUCT_FAILED;
-  constructor(public payload: { error: { error: string } }) {}
+  constructor(public payload: { error: { message: string } }) {}
 }
 
 export class SimilarProductStart implements Action {
@@ -75,6 +104,24 @@ export class ProductBidFailed implements Action {
   ) {}
 }
 
+export class SetNumberOfViewers implements Action {
+  readonly type = SET_NUMBER_OF_VIEWERS;
+
+  constructor(public payload: { views: number; productId: string; userIds: string[] }) {}
+}
+
+export class SetMessage implements Action {
+  readonly type = PRODUCT_SET_MESSAGE;
+
+  constructor(public message: string) {}
+}
+
+export class UpdateProductAfterAuctionEnd implements Action {
+  readonly type = UPDATE_PRODUCT_AFTER_AUCTION_END;
+
+  constructor(public wonAuction?: boolean) {}
+}
+
 export type ProductPageActions =
   | ProductStart
   | ProductSuccess
@@ -84,4 +131,9 @@ export type ProductPageActions =
   | ProductBidFailed
   | SimilarProductStart
   | SimilarProductSuccess
+  | SetNumberOfViewers
+  | SetMessage
+  | UpdateProductAfterBid
+  | GetProductBids
+  | UpdateProductAfterAuctionEnd
   | ClearProductMessages;

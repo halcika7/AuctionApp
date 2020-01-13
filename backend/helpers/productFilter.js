@@ -94,7 +94,7 @@ function filterProducts({
     if (filterValueIds.length > 0) {
       q += ` WHERE fp."filterValueId" IN (${filterValueIds}) GROUP BY p.id HAVING COUNT(fp."filterValueId")=${filterValueIds.length} `;
     }
-    
+
     findProductsQuery += `${q}) `;
     numberOfProductsQuery += `${q});`;
     priceRangeQuery += `${q}) group by price_range order by price_range;`;
@@ -143,11 +143,15 @@ exports.getFilteredProducts = async obj => {
 
 exports.getProductById = async (id, subcategoryId) => {
   return await Product.findOne({
-    where: { id, subcategoryId, auctionEnd: { [Op.gt]: new Date() } },
+    where: { id, subcategoryId },
     attributes: {
       include: [
         [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
-        [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids']
+        [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids'],
+        [
+          db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
+          'status'
+        ]
       ],
       exclude: ['featured']
     },
@@ -189,7 +193,7 @@ exports.noMoreProducts = ({ limit, offset, productsLength }) => {
 
 exports.getProfileProducts = async ({ active, limit = DEFAULT_LIMIT_PRODUCTS, offset }, userId) => {
   const auctionEnd = active ? { [Op.gt]: new Date() } : { [Op.lt]: new Date() };
-  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] }
+  const order = active ? { order: [['createdAt', 'DESC']] } : { order: [['updatedAt', 'DESC']] };
   const products = await Product.findAll({
     subQuery: false,
     where: { userId, auctionEnd },
@@ -240,6 +244,14 @@ exports.hasActiveProduct = async userId => {
   const findProduct = await Product.findOne({
     where: { userId, auctionEnd: { [Op.gt]: new Date() } }
   });
-  
+
   return findProduct ? true : false;
+};
+
+exports.findProductsByAuctionEnd = async auctionEnd => {
+  return await Product.findAll({
+    raw: true,
+    where: { auctionEnd },
+    attributes: ['id', 'subcategoryId', 'name', 'userId']
+  });
 };

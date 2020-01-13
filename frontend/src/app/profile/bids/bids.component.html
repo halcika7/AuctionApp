@@ -1,4 +1,11 @@
 <section class="container mt-70 mb-200">
+  <div class="wonAuction bidsAuctionWon" *ngIf="auctionWonMessage">
+    <p><span><fa-icon [icon]="['fas', 'check-circle']"></fa-icon>Congratulation!</span>{{ auctionWonMessage }}</p>
+    <fa-icon
+      [icon]="['fas', 'times']"
+      (click)="clearMessages()"
+    ></fa-icon>
+  </div>
   <app-table [values]="bids" type="bids"></app-table>
   <button
     type="button"

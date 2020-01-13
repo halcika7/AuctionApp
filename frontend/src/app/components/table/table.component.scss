@@ -8,7 +8,6 @@
 
 table {
   background: getColor(white);
-  border: 1px solid getColor(light_gray);
   width: 100%;
   box-sizing: border-box;
   border-collapse: collapse;
@@ -16,7 +15,8 @@ table {
 
   thead {
     background: getColor(darker_white3);
-    border: 0;
+    border: 1px solid getColor(light_gray);
+    border-bottom: 0;
 
     tr {
       td {
@@ -48,17 +48,22 @@ table {
 
   tbody {
     tr {
-      &:last-child {
-        td {
-          padding-bottom: 55px;
-        }
-      }
-
+      border: 1px solid getColor(light_gray);
+      border-bottom: 0;
+      border-top: 0;
       td {
         @include fontMixin(18px, regular, 0.63px, light_black);
-        @include padding($all: 20px 20px 0 0);
+        @include padding($all: 10px 20px 10px 0);
         min-width: 100px;
         max-width: 120px;
+
+        &.highest-bid {
+          @include fontMixin(18px, regular, 0.63px, light_green);
+        }
+
+        &.bid {
+          @include fontMixin(18px, regular, 0.63px, light_blue);
+        }
 
         &:first-child {
           padding-left: 40px;
@@ -90,19 +95,55 @@ table {
           background: getColor(darker_white3);
 
           &.active {
-            @include fontMixin(14px, bold, 0.49px, dark_green, $transform: uppercase);
+            @include fontMixin(
+              14px,
+              bold,
+              0.49px,
+              dark_green,
+              $transform: uppercase
+            );
           }
         }
 
         a {
           @include flex(center, center);
-          @include fontMixin(16px, bold, 0.56px, light_black, $transform: uppercase, $decoration: none);
+          @include fontMixin(
+            16px,
+            bold,
+            0.56px,
+            light_black,
+            $transform: uppercase,
+            $decoration: none
+          );
           @include heightWidth(46px, 100px);
           background: getColor(white);
           border: 3px solid getColor(inputBorder);
           box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
           box-sizing: border-box;
+
+          &.won {
+            background: getColor(purple);
+            color: getColor(white);
+            border: 3px solid getColor(purple);
+            box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+          }
         }
+      }
+
+      &.won {
+        background: rgba(131, 103, 216, 0.3);
+      }
+
+      &.spacer {
+        height: 10px;
+
+        &:last-child {
+          height: 55px;
+        }
+      }
+
+      &:last-child {
+        border-bottom: 1px solid getColor(light_gray);
       }
     }
   }

@@ -14,6 +14,8 @@ export const UPDATE_PROFILE_FAILED = "UPDATE_PROFILE_FAILED";
 
 export const DEACTIVATE_ACCOUNT = "DEACTIVATE_ACCOUNT";
 
+export const SET_AUCTION_WON_MESSAGE = "SET_AUCTION_WON_MESSAGE";
+
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
 export const CLEAR_PROFILE_MESSAGES = "CLEAR_PROFILE_MESSAGES";
 
@@ -24,7 +26,7 @@ export class ClearProfile implements Action {
 
 export class ClearProfileMessages implements Action {
   readonly type = CLEAR_PROFILE_MESSAGES;
-  constructor() {}
+  constructor(public clearAuctionWonMessage?: boolean) {}
 }
 
 export class ProfileStart implements Action {
@@ -106,6 +108,11 @@ export class DeactivateAccount implements Action {
   constructor() {}
 }
 
+export class SetAuctionWonMessage implements Action {
+  readonly type = SET_AUCTION_WON_MESSAGE;
+  constructor(public message: string, public productId: string) {}
+}
+
 export type ProfileActions =
   | ProfileStart
   | ProfileSuccess
@@ -116,4 +123,5 @@ export type ProfileActions =
   | UpdateProfileSuccess
   | UpdateProfileFailed
   | ClearProfile
+  | SetAuctionWonMessage
   | ClearProfileMessages;

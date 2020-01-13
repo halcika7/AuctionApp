@@ -32,57 +32,111 @@
           </td>
           <td>{{ item.price | currency }}</td>
           <td>{{ item.number_of_bids }}</td>
-          <td>{{ item.highest_bid | currency }}</td>
+          <td [ngClass]="{ 'highest-bid': item.highest_bid > item.price }">
+            {{ item.highest_bid | currency }}
+          </td>
           <td>
             <span [ngClass]="{ active: item.status === 'open' }">{{
               item.status
             }}</span>
           </td>
           <td>
-            <a
-              *ngIf="item.status === 'open'"
-              [routerLink]="['/shop/products', item.subcategoryId, item.id]"
+            <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
               >View</a
             >
           </td>
         </tr>
       </ng-template>
       <ng-template [ngIf]="type === 'bids'">
-        <tr *ngFor="let item of values">
-          <td>
-            <img [src]="item.Product.picture" alt="" />
-          </td>
-          <td>
-            {{ item.Product.name }}
-          </td>
-          <td>
-            {{
-              item.Product.status === "open"
-                ? (item.Product.auctionEnd | dateAgo: [{ agoOrLeft: "left" }])
-                : "0"
-            }}
-          </td>
-          <td>{{ item.dateBid | date: "dd MMM yyyy" }}</td>
-          <td>{{ item.Product.price | currency }}</td>
-          <td>{{ item.price | currency }}</td>
-          <td>{{ item.Product.number_of_bids }}</td>
-          <td>{{ item.Product.highest_bid | currency }}</td>
-          <td>
-            <span [ngClass]="{ active: item.Product.status === 'open' }">{{
-              item.Product.status
-            }}</span>
-          </td>
-          <td>
-            <a
-              *ngIf="item.Product.status === 'open'"
-              [routerLink]="[
-                '/shop/products',
-                item.Product.subcategoryId,
-                item.Product.id
-              ]"
-              >View</a
+        <ng-template ngFor let-item [ngForOf]="values">
+          <tr class="spacer">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr
+            [ngClass]="{
+              won:
+                item.Product.status === 'closed' &&
+                item.price === item.Product.highest_bid
+            }"
+          >
+            <td>
+              <img [src]="item.Product.picture" alt="" />
+            </td>
+            <td>
+              {{ item.Product.name }}
+            </td>
+            <td>
+              {{
+                item.Product.status === "open"
+                  ? (item.Product.auctionEnd | dateAgo: [{ agoOrLeft: "left" }])
+                  : "0"
+              }}
+            </td>
+            <td>{{ item.dateBid | date: "dd MMM yyyy" }}</td>
+            <td>{{ item.Product.price | currency }}</td>
+            <td
+              [ngClass]="{
+                'highest-bid': item.Product.highest_bid === item.price
+              }"
             >
-          </td>
+              {{ item.price | currency }}
+            </td>
+            <td>{{ item.Product.number_of_bids }}</td>
+            <td
+              [ngClass]="{
+                'highest-bid': item.Product.highest_bid === item.price,
+                bid: item.Product.highest_bid > item.price
+              }"
+            >
+              {{ item.Product.highest_bid | currency }}
+            </td>
+            <td>
+              <span [ngClass]="{ active: item.Product.status === 'open' }">{{
+                item.Product.status
+              }}</span>
+            </td>
+            <td>
+              <a
+                [ngClass]="{
+                  won:
+                    item.Product.status === 'closed' &&
+                    item.price === item.Product.highest_bid
+                }"
+                [routerLink]="[
+                  '/shop/products',
+                  item.Product.subcategoryId,
+                  item.Product.id
+                ]"
+                >{{
+                  item.Product.status === "closed" &&
+                  item.price === item.Product.highest_bid
+                    ? "Pay"
+                    : "View"
+                }}</a
+              >
+            </td>
+          </tr>
+        </ng-template>
+        <tr class="spacer">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </ng-template>
     </tbody>

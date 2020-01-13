@@ -57,14 +57,16 @@ export class AuthEffects {
   refreshToken = this.actions$.pipe(
     ofType(AuthActions.REFRESH_ACCESS_TOKEN_START),
     concatMap(() => {
-      return this.http.post<{ accessToken: string }>("/auth/refresh_token", {}).pipe(
-        map(data => new AuthActions.RefreshToken(data)),
-        catchError(data => {
-          localStorage.removeItem("accessToken");
-          sessionStorage.removeItem("accessToken");
-          return of(new AuthActions.RefreshToken(data));
-        })
-      );
+      return this.http
+        .post<{ accessToken: string }>("/auth/refresh_token", {})
+        .pipe(
+          map(data => new AuthActions.RefreshToken(data)),
+          catchError(data => {
+            localStorage.removeItem("accessToken");
+            sessionStorage.removeItem("accessToken");
+            return of(new AuthActions.RefreshToken(data));
+          })
+        );
     })
   );
 
@@ -94,6 +96,14 @@ export class AuthEffects {
           }),
           catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
         );
+    })
+  );
+
+  @Effect()
+  removeLoggedUser = this.actions$.pipe(
+    ofType(AuthActions.REMOVE_LOGGED_USER),
+    concatMap(() => {
+      return this.http.post<any>("/auth/removeloggeduser", {});
     })
   );
 
