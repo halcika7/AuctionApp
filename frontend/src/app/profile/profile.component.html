@@ -1,6 +1,6 @@
 <app-breadcrumb
   *ngIf="lastBreadcrumbLink"
-  [title]="'profile'"
+  [title]="lastBreadcrumbLink == 'become seller' ? 'become seller' : 'profile'"
   [other]="[
     { value: 'my account /', link: '/account/profile' },
     { value: lastBreadcrumbLink, link: '' }

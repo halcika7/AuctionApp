@@ -2,9 +2,13 @@ const BaseService = require('./BaseService');
 const BidService = require('./BidService');
 const StripeService = require('./StripeService');
 const CloudinaryService = require('./CloudinaryService');
+const ProfileService = require('./ProfileService');
+const OrderService = require('./OrderService');
+
 const Product = require('../models/Product');
 const ProductImage = require('../models/ProductImage');
 const FilterValueProduct = require('../models/FilterValueProduct');
+
 const {
   getFilteredProducts,
   getProductById,
@@ -41,6 +45,7 @@ class ProductService extends BaseService {
   async findProductById(productId, subcategoryId, token) {
     try {
       const product = await getProductById(productId, subcategoryId);
+      const ownerInfo = await ProfileService.getProductOwnerInfo(product.userId);
       const { id } = super.decodeAuthorizationToken(token);
       const highestBid = await BidService.getHighestBid(productId);
       const message =
@@ -54,7 +59,8 @@ class ProductService extends BaseService {
         product,
         message,
         highestBidUserId: highestBid ? highestBid.userId : '',
-        wonAuction
+        wonAuction,
+        ownerInfo
       });
     } catch (error) {
       return super.returnResponse(403, {});
@@ -142,8 +148,6 @@ class ProductService extends BaseService {
         return super.returnResponse(403, errors);
       }
 
-      const uploadImages = await CloudinaryService.uploadProductImages(images);
-
       if (productData.featured) {
         let source =
           typeof choosenCardToken == 'string' ? { source: choosenCardToken } : choosenCardToken;
@@ -159,6 +163,10 @@ class ProductService extends BaseService {
         }
       }
 
+      const uploadImages = await CloudinaryService.uploadProductImages(images);
+
+      if (images.length > 0) unlinkFiles(images);
+
       productData = transformProductData(
         productData,
         uploadImages[0],
@@ -167,11 +175,16 @@ class ProductService extends BaseService {
         userId
       );
 
-      if (images.length > 0) unlinkFiles(images);
+      const order = await OrderService.addOrder({
+        freeShipping: productData.freeShipping,
+        ownerId: userId,
+        shippingFrom: addressInformation
+      });
 
-      const product = await Product.create({ ...productData });
+      const product = await Product.create({ ...productData, orderId: order.id });
 
       const productImages = uploadImages.slice(1).map(image => ({ image, productId: product.id }));
+
       const productFilters = filtersData.map(filter => ({
         filterValueId: filter.id,
         productId: product.id

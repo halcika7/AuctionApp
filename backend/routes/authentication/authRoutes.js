@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const AuthController = require('../../controllers/AuthController');
+const { passport } = require('../../services/PassportService');
 
 // Auth Routes
 module.exports = io => {
@@ -16,6 +17,26 @@ module.exports = io => {
 
   router.patch('/forgotpassword', AuthController.forgotPassword);
   router.patch('/resetpassword', AuthController.resetPassword);
+
+  router.get(
+    '/google',
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+      prompt: 'select_account'
+    })
+  );
+
+  router.get(
+    '/facebook',
+    passport.authenticate('facebook', {
+      scope: 'email',
+      authType: 'reauthenticate'
+    })
+  );
+
+  router.get('/google/callback', (req, res) => AuthController.socialLogin(req, res, 'google'));
+
+  router.get('/facebook/callback', (req, res) => AuthController.socialLogin(req, res, 'facebook'));
 
   return router;
 };

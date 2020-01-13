@@ -32,11 +32,7 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING(255),
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-          notNull: true
-        }
+        allowNull: true
       },
       photo: {
         type: Sequelize.STRING(255),
@@ -99,6 +95,16 @@ module.exports = {
           },
           key: 'id'
         }
+      },
+      googleId: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null
+      },
+      facebookId: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null
       }
     });
   },

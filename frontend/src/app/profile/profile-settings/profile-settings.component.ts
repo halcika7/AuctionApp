@@ -15,6 +15,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   private _phone: string;
   private _showModal: boolean = false;
   private subscription = new Subscription();
+  
   constructor(
     private profileService: ProfileService,
     private store: Store<fromApp.AppState>

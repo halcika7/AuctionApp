@@ -11,58 +11,18 @@ module.exports = io => {
       '00 00 23 * * *',
       async () => {
         try {
-          const date = new Date();
-          date.setHours(23, 0, 0, 0);
+          const { products, productIds } = await getProducts();
 
-          const products = await findProductsByAuctionEnd(date);
-          const productIds = products.map(product => product.id);
-
-          await WishlistService.removeFromWishlistByProductId(productIds);
-
-          await productIds.map(async id => {
-            const bid = await BidService.getHighestBid(id);
+          await productIds.map(async productId => {
+            const bid = await getHighestBid(productId);
 
             if (bid) {
-              const { subcategoryId, name, userId } = products.find(
-                product => product.id === bid.productId
-              );
+              const { userId, productId: bidProductId } = bid;
+              const { name } = getProductData(products, bidProductId);
 
-              const user = await findUserById(bid.userId);
-              const owner = await findUserById(userId);
-
-              socket.emit('auction-ended', {
-                productId: id,
-                userId: bid.userId,
-                name
-              });
-
-              await sendEmail(
-                user.email,
-                id,
-                subcategoryId,
-                `Congratulations your bid was highest for ${name}`,
-                false
-              );
-
-              await sendEmail(
-                owner.email,
-                id,
-                subcategoryId,
-                `Auction ended and highest bid for ${name} was ${bid.price}`
-              );
-
+              socket.emit('auction-ended', { productId, userId, name });
             } else {
-              const { subcategoryId, name, userId } = products.find(product => product.id === id);
-              const owner = await findUserById(userId);
-
-              socket.emit('auction-ended', { productId: id });
-
-              await sendEmail(
-                owner.email,
-                id,
-                subcategoryId,
-                `Auction ended for ${name} without any bid`
-              );
+              socket.emit('auction-ended', { productId });
             }
           });
         } catch (error) {
@@ -74,8 +34,76 @@ module.exports = io => {
       'Etc/UTC'
     );
   });
+
+  new CronJob(
+    '00 00 23 * * *',
+    async () => {
+      try {
+        const { productIds, products } = await getProducts();
+
+        await WishlistService.removeFromWishlistByProductId(productIds);
+
+        await productIds.map(async id => {
+          const bid = await getHighestBid(id);
+
+          if (bid) {
+            const { subcategoryId, name, userId } = getProductData(products, bid.productId);
+            const user = await getUser(bid.userId);
+            const owner = await getUser(userId);
+
+            await sendEmail(
+              user.email,
+              id,
+              subcategoryId,
+              `Congratulations your bid was highest for ${name}`,
+              false
+            );
+
+            await sendEmail(
+              owner.email,
+              id,
+              subcategoryId,
+              `Auction ended and highest bid for ${name} was ${bid.price}`
+            );
+          } else {
+            const { subcategoryId, name, userId } = getProductData(products, id);
+            const { email } = await getUser(userId);
+
+            await sendEmail(email, id, subcategoryId, `Auction ended for ${name} without any bid`);
+          }
+        });
+      } catch (error) {
+        console.log('TCL: error', error);
+      }
+    },
+    null,
+    true,
+    'Etc/UTC'
+  );
 };
 
 async function sendEmail(email, productId, subcategoryId, text, owner = true) {
   return await notifyAuctionEnd(email, productId, subcategoryId, text, owner);
+}
+
+async function getProducts() {
+  const date = new Date();
+  date.setHours(23, 0, 0, 0);
+
+  const products = await findProductsByAuctionEnd(date);
+  const productIds = products.map(product => product.id);
+
+  return { products, productIds };
+}
+
+async function getHighestBid(id) {
+  return await BidService.getHighestBid(id);
+}
+
+async function getUser(id) {
+  return await findUserById(id);
+}
+
+function getProductData(products, idToFind) {
+  return products.find(product => product.id === idToFind);
 }

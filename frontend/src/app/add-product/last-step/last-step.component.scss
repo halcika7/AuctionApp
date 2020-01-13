@@ -97,58 +97,57 @@
   }
 }
 
-.card-information {
-  margin-top: 75px;
+::ng-deep {
+  .card-information {
+    margin-top: 75px;
 
-  h3 {
-    @include fontMixin(20px, regular, 0.7px, light_black);
-    padding-bottom: 8px;
-    border-bottom: 4px solid getColor(lighter_gray);
-    margin-bottom: 35px;
-  }
+    .one-col {
+      @include padding($all: 0px 0 63px);
 
-  .group {
-    margin-bottom: 31px;
+      .inputs {
+        .two-cols {
+          @include flex($justify: space-between);
+          padding: 0;
 
-    &:last-child {
-      margin-bottom: 130px;
-    }
+          app-input,
+          .card-number,
+          .name,
+          .number,
+          .exp-date,
+          .cvc {
+            width: 49%;
+          }
 
-    .card-date-wrapper {
-      width: 48%;
+          .card-number {
+            label {
+              span {
+                @include fontMixin(18px, regular, 0.63px, red);
+                display: inline !important;
+              }
+            }
+          }
 
-      > label {
-        @include fontMixin(18px, light, 0.63px, light_black);
-        display: block;
+          @media (max-width: 550px) {
+            flex-wrap: wrap;
 
-        span {
-          color: getColor(red);
-        }
-      }
-
-      .date {
-        @include flex($justify: space-between);
-
-        app-select-input {
-          width: 46%;
-        }
-
-        @media (max-width: 718px) {
-          flex-wrap: wrap;
-
-          app-select-input {
-            width: 100%;
-
-            &:nth-child(2) {
-              margin-top: 15px;
+            app-input,
+            .card-number,
+            .name,
+            .number,
+            .exp-date,
+            .cvc {
+              width: 100%;
             }
           }
         }
-
-        @media (max-width: 450px) {
-          width: 100%;
-        }
       }
+    }
+
+    h3 {
+      @include fontMixin(20px, regular, 0.7px, light_black);
+      padding-bottom: 8px;
+      border-bottom: 4px solid getColor(lighter_gray);
+      margin-bottom: 35px;
     }
   }
 }

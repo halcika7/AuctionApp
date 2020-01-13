@@ -48,7 +48,7 @@ import { WishlistComponent } from "./profile/wishlist/wishlist.component";
 import { TableComponent } from "./components/table/table.component";
 import { RequiredInfoComponent } from "./profile/edit-profile/required-info/required-info.component";
 import { OptionalInfoComponent } from "./profile/edit-profile/optional-info/optional-info.component";
-import { CardInfoComponent } from "./profile/edit-profile/card-info/card-info.component";
+import { CardInfoComponent } from "./components/card-info/card-info.component";
 import { ShopPageComponent } from "./shop-page/shop-page.component";
 import { CollectionListItemComponent } from "./components/collection-list-item/collection-list-item.component";
 import { ShopPriceComponent } from "./shop-page/shop-price/shop-price.component";
@@ -65,6 +65,7 @@ import { ShopPageEffects } from "./shop-page/store/shop-page.effects";
 import { ProfileEffects } from "./profile/store/profile.effects";
 import { AddProductEffects } from "./add-product/store/add-product.effects";
 import { WishlistEffects } from "./wishlist/store/wishlist.effects";
+import { PaymentPageEffects } from "./payment/store/payment.effects";
 
 // Font Awesome Icons
 import {
@@ -97,12 +98,13 @@ import {
   faCalendarAlt,
   faDollarSign,
   faEye,
-  faCheckCircle
+  faCheckCircle,
+  faStar
 } from "@fortawesome/free-solid-svg-icons";
 
 // Services, directives and pipes
 import { DropdownDirective } from "./shared/directives/dropdown.directive";
-import { DragDropDirective } from './shared/directives/drag-drop.directive';
+import { DragDropDirective } from "./shared/directives/drag-drop.directive";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { DropdownNoautocloseDirective } from "./shared/directives/dropdown-noautoclose.directive";
 import { TruncateTextPipe } from "./shared/pipes/truncate-text.pipe";
@@ -115,6 +117,9 @@ import { SecondStepComponent } from "./add-product/second-step/second-step.compo
 import { NoActiveComponent } from "./add-product/no-active/no-active.component";
 import { UploadImagesComponent } from "./add-product/upload-images/upload-images.component";
 import { CustomDateInputComponent } from "./add-product/second-step/custom-date-input/custom-date-input.component";
+import { PaymentComponent } from "./payment/payment.component";
+import { RateOwnerComponent } from "./payment/rate-owner/rate-owner.component";
+import { SpinnerComponent } from "./components/spinner/spinner.component";
 
 @NgModule({
   declarations: [
@@ -172,7 +177,10 @@ import { CustomDateInputComponent } from "./add-product/second-step/custom-date-
     SecondStepComponent,
     NoActiveComponent,
     UploadImagesComponent,
-    CustomDateInputComponent
+    CustomDateInputComponent,
+    PaymentComponent,
+    RateOwnerComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -189,7 +197,8 @@ import { CustomDateInputComponent } from "./add-product/second-step/custom-date-
       ShopPageEffects,
       ProfileEffects,
       AddProductEffects,
-      WishlistEffects
+      WishlistEffects,
+      PaymentPageEffects
     ]),
     FontAwesomeModule,
     Ng5SliderModule,
@@ -234,7 +243,8 @@ export class AppModule {
       faCalendarAlt,
       faDollarSign,
       faEye,
-      faCheckCircle
+      faCheckCircle,
+      faStar
     );
   }
 }

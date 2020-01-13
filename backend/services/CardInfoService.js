@@ -10,12 +10,16 @@ class CardInfoService extends BaseService {
     return await CardInfo.findOne({
       raw: true,
       where: { id },
-      attributes: ['customerId', 'cardId']
+      attributes: ['customerId', 'cardId', 'accountId', 'cardFingerprint']
     });
   }
 
-  async createCardInfo(customerId) {
-    return await CardInfo.create({ customerId });
+  async getUserCardInfo(id) {
+    return await CardInfo.findOne({ raw: true, where: { id } });
+  }
+
+  async createCardInfo(customerId, accountId) {
+    return await CardInfo.create({ customerId, accountId });
   }
 
   async updateCardInfo(cardInfoData, id) {

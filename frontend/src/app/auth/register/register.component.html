@@ -1,10 +1,14 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
 <app-breadcrumb [title]="'register'"></app-breadcrumb>
+
 <app-alert
   *ngIf="message"
   [message]="message"
   (closeAlert)="clearMessages()"
   [type]="success"
 ></app-alert>
+
 <section class="container">
   <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <h1>Register</h1>

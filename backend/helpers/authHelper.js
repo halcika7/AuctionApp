@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Review = require('../models/Review');
 const OptionalInfo = require('../models/OptionalInfo');
 const CardInfo = require('../models/CardInfo');
 const {
@@ -52,6 +53,7 @@ exports.findUserById = async id => {
 
 exports.getUserInfo = async id => {
   return await User.findOne({
+    subQuery: false,
     where: { id },
     include: [
       {
@@ -62,9 +64,7 @@ exports.getUserInfo = async id => {
       },
       {
         model: CardInfo,
-        attributes: {
-          exclude: ['id', 'cardToken', 'cardFingerprint']
-        }
+        attributes: ['name', 'number', 'cvc', 'exp_year', 'exp_month']
       }
     ],
     attributes: [
@@ -75,7 +75,11 @@ exports.getUserInfo = async id => {
       'photo',
       'gender',
       'phoneNumber',
-      'dateOfBirth'
+      'dateOfBirth',
+      [
+        db.literal(`CASE WHEN "CardInfo"."cardFingerprint" is null THEN false ELSE true END`),
+        'hasCard'
+      ]
     ]
   });
 };
@@ -119,8 +123,51 @@ exports.getOptionalInfoCard = async id => {
       },
       {
         model: CardInfo,
-        attributes: []
+        attributes: ['name', 'number', 'cvc', 'exp_year', 'exp_month']
       }
     ]
   });
 };
+
+exports.productOwnerInfo = async id =>
+  await User.findOne({
+    raw: true,
+    where: { id },
+    attributes: [
+      'photo',
+      [db.fn('concat', db.col('firstName'), ' ', db.col('lastName')), 'full_name'],
+      [
+        db.fn(
+          'coalesce',
+          db.fn('ROUND', db.fn('AVG', db.cast(db.col('Reviews.rating'), 'numeric')), 2),
+          0
+        ),
+        'avg_rating'
+      ]
+    ],
+    include: {
+      model: Review,
+      attributes: []
+    },
+    group: ['User.id']
+  });
+
+exports.getUsersOptionalInfoIdAndCardInfoId = async id =>
+  await User.findOne({
+    raw: true,
+    where: { id },
+    attributes: [
+      [db.col('OptionalInfo.id'), 'optionalInfoId'],
+      [db.col('CardInfo.id'), 'cardInfoId']
+    ],
+    include: [
+      {
+        model: OptionalInfo,
+        attributes: []
+      },
+      {
+        model: CardInfo,
+        attributes: []
+      }
+    ]
+  });

@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { FullProduct, Bid } from "./product-page.reducer";
+import { FullProduct, Bid, OwnerInfo } from "./product-page.reducer";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export const PRODUCT_START = "PRODUCT_START";
@@ -56,6 +56,7 @@ export class ProductSuccess implements Action {
       message?: string;
       highestBidUserId?: string;
       wonAuction?: boolean;
+      ownerInfo?: OwnerInfo;
     }
   ) {}
 }

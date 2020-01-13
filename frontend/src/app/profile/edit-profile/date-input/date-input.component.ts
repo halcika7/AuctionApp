@@ -20,6 +20,7 @@ export class DateInputComponent implements OnInit {
   @Input() monthNumbers: boolean;
   @Input() label: string;
   @Input() error: string;
+  @Input() id: string;
   @Input() defaultDate: { day: number; year: number; month: string } = {
     day: 0,
     year: 0,

@@ -73,7 +73,16 @@ const Product = db.define(
         },
         key: 'id'
       }
-    }
+    },
+    orderId: {
+      type: Sequelize.BIGINT,
+      references: {
+        model: {
+          tableName: 'Orders'
+        },
+        key: 'id'
+      }
+    },
   },
   {
     sequelize: Sequelize,

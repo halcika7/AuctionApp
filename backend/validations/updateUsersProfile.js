@@ -4,7 +4,6 @@ const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
-const { removeNullProperty } = require('../helpers/removeNullProperty');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -52,45 +51,86 @@ exports.userInfoValidation = async (userInfo, email) => {
   };
 };
 
-exports.userCardValidation = async (cardInfo, userCardInfoId, email, errors, isValidUserInfo) => {
-  if (!isValidUserInfo) return { isValid: true, errors };
+exports.userCardValidation = async (
+  token,
+  name,
+  changeCard,
+  userCardInfoId,
+  email,
+  errors,
+  isValidUserInfo
+) => {
+  if (!isValidUserInfo || !token || !changeCard) return { isValid: true, errors };
 
-  if (
-    Object.keys(removeNullProperty(cardInfo)).length == 0 ||
-    (cardInfo.cvc == '****' && cardInfo.number.includes('************'))
-  ) {
-    return { isValid: true, errors, cardInfoData: {} };
+  if (name && name.length > 100) {
+    errors.errors.card = 'Name on card cannot exceed 100 characters';
+    return {
+      isValid: false,
+      errors
+    };
   }
-  
-  let { customerId, cardId } = await CardInfoService.findUserCardInfo(userCardInfoId);
+
+  if ((name && !token) || (changeCard && !token)) {
+    errors.errors.card = 'Invalid credit card info';
+    return {
+      isValid: false,
+      errors
+    };
+  }
+
+  let { customerId, cardId, accountId, cardFingerprint } = await CardInfoService.findUserCardInfo(
+    userCardInfoId
+  );
 
   try {
-    const { card, id, valid } = await StripeService.validateCard(errors, userCardInfoId, cardInfo);
+    const { card, valid } = await StripeService.validateCard(errors, userCardInfoId, token);
 
     if (!valid) return { isValid: false, errors };
 
+    if (cardFingerprint === card.fingerprint) return { isValid: true, errors };
+
     if (!customerId) {
       try {
-        const { id } = await StripeService.createCustomer('Customer for atlant auction app', email);
-        if(!id) throw new Error('Customer not created');
-        customerId = id;
+        const { id: customer } = await StripeService.createCustomer(
+          'Customer for atlant auction app',
+          email
+        );
+        const account = await StripeService.createAccount(email);
+        if (!customer || !account) throw new Error('Customer or Account not created');
+        customerId = customer;
+        accountId = account.id;
       } catch (error) {
         errors.errors.card = 'We were unable to create new customer';
         return { isValid: false, errors };
       }
     }
 
-    if (cardId) await StripeService.deleteSource(customerId, cardId);
+    if (cardId) {
+      try {
+        await StripeService.deleteSource(customerId, cardId);
+      } catch (error) {
+        errors.errors.card = error.raw.message;
+        return { isValid: false, errors };
+      }
+    }
 
-    await StripeService.createSource(customerId, id);
+    try {
+      await StripeService.createSource(customerId, token);
+    } catch (error) {
+      errors.errors.card = error.raw.message;
+        return { isValid: false, errors };
+    }
 
-    cardInfo = {
-      ...cardInfo,
-      customerId,
-      cardId: card.id,
-      cardFingerprint: card.fingerprint,
+    const cardInfo = {
+      name,
       number: '************' + card.last4,
-      cvc: '****'
+      cvc: '***',
+      exp_year: card.exp_year,
+      exp_month: card.exp_month,
+      customerId,
+      accountId,
+      cardId: card.id,
+      cardFingerprint: card.fingerprint
     };
 
     return { isValid: true, errors, cardInfoData: cardInfo };

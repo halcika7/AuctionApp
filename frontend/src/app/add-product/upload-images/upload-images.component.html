@@ -31,7 +31,9 @@
   <p *ngIf="urls.length == 0">+ Add at least 3 photos</p>
 </div>
 <span *ngIf="input.invalid && input.touched">
-  <span *ngIf="input.errors['required']">Product images are required</span>
+  <span *ngIf="input.errors['required'] && input.touched"
+    >Product images are required</span
+  >
   <span *ngIf="input.errors['minlength']"
     >Upload at least {{ input.errors["minlength"].requiredLength }} photos</span
   >

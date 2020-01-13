@@ -16,9 +16,9 @@ import {
 } from "@app/shared/validators";
 import { partialFormValidity } from "@app/shared/partialFormValidity";
 import { AddProductService } from "./../add-product.service";
-import { getNextFourYears, getMonthNumber } from "@app/shared/dateHelper";
 import { Store } from "@ngrx/store";
 import * as fromApp from "@app/store/app.reducer";
+import { StripeServiceService } from "@app/shared/services/stripe-service.service";
 
 @Component({
   selector: "app-last-step",
@@ -27,51 +27,66 @@ import * as fromApp from "@app/store/app.reducer";
 })
 export class LastStepComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup;
+  @Input() nestedGroup: FormGroup;
   @Input() currentStep: number;
+  @Input() payment: boolean = false;
+  @Input() clicked: boolean = false;
   @Output() submitForm = new EventEmitter<any>();
   private _isValidStep = false;
   private step: number = 3;
-  private _years = getNextFourYears();
-  private _months = getMonthNumber();
-  private _selectedYear: number;
-  private _selectedMonth: string;
   private _userInfo;
   private _phoneNumber: string;
-  private _expYearError: string;
-  private _expMonthError: string;
   private _cardError: string;
   private _showCard: boolean = true;
   private _hasCard: boolean = false;
   private _usingOptionslInfo: boolean = false;
+  private _validCard: boolean = false;
   private subscription = new Subscription();
 
   constructor(
     private addProductService: AddProductService,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    private stripe: StripeServiceService
   ) {}
 
   ngOnInit() {
     this._showCard = !this.form.value.useCard;
+    const {
+      cName,
+      cardNumber,
+      cardCvc,
+      cardExpiry
+    } = this.nestedGroup.controls;
+
+    this.stripe.createElements();
+
+    if (this.showCard) {
+      setValidators(
+        [cName, cardNumber, cardCvc, cardExpiry],
+        ["cName", "cardNumber", "cardCvc", "cardExpiry"]
+      );
+    }
+
     this.checkValidity();
     this.subscription.add(
       this.form.valueChanges.subscribe(({ useCard, useOptionalInfo }) => {
-        const { cName, cNumber, CVC } = this.form.controls;
         if (this._usingOptionslInfo !== useOptionalInfo) {
           this._usingOptionslInfo = useOptionalInfo;
           this.patchValues();
         }
-        if (this._showCard !== !useCard) {
+
+        if (this.showCard == useCard) {
           this._showCard = !useCard;
-          if (useCard) {
-            setValidators([cName, cNumber, CVC], "required")
-            this._selectedYear = null;
-            this._selectedMonth = null;
-            this._expYearError = null;
-            this._expMonthError = null;
+          if (!useCard) {
+            setValidators(
+              [cName, cardNumber, cardCvc, cardExpiry],
+              ["cName", "cardNumber", "cardCvc", "cardExpiry"]
+            );
           } else {
-            clearValidators([cName, cNumber, CVC]);
+            clearValidators([cName, cardNumber, cardCvc, cardExpiry]);
+            this._cardError = "";
           }
-          updateValueAndValidity([cName, cNumber, CVC]);
+          updateValueAndValidity([cName, cardNumber, cardCvc, cardExpiry]);
         }
         this.checkValidity();
       })
@@ -81,15 +96,24 @@ export class LastStepComponent implements OnInit, OnDestroy {
         this._hasCard = userInfo.hasCard;
         this._userInfo = userInfo.OptionalInfo;
         this._phoneNumber = userInfo.phoneNumber;
-        this._expYearError = errors.exp_year;
-        this._expMonthError = errors.exp_month;
         this._cardError = errors.card;
+      })
+    );
+
+    this.subscription.add(
+      this.stripe.cardValidity.subscribe(({ untouched, valid }) => {
+        this._validCard = !untouched && valid;
+        this._cardError =
+          this._validCard && this.nestedGroup.value.cName
+            ? ""
+            : this._cardError;
       })
     );
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.stripe.unmount();
   }
 
   buttonClicked() {
@@ -97,25 +121,24 @@ export class LastStepComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
   }
 
-  process() {
-    this.submitForm.emit({
-      exp_year: this.selectedYear,
-      exp_month: this.selectedMonth
-    });
+  async process() {
+    this._isValidStep = false;
+    let tokenId = '';
+    if (this._showCard) {
+      const { token = { id: "" }, error } = await this.stripe.create(
+        this.form.value.cardInfo.cName
+      );
+      if (error) {
+        this._cardError = error.message;
+        return;
+      }
+      tokenId = token.id;
+    }
+    this.submitForm.emit(tokenId);
   }
 
   sowUseSavedInfo(): boolean {
     return !isEmptyObject(this._userInfo);
-  }
-
-  changeSelectedYear(value: number) {
-    this._selectedYear = value;
-    this._expYearError = null;
-  }
-
-  changeSelectedMonth(value: string) {
-    this._selectedMonth = value;
-    this._expMonthError = null;
   }
 
   private patchValues() {
@@ -131,28 +154,14 @@ export class LastStepComponent implements OnInit, OnDestroy {
   }
 
   private checkValidity() {
-    const {
-      address,
-      country,
-      city,
-      zip,
-      phone,
-      cName,
-      cNumber,
-      CVC
-    } = this.form.controls;
+    const { address, country, city, zip, phone } = this.form.controls;
+    const { cName } = this.nestedGroup.controls;
     let valid = partialFormValidity([address, country, city, zip, phone]);
-    if (!this.form.controls.useCard) {
-      valid = partialFormValidity([
-        address,
-        country,
-        city,
-        zip,
-        phone,
-        cName,
-        cNumber,
-        CVC
-      ]);
+    if (!this.form.value.useCard) {
+      valid =
+        partialFormValidity([address, country, city, zip, phone, cName]) &&
+        this._validCard &&
+        !this._cardError;
     }
     this._isValidStep = valid;
   }
@@ -161,36 +170,12 @@ export class LastStepComponent implements OnInit, OnDestroy {
     return this._isValidStep;
   }
 
-  get years(): number[] {
-    return this._years;
-  }
-
-  get months(): string[] {
-    return this._months;
-  }
-
-  get selectedYear(): number {
-    return this._selectedYear;
-  }
-
-  get selectedMonth(): string {
-    return this._selectedMonth;
-  }
-
   get showCard(): boolean {
     return this._showCard;
   }
 
   get hasCard(): boolean {
     return this._hasCard;
-  }
-
-  get expYearError(): string {
-    return this._expYearError;
-  }
-
-  get expMonthError(): string {
-    return this._expMonthError;
   }
 
   get cardError(): string {

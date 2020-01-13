@@ -14,7 +14,7 @@
       <app-input
         id="firstName"
         title="First name"
-        placeholder="Enter first name"
+        placeholder="e.g. John"
         type="text"
         controlName="firstName"
         [parentForm]="form"
@@ -22,11 +22,13 @@
         profile="true"
         [showErrors]="true"
         [required]="true"
+        [minLength]="1"
+        [maxLength]="102"
       ></app-input>
       <app-input
         id="lastName"
         title="Last name"
-        placeholder="Enter last name"
+        placeholder="e.g. Doe"
         type="text"
         controlName="lastName"
         [parentForm]="form"
@@ -34,9 +36,12 @@
         profile="true"
         [showErrors]="true"
         [required]="true"
+        [minLength]="1"
+        [maxLength]="102"
       ></app-input>
       <app-select-input
         *ngIf="gender"
+        id="gender"
         [default]="gender || 'Select Gender'"
         [values]="['Male', 'Female', 'Other']"
         label="I am"
@@ -51,6 +56,7 @@
           [defaultDate]="date"
           [error]="dateError"
           [required]="true"
+          id="dateOfBirth"
         ></app-date-input>
       </ng-template>
       <app-input
@@ -63,11 +69,13 @@
         [input]="form.get('phoneNumber')"
         profile="true"
         [showErrors]="true"
+        [minLength]="7"
+        [maxLength]="16"
       ></app-input>
       <app-input
         id="email"
         title="Email"
-        placeholder="Enter email"
+        placeholder="e.g. example@google.com"
         type="email"
         controlName="email"
         [parentForm]="form"
@@ -76,6 +84,8 @@
         profile="true"
         [showErrors]="true"
         [required]="true"
+        [minLength]="1"
+        [maxLength]="102"
       ></app-input>
     </div>
   </div>

@@ -74,6 +74,15 @@ module.exports = {
             key: 'id'
           }
         },
+        orderId: {
+          type: Sequelize.BIGINT,
+          references: {
+            model: {
+              tableName: 'Orders'
+            },
+            key: 'id'
+          }
+        },
         createdAt: {
           type: Sequelize.DATE,
           defaultValue: Sequelize.NOW
@@ -91,7 +100,8 @@ module.exports = {
           'auctionStart',
           'auctionEnd',
           'subcategoryId',
-          'brandId'
+          'brandId',
+          'orderId',
         ])
       );
   },

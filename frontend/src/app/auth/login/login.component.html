@@ -36,16 +36,16 @@
       <button type="submit" class="login-button">
         Login
       </button>
-      <!-- <div class="social-login">
-        <a href="" class="facebook-link"
+      <div class="social-login">
+        <a [href]="url + '/auth/facebook'" class="facebook-link"
           ><fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>login with
           facebook</a
         >
-        <a href="" class="gmail-link"
+        <a [href]="url + '/auth/google'" class="gmail-link"
           ><fa-icon [icon]="['fab', 'google-plus-square']"></fa-icon>login with
           gmail</a
         >
-      </div> -->
+      </div>
       <a [routerLink]="['/home/auth/forgot-password']" class="forgot-password"
         >Forgot Password?</a
       >

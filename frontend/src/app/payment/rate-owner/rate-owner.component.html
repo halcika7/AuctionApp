@@ -1,0 +1,33 @@
+<section class="rate-owner">
+  <div class="content">
+    <h3>Seller rating</h3>
+    <div class="user-info">
+      <img [src]="ownerInfo.photo" [alt]="ownerInfo.full_name" />
+      <span>{{ ownerInfo.full_name }}</span>
+      <p>Please, rate a seller!</p>
+      <p class="previousRating" *ngIf="previousRating">
+        You have already rated this user with
+        <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+        {{ previousRating }} / 5.
+      </p>
+      <div class="rating" [ngClass]="class">
+        <span (click)="onChangeRating(5, 'five')">☆</span>
+        <span (click)="onChangeRating(4, 'four')">☆</span>
+        <span (click)="onChangeRating(3, 'three')">☆</span>
+        <span (click)="onChangeRating(2, 'two')">☆</span>
+        <span (click)="onChangeRating(1, 'one')">☆</span>
+      </div>
+    </div>
+    <div class="cd-buttons">
+      <button class="close" (click)="onConfirmClicked(true)">Skip</button>
+      <button
+        class="confirm"
+        (click)="onConfirmClicked()"
+        [disabled]="selectedRating == null"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+  <div class="backdrop"></div>
+</section>

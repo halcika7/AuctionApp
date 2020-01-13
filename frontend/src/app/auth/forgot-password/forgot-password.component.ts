@@ -8,6 +8,7 @@ import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "./../auth";
 import { jwtDecode } from "@app/shared/jwtDecode";
 import { EMAIL_VALIDATOR } from "@app/shared/validators";
+import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: "app-forgot-password",
@@ -21,14 +22,16 @@ export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private render: Renderer2
   ) {
     super(
       store,
       new FormGroup({
         ...EMAIL_VALIDATOR(true)
       }),
-      router
+      router,
+      render
     );
   }
 

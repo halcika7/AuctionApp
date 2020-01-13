@@ -9,34 +9,15 @@ const Order = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    price: {
-      type: Sequelize.DOUBLE,
-      allowNull: false
-    },
     paid: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false
     },
-    shipped: {
+    freeShipping: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false
-    },
-    received: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
-    productId: {
-      type: Sequelize.BIGINT,
-      allowNull: false,
-      references: {
-        model: {
-          tableName: 'Products'
-        },
-        key: 'id'
-      }
     },
     ownerId: {
       type: Sequelize.BIGINT,
@@ -49,11 +30,35 @@ const Order = db.define(
     },
     userId: {
       type: Sequelize.BIGINT,
+      allowNull: true,
+      defaultValue: null,
       references: {
         model: {
           tableName: 'Users'
         },
         key: 'id'
+      }
+    },
+    shippingFrom: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: {
+        address: '',
+        country: '',
+        city: '',
+        zipCode: '',
+        phone: ''
+      }
+    },
+    shippingTo: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: {
+        address: '',
+        country: '',
+        city: '',
+        zipCode: '',
+        phone: ''
       }
     }
   },

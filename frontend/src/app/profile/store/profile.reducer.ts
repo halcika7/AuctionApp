@@ -17,6 +17,7 @@ export interface UserInfo {
   gender?: string;
   phoneNumber?: string;
   dateOfBirth?: string;
+  hasCard?: boolean;
   OptionalInfo?: {
     street: string | null;
     city: string | null;
@@ -30,13 +31,11 @@ export interface UserInfo {
     cvc: string | null;
     exp_year: number | null;
     exp_month: string | null;
-    cardToken: string | null;
-    cardFingerprint: string | null;
   };
 }
 
 export interface ProfileBid {
-  dateBid: string;
+  createdAt: string;
   price: number;
   Product: ProfileProduct;
 }

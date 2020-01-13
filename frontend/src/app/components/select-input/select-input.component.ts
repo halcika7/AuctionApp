@@ -22,6 +22,7 @@ export class SelectInputComponent implements OnInit, OnChanges {
   @Input() default: string;
   @Input() liWhenValuesLength0: string;
   @Input() parentId: string;
+  @Input() id: string;
   @Output() valueChange = new EventEmitter<any>();
   private _selectedValue: any;
 

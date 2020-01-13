@@ -2,9 +2,13 @@
 @import "variables";
 
 label {
-  @include fontMixin(18px, light, 0.63px, light_black);
+  @include fontMixin(18px, regular, 0.63px, light_black);
   margin-bottom: 16px;
   display: block;
+
+  span {
+    @include fontMixin(18px, regular, 0.63px, red);
+  }
 }
 
 input {

@@ -8,6 +8,7 @@ import * as fromShopPage from "@app/shop-page/store/shop-page.reducer";
 import * as fromProfile from "@app/profile/store/profile.reducer";
 import * as fromAddProduct from "@app/add-product/store/add-product.reducer";
 import * as fromWishlist from "@app/wishlist/store/wishlist.reducer";
+import * as fromPayment from "@app/payment/store/payment.reducer";
 
 export interface AppState {
   auth: fromAuth.State;
@@ -18,6 +19,7 @@ export interface AppState {
   profile: fromProfile.State;
   addProduct: fromAddProduct.State;
   wishlist: fromWishlist.State;
+  payment: fromPayment.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -28,5 +30,6 @@ export const appReducer: ActionReducerMap<AppState> = {
   shopPage: fromShopPage.shopPageReducer,
   profile: fromProfile.profileReducer,
   addProduct: fromAddProduct.addProductReducer,
-  wishlist: fromWishlist.wishlistReducer
+  wishlist: fromWishlist.wishlistReducer,
+  payment: fromPayment.paymentReducer,
 };

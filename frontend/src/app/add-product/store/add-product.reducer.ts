@@ -12,6 +12,13 @@ export interface AddProductUserInfo {
     state: string;
     country: string;
   };
+  CardInfo: {
+    name: string;
+    number: string;
+    cvc: string;
+    exp_year: number;
+    exp_month: string;
+  }
 }
 
 export interface State {
@@ -64,6 +71,13 @@ const initialState: State = {
       zip: "",
       state: "",
       country: ""
+    },
+    CardInfo: {
+      name: "",
+      number: "",
+      cvc: "",
+      exp_month: "",
+      exp_year: null
     }
   },
   success: false,

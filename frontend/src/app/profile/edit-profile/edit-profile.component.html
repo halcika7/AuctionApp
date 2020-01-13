@@ -1,3 +1,5 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
 <section class="container">
   <form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-required-info
@@ -7,7 +9,11 @@
       (changeGender)="changeGender($event)"
     ></app-required-info>
 
-    <app-card-info [form]="form" [cardExp]="cardExp"></app-card-info>
+    <app-card-info
+      [formGroup]="form.controls.cardInfo"
+      [form]="form"
+      [cardError]="cardError"
+    ></app-card-info>
 
     <app-optional-info [form]="form"></app-optional-info>
     <button

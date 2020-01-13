@@ -5,14 +5,17 @@ const OptionalInfoService = require('../services/OptionalInfoService');
 const CloudinaryService = require('../services/CloudinaryService');
 const {
   removeNullFromUserInfo,
-  removeNullFromOptionalUserInfo
+  removeNullFromOptionalUserInfo,
+  removeNullFromUserCardInfo
 } = require('../helpers/removeNullProperty');
 const { userInfoValidation, userCardValidation } = require('../validations/updateUsersProfile');
 const {
   getUserInfo,
   createAccessToken,
   createRefreshToken,
-  getOptionalInfoCard
+  getOptionalInfoCard,
+  productOwnerInfo,
+  getUsersOptionalInfoIdAndCardInfoId
 } = require('../helpers/authHelper');
 const { unlinkFiles } = require('../helpers/unlinkFiles');
 
@@ -41,10 +44,9 @@ class ProfileService extends BaseService {
     }
   }
 
-  async updateUserInfo(file, { userInfo, optionalInfo, cardInfo }, userId, email) {
+  async updateUserInfo(file, { userInfo, optionalInfo, token, name, changeCard }, userId, email) {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
-    cardInfo = JSON.parse(cardInfo);
 
     try {
       //userId, optionalInfoId and cardInfoId are same
@@ -53,8 +55,10 @@ class ProfileService extends BaseService {
         email
       );
 
-      const { isValid: validCard, errors, cardInfoData } = await userCardValidation(
-        cardInfo,
+      let { isValid: validCard, errors, cardInfoData } = await userCardValidation(
+        token,
+        name,
+        changeCard,
         userId,
         email,
         requiredInfoErrors,
@@ -68,21 +72,25 @@ class ProfileService extends BaseService {
 
       if (file && file.path) {
         const { secure_url } = await CloudinaryService.uploadProfilePhoto(file.path, userId);
-
         userInfo.photo = secure_url;
-
         unlinkFiles([file]);
       } else {
         userInfo.photo = currentUser.photo;
       }
 
+      const { optionalInfoId, cardInfoId } = await getUsersOptionalInfoIdAndCardInfoId(userId);
+
       userInfo = removeNullFromUserInfo(userInfo, currentUser);
-      const currentOptionalInfo = await OptionalInfoService.getOptionalInfo(userId);
+      const currentOptionalInfo = await OptionalInfoService.getOptionalInfo(optionalInfoId);
       optionalInfo = removeNullFromOptionalUserInfo(optionalInfo, currentOptionalInfo);
 
-      const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, userId);
-      const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, userId);
+      const currentCardInfo = await CardInfoService.getUserCardInfo(cardInfoId);
+      cardInfoData = cardInfoData ? removeNullFromUserCardInfo(currentCardInfo, cardInfoData) : {};
+
+      const [updateOptionalData] = await OptionalInfoService.update(optionalInfo, optionalInfoId);
+      const [updatedCardInfoData] = await CardInfoService.updateCardInfo(cardInfoData, cardInfoId);
       const [updateUserInfo] = await User.update({ ...userInfo }, { where: { id: userId } });
+
       const userInfoData = await getUserInfo(userId);
 
       const accessToken = createAccessToken(userInfoData),
@@ -109,6 +117,10 @@ class ProfileService extends BaseService {
     } catch (error) {
       return super.returnGenericFailed();
     }
+  }
+
+  async getProductOwnerInfo(id) {
+    return await productOwnerInfo(id);
   }
 }
 

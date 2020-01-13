@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
 const ProductImage = require('../models/ProductImage');
 const Bid = require('../models/Bid');
+const Order = require('../models/Order');
 const { db, Op } = require('../config/database');
 const {
   STARTS_IN_MAX_DAYS,
@@ -148,6 +149,7 @@ exports.getProductById = async (id, subcategoryId) => {
       include: [
         [db.fn('coalesce', db.fn('MAX', db.col('Bids.price')), 0), 'highest_bid'],
         [db.fn('coalesce', db.fn('COUNT', db.col('Bids.price')), 0), 'number_of_bids'],
+        [db.col('Order.paid'), 'paid'],
         [
           db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
           'status'
@@ -157,9 +159,10 @@ exports.getProductById = async (id, subcategoryId) => {
     },
     include: [
       { model: ProductImage, attributes: ['image'] },
-      { model: Bid, attributes: [] }
+      { model: Bid, attributes: [] },
+      { model: Order, attributes: [] }
     ],
-    group: ['Product.id', 'ProductImages.id']
+    group: ['Product.id', 'ProductImages.id', 'Order.paid']
   });
 };
 
@@ -255,3 +258,14 @@ exports.findProductsByAuctionEnd = async auctionEnd => {
     attributes: ['id', 'subcategoryId', 'name', 'userId']
   });
 };
+
+exports.getProductOrderId = async id =>
+  await Product.findOne({
+    raw: true,
+    where: { id },
+    attributes: [[db.col('Order.id'), 'orderId'], 'userId'],
+    include: {
+      model: Order,
+      attributes: []
+    }
+  });

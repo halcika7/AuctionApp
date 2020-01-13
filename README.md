@@ -22,6 +22,10 @@
     TWILIO_SID=
     TWILIO_AUTH_TOKEN=
     STRIPE_KEY=
+    GOOGLE_CLIENT_ID=
+    GOOGLE_CLIENT_SECRET=
+    FACEBOOK_CLIENT_ID=
+    FACEBOOK_CLIENT_SECRET=
     NODE_ENV=
 ```
 
@@ -36,4 +40,10 @@
     npm run migrate
 
     npm run dev
+```
+If you want to seed database 
+
+```bash
+    npm run generate-users
+    npm run seed
 ```

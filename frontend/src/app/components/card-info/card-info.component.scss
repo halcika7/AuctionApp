@@ -1,0 +1,136 @@
+@import "mixins";
+@import "variables";
+
+.inputs {
+  span {
+    @include fontMixin(14px, light, $color: red);
+    display: block;
+    margin-top: 5px;
+  }
+}
+
+.inputs.hascard {
+  .name,
+  .number,
+  .exp-date,
+  .cvc {
+    margin: 19px 0 0 !important;
+
+    label {
+      @include fontMixin(18px, regular, 0.63px, light_black);
+      margin-bottom: 8px;
+      display: block;
+
+      span {
+        @include fontMixin(18px, regular, 0.63px);
+        display: inline;
+      }
+    }
+
+    div {
+      @include fontMixin(18px, light);
+      @include flex(center);
+      @include heightWidth(46px, 100%);
+      padding: 0 16px;
+      box-sizing: border-box;
+      outline: none;
+      border: 1px solid getColor(light_gray);
+      background: getColor(darker_white);
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.card-number {
+  margin: 19px 0 0 !important;
+
+  &.invalid {
+    .StripeElement {
+      border: 1px solid getColor(red);
+    }
+  }
+
+  label {
+    @include fontMixin(18px, regular, 0.63px, light_black);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .StripeElement {
+    @include heightWidth(46px, 100%);
+    padding: 0 16px;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid getColor(light_gray);
+    background: getColor(darker_white);
+  }
+}
+
+::ng-deep {
+  .card-number {
+    .StripeElement {
+      @include flex(center);
+      * {
+        font-size: 18px !important;
+        font-weight: 300 !important;
+      }
+
+      > div {
+        width: 100% !important;
+        height: 20px;
+
+        .ElementsApp {
+          color: grey;
+        }
+      }
+    }
+  }
+}
+
+.checkbox {
+  margin: 20px 0;
+
+  label {
+    position: relative;
+    cursor: pointer;
+    padding-left: 25px;
+
+    fa-icon {
+      @include flex(center, center);
+      opacity: 0;
+      z-index: 2;
+      font-size: 15px;
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      display: none;
+
+      &:checked ~ fa-icon {
+        opacity: 1;
+      }
+    }
+
+    &:before,
+    fa-icon {
+      @include heightWidth(20px, 20px);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:before {
+      content: "";
+      background: getColor(white);
+      border: 1px solid getColor(light_gray);
+      box-sizing: border-box;
+    }
+  }
+}

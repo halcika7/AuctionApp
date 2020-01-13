@@ -72,14 +72,24 @@
           @include flex($justify: space-between);
           padding: 0;
 
-          app-input {
+          app-input,
+          .card-number,
+          .name,
+          .number,
+          .exp-date,
+          .cvc {
             width: 49%;
           }
 
           @media (max-width: 550px) {
             flex-wrap: wrap;
 
-            app-input {
+            app-input,
+            .card-number,
+            .name,
+            .number,
+            .exp-date,
+            .cvc {
               width: 100%;
             }
           }

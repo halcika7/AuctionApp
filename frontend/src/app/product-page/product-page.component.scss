@@ -66,6 +66,49 @@
       color: getColor(red);
     }
   }
+
+  .owner-info {
+    @include flex(center);
+    @include fontMixin(15px, regular, 0.52px, gray, $lineH: 22px);
+    @include margin(-30px, 20px);
+
+    img {
+      @include heightWidth(40px, 40px);
+      @include margin($all: 0 10px);
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    span {
+      @include fontMixin(15px, regular, 0.52px, light_black, $lineH: 22px);
+    }
+
+    fa-icon {
+      @include fontMixin(20px, regular, 0.52px, purple, $lineH: 22px);
+      margin-left: 20px;
+      margin-right: 5px;
+    }
+  }
+
+  .payment-button {
+    a {
+      @include flex(center, center);
+      @include fontMixin(
+        16px,
+        bold,
+        0.56px,
+        light_black,
+        $transform: uppercase,
+        $decoration: none
+      );
+      @include heightWidth(46px, 100px);
+      box-sizing: border-box;
+      background: getColor(purple);
+      color: getColor(white);
+      border: 3px solid getColor(purple);
+      box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+    }
+  }
 }
 
 .current-bid {
@@ -101,11 +144,7 @@
     }
 
     &.wishlisted {
-      @include boxShadowBackground(
-        false,
-        white,
-        3px solid getColor(purple)
-      );
+      @include boxShadowBackground(false, white, 3px solid getColor(purple));
       fa-icon {
         color: getColor(purple);
       }

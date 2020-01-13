@@ -1,8 +1,13 @@
 const BaseService = require('./BaseService');
 const Bid = require('../models/Bid');
 const User = require('../models/User');
+const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { getAuctionEndProduct, noMoreProducts, getProductById } = require('../helpers/productFilter');
+const {
+  getAuctionEndProduct,
+  noMoreProducts,
+  getProductById
+} = require('../helpers/productFilter');
 const { LIMIT_BIDS, MAX_BID, DEFAULT_LIMIT_PRODUCTS } = require('../config/configs');
 const { db } = require('../config/database');
 
@@ -78,8 +83,8 @@ class BidService extends BaseService {
     try {
       const { id } = super.decodeAuthorizationToken(token);
       const product = await getProductById(productId, subcategoryId);
-      
-      if(id !== product.userId) return { bids: [] };
+
+      if (id !== product.userId) return { bids: [] };
 
       const bids = await Bid.findAll({
         where: {
@@ -107,7 +112,7 @@ class BidService extends BaseService {
       const bids = await Bid.findAll({
         subQuery: false,
         where: { userId },
-        attributes: ['dateBid', 'price'],
+        attributes: ['createdAt', 'price'],
         include: {
           model: Product,
           attributes: [
@@ -119,20 +124,27 @@ class BidService extends BaseService {
             'auctionEnd',
             [db.fn('coalesce', db.fn('MAX', db.col('Product.Bids.price')), 0), 'highest_bid'],
             [db.fn('coalesce', db.fn('COUNT', db.col('Product.Bids.price')), 0), 'number_of_bids'],
+            [db.fn('concat', db.col('Product.Order.paid')), 'paid'],
             [
               db.literal(`CASE WHEN "Product"."auctionEnd" > NOW() THEN 'open' ELSE 'closed' END`),
               'status'
             ]
           ],
-          include: {
-            model: Bid,
-            attributes: []
-          }
+          include: [
+            {
+              model: Bid,
+              attributes: []
+            },
+            {
+              model: Order,
+              attributes: []
+            }
+          ]
         },
         limit,
         offset,
-        order: [['dateBid', 'DESC']],
-        group: ['Bid.id', 'Product.id']
+        order: [['createdAt', 'DESC']],
+        group: ['Bid.id', 'Product.id', 'Product->Order.paid']
       });
       const length = await Bid.count({
         where: { userId }
@@ -154,7 +166,7 @@ class BidService extends BaseService {
       raw: true,
       where: { productId },
       order: [['price', 'DESC']]
-    })
+    });
   }
 }
 

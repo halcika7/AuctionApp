@@ -4,21 +4,19 @@
 >
   <app-input
     id="name"
-    title="Product name"
-    placeholder="Enter product name"
+    title="What do u sell?"
     type="text"
     controlName="name"
     [parentForm]="form"
     [input]="form.get('name')"
     [showErrors]="true"
-    [minLength]="5"
+    [minLength]="1"
     [maxLength]="61"
     [required]="true"
   ></app-input>
   <p>Up to 10 words (60 characters)</p>
   <div class="category">
     <app-select-input
-      label="Select category"
       [default]="categoryData.name || 'Select category'"
       [values]="categories"
       [object]="true"
@@ -28,7 +26,6 @@
       [required]="true"
     ></app-select-input>
     <app-select-input
-      label="Select subcategory"
       [default]="subcategoryData.name || 'Select subcategory'"
       [values]="subcategories"
       liWhenValuesLength0="Please select category"
@@ -41,7 +38,6 @@
   </div>
   <div class="brand">
     <app-select-input
-      label="Select brand"
       [default]="brandData.name || 'Select brand'"
       [values]="brands"
       liWhenValuesLength0="Please select subcategory"
@@ -55,7 +51,6 @@
   <div class="filters" *ngIf="filters.length > 0">
     <app-select-input
       *ngFor="let filter of filters; let index = index"
-      [label]="'Select ' + filter.name"
       [default]="getselectedFilterValue(filter.id) || 'Select ' + filter.name"
       [values]="filter.FilterValues"
       liWhenValuesLength0="Please select filter.name"
@@ -71,7 +66,6 @@
     <app-input
       id="description"
       title="Description"
-      placeholder="Enter description"
       controlName="description"
       [parentForm]="form"
       [input]="form.get('description')"
@@ -92,7 +86,7 @@
     >
       <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>back
     </button>
-    <button class="next" (click)="buttonClicked(false)" [disabled]="!isValid" >
+    <button class="next" (click)="buttonClicked(false)" [disabled]="!isValid">
       next<fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
     </button>
   </div>
