@@ -3,10 +3,10 @@ import { WebSocketServiceService } from "./services/web-socket-service.service";
 export class WindowOnBeforeUnload {
   constructor(private socketService: WebSocketServiceService) {}
 
-  beforeUnload(productId = null) {
+  beforeUnload(productId = null, userId = null) {
     window.onbeforeunload = () => {
       if (productId) {
-        this.socketService.emit("removeWatcher", productId);
+        this.socketService.emit("removeWatcher", { productId, userId });
       }
 
       if (
@@ -18,8 +18,6 @@ export class WindowOnBeforeUnload {
           : "Bearer " + sessionStorage.getItem("accessToken");
         this.socketService.emit("removeloggeduser", token);
       }
-
-      this.socketService.disconnect();
     };
   }
 }

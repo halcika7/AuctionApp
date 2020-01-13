@@ -1,6 +1,7 @@
 const AuthServiceInstance = require('../services/AuthService');
 const BaseController = require('./BaseController');
 const { decodeToken } = require('../helpers/authHelper');
+const NotificationService = require('../services/NotificationService');
 
 class AuthController extends BaseController {
   constructor() {
@@ -23,11 +24,15 @@ class AuthController extends BaseController {
     return super.sendResponse(res, status, response);
   }
 
-  async logout(req, res) {
+  async logout(req, res, io) {
     const token = super.getAuthorizationHeader(req);
     const { id } = decodeToken(token) || { id: undefined };
     AuthServiceInstance.removeLoggedUser(id);
     AuthServiceInstance.setRefreshTokenCookie(res, '');
+
+    if(id) {
+      NotificationService.removeUserFromAllProducts(io, id);
+    }
 
     return super.sendResponse(res, 200, { accessToken: '' });
   }

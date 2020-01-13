@@ -29,7 +29,7 @@ export interface State {
   bids: Bid[];
   message: string;
   success: boolean;
-  numberOfViewers: { views?: number; productId?: string };
+  numberOfViewers: { views?: number; productId?: string; userIds?: string[] };
   highestBidUserId: string;
   ownerInfo: OwnerInfo;
   wonAuction: boolean;
@@ -60,7 +60,7 @@ const initialState: State = {
   bids: [],
   message: "",
   success: false,
-  numberOfViewers: { views: 0, productId: null },
+  numberOfViewers: { views: 0, productId: null, userIds: [] },
   highestBidUserId: "",
   wonAuction: false
 };
