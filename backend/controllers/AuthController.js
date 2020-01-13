@@ -2,6 +2,7 @@ const AuthServiceInstance = require('../services/AuthService');
 const BaseController = require('./BaseController');
 const { decodeToken } = require('../helpers/authHelper');
 const { PassportService } = require('../services/PassportService');
+const NotificationService = require('../services/NotificationService');
 
 class AuthController extends BaseController {
   constructor() {
@@ -28,12 +29,15 @@ class AuthController extends BaseController {
     return PassportService.socialCallback(req, res, provider);
   }
 
-  async logout(req, res) {
-    req.logout();
+  async logout(req, res, io) {
     const token = super.getAuthorizationHeader(req);
     const { id } = decodeToken(token) || { id: undefined };
     AuthServiceInstance.removeLoggedUser(id);
     AuthServiceInstance.setRefreshTokenCookie(res, '');
+
+    if(id) {
+      NotificationService.removeUserFromAllProducts(io, id);
+    }
 
     return super.sendResponse(res, 200, { accessToken: '' });
   }

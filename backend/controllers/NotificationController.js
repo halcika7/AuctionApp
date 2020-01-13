@@ -11,8 +11,8 @@ class NotificationController extends BaseController {
     return io.emit('watchers', numberOfViewers);
   }
 
-  removeWatcher(io, productId) {
-    const numberOfViewers = NotificationService.removeWatcherFromProduct(productId);
+  removeWatcher(io, { productId, userId }) {
+    const numberOfViewers = NotificationService.removeWatcherFromProduct(productId, userId);
     return io.emit('watchers', numberOfViewers);
   }
 }

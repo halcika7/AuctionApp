@@ -4,6 +4,7 @@ import * as fromApp from "@app/store/app.reducer";
 import * as AuthActions from "@app/auth/store/auth.actions";
 import { Subscription } from "rxjs";
 import { Router, ActivatedRoute } from "@angular/router";
+import { WebSocketServiceService } from '@app/shared/services/web-socket-service.service';
 
 @Component({
   selector: "app-header",
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private socket: WebSocketServiceService
   ) {}
 
   ngOnInit() {

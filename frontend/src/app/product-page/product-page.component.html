@@ -81,11 +81,25 @@
     <div class="current-bid">
       <p
         *ngIf="
-          numberOfViewers > 1 && product.status && product.status !== 'closed'
+          numberOfViewers > 1 &&
+          product.status &&
+          product.status !== 'closed' &&
+          userId
         "
       >
         Currently watching You and {{ numberOfViewers - 1 }} more
         {{ numberOfViewers - 1 == 1 ? "user" : "users" }}
+      </p>
+      <p
+        *ngIf="
+          product.status &&
+          product.status !== 'closed' &&
+          !userId &&
+          numberOfViewers > 0
+        "
+      >
+        Currently watching {{ numberOfViewers }}
+        {{ numberOfViewers == 1 ? "user" : "users" }}
       </p>
       <ng-template [ngIf]="!hide">
         <p>
