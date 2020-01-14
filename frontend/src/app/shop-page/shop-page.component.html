@@ -14,12 +14,6 @@
       [subcategoryId]="subcategoryId"
       [shop]="true"
     ></app-categories-list>
-    <app-shop-filters
-      [brand]="true"
-      [values]="brands"
-      [brandId]="filterProduct.brandId"
-      (clickFilter)="filterClicked($event)"
-    ></app-shop-filters>
     <ng-template [ngIf]="showIfKeysLength(prices)">
       <app-shop-price
         [prices]="prices"
@@ -27,6 +21,12 @@
         (changeValues)="changePriceValues($event)"
       ></app-shop-price>
     </ng-template>
+    <app-shop-filters
+      [brand]="true"
+      [values]="brands"
+      [brandId]="filterProduct.brandId"
+      (clickFilter)="filterClicked($event)"
+    ></app-shop-filters>
     <app-shop-filters
       [filterValueIds]="filterProduct.filterValueIds"
       [brand]="false"

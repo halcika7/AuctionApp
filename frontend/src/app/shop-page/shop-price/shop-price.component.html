@@ -21,6 +21,6 @@
     [options]="options"
     (userChangeEnd)="changePrice($event)"
   ></ng5-slider>
-  <p>{{ prices.min_price | currency }} - {{ prices.max_price | currency }}</p>
+  <p>{{ prices.min_price | currency:'USD':true: '1.0-0' }} - {{ prices.max_price | currency:'USD':true: '1.0-0' }}</p>
   <p>The average price is {{ prices.avg_price | currency }}.</p>
 </div>

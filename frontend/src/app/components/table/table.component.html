@@ -1,21 +1,19 @@
-<section class="table">
-  <table [ngClass]="{ 'mw-1800': type === 'bids' }">
+<section class="table" [ngClass]="{ bids: type === 'bids' }">
+  <table>
     <thead>
       <tr>
         <td>Item</td>
         <td>Name</td>
         <td>Time left</td>
-        <td *ngIf="type === 'bids'">Bid date</td>
-        <td>Price</td>
-        <td *ngIf="type === 'bids'">Your bid</td>
-        <td>No. bids</td>
+        <td *ngIf="type != 'wishlist'">Your Price</td>
+        <td *ngIf="type != 'wishlist'">No. bids</td>
         <td>Highest bid</td>
-        <td>Status</td>
+        <td *ngIf="type === 'wishlist'">Status</td>
         <td></td>
       </tr>
     </thead>
     <tbody>
-      <ng-template [ngIf]="type === 'products'">
+      <ng-template [ngIf]="type === 'products' || type === 'wishlist'">
         <tr *ngFor="let item of values">
           <td>
             <img [src]="item.picture" alt="" />
@@ -30,29 +28,26 @@
                 : "0"
             }}
           </td>
-          <td>{{ item.price | currency }}</td>
-          <td>{{ item.number_of_bids }}</td>
+          <td *ngIf="type != 'wishlist'">{{ item.price | currency }}</td>
+          <td *ngIf="type != 'wishlist'">{{ item.number_of_bids }}</td>
           <td [ngClass]="{ 'highest-bid': item.highest_bid > item.price }">
             {{ item.highest_bid | currency }}
           </td>
-          <td>
+          <td *ngIf="type === 'wishlist'">
             <span [ngClass]="{ active: item.status === 'open' }">{{
               item.status
             }}</span>
           </td>
           <td>
-            <a [routerLink]="['/shop/products', item.subcategoryId, item.id]"
-              >View</a
-            >
+            <a [routerLink]="['/shop/products', item.subcategoryId, item.id]">{{
+              type === "wishlist" ? "Bid" : "View"
+            }}</a>
           </td>
         </tr>
       </ng-template>
       <ng-template [ngIf]="type === 'bids' && values.length > 0">
         <ng-template ngFor let-item [ngForOf]="values">
           <tr class="spacer">
-            <td></td>
-            <td></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -81,8 +76,6 @@
                   : "0"
               }}
             </td>
-            <td>{{ item.createdAt | date: "dd MMM yyyy" }}</td>
-            <td>{{ item.Product.price | currency }}</td>
             <td
               [ngClass]="{
                 'highest-bid': item.Product.highest_bid === item.price
@@ -100,15 +93,8 @@
               {{ item.Product.highest_bid | currency }}
             </td>
             <td>
-              <span [ngClass]="{ active: item.Product.status === 'open' }">{{
-                item.Product.status
-              }}</span>
-            </td>
-            <td>
               <a
-                *ngIf="
-                  item.Product.status !== 'closed'
-                "
+                *ngIf="item.Product.status !== 'closed'"
                 [routerLink]="[
                   '/shop/products',
                   item.Product.subcategoryId,
@@ -138,9 +124,6 @@
           </tr>
         </ng-template>
         <tr class="spacer">
-          <td></td>
-          <td></td>
-          <td></td>
           <td></td>
           <td></td>
           <td></td>

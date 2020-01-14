@@ -2,9 +2,9 @@ import * as ProfileActions from "./profile.actions";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 
 export interface ProfileProduct extends Product {
-  highest_bid: string | number;
-  number_of_bids: string | number;
-  status: string;
+  highest_bid?: string | number;
+  number_of_bids?: string | number;
+  status?: string;
   auctionEnd: string;
 }
 
