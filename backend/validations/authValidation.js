@@ -53,7 +53,7 @@ exports.loginValidation = async data => {
     return this.returnData(errors, message, { user });
   }
 
-  await this.emailValidation(data.email, errors);
+  await this.emailValidation(data.email, errors, true);
 
   if (isEmpty(data.password)) errors.password = 'Password is required';
 
@@ -122,21 +122,24 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
   return this.returnData(errors, message, { email: user.email });
 };
 
-exports.emailValidation = async (email, errors) => {
+exports.emailValidation = async (email, errors, login = false) => {
   if (isEmpty(email)) {
     errors.email = 'Email is required';
     return;
   }
 
-  try {
-    const response = await axios.get(`${NEVERBOUNCE_URL}&email=${email}`);
-    const data = response.data;
-    if (data.result != 'valid') {
+  if(!login) {
+    try {
+      const response = await axios.get(`${NEVERBOUNCE_URL}&email=${email}`);
+      const data = response.data;
+      if (data.result != 'valid') {
+        errors.email = 'Please enter valid email address';
+      }
+    } catch (error) {
       errors.email = 'Please enter valid email address';
     }
-  } catch (error) {
-    errors.email = 'Please enter valid email address';
   }
+
 };
 
 exports.passwordValidation = (
