@@ -13,6 +13,7 @@ export const UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILED = "UPDATE_PROFILE_FAILED";
 
 export const DEACTIVATE_ACCOUNT = "DEACTIVATE_ACCOUNT";
+export const DEACTIVATE_ACCOUNT_SUCCESS = "DEACTIVATE_ACCOUNT_SUCCESS";
 
 export const SET_AUCTION_WON_MESSAGE = "SET_AUCTION_WON_MESSAGE";
 
@@ -108,6 +109,11 @@ export class DeactivateAccount implements Action {
   constructor() {}
 }
 
+export class DeactivateAccountSuccess implements Action {
+  readonly type = DEACTIVATE_ACCOUNT_SUCCESS;
+  constructor() {}
+}
+
 export class SetAuctionWonMessage implements Action {
   readonly type = SET_AUCTION_WON_MESSAGE;
   constructor(public message: string, public productId: string) {}
@@ -124,4 +130,6 @@ export type ProfileActions =
   | UpdateProfileFailed
   | ClearProfile
   | SetAuctionWonMessage
-  | ClearProfileMessages;
+  | ClearProfileMessages
+  | DeactivateAccount
+  | DeactivateAccountSuccess;

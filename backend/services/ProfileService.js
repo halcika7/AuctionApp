@@ -1,5 +1,12 @@
 const BaseService = require('./BaseService');
 const User = require('../models/User');
+const Product = require('../models/Product');
+const Bid = require('../models/Bid');
+const Order = require('../models/Order');
+const ProductImage = require('../models/ProductImage');
+const Wishlist = require('../models/Wishlist');
+const FilterValueProduct = require('../models/FilterValueProduct');
+const ProductReview = require('../models/ProductReview');
 const CardInfoService = require('../services/CardInfoService');
 const OptionalInfoService = require('../services/OptionalInfoService');
 const CloudinaryService = require('../services/CloudinaryService');
@@ -18,6 +25,7 @@ const {
   getUsersOptionalInfoIdAndCardInfoId
 } = require('../helpers/authHelper');
 const { unlinkFiles } = require('../helpers/unlinkFiles');
+const { db, Op } = require('../config/database');
 
 class ProfileService extends BaseService {
   constructor() {
@@ -37,6 +45,56 @@ class ProfileService extends BaseService {
   async deactivateUserAccount(id) {
     try {
       await User.update({ deactivated: true }, { where: { id } });
+
+      const { ids = [], orderIds = [], imagesUrls = [] } = await Product.findOne({
+        raw: true,
+        where: { userId: id, auctionEnd: { [Op.gt]: new Date() } },
+        attributes: [
+          [db.fn('ARRAY_AGG', db.col('id')), 'ids'],
+          [db.fn('ARRAY_AGG', db.col('orderId')), 'orderIds'],
+          [db.fn('ARRAY_AGG', db.col('picture')), 'imagesUrls']
+        ]
+      });
+
+      if (ids && ids.length > 0) {
+        const { images = [] } = await ProductImage.findOne({
+          raw: true,
+          where: {
+            productId: {
+              [Op.in]: ids
+            }
+          },
+          attributes: [[db.fn('ARRAY_AGG', db.col('image')), 'images']]
+        });
+
+        const allProductImages = imagesUrls.concat(images);
+
+        await allProductImages.map(async val => {
+          try {
+            const splitedPhoto = val.split('/');
+            if (splitedPhoto && splitedPhoto.length > 0) {
+              const public_id = splitedPhoto[splitedPhoto.length - 1].split('.')[0];
+              await CloudinaryService.deleteImage(public_id);
+            }
+          } catch (error) {
+            console.log('TCL: ProfileService -> deactivateUserAccounttttt -> error', error);
+          }
+        });
+
+        await Bid.destroy({ where: { productId: { [Op.in]: ids } } });
+
+        await FilterValueProduct.destroy({ where: { productId: { [Op.in]: ids } } });
+
+        await ProductReview.destroy({ where: { productId: { [Op.in]: ids } } });
+
+        await ProductImage.destroy({ where: { productId: { [Op.in]: ids } } });
+
+        await Product.destroy({ where: { id: { [Op.in]: ids } } });
+
+        await Order.destroy({ where: { id: { [Op.in]: orderIds } } });
+
+        await Wishlist.destroy({ where: { productId: { [Op.in]: ids } } });
+      }
 
       return super.returnResponse(200, {});
     } catch (error) {

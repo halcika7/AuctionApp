@@ -120,7 +120,10 @@ export class ProfileEffects {
     ofType(ProfileActions.DEACTIVATE_ACCOUNT),
     switchMap(() => {
       return this.http.put<any>("/profile/deactivate", {}).pipe(
-        map(() => new LogoutStart()),
+        map(() => {
+          this.store.dispatch(new LogoutStart());
+          return new ProfileActions.DeactivateAccountSuccess();
+        }),
         catchError(data => {
           if (data.error.accessToken) {
             this.store.dispatch(

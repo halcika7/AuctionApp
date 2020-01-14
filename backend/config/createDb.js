@@ -8,10 +8,18 @@ pg.connect()
   .then(client => {
     client
       .query(`CREATE DATABASE ${DB_NAME}`)
-      .query(`ALTER USER postgres SET timezone='UTC'`)
       .then(() => {
         console.log('db created');
-        process.kill(process.pid);
+        client
+          .query(`ALTER USER postgres SET timezone='UTC'`)
+          .then(() => {
+            console.log('timezone set to UTC');
+            process.kill(process.pid);
+          })
+          .catch(err => {
+            console.log('timezone not set to UTC');
+            process.kill(process.pid);
+          });
       })
       .catch(err => {
         console.log('db exists');

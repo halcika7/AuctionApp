@@ -21,12 +21,18 @@
 
   .content {
     @include flex(center, center, column);
-    height: 200px;
+    @include heightWidth(300px, 400px);
     background: getColor(white);
     z-index: 1;
     padding: 30px;
     border-radius: 5px;
     box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.297);
+
+    @media (max-width: 500px) {
+      @include heightWidth(300px, 90%);
+      max-width: 90%;
+      padding: 15px;
+    }
 
     h3 {
       @include fontMixin(18px, regular, 0.63px, light_black);
@@ -35,6 +41,7 @@
     .cd-buttons {
       @include flex(center, space-between);
       width: 100%;
+      margin-top: 15px;
 
       button {
         @include fontMixin(16px, bold, 0.63px, light_black, $transform: uppercase);
