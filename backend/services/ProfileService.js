@@ -46,6 +46,24 @@ class ProfileService extends BaseService {
     try {
       await User.update({ deactivated: true }, { where: { id } });
 
+      const { ids: productsWithUserBids } = await Product.findOne({
+        subQuery: false,
+        raw: true,
+        where: { auctionEnd: { [Op.gt]: new Date() } },
+        include: {
+          model: Bid,
+          where: { userId: id },
+          attributes: []
+        },
+        attributes: [[db.fn('ARRAY_AGG', db.col('Product.id')), 'ids']]
+      });
+
+      if (productsWithUserBids) {
+        await Bid.destroy({
+          where: { productId: { [Op.in]: productsWithUserBids }, userId: id }
+        });
+      }
+
       const { ids = [], orderIds = [], imagesUrls = [] } = await Product.findOne({
         raw: true,
         where: { userId: id, auctionEnd: { [Op.gt]: new Date() } },

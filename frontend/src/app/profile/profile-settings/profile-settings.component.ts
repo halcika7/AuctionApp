@@ -40,6 +40,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.store.dispatch(new ProfileActions.ClearProfileMessages());
   }
 
   openModal(value: boolean = true) {
