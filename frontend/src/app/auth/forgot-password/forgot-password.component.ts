@@ -8,7 +8,8 @@ import * as AuthActions from "@app/auth/store/auth.actions";
 import { Auth } from "./../auth";
 import { jwtDecode } from "@app/shared/jwtDecode";
 import { EMAIL_VALIDATOR } from "@app/shared/validators";
-import { Renderer2 } from '@angular/core';
+import { Renderer2 } from "@angular/core";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-forgot-password",
@@ -18,6 +19,7 @@ import { Renderer2 } from '@angular/core';
 export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
   private _subscription = new Subscription();
   private _isVaildForm: boolean = false;
+  private _reactivate: boolean = false;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -40,13 +42,15 @@ export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
       this.route.params.subscribe(({ token }: Params) => {
         if (token) {
           this.checkDateTokenValidity(token);
+        } else if (this.router.url == "/home/auth/reactivate-account") {
+          this._reactivate = true;
         }
       })
     );
 
     this.subscription.add(
       super.form.statusChanges.subscribe(validity => {
-        if (validity === "VALID") {
+        if (validity === environment.VALID_FORM) {
           this._isVaildForm = true;
         } else {
           this._isVaildForm = false;
@@ -57,12 +61,17 @@ export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
+    super.destroy();
     this.store.dispatch(new AuthActions.AuthClearMessagess());
   }
 
   onSubmit() {
     super.isClicked = true;
-    this.store.dispatch(new AuthActions.ForgotPasswordStart(super.form.controls.email.value));
+    const url = !this._reactivate ? "/auth/forgotpassword" : "/auth/reactivate";
+    const httpType = !this._reactivate ? "patch" : "post";
+    this.store.dispatch(
+      new AuthActions.ForgotPasswordStart(super.form.controls.email.value, url, httpType)
+    );
   }
 
   private checkDateTokenValidity(token) {
@@ -80,5 +89,9 @@ export class ForgotPasswordComponent extends Auth implements OnInit, OnDestroy {
 
   get isValidForm() {
     return this._isVaildForm;
+  }
+
+  get reactivate(): boolean {
+    return this._reactivate;
   }
 }

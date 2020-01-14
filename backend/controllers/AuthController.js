@@ -77,6 +77,18 @@ class AuthController extends BaseController {
 
     return true;
   }
+
+  async activateAccount(req, res) {
+    const { status, response } = await AuthServiceInstance.activateAccount(req.body);
+
+    return super.sendResponse(res, status, response);
+  }
+
+  async reactivateAccount(req, res) {
+    const { status, response } = await AuthServiceInstance.reactivateAccount(req.body);
+
+    return super.sendResponse(res, status, response);
+  }
 }
 
 const AuthControllerInstance = new AuthController();

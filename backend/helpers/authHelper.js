@@ -11,8 +11,8 @@ const {
 } = require('../config/configs');
 const { db } = require('../config/database');
 
-exports.createAccessToken = ({ id, email }) =>
-  jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+exports.createAccessToken = ({ id, email }, expiresIn = '15m') =>
+  jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn });
 
 exports.createRefreshToken = ({ id, email }) =>
   jwt.sign({ id, email }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
@@ -85,7 +85,7 @@ exports.getUserInfo = async id => {
 };
 
 exports.createUser = async (
-  { firstName, lastName, email, password },
+  { firstName, lastName, email, password, activationToken },
   optionalInfoId,
   cardInfoId
 ) => {

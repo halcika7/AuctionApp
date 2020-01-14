@@ -15,6 +15,7 @@ import {
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
 import { StripeServiceService } from "@app/shared/services/stripe-service.service";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: "app-edit-profile",
@@ -122,7 +123,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.form.statusChanges.subscribe(validity => {
-        if (validity === "VALID") {
+        if (validity === environment.VALID_FORM) {
           this._isValidForm = true;
         } else {
           this._isValidForm = false;

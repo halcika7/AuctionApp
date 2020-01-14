@@ -8,7 +8,7 @@ pg.connect()
   .then(client => {
     client
       .query(`CREATE DATABASE ${DB_NAME}`)
-      .query(`ALTER USER postgres SET timezone='UTC'` )
+      .query(`ALTER USER postgres SET timezone='UTC'`)
       .then(() => {
         console.log('db created');
         process.kill(process.pid);
@@ -19,6 +19,7 @@ pg.connect()
       });
   })
   .catch(err => {
+    console.log('TCL: err', err);
     console.log('unable to connect to postgres db');
     process.kill(process.pid);
   });

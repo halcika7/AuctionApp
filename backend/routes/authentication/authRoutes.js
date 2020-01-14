@@ -38,5 +38,9 @@ module.exports = io => {
 
   router.get('/facebook/callback', (req, res) => AuthController.socialLogin(req, res, 'facebook'));
 
+  router.post('/activate-account', AuthController.activateAccount);
+
+  router.post('/reactivate', AuthController.reactivateAccount);
+
   return router;
 };

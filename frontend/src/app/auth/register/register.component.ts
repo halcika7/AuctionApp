@@ -11,6 +11,7 @@ import {
   PASSWORD_VALIDATOR,
   EMAIL_VALIDATOR
 } from "@app/shared/validators";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: "app-register",
@@ -45,7 +46,7 @@ export class RegisterComponent extends Auth implements OnInit, OnDestroy {
   ngOnInit() {
     this.registerSubscription.add(
       super.form.statusChanges.subscribe(validity => {
-        if (validity === "VALID") {
+        if (validity === environment.VALID_FORM) {
           this._isValidForm = true;
         } else {
           this._isValidForm = false;

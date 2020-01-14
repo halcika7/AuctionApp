@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Actions, ofType, Effect } from "@ngrx/effects";
 import * as AuthActions from "@app/auth/store/auth.actions";
-import { concatMap, map, catchError } from "rxjs/operators";
+import { concatMap, map, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 
 @Injectable()
@@ -73,13 +73,22 @@ export class AuthEffects {
   @Effect()
   forgotPassword = this.actions$.pipe(
     ofType(AuthActions.FORGOT_PASSWORD_START),
-    concatMap(({ email }) => {
-      return this.http
-        .patch<any>("/auth/forgotpassword", { email })
-        .pipe(
-          map(data => new AuthActions.ForgotPasswordSuccess(data)),
-          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
-        );
+    concatMap(({ email, url, httpType }) => {
+      if(httpType == "patch") {
+        return this.http
+          .patch<any>(url, { email })
+          .pipe(
+            map(data => new AuthActions.ForgotPasswordSuccess(data)),
+            catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+          );
+      } else {
+        return this.http
+          .post<any>(url, { email })
+          .pipe(
+            map(data => new AuthActions.ForgotPasswordSuccess(data)),
+            catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+          );
+      }
     })
   );
 
@@ -104,6 +113,21 @@ export class AuthEffects {
     ofType(AuthActions.REMOVE_LOGGED_USER),
     concatMap(() => {
       return this.http.post<any>("/auth/removeloggeduser", {});
+    })
+  );
+
+  @Effect()
+  authActivateAccount = this.actions$.pipe(
+    ofType(AuthActions.ACTIVATE_ACCOUNT_START),
+    switchMap((activationData: AuthActions.ActivateAccountStart) => {
+      return this.http
+        .post<any>("/auth/activate-account", {
+          activationToken: activationData.payload.activationToken
+        })
+        .pipe(
+          map(resData => new AuthActions.ActivateAccountSuccess(resData)),
+          catchError(({ error }) => of(new AuthActions.AuthFailed(error)))
+        );
     })
   );
 

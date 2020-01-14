@@ -120,6 +120,8 @@ import { CustomDateInputComponent } from "./add-product/second-step/custom-date-
 import { PaymentComponent } from "./payment/payment.component";
 import { RateOwnerComponent } from "./payment/rate-owner/rate-owner.component";
 import { SpinnerComponent } from "./components/spinner/spinner.component";
+import { ActivateAccountComponent } from './auth/activate-account/activate-account.component';
+import { ASpinnerComponent } from './auth/activate-account/a-spinner/a-spinner.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +182,9 @@ import { SpinnerComponent } from "./components/spinner/spinner.component";
     CustomDateInputComponent,
     PaymentComponent,
     RateOwnerComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ActivateAccountComponent,
+    ASpinnerComponent
   ],
   imports: [
     BrowserModule,

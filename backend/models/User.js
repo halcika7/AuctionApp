@@ -60,12 +60,12 @@ const User = db.define(
       allowNull: false,
       defaultValue: false
     },
-    active: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
     resetPasswordToken: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null
+    },
+    activationToken: {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null

@@ -1,5 +1,6 @@
 import { Product } from "@app/landing-page/store/landing-page.reducers";
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: "app-shop-navigation",
@@ -14,22 +15,22 @@ export class ShopNavigationComponent implements OnInit, OnChanges {
   @Output() loadMore = new EventEmitter<any>();
   @Output() changeOrderBy = new EventEmitter<any>();
   private _orderBy = [
-    "Default Sorting",
+    environment.DEFAULT_SORTING,
     "Sort by Price Descending",
     "Sort by Price Ascending",
     "Sort by Time Left Descending",
     "Sort by Time Left Ascending"
   ];
-  private _orderByText = "Default Sorting";
+  private _orderByText = environment.DEFAULT_SORTING;
 
   constructor() {}
 
   ngOnInit() {
-    this._orderByText = this.orderby == null ? "Default Sorting" : this.orderby;
+    this._orderByText = this.orderby == null ? environment.DEFAULT_SORTING : this.orderby;
   }
 
   ngOnChanges() {
-    this._orderByText = this.orderby == null ? "Default Sorting" : this.orderby;
+    this._orderByText = this.orderby == null ? environment.DEFAULT_SORTING : this.orderby;
   }
 
   changeProductsLayout(layout: string) {
@@ -43,7 +44,7 @@ export class ShopNavigationComponent implements OnInit, OnChanges {
   changeOrderByChanged(value: number) {
     this._orderByText = this.orderBy[value];
     this.changeOrderBy.emit(
-      this.orderBy[value] === "Default Sorting" ? null : this.orderBy[value]
+      this.orderBy[value] === environment.DEFAULT_SORTING ? null : this.orderBy[value]
     );
   }
 
