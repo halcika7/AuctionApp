@@ -56,6 +56,7 @@ export function authReducer(
     case AuthActions.REGISTER_SUCCESS:
     case AuthActions.FORGOT_PASSWORD_SUCCESS:
     case AuthActions.RESET_PASSWORD_SUCCESS:
+    case AuthActions.ACTIVATE_ACCOUNT_SUCCESS:
       return {
         ...initialState,
         message: action.payload.message,

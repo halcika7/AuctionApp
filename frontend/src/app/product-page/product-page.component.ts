@@ -9,6 +9,7 @@ import { Product } from "@app/landing-page/store/landing-page.reducers";
 import { Wishlist } from "@app/wishlist/wishlist";
 import { WebSocketServiceService } from "@app/shared/services/web-socket-service.service";
 import { WindowOnBeforeUnload } from "./../shared/windowOnBeforeUnload";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-product-page",
@@ -110,7 +111,7 @@ export class ProductPageComponent extends Wishlist
               super.onInitWishlist(product.id, true);
             }
 
-            if (message === "Product not found !")
+            if (message === environment.PRODUCT_NOT_FOUND)
               this.router.navigate(["/404"]);
 
             if (success) {
@@ -251,13 +252,14 @@ export class ProductPageComponent extends Wishlist
       !this._message &&
       this.product.userId === this.userId
     ) {
-      this._message = this.hide || this.product.status == 'closed'
-        ? ""
-        : "You can't place bid on your own product";
+      this._message =
+        this.hide || this.product.status == "closed"
+          ? ""
+          : environment.NO_BID_OWN_PRODUCT;
     }
     this._disabled =
-      this._message === "You can't place bid on your own product" ||
-      this._message === "Please login in order to place bid!"
+      this._message === environment.NO_BID_OWN_PRODUCT ||
+      this._message === environment.LOGIN_TO_BID
         ? true
         : false;
   }

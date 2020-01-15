@@ -8,16 +8,21 @@ const pug = require('pug');
 exports.sendEmail = async (email, token, text) => {
   try {
     let reqPath = path.join(__dirname, '../');
+    const pathToTemplate = 'emails/forgotPassword.pug';
+
+    const forwardObject = {
+      token,
+      URL,
+      text
+    };
+
+    const html = pug.renderFile(reqPath + pathToTemplate, { ...forwardObject });
 
     await transporter.sendMail({
       from: 'auctionapp@example.com',
       to: email,
       subject: 'Reset password',
-      html: pug.renderFile(reqPath + 'emails/forgotPassword.pug', {
-        text,
-        token,
-        URL
-      })
+      html
     });
 
     return { err: null };
@@ -39,6 +44,32 @@ exports.notifyAuctionEnd = async (email, productId, subcategoryId, text, toOwner
         URL: URL + `/shop/products/${subcategoryId}/${productId}`,
         toOwner
       })
+    });
+
+    return { err: null };
+  } catch (err) {
+    return { err: err.message || err };
+  }
+};
+
+exports.sendActivationEmail = async (email, name, token) => {
+  try {
+    let reqPath = path.join(__dirname, '../');
+    const pathToTemplate = 'emails/activationEmail.pug';
+
+    const forwardObject = {
+      token,
+      URL,
+      name
+    };
+
+    const html = pug.renderFile(reqPath + pathToTemplate, { ...forwardObject });
+
+    await transporter.sendMail({
+      from: 'auctionapp@example.com',
+      to: email,
+      subject: 'Activate account',
+      html
     });
 
     return { err: null };

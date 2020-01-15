@@ -24,6 +24,10 @@ class CloudinaryService extends BaseService {
       })
     );
   }
+
+  async deleteImage(public_id) {
+    return await cloudinary.uploader.destroy(public_id);
+  }
 }
 
 const CloudinaryServiceInstance = new CloudinaryService();

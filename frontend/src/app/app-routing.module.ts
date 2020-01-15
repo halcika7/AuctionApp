@@ -21,6 +21,7 @@ import { WishlistComponent } from "./profile/wishlist/wishlist.component";
 import { BidsComponent } from "./profile/bids/bids.component";
 import { AddProductComponent } from "./add-product/add-product.component";
 import { PaymentComponent } from "./payment/payment.component";
+import { ActivateAccountComponent } from "./auth/activate-account/activate-account.component";
 
 import { LoginGuard } from "./auth/login.guard";
 import { AuthGuard } from "./auth/auth.guard";
@@ -47,6 +48,11 @@ const appRoutes: Routes = [
         canActivate: [LoginGuard]
       },
       {
+        path: "auth/reactivate-account",
+        component: ForgotPasswordComponent,
+        canActivate: [LoginGuard]
+      },
+      {
         path: "auth/forgot-password/:token",
         component: ForgotPasswordComponent,
         canActivate: [LoginGuard]
@@ -54,6 +60,11 @@ const appRoutes: Routes = [
       {
         path: "auth/reset-password",
         component: ResetPasswordComponent,
+        canActivate: [LoginGuard]
+      },
+      {
+        path: "auth/verify-account",
+        component: ActivateAccountComponent,
         canActivate: [LoginGuard]
       },
       {

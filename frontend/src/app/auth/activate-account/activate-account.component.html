@@ -1,0 +1,10 @@
+<app-breadcrumb title="Activate Account"></app-breadcrumb>
+
+<app-alert
+  *ngIf="activateMessage"
+  [message]="activateMessage"
+  [type]="activationSuccess"
+  [closable]="false"
+></app-alert>
+
+<app-a-spinner *ngIf="!activateMessage"></app-a-spinner>

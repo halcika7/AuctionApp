@@ -38,7 +38,7 @@ exports.userInfoValidation = async (userInfo, email) => {
 
   nameValidation('firstName', data.firstName, errors, 'First name');
   nameValidation('lastName', data.lastName, errors, 'Last name');
-  emailValidation(data.email, errors);
+  await emailValidation(data.email, errors);
 
   if (!errors.email && enteredEmailUser && currentUser.id !== enteredEmailUser.id) {
     errors.email = 'Email already in use';

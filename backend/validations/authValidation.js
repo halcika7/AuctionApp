@@ -2,6 +2,8 @@ const Validator = require('validator');
 const isEmpty = require('./is-empty');
 const { comparePassword, findUserByEmail, decodeToken } = require('../helpers/authHelper');
 const strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,30})');
+const axios = require('axios');
+const { NEVERBOUNCE_URL } = require('../config/configs');
 
 exports.registerValidation = async data => {
   let errors = {};
@@ -24,7 +26,7 @@ exports.registerValidation = async data => {
     checkEquality: data.password
   });
 
-  this.emailValidation(data.email, errors);
+  await this.emailValidation(data.email, errors);
 
   if (!errors.email && user) {
     errors.email = 'Email already in use';
@@ -46,9 +48,12 @@ exports.loginValidation = async data => {
   if (user.deactivated) {
     message = 'Your account is deactivated';
     return this.returnData(errors, message, { user });
+  } else if (user.activationToken) {
+    message = 'Please verify email address';
+    return this.returnData(errors, message, { user });
   }
 
-  this.emailValidation(data.email, errors);
+  await this.emailValidation(data.email, errors, true);
 
   if (isEmpty(data.password)) errors.password = 'Password is required';
 
@@ -117,12 +122,24 @@ exports.resetPasswordValidation = async (resetPasswordToken, password) => {
   return this.returnData(errors, message, { email: user.email });
 };
 
-exports.emailValidation = (email, errors) => {
+exports.emailValidation = async (email, errors, login = false) => {
   if (isEmpty(email)) {
     errors.email = 'Email is required';
-  } else if (!Validator.isEmail(email)) {
-    errors.email = 'Please enter valid email address';
+    return;
   }
+
+  if(!login) {
+    try {
+      const response = await axios.get(`${NEVERBOUNCE_URL}&email=${email}`);
+      const data = response.data;
+      if (data.result != 'valid') {
+        errors.email = 'Please enter valid email address';
+      }
+    } catch (error) {
+      errors.email = 'Please enter valid email address';
+    }
+  }
+
 };
 
 exports.passwordValidation = (

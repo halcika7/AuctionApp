@@ -10,14 +10,16 @@ const {
   createUser,
   findUserByEmail,
   verifyRefreshToken,
+  verifyAccessToken,
   hashPassword
 } = require('../helpers/authHelper');
-const { sendEmail } = require('../helpers/sendEmail');
+const { sendEmail, sendActivationEmail } = require('../helpers/sendEmail');
 const BaseService = require('./BaseService');
 const User = require('../models/User');
 const CardInfoService = require('../services/CardInfoService');
 const OptionalInfoService = require('../services/OptionalInfoService');
 const StripeService = require('../services/StripeService');
+const { TOKEN_DURATION } = require('../config/configs');
 
 class AuthService extends BaseService {
   constructor() {
@@ -35,11 +37,26 @@ class AuthService extends BaseService {
       if (!isValid) return { status: 403, response: { ...errors } };
 
       const { id, cardInfoId } = await this.createUserData(data.email);
-      
+
+      const activationToken = createAccessToken({ id: null, email: data.email }, TOKEN_DURATION);
+
+      data.activationToken = activationToken;
+
       await createUser(data, id, cardInfoId);
 
+      const { err } = await sendActivationEmail(
+        data.email,
+        `${data.firstName} ${data.lastName}`,
+        activationToken
+      );
+
+      if (err) return { status: 403, response: { message: err } };
+
       return super.returnResponse(200, {
-        response: { message: 'Account successfully created !' }
+        response: {
+          message:
+            'Account successfully created. Please visit your mail inbox to verify email or use social login !'
+        }
       });
     } catch (error) {
       return super.returnResponse(403, {
@@ -106,7 +123,7 @@ class AuthService extends BaseService {
 
       if (!isValid && errors) return { status: 403, response: { ...errors } };
 
-      const resetPasswordToken = createAccessToken(user, '1d');
+      const resetPasswordToken = createAccessToken(user, TOKEN_DURATION);
       const { err } = await sendEmail(
         email,
         resetPasswordToken,
@@ -173,7 +190,80 @@ class AuthService extends BaseService {
     const account = await StripeService.createAccount(email);
     const { id: cardInfoId } = await CardInfoService.createCardInfo(customerId, account.id);
 
-    return { id, cardInfoId }
+    return { id, cardInfoId };
+  }
+
+  async activateAccount({ activationToken }) {
+    try {
+      const user = await User.findOne({ raw: true, where: { activationToken } });
+      activationToken = verifyAccessToken(activationToken);
+
+      if (!activationToken) {
+        return { status: 403, response: { message: 'Token not provided' } };
+      } else if (activationToken.err) {
+        return {
+          status: 403,
+          response: { message: 'Activation token expired, please resend activation link.' }
+        };
+      } else if (!user) {
+        return { status: 403, response: { message: 'Invalid token or account already activated' } };
+      }
+
+      await User.update(
+        { activationToken: null, deactivated: false },
+        { where: { email: user.email } }
+      );
+
+      return { status: 200, response: { message: 'Account successfully activated' } };
+    } catch (error) {
+      return {
+        status: 403,
+        response: { message: 'Something happened. We were unable to perform request.' }
+      };
+    }
+  }
+
+  async reactivateAccount({ email }) {
+    try {
+      const user = await User.findOne({ raw: true, where: { email } });
+
+      if (!user) {
+        return { status: 403, response: { message: 'Invalid email provided' } };
+      } else if (!user.deactivated && !user.activationToken) {
+        return { status: 403, response: { message: 'Account already activated' } };
+      }
+
+      const activationToken = createAccessToken({ id: null, email }, TOKEN_DURATION);
+
+      await User.update({ activationToken, deactivated: false }, { where: { email } });
+
+      const { err } = await sendActivationEmail(
+        email,
+        `${user.firstName} ${user.lastName}`,
+        activationToken
+      );
+
+      if (err) {
+        await User.update(
+          { activationToken: user.activationToken, deactivated: user.deactivated },
+          { where: { email } }
+        );
+        return {
+          status: 403,
+          response: { message: 'We were unable to send email. Please try again later.' }
+        };
+      }
+
+      return {
+        status: 200,
+        response: { message: 'Please visit your mail inbox to verify email or use social login !' }
+      };
+    } catch (error) {
+      return {
+        status: 403,
+        response: { message: 'Something happened. We were unable to perform request.' }
+      };
+    }
   }
 
   pushLoggedUser({ id, email }) {

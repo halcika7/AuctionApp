@@ -15,6 +15,7 @@ export class Auth {
   private _success = false;
   private _isClicked = false;
   private _register = false;
+  private _activateAccount = false;
   private _resetPassword = false;
   private _expiredToken: string;
   subscription: Subscription;
@@ -64,12 +65,14 @@ export class Auth {
           if (this._success) {
             this._showErrors = false;
             this.renderer.addClass(document.body, "no-click");
-            this._register || this._resetPassword
-              ? setTimeout(
-                  () => this.Router.navigate(["/home/auth/login"]),
-                  2000
-                )
-              : setTimeout(() => this.Router.navigate(["/home"]), 2000);
+            if(this._resetPassword || this._activateAccount) {
+              setTimeout(
+                () => this.Router.navigate(["/home/auth/login"]),
+                2000
+              )
+            } else {
+              setTimeout(() => this.Router.navigate(["/home"]), 2000);
+            }
           } else {
             this.isClicked = false;
           }
@@ -120,6 +123,10 @@ export class Auth {
 
   set resetPassword(val: boolean) {
     this._resetPassword = val;
+  }
+
+  set activateAccount(val: boolean) {
+    this._activateAccount = val;
   }
 
   get tokenExpired(): string {

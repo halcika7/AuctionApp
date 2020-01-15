@@ -39,5 +39,7 @@ module.exports = {
       ? 'https://polar-lake-39918.herokuapp.com/api/auth/facebook/callback'
       : '/api/auth/facebook/callback',
   FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
-  FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET
+  FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+  NEVERBOUNCE_URL: `https://api.neverbounce.com/v4/single/check?key=${process.env.NEVERBOUNCE_API_KEY}`,
+  TOKEN_DURATION: '1d'
 };

@@ -1,5 +1,6 @@
 import * as ProductPageActions from "./product-page.actions";
 import { Product } from "@app/landing-page/store/landing-page.reducers";
+import { environment } from "../../../environments/environment";
 
 export interface FullProduct extends Product {
   status?: string;
@@ -52,9 +53,9 @@ const initialState: State = {
     ProductImages: []
   },
   ownerInfo: {
-    photo: '',
-    full_name: '',
-    avg_rating: ''
+    photo: "",
+    full_name: "",
+    avg_rating: ""
   },
   similarProducts: [],
   bids: [],
@@ -74,9 +75,7 @@ export function productPageReducer(
       return {
         ...initialState,
         message:
-          state.message === "Please login in order to place bid!"
-            ? state.message
-            : ""
+          state.message === environment.LOGIN_TO_BID ? state.message : ""
       };
     case ProductPageActions.PRODUCT_SUCCESS:
       return {
@@ -92,7 +91,9 @@ export function productPageReducer(
         highestBidUserId: action.payload.highestBidUserId
           ? action.payload.highestBidUserId
           : "",
-        ownerInfo: action.payload.ownerInfo ? action.payload.ownerInfo : state.ownerInfo,
+        ownerInfo: action.payload.ownerInfo
+          ? action.payload.ownerInfo
+          : state.ownerInfo,
         wonAuction: action.payload.wonAuction
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:

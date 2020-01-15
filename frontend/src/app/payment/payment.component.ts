@@ -15,6 +15,7 @@ import {
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { OwnerInfo } from "@app/product-page/store/product-page.reducer";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-payment",
@@ -96,7 +97,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.store
         .select("payment")
         .subscribe(({ message, success, ownerInfo, previousRating }) => {
-          if (message == "Product not found !") this.router.navigate(["/404"]);
+          if (message == environment.PRODUCT_NOT_FOUND)
+            this.router.navigate(["/404"]);
           this._message = message;
           this._success = success;
           this._clicked = false;

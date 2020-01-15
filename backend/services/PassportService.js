@@ -30,10 +30,10 @@ class PassportService extends BaseService {
 
   async passportStrategy(profile, done, { googleId = false, facebookId = false }) {
     try {
-      let updateObject = {};
+      let updateObject = { deactivated: false, activationToken: null };
       const whereObj = { where: { email: profile._json.email } };
       const findUserWithEmail = await User.findOne({ raw: true, ...whereObj });
-  
+
       if (googleId) {
         whereObj.where.googleId = profile.id;
         updateObject.googleId = profile.id;
@@ -41,9 +41,9 @@ class PassportService extends BaseService {
         whereObj.where.facebookId = profile.id;
         updateObject.facebookId = profile.id;
       }
-  
+
       const findUserWithEmailSocialId = await User.findOne({ raw: true, ...whereObj });
-  
+
       if (
         (findUserWithEmailSocialId && findUserWithEmailSocialId.deactivated) ||
         (findUserWithEmail && findUserWithEmail.deactivated)
@@ -51,12 +51,12 @@ class PassportService extends BaseService {
         return done(new Error(`User ${profile._json.email} is deactivated.`));
       } else if (!findUserWithEmail) {
         const { id, cardInfoId } = await AuthService.createUserData(profile._json.email);
-  
+
         const socialIds = {
           googleId: googleId ? profile.id : null,
           facebookId: facebookId ? profile.id : null
         };
-  
+
         const user = await User.create({
           email: profile._json.email,
           firstName: googleId ? profile._json.given_name : profile._json.first_name,
@@ -67,16 +67,16 @@ class PassportService extends BaseService {
           optionalInfoId: id,
           cardInfoId
         });
-  
+
         return done(null, user);
       } else if (!findUserWithEmailSocialId) {
         await User.update({ ...updateObject }, { where: { id: findUserWithEmail.id } });
-  
+
         const user = await User.findOne({ raw: true, where: { id: findUserWithEmail.id } });
-  
+
         return done(null, user);
       }
-  
+
       return done(null, findUserWithEmailSocialId);
     } catch (error) {
       return done(error.message, null);
