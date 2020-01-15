@@ -4,6 +4,23 @@
 .table {
   overflow-x: auto;
   padding-bottom: 20px;
+
+  &.bids {
+    min-width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    table {
+      max-width: 100%;
+      thead {
+        tr {
+          td {
+            min-width: 130px;
+            max-width: 130px;
+          }
+        }
+      }
+    }
+  }
 }
 
 table {

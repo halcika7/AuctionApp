@@ -87,7 +87,7 @@ class PassportService extends BaseService {
     try {
       if (err) return super.redirectAfterLogin(res, { err });
 
-      const accessToken = createAccessToken(user),
+      const accessToken = createAccessToken(user, '15m', true),
         refreshToken = createRefreshToken(user);
 
       AuthService.setRefreshTokenCookie(res, refreshToken);

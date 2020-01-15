@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const AuthController = require('../../controllers/AuthController');
 const { passport } = require('../../services/PassportService');
+const authMiddleware = require('../../middlewares/authMiddleware');
 
 // Auth Routes
 module.exports = io => {
@@ -13,7 +14,7 @@ module.exports = io => {
 
   router.post('/register', AuthController.registerUser);
   router.post('/login', AuthController.loginUser);
-  router.post('/refresh_token', AuthController.refreshToken);
+  router.post('/refresh_token', authMiddleware, AuthController.refreshToken);
 
   router.patch('/forgotpassword', AuthController.forgotPassword);
   router.patch('/resetpassword', AuthController.resetPassword);

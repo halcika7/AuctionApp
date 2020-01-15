@@ -18,7 +18,7 @@ class AuthController extends BaseController {
   async loginUser(req, res) {
     const { status, response, refreshToken } = await AuthServiceInstance.login(req.body);
 
-    if (!response.errors && !response.err) {
+    if (!response.errors && !response.err && req.body.remember) {
       AuthServiceInstance.setRefreshTokenCookie(res, refreshToken);
     }
 
@@ -35,7 +35,7 @@ class AuthController extends BaseController {
     AuthServiceInstance.removeLoggedUser(id);
     AuthServiceInstance.setRefreshTokenCookie(res, '');
 
-    if(id) {
+    if (id) {
       NotificationService.removeUserFromAllProducts(io, id);
     }
 
@@ -43,10 +43,10 @@ class AuthController extends BaseController {
   }
 
   async refreshToken(req, res) {
-    const token = req.cookies.jid;
-    const { status, response, refreshToken } = await AuthServiceInstance.refreshToken(token);
+    const token = req.remember ? req.cookies.jid : req.accessToken;
+    const { status, response, refreshToken } = await AuthServiceInstance.refreshToken(token, req.remember);
 
-    if (!response.authorizationError && token) {
+    if (!response.authorizationError && req.remember) {
       AuthServiceInstance.setRefreshTokenCookie(res, refreshToken);
     }
 
@@ -54,7 +54,7 @@ class AuthController extends BaseController {
       res,
       status,
       response,
-      !token ? { accessToken: '' } : undefined
+      req.remember && !token ? { accessToken: '' } : undefined
     );
   }
 

@@ -120,7 +120,7 @@ class ProfileService extends BaseService {
     }
   }
 
-  async updateUserInfo(file, { userInfo, optionalInfo, token, name, changeCard }, userId, email) {
+  async updateUserInfo(file, { userInfo, optionalInfo, token, name, changeCard }, userId, email, remember) {
     userInfo = JSON.parse(userInfo);
     optionalInfo = JSON.parse(optionalInfo);
 
@@ -169,7 +169,7 @@ class ProfileService extends BaseService {
 
       const userInfoData = await getUserInfo(userId);
 
-      const accessToken = createAccessToken(userInfoData),
+      const accessToken = createAccessToken(userInfoData, '15m', remember),
         refreshToken = createRefreshToken(userInfoData);
 
       const success =
