@@ -73,7 +73,7 @@ class AuthService extends BaseService {
 
       if (!isValid && message) return super.returnResponse(403, { response: { message } });
 
-      const accessToken = createAccessToken(user),
+      const accessToken = createAccessToken(user, '15m', data.remember),
         refreshToken = createRefreshToken(user);
 
       this.pushLoggedUser(user);
@@ -88,16 +88,17 @@ class AuthService extends BaseService {
         refreshToken
       };
     } catch (error) {
+      console.log('TCL: AuthService -> login -> error', error)
       return super.returnResponse(403, {
         response: { message: 'Something happened. We were unable to perform login.' }
       });
     }
   }
 
-  async refreshToken(token) {
+  async refreshToken(token, remember) {
     try {
-      const payload = verifyRefreshToken(token),
-        user = await findUserByEmail(payload.email, false);
+      const payload = remember ? verifyRefreshToken(token) : verifyAccessToken(token);
+      const user = await findUserByEmail(payload.email, false);
 
       if (!user) {
         return super.returnResponse(400, { response: { accessToken: '' } });
@@ -107,10 +108,11 @@ class AuthService extends BaseService {
 
       return {
         status: 200,
-        response: { accessToken: createAccessToken(user) },
-        refreshToken: createRefreshToken(user)
+        response: { accessToken: createAccessToken(user, '15m', remember) },
+        refreshToken: remember ? createRefreshToken(user) : null
       };
     } catch (error) {
+      console.log('TCL: AuthService -> refreshToken -> error', error)
       return super.returnResponse(400, {
         response: { accessToken: '' }
       });

@@ -11,8 +11,8 @@ const {
 } = require('../config/configs');
 const { db } = require('../config/database');
 
-exports.createAccessToken = ({ id, email }, expiresIn = '15m') =>
-  jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, { expiresIn });
+exports.createAccessToken = ({ id, email }, expiresIn = '15m', remember = false) =>
+  jwt.sign({ id, email, remember }, ACCESS_TOKEN_SECRET, { expiresIn });
 
 exports.createRefreshToken = ({ id, email }) =>
   jwt.sign({ id, email }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
@@ -28,7 +28,7 @@ exports.verifyRefreshToken = token => {
 exports.verifyAccessToken = token => {
   try {
     return jwt.verify(token, ACCESS_TOKEN_SECRET);
-  } catch {
+  } catch(error) {
     return { err: 'Token expired' };
   }
 };
