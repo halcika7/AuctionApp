@@ -88,7 +88,6 @@ class AuthService extends BaseService {
         refreshToken
       };
     } catch (error) {
-      console.log('TCL: AuthService -> login -> error', error)
       return super.returnResponse(403, {
         response: { message: 'Something happened. We were unable to perform login.' }
       });
@@ -112,7 +111,7 @@ class AuthService extends BaseService {
         refreshToken: remember ? createRefreshToken(user) : null
       };
     } catch (error) {
-      console.log('TCL: AuthService -> refreshToken -> error', error)
+      ('TCL: AuthService -> refreshToken -> error', error)
       return super.returnResponse(400, {
         response: { accessToken: '' }
       });
