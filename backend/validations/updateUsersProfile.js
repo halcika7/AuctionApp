@@ -38,7 +38,10 @@ exports.userInfoValidation = async (userInfo, email) => {
 
   nameValidation('firstName', data.firstName, errors, 'First name');
   nameValidation('lastName', data.lastName, errors, 'Last name');
-  await emailValidation(data.email, errors);
+
+  if (urrentUser.id !== enteredEmailUser.id) {
+    await emailValidation(data.email, errors);
+  }
 
   if (!errors.email && enteredEmailUser && currentUser.id !== enteredEmailUser.id) {
     errors.email = 'Email already in use';
@@ -118,7 +121,7 @@ exports.userCardValidation = async (
       await StripeService.createSource(customerId, token);
     } catch (error) {
       errors.errors.card = error.raw.message;
-        return { isValid: false, errors };
+      return { isValid: false, errors };
     }
 
     const cardInfo = {
