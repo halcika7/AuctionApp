@@ -37,8 +37,6 @@ async function createAccount(i) {
 
   const { id: accountId } = await StripeService.createAccount(email);
 
-  await sleep(500);
-
   data = [...data, { email, customerId, accountId }];
 }
 
