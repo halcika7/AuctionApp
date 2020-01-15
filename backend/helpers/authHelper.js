@@ -91,6 +91,7 @@ exports.createUser = async (
 ) => {
   password = await this.hashPassword(password);
   return await User.create({
+    activationToken,
     firstName,
     lastName,
     email,

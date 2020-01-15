@@ -94,7 +94,7 @@ export function productPageReducer(
         ownerInfo: action.payload.ownerInfo
           ? action.payload.ownerInfo
           : state.ownerInfo,
-        wonAuction: action.payload.wonAuction
+        wonAuction: action.payload.wonAuction ? action.payload.wonAuction : state.wonAuction
       };
     case ProductPageActions.SIMILAR_PRODUCT_SUCCESS:
       return {

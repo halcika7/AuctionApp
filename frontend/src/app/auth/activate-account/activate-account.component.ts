@@ -73,6 +73,10 @@ export class ActivateAccountComponent extends Auth
         ) {
           this.router.navigate(["/404"]);
         }
+
+        if(success) {
+          sessionStorage.removeItem('activationToken');
+        }
       })
     );
   }

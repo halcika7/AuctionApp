@@ -8,7 +8,7 @@ const { findProductsByAuctionEnd } = require('../helpers/productFilter');
 module.exports = io => {
   io.on('connection', socket => {
     new CronJob(
-      '00 00 23 * * *',
+      '* * * * *',
       async () => {
         try {
           const { products, productIds } = await getProducts();
@@ -36,7 +36,7 @@ module.exports = io => {
   });
 
   new CronJob(
-    '00 00 23 * * *',
+    '* * * * *',
     async () => {
       try {
         const { productIds, products } = await getProducts();
@@ -88,7 +88,7 @@ async function sendEmail(email, productId, subcategoryId, text, owner = true) {
 
 async function getProducts() {
   const date = new Date();
-  date.setHours(23, 0, 0, 0);
+  date.setSeconds(0, 0);
 
   const products = await findProductsByAuctionEnd(date);
   const productIds = products.map(product => product.id);
