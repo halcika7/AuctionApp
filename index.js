@@ -41,6 +41,7 @@ app.use('/api/payment', require('./backend/routes/payment/payment'));
 
 require('./backend/cron/cron')(io);
 
+
 // static assets for production
 if (process.env.NODE_ENV === 'production') {
   //Set static folder
