@@ -26,7 +26,7 @@ class ProfileController extends BaseController {
       refreshToken
     } = await ProfileService.updateUserInfo(req.file, req.body, userId, email, req.remember);
 
-    if (refreshToken && remember) {
+    if (refreshToken && req.remember) {
       AuthService.setRefreshTokenCookie(res, refreshToken);
     }
 
