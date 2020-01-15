@@ -4,6 +4,7 @@ const { findUserByEmail } = require('../helpers/authHelper');
 const { client } = require('../config/twilioConfig');
 const isEmpty = require('./is-empty');
 const { nameValidation, emailValidation } = require('./authValidation');
+const Validator = require('validator');
 
 exports.userInfoValidation = async (userInfo, email) => {
   let errors = {};
@@ -39,12 +40,14 @@ exports.userInfoValidation = async (userInfo, email) => {
   nameValidation('firstName', data.firstName, errors, 'First name');
   nameValidation('lastName', data.lastName, errors, 'Last name');
 
-  if (enteredEmailUser && currentUser.id !== enteredEmailUser.id) {
+  if (!enteredEmailUser) {
     await emailValidation(data.email, errors);
   }
 
   if (!errors.email && enteredEmailUser && currentUser.id !== enteredEmailUser.id) {
     errors.email = 'Email already in use';
+  } else if (!errors.email && !Validator.isEmail(data.email)) {
+    errors.email = 'Please enter valid email';
   }
 
   return {
