@@ -111,16 +111,17 @@
         </div>
       </div>
       <div class="two-cols">
-        <div class="exp-date">
-          <label><span *ngIf="required">*</span>Expiration Date</label>
-          <div class="expDate">
-            {{
-              cardInfo.exp_month.length == 1
-                ? "0" + cardInfo.exp_month
-                : cardInfo.exp_month
-            }}
-            / {{ cardInfo.exp_year }}
-          </div>
+        <div class="two-cols">
+          <app-date-input
+            *ngIf="showCardExp()"
+            [withDays]="false"
+            label="Expiration Date"
+            [defaultDate]="savedCardExp"
+            [monthNumbers]="true"
+            [form]="formGroup"
+            [required]="required"
+            [disabled]="true"
+          ></app-date-input>
         </div>
         <div class="cvc">
           <label><span *ngIf="required">*</span>CVC/CW</label>

@@ -20,6 +20,7 @@ export class DateInputComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() withDays: boolean;
   @Input() required: boolean = false;
+  @Input() disabled: boolean = false;
   @Input() monthNumbers: boolean;
   @Input() label: string;
   @Input() error: string;

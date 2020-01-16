@@ -15,6 +15,7 @@ import {
 export class SelectInputComponent implements OnInit, OnChanges {
   @Input() object: boolean = false;
   @Input() required: boolean = false;
+  @Input() disabled: boolean = false;
   @Input() values: any[];
   @Input() label: string;
   @Input() error: string;

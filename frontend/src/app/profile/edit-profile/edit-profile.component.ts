@@ -41,6 +41,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _hasCard: boolean = false;
   private _cardError: string;
   private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
+  private _savedCardEXP: { year: number; month: string } = { year: 0, month: "" };
   private changeCard: boolean;
 
   constructor(
@@ -78,6 +79,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
           if (userInfo.hasCard && !errors.card) {
             this.cardInfo.controls.cName.setValue("");
+            this._savedCardEXP = { year: userInfo.CardInfo.exp_year, month: userInfo.CardInfo.exp_month }
           }
 
           this._date = !emptyObject(errors)
@@ -226,6 +228,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
   get cardExp() {
     return this._cardEXP;
+  }
+
+  get savedCardExp() {
+    return this._savedCardEXP;
   }
 
   async onSubmit() {

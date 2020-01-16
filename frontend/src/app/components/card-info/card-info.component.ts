@@ -19,6 +19,7 @@ export class CardInfoComponent implements OnInit, OnDestroy {
   @Input() required: boolean = false;
   @Input() showCard: boolean;
   @Input() cardExp;
+  @Input() savedCardExp;
   private _hasCard: boolean;
   private _asyncCardValidation: string;
   private subscription = new Subscription();

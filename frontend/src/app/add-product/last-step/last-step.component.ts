@@ -40,7 +40,10 @@ export class LastStepComponent implements OnInit, OnDestroy {
   private _showCard: boolean = true;
   private _hasCard: boolean = false;
   private _usingOptionslInfo: boolean = false;
-  private _validCard: boolean = false;
+  private _savedCardEXP: { year: number; month: string } = {
+    year: 0,
+    month: ""
+  };
   private subscription = new Subscription();
   private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
 
@@ -95,15 +98,23 @@ export class LastStepComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.store.select("addProduct").subscribe(({ userInfo, errors }) => {
         this._hasCard = userInfo.hasCard;
+        if (userInfo.hasCard) {
+          this._savedCardEXP = {
+            year: userInfo.CardInfo.exp_year,
+            month: userInfo.CardInfo.exp_month
+          };
+        }
         this._userInfo = userInfo.OptionalInfo;
         this._phoneNumber = userInfo.phoneNumber;
         this._cardError = errors.card;
       })
     );
 
-    this.subscription.add(this.nestedGroup.valueChanges.subscribe(vals => {
-      this._cardError = "";
-    }))
+    this.subscription.add(
+      this.nestedGroup.valueChanges.subscribe(vals => {
+        this._cardError = "";
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -117,7 +128,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
 
   async process() {
     this._isValidStep = false;
-    let tokenId = '';
+    let tokenId = "";
     if (this._showCard) {
       const { error, id } = await this.stripe.create(
         this.nestedGroup.value.cName,
@@ -186,5 +197,9 @@ export class LastStepComponent implements OnInit, OnDestroy {
 
   get cardExp() {
     return this._cardEXP;
+  }
+
+  get savedCardExp() {
+    return this._savedCardEXP;
   }
 }

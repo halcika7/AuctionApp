@@ -1,10 +1,13 @@
 <div class="select-wrapper" [ngClass]="{ invalid: invalid }" [id]="id">
   <label *ngIf="label"><span>*</span>{{ label }}</label>
   <div class="select">
-    <p appDropdown class="paragraphDropdown">
+    <p appDropdown class="paragraphDropdown" *ngIf="!disabled">
       <span>{{ selectedValue || default }}</span>
     </p>
-    <ng-template [ngIf]="!object">
+    <p appDropdown class="paragraphDropdown disabled" *ngIf="disabled">
+      <span>{{ selectedValue || default }}</span>
+    </p>
+    <ng-template [ngIf]="!object && !disabled">
       <ul *ngIf="values.length > 0" type="select">
         <li
           *ngFor="let value of values"
@@ -15,7 +18,7 @@
         </li>
       </ul>
     </ng-template>
-    <ng-template [ngIf]="object">
+    <ng-template [ngIf]="object && !disabled">
       <ul *ngIf="values.length > 0" type="select">
         <li
           *ngFor="let value of values"
