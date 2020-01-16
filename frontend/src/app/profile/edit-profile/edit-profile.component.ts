@@ -15,7 +15,8 @@ import {
 } from "@app/shared/validators";
 import { buildDate, getYearMonthDay } from "@app/shared/dateHelper";
 import { StripeServiceService } from "@app/shared/services/stripe-service.service";
-import { environment } from '../../../environments/environment';
+import { environment } from "../../../environments/environment";
+import { setValidators, clearValidators } from "@app/shared/validators";
 
 @Component({
   selector: "app-edit-profile",
@@ -29,7 +30,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     ...CARD_FIELD("cName", { max: 100, min: 1 }),
     ...CARD_FIELD("cardNumber", {}),
     ...CARD_FIELD("cardCvc", { min: 3, max: 4 }),
-    ...CARD_FIELD("cardExpiry", { min: 4, max: 4 })
+    ...CARD_FIELD("cardExpiry", { min: 3, max: 4 })
   });
   private _gender: string;
   private _date: { day: number; year: number; month: string };
@@ -38,8 +39,9 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   private _showSpinner: boolean = false;
   private subscription = new Subscription();
   private _hasCard: boolean = false;
-  private _validCard: boolean;
   private _cardError: string;
+  private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
+  private changeCard: boolean;
 
   constructor(
     private profileService: ProfileService,
@@ -64,22 +66,18 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       cardInfo: this.cardInfo
     });
 
-    this.stripe.createElements();
-
     this.subscription.add(
       this.store.select("profile").subscribe(({ userInfo, errors }) => {
         this._clicked = false;
         this._showSpinner = false;
         if (!emptyObject(userInfo)) {
-          this._validCard = userInfo.hasCard ? true : false;
-
           if (userInfo.hasCard) {
             this.cardInfo.controls.changeCard.setValue(false);
+            this.changeCard = false;
           }
 
           if (userInfo.hasCard && !errors.card) {
             this.cardInfo.controls.cName.setValue("");
-            this.stripe.clear();
           }
 
           this._date = !emptyObject(errors)
@@ -115,6 +113,9 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             this.scrollWindow("#card-info");
           }
         } else {
+          this.clearCardValidators();
+          this._form.reset();
+          this._cardEXP = { year: 0, month: "" };
           this._cardError = "";
           window.scrollTo(0, 0);
         }
@@ -122,24 +123,53 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
+      this.cardInfo.valueChanges.subscribe(
+        ({ changeCard, cName, cardNumber, cardCvc }) => {
+          if (
+            cName ||
+            cardNumber ||
+            cardCvc ||
+            this._cardEXP.year ||
+            this._cardEXP.month ||
+            changeCard
+          ) {
+            this.changeCard = true;
+          } else {
+            this.changeCard = false;
+          }
+          if (this.changeCard || changeCard) {
+            setValidators(
+              [
+                this.cardInfo.controls.cName,
+                this.cardInfo.controls.cardNumber,
+                this.cardInfo.controls.cardExpiry,
+                this.cardInfo.controls.cardCvc
+              ],
+              ["cName", "cardNumber", "cardCvc", "cardExpiry"]
+            );
+          } else {
+            this.clearCardValidators();
+          }
+        }
+      )
+    );
+
+    this.subscription.add(
       this.form.statusChanges.subscribe(validity => {
-        if (validity === environment.VALID_FORM) {
+        this.cardInfo.updateValueAndValidity({ onlySelf: true });
+        if (
+          validity === environment.VALID_FORM &&
+          this.cardInfo.status === environment.VALID_FORM
+        ) {
           this._isValidForm = true;
         } else {
           this._isValidForm = false;
         }
       })
     );
-
-    this.subscription.add(
-      this.stripe.cardValid.subscribe(value => {
-        this._validCard = value;
-      })
-    );
   }
 
   ngOnDestroy() {
-    this.stripe.unmount();
     this.subscription.unsubscribe();
     this.store.dispatch(new ProfileActions.ClearProfile());
     this.store.dispatch(new ProfileActions.ClearProfileMessages());
@@ -151,6 +181,15 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
   private scrollWindow(id: string) {
     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
+
+  private clearCardValidators() {
+    clearValidators([
+      this.cardInfo.controls.cName,
+      this.cardInfo.controls.cardNumber,
+      this.cardInfo.controls.cardExpiry,
+      this.cardInfo.controls.cardCvc
+    ]);
   }
 
   get form(): FormGroup {
@@ -185,6 +224,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     return this._cardError;
   }
 
+  get cardExp() {
+    return this._cardEXP;
+  }
+
   async onSubmit() {
     const formData = new FormData();
     const userInfo = {
@@ -205,17 +248,21 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       state: this.form.value.state
     };
 
-    if (this._validCard && this.cardInfo.value.changeCard) {
-      formData.append("name", this.form.value.cardInfo.cName);
-      const { token = { id: "" }, error } = await this.stripe.create(
-        this.form.value.cardInfo.cName
+    if (this.changeCard) {
+      formData.append("name", this.cardInfo.value.cName);
+      const { error, id } = await this.stripe.create(
+        this.cardInfo.value.cName,
+        this.cardInfo.value.cardNumber,
+        this._cardEXP.month,
+        this._cardEXP.year,
+        this.cardInfo.value.cardCvc
       );
       if (error) {
         this._cardError = error.message;
-        this.scrollWindow("#card-info")
+        this.scrollWindow("#card-info");
         return false;
       }
-      formData.append("token", token.id);
+      formData.append("token", id);
       formData.append("changeCard", this.cardInfo.value.changeCard);
     }
     formData.append("userInfo", JSON.stringify(userInfo));

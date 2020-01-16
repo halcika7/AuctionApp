@@ -42,6 +42,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
   private _usingOptionslInfo: boolean = false;
   private _validCard: boolean = false;
   private subscription = new Subscription();
+  private _cardEXP: { year: number; month: string } = { year: 0, month: "" };
 
   constructor(
     private addProductService: AddProductService,
@@ -58,8 +59,6 @@ export class LastStepComponent implements OnInit, OnDestroy {
       cardExpiry
     } = this.nestedGroup.controls;
 
-    this.stripe.createElements();
-
     if (this.showCard) {
       setValidators(
         [cName, cardNumber, cardCvc, cardExpiry],
@@ -68,6 +67,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
     }
 
     this.checkValidity();
+
     this.subscription.add(
       this.form.valueChanges.subscribe(({ useCard, useOptionalInfo }) => {
         if (this._usingOptionslInfo !== useOptionalInfo) {
@@ -91,6 +91,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
         this.checkValidity();
       })
     );
+
     this.subscription.add(
       this.store.select("addProduct").subscribe(({ userInfo, errors }) => {
         this._hasCard = userInfo.hasCard;
@@ -100,20 +101,13 @@ export class LastStepComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscription.add(
-      this.stripe.cardValidity.subscribe(({ untouched, valid }) => {
-        this._validCard = !untouched && valid;
-        this._cardError =
-          this._validCard && this.nestedGroup.value.cName
-            ? ""
-            : this._cardError;
-      })
-    );
+    this.subscription.add(this.nestedGroup.valueChanges.subscribe(vals => {
+      this._cardError = "";
+    }))
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.stripe.unmount();
   }
 
   buttonClicked() {
@@ -125,14 +119,18 @@ export class LastStepComponent implements OnInit, OnDestroy {
     this._isValidStep = false;
     let tokenId = '';
     if (this._showCard) {
-      const { token = { id: "" }, error } = await this.stripe.create(
-        this.form.value.cardInfo.cName
+      const { error, id } = await this.stripe.create(
+        this.nestedGroup.value.cName,
+        this.nestedGroup.value.cardNumber,
+        this._cardEXP.month,
+        this._cardEXP.year,
+        this.nestedGroup.value.cardCvc
       );
       if (error) {
         this._cardError = error.message;
         return;
       }
-      tokenId = token.id;
+      tokenId = id;
     }
     this.submitForm.emit(tokenId);
   }
@@ -160,7 +158,7 @@ export class LastStepComponent implements OnInit, OnDestroy {
     if (!this.form.value.useCard) {
       valid =
         partialFormValidity([address, country, city, zip, phone, cName]) &&
-        this._validCard &&
+        this.nestedGroup.valid &&
         !this._cardError;
     }
     this._isValidStep = valid;
@@ -184,5 +182,9 @@ export class LastStepComponent implements OnInit, OnDestroy {
 
   get usingOptionslInfo(): boolean {
     return this._usingOptionslInfo;
+  }
+
+  get cardExp() {
+    return this._cardEXP;
   }
 }

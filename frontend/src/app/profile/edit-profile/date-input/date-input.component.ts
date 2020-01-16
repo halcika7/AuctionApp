@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { Component, OnInit, Input } from "@angular/core";
 import {
   getYears,
@@ -7,7 +8,8 @@ import {
   getMonthNumber
 } from "@app/shared/dateHelper";
 import { emptyObject } from "@app/shared/checkEmptyObject";
-import { ProfileService } from '@app/profile/profile.service';
+import { ProfileService } from "@app/profile/profile.service";
+import { setValidators, clearValidators } from "@app/shared/validators";
 
 @Component({
   selector: "app-date-input",
@@ -15,6 +17,7 @@ import { ProfileService } from '@app/profile/profile.service';
   styleUrls: ["./date-input.component.scss"]
 })
 export class DateInputComponent implements OnInit {
+  @Input() form: FormGroup;
   @Input() withDays: boolean;
   @Input() required: boolean = false;
   @Input() monthNumbers: boolean;
@@ -49,6 +52,8 @@ export class DateInputComponent implements OnInit {
     this.withDays && this.profileService.changeBirthDate(this.defaultDate);
     if (this.withDays) {
       this.pushDays();
+    } else {
+      setValidators([this.form.controls.cardExpiry], ["cardExpiry"]);
     }
   }
 
@@ -58,6 +63,9 @@ export class DateInputComponent implements OnInit {
     this.withDays && this.profileService.changeBirthDate(this.defaultDate);
     if (this.withDays) {
       this.pushDays();
+    } else {
+      clearValidators([this.form.controls.cardExpiry]);
+      this.form.controls.cardExpiry.setValue("   ");
     }
   }
 
