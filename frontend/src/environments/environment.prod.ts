@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: "https://polar-lake-39918.herokuapp.com/api",
-  socketUrl: "https://polar-lake-39918.herokuapp.com",
+  apiUrl: "https://auction-webapp.herokuapp.com/api",
+  socketUrl: "https://auction-webapp.herokuapp.com",
   MESSAGE_INVALID_TOKEN: "Invalid token",
   MESSAGE_NO_TOKEN: "Token not provided",
   PRODUCT_NOT_FOUND: "Product not found !",
