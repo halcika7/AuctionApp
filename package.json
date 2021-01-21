@@ -45,7 +45,7 @@
     "pug": "^2.0.4",
     "sequelize": "^5.21.3",
     "sequelize-cli": "^5.5.1",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "stripe": "^7.15.0",
     "twilio": "^3.39.1",
     "validator": "^12.1.0"
